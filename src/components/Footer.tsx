@@ -8,7 +8,7 @@ export function Footer() {
           <div>
             <h3 className="text-white mb-4">Taxi Airport Gdańsk</h3>
             <p className="text-sm">
-              Professional airport transfer service in the Tri-City area. Available 24/7.
+              Professional airport transfer service in the Tri-City area. Available 24/7. TEST123
             </p>
           </div>
 
