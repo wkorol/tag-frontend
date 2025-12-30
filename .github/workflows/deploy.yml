@@ -14,17 +14,17 @@ jobs:
       - name: Write SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOY_SSH_KEY_B64 }}" | base64 -d > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ls -l ~/.ssh/deploy_key
-          ssh-keygen -y -f ~/.ssh/deploy_key >/dev/null
+          echo "${{ secrets.DEPLOY_SSH_KEY_B64 }}" | base64 -d > /home/runner/.ssh/deploy_key
+          chmod 600 /home/runner/.ssh/deploy_key
+          ls -l /home/runner/.ssh/deploy_key
+          ssh-keygen -y -f /home/runner/.ssh/deploy_key >/dev/null
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
-          key_path: ~/.ssh/deploy_key
+          key_path: /home/runner/.ssh/deploy_key
           script: |
             set -euxo pipefail
             whoami
