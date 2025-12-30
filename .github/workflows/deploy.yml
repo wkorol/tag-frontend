@@ -18,6 +18,10 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
+            set -euxo pipefail
+            whoami
+            pwd
             cd /opt/tag-frontend
+            ls -la
             docker compose pull
             docker compose up -d
