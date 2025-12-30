@@ -35,7 +35,7 @@ export function Hero() {
             </a>
           </div>
           <h1 className="text-xl sm:text-2xl text-blue-100 mb-4 max-w-2xl mx-auto">
-            Professional Airport Transfer Service in Gdańsk, Sopot & Gdynia
+            Professional Airport Transfer Service in Gdańsk, Sopot & Gdynia TEST666
           </h1>
           <p className="text-blue-200 mb-6 max-w-2xl mx-auto">
             Reliable, comfortable, and on time transfers across Tri-City area
