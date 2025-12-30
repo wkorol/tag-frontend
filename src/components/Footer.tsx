@@ -8,7 +8,7 @@ export function Footer() {
           <div>
             <h3 className="text-white mb-4">Taxi Airport Gdańsk</h3>
             <p className="text-sm">
-              Professional airport transfer service in the Tri-City area. Available 24/7. TEST123
+              Professional airport transfer service in the Tri-City area. Available 24/7.
             </p>
           </div>
 
@@ -17,8 +17,8 @@ export function Footer() {
             <div className="space-y-3 text-sm">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
-                <a href="mailto:booking@taxiairportgdansk.pl" className="hover:text-white transition-colors">
-                  booking@taxiairportgdansk.pl
+                <a href="mailto:booking@taxiairportgdansk.com" className="hover:text-white transition-colors">
+                  booking@taxiairportgdansk.com
                 </a>
               </div>
               <div className="flex items-center gap-2">

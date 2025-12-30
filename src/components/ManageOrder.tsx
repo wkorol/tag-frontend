@@ -375,7 +375,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                 </div>
                 <div className="ml-3">
                   <p className="text-sm text-yellow-700">
-                    Changes to your booking will be confirmed via email. For urgent changes, please contact us directly at booking@taxiairportgdansk.pl
+                    Changes to your booking will be confirmed via email. For urgent changes, please contact us directly at booking@taxiairportgdansk.com
                   </p>
                 </div>
               </div>

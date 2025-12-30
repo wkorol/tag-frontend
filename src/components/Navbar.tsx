@@ -44,7 +44,7 @@ export function Navbar() {
               Prices
             </button>
             <button
-              onClick={() => scrollToSection('booking')}
+              onClick={() => scrollToSection('vehicle-selection')}
               className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
             >
               ORDER NOW
@@ -80,7 +80,7 @@ export function Navbar() {
               Prices
             </button>
             <button
-              onClick={() => scrollToSection('booking')}
+              onClick={() => scrollToSection('vehicle-selection')}
               className="block w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
             >
               ORDER NOW
