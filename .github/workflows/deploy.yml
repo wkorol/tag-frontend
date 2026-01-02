@@ -14,20 +14,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Write SSH key
+      - name: Decode SSH key
+        id: decode_key
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOY_SSH_KEY_B64 }}" | base64 -d > /home/runner/.ssh/deploy_key
-          chmod 600 /home/runner/.ssh/deploy_key
-          ls -l /home/runner/.ssh/deploy_key
-          ssh-keygen -y -f /home/runner/.ssh/deploy_key >/dev/null
+          echo "key<<EOF" >> "$GITHUB_OUTPUT"
+          echo "${{ secrets.DEPLOY_SSH_KEY_B64 }}" | base64 -d >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: Upload deploy config
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY_B64 }}
+          key: ${{ steps.decode_key.outputs.key }}
           source: deploy/Caddyfile,deploy/docker-compose.yml
           target: /opt/tag-frontend
           strip_components: 1
@@ -37,7 +36,7 @@ jobs:
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY_B64 }}
+          key: ${{ steps.decode_key.outputs.key }}
           script: |
             set -euxo pipefail
             whoami
