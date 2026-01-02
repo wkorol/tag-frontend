@@ -19,6 +19,15 @@ jobs:
           ls -l /home/runner/.ssh/deploy_key
           ssh-keygen -y -f /home/runner/.ssh/deploy_key >/dev/null
 
+      - name: Upload deploy config
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key_path: /home/runner/.ssh/deploy_key
+          source: deploy/Caddyfile,deploy/docker-compose.yml
+          target: /opt/tag-frontend
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -31,5 +40,12 @@ jobs:
             pwd
             cd /opt/tag-frontend
             ls -la
+            if [ -f /opt/tag-frontend/deploy/Caddyfile ]; then
+              cp /opt/tag-frontend/deploy/Caddyfile /opt/tag-frontend/Caddyfile
+            fi
+            if [ -f /opt/tag-frontend/deploy/docker-compose.yml ]; then
+              cp /opt/tag-frontend/deploy/docker-compose.yml /opt/tag-frontend/docker-compose.yml
+            fi
             docker compose pull
             docker compose up -d
+            docker compose restart caddy
