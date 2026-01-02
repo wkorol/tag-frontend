@@ -37,6 +37,23 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const [submitting, setSubmitting] = useState(false);
   const [currentPrice, setCurrentPrice] = useState(route.priceDay);
 
+  const trackConversion = () => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const gtag = (window as { gtag?: (...args: unknown[]) => void }).gtag;
+    if (typeof gtag !== 'function') {
+      return;
+    }
+
+    gtag('event', 'conversion', {
+      send_to: 'AW-17848598074/5NXzCOzwpNsbELr8775C',
+      value: 1.0,
+      currency: 'PLN',
+    });
+  };
+
   // Calculate if it's night rate based on time (22:00-6:00, accounting for 30min travel)
   useEffect(() => {
     if (formData.time) {
@@ -100,6 +117,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       setOrderId(data?.id ?? null);
       setGeneratedId(data?.generatedId ?? null);
       setSubmitted(true);
+      trackConversion();
     } catch (submitError) {
       setError('Network error while submitting the order. Please try again.');
     } finally {

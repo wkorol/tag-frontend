@@ -31,6 +31,23 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
+  const trackConversion = () => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const gtag = (window as { gtag?: (...args: unknown[]) => void }).gtag;
+    if (typeof gtag !== 'function') {
+      return;
+    }
+
+    gtag('event', 'conversion', {
+      send_to: 'AW-17848598074/5NXzCOzwpNsbELr8775C',
+      value: 1.0,
+      currency: 'PLN',
+    });
+  };
+
   // Auto-fill airport address on mount if airport pickup is selected
   useEffect(() => {
     if (formData.pickupType === 'airport' && !formData.pickupAddress) {
@@ -93,6 +110,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
       setOrderId(data?.id ?? null);
       setGeneratedId(data?.generatedId ?? null);
       setSubmitted(true);
+      trackConversion();
     } catch {
       setError('Network error while submitting the quote request. Please try again.');
     } finally {
