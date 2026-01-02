@@ -16,42 +16,55 @@ export function Navbar() {
     setIsMenuOpen(false);
   };
 
+  const handleNavClick = (event: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      event.preventDefault();
+      element.scrollIntoView({ behavior: 'smooth' });
+      setIsMenuOpen(false);
+    }
+  };
+
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-md">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <button 
-            onClick={() => scrollToSection('hero')}
+          <a
+            href="/#hero"
+            onClick={(event) => handleNavClick(event, 'hero')}
             className="flex items-center"
           >
-            <img 
-              src={logo} 
-              alt="Taxi Airport Gdańsk" 
+            <img
+              src={logo}
+              alt="Taxi Airport Gdańsk"
               className="h-12 w-auto"
             />
-          </button>
+          </a>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
-            <button
-              onClick={() => scrollToSection('fleet')}
+            <a
+              href="/#fleet"
+              onClick={(event) => handleNavClick(event, 'fleet')}
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
               Our Fleet
-            </button>
-            <button
-              onClick={() => scrollToSection('vehicle-selection')}
+            </a>
+            <a
+              href="/#vehicle-selection"
+              onClick={(event) => handleNavClick(event, 'vehicle-selection')}
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
               Prices
-            </button>
-            <button
-              onClick={() => scrollToSection('vehicle-selection')}
+            </a>
+            <a
+              href="/#vehicle-selection"
+              onClick={(event) => handleNavClick(event, 'vehicle-selection')}
               className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
             >
               ORDER NOW
-            </button>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -70,24 +83,27 @@ export function Navbar() {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden pb-4 space-y-3">
-            <button
-              onClick={() => scrollToSection('fleet')}
+            <a
+              href="/#fleet"
+              onClick={(event) => handleNavClick(event, 'fleet')}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
               Our Fleet
-            </button>
-            <button
-              onClick={() => scrollToSection('vehicle-selection')}
+            </a>
+            <a
+              href="/#vehicle-selection"
+              onClick={(event) => handleNavClick(event, 'vehicle-selection')}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
               Prices
-            </button>
-            <button
-              onClick={() => scrollToSection('vehicle-selection')}
+            </a>
+            <a
+              href="/#vehicle-selection"
+              onClick={(event) => handleNavClick(event, 'vehicle-selection')}
               className="block w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
             >
               ORDER NOW
-            </button>
+            </a>
           </div>
         )}
       </div>

@@ -20,7 +20,8 @@
       />
       <meta property="og:type" content="website" />
       <meta property="og:url" content="https://taxiairportgdansk.com/" />
-      <meta property="og:image" content="https://taxiairportgdansk.com/og-image.svg" />
+      <meta property="og:image" content="https://taxiairportgdansk.com/og-image.png" />
+      <meta property="og:image:type" content="image/png" />
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Taxi Airport Gdańsk" />
@@ -28,7 +29,7 @@
         name="twitter:description"
         content="Reliable airport transfers in Gdańsk. Book premium taxi rides with fixed prices, professional drivers, and fast confirmation."
       />
-      <meta name="twitter:image" content="https://taxiairportgdansk.com/og-image.svg" />
+      <meta name="twitter:image" content="https://taxiairportgdansk.com/og-image.png" />
 
       <!-- Google tag (gtag.js) -->
       <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17848598074"></script>
@@ -53,12 +54,28 @@
           "areaServed": "Gdańsk",
           "email": "booking@taxiairportgdansk.com",
           "priceRange": "$$",
-          "telephone": "+48537523437"
+          "telephone": "+48537523437",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Gdańsk",
+            "addressCountry": "PL"
+          },
+          "openingHours": "Mo-Su 00:00-23:59",
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "54.3520",
+            "longitude": "18.6466"
+          }
         }
       </script>
     </head>
 
     <body>
+      <noscript>
+        Taxi Airport Gdańsk provides 24/7 airport transfers across Gdańsk, Sopot, and Gdynia. Fixed
+        pricing, professional drivers, and fast confirmation. Contact:
+        booking@taxiairportgdansk.com.
+      </noscript>
       <div id="root"></div>
       <script type="module" src="/src/main.tsx"></script>
     </body>

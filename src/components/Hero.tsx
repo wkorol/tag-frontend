@@ -1,4 +1,4 @@
-import { Mail, Bus, Car, Target, Sparkles, Plus } from 'lucide-react';
+import { Mail, Bus, Car, Clock, BadgeCheck, Plane } from 'lucide-react';
 import logo from 'figma:asset/9bf12920b9f211a57ac7e4ff94480c867662dafa.png';
 
 export function Hero() {
@@ -47,32 +47,32 @@ export function Hero() {
           <div className="mt-12 mb-10 max-w-4xl mx-auto">
             <div className="rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm px-6 py-6 shadow-xl">
               <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
-                <h2 className="text-blue-100 text-lg sm:text-xl">Our Premium Services</h2>
-                <span className="text-xs uppercase tracking-[0.2em] text-blue-200/80">Extras</span>
+                <h2 className="text-blue-100 text-lg sm:text-xl">Why choose Taxi Airport Gdańsk</h2>
+                <span className="text-xs uppercase tracking-[0.2em] text-blue-200/80">Benefits</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all">
-                  <Target className="w-8 h-8 text-orange-400 mx-auto mb-2"/>
-                  <h3 className="text-white mb-1">Shooting Range</h3>
+                  <Plane className="w-8 h-8 text-orange-400 mx-auto mb-2"/>
+                  <h3 className="text-white mb-1">Flight tracking</h3>
                   <p className="text-blue-200 text-sm">
-                    Organize shooting experiences in Gdańsk area
+                    We monitor arrivals and adjust pickup time automatically.
                   </p>
                 </div>
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all">
-                  <Sparkles className="w-8 h-8 text-yellow-400 mx-auto mb-2"/>
-                  <h3 className="text-white mb-1">Limousine Service</h3>
+                  <BadgeCheck className="w-8 h-8 text-yellow-400 mx-auto mb-2"/>
+                  <h3 className="text-white mb-1">Meet &amp; greet</h3>
                   <p className="text-blue-200 text-sm">
-                    Luxury transportation for special occasions
+                    Professional drivers, clear communication, and help with luggage.
                   </p>
                 </div>
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all">
-                  <Plus className="w-8 h-8 text-green-400 mx-auto mb-2"/>
-                  <h3 className="text-white mb-1">+18 Entertainment</h3>
+                  <Clock className="w-8 h-8 text-green-400 mx-auto mb-2"/>
+                  <h3 className="text-white mb-1">Fast confirmation</h3>
                   <p className="text-blue-200 text-sm">
-                    Adult entertainment & nightlife organization
+                    Most bookings are confirmed within 5–10 minutes.
                   </p>
                 </div>
               </div>
