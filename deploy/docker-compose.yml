@@ -6,6 +6,8 @@ services:
       - "443:443"
     environment:
       - ACME_EMAIL=${ACME_EMAIL}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
