@@ -11,7 +11,14 @@ const ssrEntryCandidates = [
   path.join(rootDir, 'build-ssr', 'entry-server.mjs'),
 ];
 
-const routes = ['/', '/cookies', '/privacy'];
+const routes = [
+  '/',
+  '/cookies',
+  '/privacy',
+  '/gdansk-airport-taxi',
+  '/gdansk-airport-to-sopot',
+  '/gdansk-airport-to-gdynia',
+];
 
 let render;
 for (const candidate of ssrEntryCandidates) {

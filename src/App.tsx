@@ -11,6 +11,9 @@ import { Footer } from './components/Footer';
 import { CookieBanner } from './components/CookieBanner';
 import { CookiesPage } from './pages/CookiesPage';
 import { PrivacyPage } from './pages/PrivacyPage';
+import { TrustSection } from './components/TrustSection';
+import { RouteLanding } from './pages/RouteLanding';
+import { trackContactClick } from './lib/tracking';
 
 function Landing() {
   const [step, setStep] = useState<'vehicle' | 'pricing'>('vehicle');
@@ -85,6 +88,8 @@ function Landing() {
   }, []);
 
   const showFloating = !targetVisible && !selectedRoute && !showQuoteForm;
+  const whatsappLink = 'https://wa.me/48694347548?text=Hello%20Taxi%20Airport%20Gda%C5%84sk,%20I%20would%20like%20to%20book%20a%20transfer.';
+  const phoneLink = 'tel:+48694347548';
 
   useEffect(() => {
     if (!showFloating) {
@@ -111,6 +116,8 @@ function Landing() {
           onBack={handleBackToVehicleSelection}
         />
       )}
+
+      <TrustSection />
       
       <Footer />
 
@@ -123,7 +130,9 @@ function Landing() {
 
       {showQuoteForm && (
         <QuoteForm 
-          onClose={() => setShowQuoteForm(false)}
+          onClose={() => {
+            setShowQuoteForm(false);
+          }}
         />
       )}
 
@@ -137,6 +146,23 @@ function Landing() {
           Order Online Now
         </a>
       )}
+
+      <div className="fixed bottom-6 right-4 z-50 sm:hidden flex flex-col gap-3">
+        <a
+          href={whatsappLink}
+          onClick={() => trackContactClick('whatsapp')}
+          className="bg-white text-slate-900 px-4 py-3 rounded-full shadow-lg border border-slate-200 flex items-center gap-2"
+        >
+          WhatsApp
+        </a>
+        <a
+          href={phoneLink}
+          onClick={() => trackContactClick('call')}
+          className="bg-slate-900 text-white px-4 py-3 rounded-full shadow-lg flex items-center gap-2"
+        >
+          Call now
+        </a>
+      </div>
     </div>
   );
 }
@@ -148,6 +174,54 @@ export default function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/cookies" element={<CookiesPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route
+          path="/gdansk-airport-taxi"
+          element={
+            <RouteLanding
+              title="Gdańsk Airport Taxi"
+              description="Book a fast, reliable airport taxi from Gdańsk Airport. Fixed pricing, professional drivers, and quick confirmation."
+              route="Gdańsk Airport"
+              examples={[
+                'Gdańsk Old Town',
+                'Gdańsk Oliwa',
+                'Gdańsk Main Station',
+                'Brzeźno Beach',
+              ]}
+            />
+          }
+        />
+        <Route
+          path="/gdansk-airport-to-sopot"
+          element={
+            <RouteLanding
+              title="Gdańsk Airport to Sopot Transfer"
+              description="Private transfer from Gdańsk Airport to Sopot with fixed pricing and flight tracking."
+              route="Gdańsk Airport → Sopot"
+              examples={[
+                'Sopot Pier',
+                'Sopot Centre',
+                'Sopot Hotels',
+                'Sopot Railway Station',
+              ]}
+            />
+          }
+        />
+        <Route
+          path="/gdansk-airport-to-gdynia"
+          element={
+            <RouteLanding
+              title="Gdańsk Airport to Gdynia Transfer"
+              description="Comfortable airport transfer to Gdynia with professional drivers and quick confirmation."
+              route="Gdańsk Airport → Gdynia"
+              examples={[
+                'Gdynia Centre',
+                'Gdynia Port',
+                'Gdynia Hotels',
+                'Gdynia Orłowo',
+              ]}
+            />
+          }
+        />
       </Routes>
       <CookieBanner />
     </>

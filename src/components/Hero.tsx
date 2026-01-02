@@ -1,7 +1,11 @@
-import { Mail, Bus, Car, Clock, BadgeCheck, Plane } from 'lucide-react';
+import { Phone, MessageCircle, Mail, Bus, Car, Clock, BadgeCheck, Plane } from 'lucide-react';
 import logo from 'figma:asset/9bf12920b9f211a57ac7e4ff94480c867662dafa.png';
+import { trackContactClick } from '../lib/tracking';
 
 export function Hero() {
+  const whatsappLink = 'https://wa.me/48694347548?text=Hello%20Taxi%20Airport%20Gda%C5%84sk,%20I%20would%20like%20to%20book%20a%20transfer.';
+  const phoneLink = 'tel:+48694347548';
+
   return (
     <div id="hero" className="relative bg-gradient-to-br from-blue-900 to-blue-700 text-white">
       <div 
@@ -21,11 +25,27 @@ export function Hero() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a
-                href="mailto:booking@taxiairportgdansk.com"
+                href={whatsappLink}
+                onClick={() => trackContactClick('whatsapp')}
                 className="inline-flex items-center gap-2 bg-white text-blue-900 px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors"
             >
-              <Mail className="w-5 h-5"/>
-              Book via Email
+              <MessageCircle className="w-5 h-5"/>
+              WhatsApp
+            </a>
+            <a
+                href={phoneLink}
+                onClick={() => trackContactClick('call')}
+                className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-6 py-3 rounded-lg hover:bg-white/20 transition-colors"
+            >
+              <Phone className="w-5 h-5"/>
+              Call now
+            </a>
+            <a
+                href="mailto:booking@taxiairportgdansk.com"
+                className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-6 py-3 rounded-lg hover:bg-white/20 transition-colors"
+            >
+              <Mail className="w-5 h-5" />
+              Order via email
             </a>
             <a
                 href="#vehicle-selection"
@@ -50,9 +70,9 @@ export function Hero() {
                 <h2 className="text-blue-100 text-lg sm:text-xl">Why choose Taxi Airport Gdańsk</h2>
                 <span className="text-xs uppercase tracking-[0.2em] text-blue-200/80">Benefits</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div
-                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all">
+                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
                   <Plane className="w-8 h-8 text-orange-400 mx-auto mb-2"/>
                   <h3 className="text-white mb-1">Flight tracking</h3>
                   <p className="text-blue-200 text-sm">
@@ -60,7 +80,7 @@ export function Hero() {
                   </p>
                 </div>
                 <div
-                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all">
+                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
                   <BadgeCheck className="w-8 h-8 text-yellow-400 mx-auto mb-2"/>
                   <h3 className="text-white mb-1">Meet &amp; greet</h3>
                   <p className="text-blue-200 text-sm">
@@ -68,11 +88,19 @@ export function Hero() {
                   </p>
                 </div>
                 <div
-                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all">
+                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
                   <Clock className="w-8 h-8 text-green-400 mx-auto mb-2"/>
                   <h3 className="text-white mb-1">Fast confirmation</h3>
                   <p className="text-blue-200 text-sm">
                     Most bookings are confirmed within 5–10 minutes.
+                  </p>
+                </div>
+                <div
+                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
+                  <span className="text-2xl block text-center mb-2">💳</span>
+                  <h3 className="text-white mb-1">Flexible payments</h3>
+                  <p className="text-blue-200 text-sm">
+                    Card, Apple Pay, Google Pay, Revolut, or cash.
                   </p>
                 </div>
               </div>

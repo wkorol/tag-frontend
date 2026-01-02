@@ -62,6 +62,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
     }
   }, []);
 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
