@@ -48,9 +48,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     }
 
     gtag('event', 'conversion', {
-      send_to: 'AW-17848598074/5NXzCOzwpNsbELr8775C',
-      value: 1.0,
-      currency: 'PLN',
+      send_to: 'AW-17848598074/g8djCIK0udsbELr8775C',
     });
   };
 
