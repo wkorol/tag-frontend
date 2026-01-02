@@ -146,10 +146,15 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h3 className="text-green-900 mb-2">Order Confirmed!</h3>
+            <h3 className="text-green-900 mb-2">Order received</h3>
             <p className="text-green-800 mb-4">
-              Your transfer has been booked. We will contact you shortly with confirmation details.
+              Thanks! Your request is in the queue. Please wait for acceptance – it usually takes 5–10 minutes.
+              You will receive a confirmation email shortly.
             </p>
+            <div className="flex items-center justify-center gap-2 text-green-700 mb-4">
+              <span className="inline-flex h-2.5 w-2.5 rounded-full bg-green-500 animate-pulse"></span>
+              <span className="text-sm">Awaiting confirmation...</span>
+            </div>
             <div className="bg-white rounded-lg p-4 mb-4">
               <p className="text-gray-700">Total Price: <span className="font-bold text-blue-600">{currentPrice} PLN</span></p>
             </div>
