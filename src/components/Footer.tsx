@@ -22,17 +22,11 @@ export function Footer() {
                 </a>
               </div>
               <div className="flex items-center gap-2">
-                <span className="w-4 h-4 text-gray-300">☎</span>
-                <a href="tel:+48694347548" className="hover:text-white transition-colors">
-                  +48 694 347 548
-                </a>
-              </div>
-              <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
                 <span>Gdańsk, Poland</span>
               </div>
               <p className="text-xs text-gray-400 mt-4">
-                Book online, via WhatsApp, phone, or email
+                Book online, via WhatsApp, or email
               </p>
             </div>
           </div>

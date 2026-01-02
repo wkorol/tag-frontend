@@ -89,7 +89,6 @@ function Landing() {
 
   const showFloating = !targetVisible && !selectedRoute && !showQuoteForm;
   const whatsappLink = 'https://wa.me/48694347548?text=Hello%20Taxi%20Airport%20Gda%C5%84sk,%20I%20would%20like%20to%20book%20a%20transfer.';
-  const phoneLink = 'tel:+48694347548';
 
   useEffect(() => {
     if (!showFloating) {
@@ -154,13 +153,6 @@ function Landing() {
           className="bg-white text-slate-900 px-4 py-3 rounded-full shadow-lg border border-slate-200 flex items-center gap-2"
         >
           WhatsApp
-        </a>
-        <a
-          href={phoneLink}
-          onClick={() => trackContactClick('call')}
-          className="bg-slate-900 text-white px-4 py-3 rounded-full shadow-lg flex items-center gap-2"
-        >
-          Call now
         </a>
       </div>
     </div>

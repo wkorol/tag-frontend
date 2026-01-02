@@ -6,11 +6,11 @@ export function TrustSection() {
           <div>
             <h3 className="text-gray-900 mb-2">Company details</h3>
             <p className="text-sm text-gray-600">
-              WK DRIVE WIKTOR KOROL
+              WK DRIVE
               <br />
               NIP: 5862330063
               <br />
-              Piotrkowska 46/3, 80-180 Gdańsk
+              Gdańsk
             </p>
           </div>
           <div>
