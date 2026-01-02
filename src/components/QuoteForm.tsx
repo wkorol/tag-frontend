@@ -12,7 +12,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   const [formData, setFormData] = useState({
     pickupAddress: '',
     destinationAddress: '',
-    proposedPrice: '',
+    proposedPrice: 'taximeter',
     pickupType: 'airport',
     signText: '',
     flightNumber: '',
@@ -31,6 +31,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   const [generatedId, setGeneratedId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [showPriceInput, setShowPriceInput] = useState(false);
 
   const trackConversion = () => {
     if (typeof window === 'undefined') {
@@ -262,21 +263,36 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
               <DollarSign className="w-4 h-4 inline mr-2" />
               Your Proposed Price (PLN)
             </label>
-            <input
-              type="number"
-              id="proposedPrice"
-              name="proposedPrice"
-              value={formData.proposedPrice}
-              onChange={handleChange}
-              placeholder="Enter your offer in PLN (e.g., 150)"
-              min="0"
-              step="10"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
-            />
-            <p className="text-sm text-gray-500 mt-1">
-              Propose your price for this ride. We'll review and respond within 5-10 minutes.
-            </p>
+            {!showPriceInput ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setShowPriceInput(true);
+                  setFormData(prev => ({ ...prev, proposedPrice: '' }));
+                }}
+                className="w-full border-2 border-blue-600 text-blue-700 py-3 rounded-lg hover:bg-blue-50 transition-colors"
+              >
+                Price will be calculateded by taximeter, if you want propose your fixed price, please click this button and fill the input
+              </button>
+            ) : (
+              <>
+                <input
+                  type="number"
+                  id="proposedPrice"
+                  name="proposedPrice"
+                  value={formData.proposedPrice}
+                  onChange={handleChange}
+                  placeholder="Enter your offer in PLN (e.g., 150)"
+                  min="0"
+                  step="10"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                />
+                <p className="text-sm text-gray-500 mt-1">
+                  Propose your price for this ride. We'll review and respond within 5-10 minutes.
+                </p>
+              </>
+            )}
           </div>
 
           {/* Date and Time */}
