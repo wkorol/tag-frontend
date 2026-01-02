@@ -10,7 +10,10 @@ export function Navbar() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
       setIsMenuOpen(false);
+      return;
     }
+    window.location.href = `/#${sectionId}`;
+    setIsMenuOpen(false);
   };
 
   return (

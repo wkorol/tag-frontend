@@ -10,6 +10,7 @@ import { ManageOrder } from './components/ManageOrder';
 import { Footer } from './components/Footer';
 import { CookieBanner } from './components/CookieBanner';
 import { CookiesPage } from './pages/CookiesPage';
+import { PrivacyPage } from './pages/PrivacyPage';
 
 function Landing() {
   const [step, setStep] = useState<'vehicle' | 'pricing'>('vehicle');
@@ -62,6 +63,25 @@ function Landing() {
       window.removeEventListener('scroll', updateVisibility);
       window.removeEventListener('resize', updateVisibility);
     };
+  }, []);
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash) {
+      return;
+    }
+
+    const targetId = hash.replace('#', '');
+    if (!targetId) {
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      document.getElementById(targetId)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    });
   }, []);
 
   const showFloating = !targetVisible && !selectedRoute && !showQuoteForm;
@@ -127,6 +147,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/cookies" element={<CookiesPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
       </Routes>
       <CookieBanner />
     </>

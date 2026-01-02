@@ -7,19 +7,24 @@ export function CookiePolicy() {
 
         <p className="mb-4">
           This website uses cookies to ensure the site works reliably and to keep your booking safe.
-          We do not use marketing or analytics cookies at this time.
+          With your consent, we also use marketing cookies to measure ad conversions.
         </p>
 
         <h3 className="text-lg text-gray-900 mb-2">What cookies we use</h3>
         <ul className="list-disc pl-5 space-y-2 mb-6">
           <li>Essential cookies to keep the site secure and prevent abuse.</li>
           <li>Preference cookies to remember basic choices during a session.</li>
+          <li>Marketing cookies to measure conversions from ads (Google Ads).</li>
         </ul>
 
         <h3 className="text-lg text-gray-900 mb-2">How you can manage cookies</h3>
         <p className="mb-4">
           You can delete cookies at any time from your browser settings. Blocking essential cookies may
           prevent the booking form and order management from working properly.
+        </p>
+        <p className="mb-4">
+          You can also change your marketing cookie preference by clearing your browser storage and
+          revisiting this site.
         </p>
 
         <h3 className="text-lg text-gray-900 mb-2">Contact</h3>

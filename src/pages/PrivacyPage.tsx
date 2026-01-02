@@ -1,9 +1,8 @@
-import { CookiePolicy } from '../components/CookiePolicy';
 import { PrivacyPolicy } from '../components/PrivacyPolicy';
 import { Footer } from '../components/Footer';
 import { Navbar } from '../components/Navbar';
 
-export function CookiesPage() {
+export function PrivacyPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -15,7 +14,6 @@ export function CookiesPage() {
           ← Back to home
         </a>
       </div>
-      <CookiePolicy />
       <PrivacyPolicy />
       <Footer />
     </div>

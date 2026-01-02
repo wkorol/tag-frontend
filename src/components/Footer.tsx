@@ -47,6 +47,12 @@ export function Footer() {
             <a href="/cookies" className="text-gray-300 hover:text-white underline">
               Cookie Policy
             </a>
+            {' '}
+            <span className="text-gray-500">|</span>
+            {' '}
+            <a href="/privacy" className="text-gray-300 hover:text-white underline">
+              Privacy Policy
+            </a>
           </p>
         </div>
       </div>

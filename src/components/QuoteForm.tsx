@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Calendar, Users, Luggage, MapPin, FileText, Plane, DollarSign, Info } from 'lucide-react';
 import { buildAdditionalNotes } from '../lib/orderNotes';
+import { hasMarketingConsent } from '../lib/consent';
 import { getApiBaseUrl } from '../lib/api';
 
 interface QuoteFormProps {
@@ -38,6 +39,9 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
 
     const gtag = (window as { gtag?: (...args: unknown[]) => void }).gtag;
     if (typeof gtag !== 'function') {
+      return;
+    }
+    if (!hasMarketingConsent()) {
       return;
     }
 
