@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Calendar, Users, Luggage, MapPin, FileText, Plane, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { buildAdditionalNotes } from '../lib/orderNotes';
+import { getApiBaseUrl } from '../lib/api';
 
 interface OrderFormProps {
   route: {
@@ -54,7 +55,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     setError(null);
     setSubmitting(true);
 
-    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000';
+    const apiBaseUrl = getApiBaseUrl();
     const additionalNotes = buildAdditionalNotes({
       pickupType: formData.pickupType as 'airport' | 'address',
       signText: formData.signText,

@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Calendar, Users, Luggage, MapPin, FileText, Plane, AlertCircle, Trash2, Edit, Copy } from 'lucide-react';
 import { buildAdditionalNotes, parseAdditionalNotes, RouteType } from '../lib/orderNotes';
+import { getApiBaseUrl } from '../lib/api';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000';
+const API_BASE_URL = getApiBaseUrl();
 
 interface ManageOrderProps {
   orderId: string;

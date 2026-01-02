@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Calendar, Users, Luggage, MapPin, FileText, Plane, DollarSign, Info } from 'lucide-react';
 import { buildAdditionalNotes } from '../lib/orderNotes';
+import { getApiBaseUrl } from '../lib/api';
 
 interface QuoteFormProps {
   onClose: () => void;
@@ -45,7 +46,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
     setError(null);
     setSubmitting(true);
 
-    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000';
+    const apiBaseUrl = getApiBaseUrl();
     const passengersNumber = Number(formData.passengers);
     const carType = passengersNumber >= 5 ? 1 : 2;
     const additionalNotes = buildAdditionalNotes({
