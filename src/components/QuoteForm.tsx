@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Calendar, Users, Luggage, MapPin, FileText, Plane, DollarSign, Info } from 'lucide-react';
+import { buildAdditionalNotes } from '../lib/orderNotes';
 
 interface QuoteFormProps {
   onClose: () => void;
@@ -24,6 +25,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [orderId, setOrderId] = useState<string | null>(null);
+  const [generatedId, setGeneratedId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   // Auto-fill airport address on mount if airport pickup is selected
   useEffect(() => {
@@ -35,10 +40,63 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
     }
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    console.log('Quote request submitted:', formData);
+    setError(null);
+    setSubmitting(true);
+
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000';
+    const passengersNumber = Number(formData.passengers);
+    const carType = passengersNumber >= 5 ? 1 : 2;
+    const additionalNotes = buildAdditionalNotes({
+      pickupType: formData.pickupType as 'airport' | 'address',
+      signText: formData.signText,
+      passengers: formData.passengers,
+      largeLuggage: formData.largeLuggage,
+      route: {
+        from: formData.pickupAddress,
+        to: formData.destinationAddress,
+        type: carType === 1 ? 'bus' : 'standard',
+      },
+      notes: formData.description.trim(),
+    });
+
+    const payload = {
+      carType,
+      pickupAddress: formData.pickupAddress,
+      proposedPrice: formData.proposedPrice,
+      date: formData.date,
+      pickupTime: formData.time,
+      flightNumber: formData.pickupType === 'airport' ? formData.flightNumber : 'N/A',
+      fullName: formData.name,
+      emailAddress: formData.email,
+      phoneNumber: formData.phone,
+      additionalNotes,
+    };
+
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json().catch(() => null);
+      if (!response.ok) {
+        setError(data?.error ?? 'Failed to submit quote request. Please try again.');
+        return;
+      }
+
+      setOrderId(data?.id ?? null);
+      setGeneratedId(data?.generatedId ?? null);
+      setSubmitted(true);
+    } catch {
+      setError('Network error while submitting the quote request. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -80,6 +138,20 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
             <p className="text-green-800 mb-4">
               Thank you for your request. You will receive an email within 5-10 minutes confirming whether your offer has been accepted or declined.
             </p>
+            {orderId && (
+              <div className="bg-white rounded-lg p-4 mb-4">
+                {generatedId && (
+                  <p className="text-gray-700">Order #: <span className="font-semibold">{generatedId}</span></p>
+                )}
+                <p className="text-gray-700">Order ID: <span className="font-semibold">{orderId}</span></p>
+                <a
+                  href={`/?orderId=${orderId}`}
+                  className="text-blue-600 hover:text-blue-700 text-sm underline"
+                >
+                  Manage your order
+                </a>
+              </div>
+            )}
             <button
               onClick={onClose}
               className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
@@ -111,6 +183,12 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6 overflow-y-auto">
+          {error && (
+            <div className="bg-red-50 border-2 border-red-500 rounded-lg p-4 text-red-800">
+              {error}
+            </div>
+          )}
+
           {/* Pickup Address */}
           <div>
             <label htmlFor="pickupAddress" className="block text-gray-700 mb-2">
@@ -369,6 +447,22 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
               </div>
 
               <div>
+                <label htmlFor="phone" className="block text-gray-700 mb-2">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="+48 123 456 789"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                />
+              </div>
+
+              <div>
                 <label htmlFor="email" className="block text-gray-700 mb-2">
                   Email Address
                 </label>
@@ -411,9 +505,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 transition-colors"
+            className="w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+            disabled={submitting}
           >
-            Submit Quote Request
+            {submitting ? 'Submitting...' : 'Submit Quote Request'}
           </button>
         </form>
       </div>

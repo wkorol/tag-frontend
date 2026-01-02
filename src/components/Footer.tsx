@@ -41,7 +41,13 @@ export function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} Taxi Airport Gdańsk. All rights reserved.</p>
+          <p>
+            &copy; {new Date().getFullYear()} Taxi Airport Gdańsk. All rights reserved.
+            {' '}
+            <a href="/cookies" className="text-gray-300 hover:text-white underline">
+              Cookie Policy
+            </a>
+          </p>
         </div>
       </div>
     </footer>

@@ -29,45 +29,52 @@ export function Hero() {
             </a>
             <a
                 href="#vehicle-selection"
-                className="inline-flex items-center gap-2 text-white px-6 py-3 rounded-lg transition-colors animate-pulse-glow"
+                className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-400 transition-colors animate-pulse-glow"
             >
               Order Online Now
             </a>
           </div>
-          <h1 className="text-xl sm:text-2xl text-blue-100 mb-4 max-w-2xl mx-auto">
-            Professional Airport Transfer Service in Gdańsk, Sopot & Gdynia
-          </h1>
-          <p className="text-blue-200 mb-6 max-w-2xl mx-auto">
-            Reliable, comfortable, and on time transfers across Tri-City area
-          </p>
+          <div className="mt-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-6 py-5 max-w-2xl mx-auto">
+            <h1 className="text-xl sm:text-2xl text-blue-100 mb-3">
+              Professional Airport Transfer Service in Gdańsk, Sopot & Gdynia
+            </h1>
+            <p className="text-blue-200">
+              Reliable, comfortable, and on time transfers across Tri-City area
+            </p>
+          </div>
 
           {/* Additional Services - SEO optimized */}
-          <div className="mb-8 max-w-3xl mx-auto">
-            <h2 className="text-blue-100 mb-4">Our Premium Services</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div
-                  className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/15 transition-all">
-                <Target className="w-8 h-8 text-orange-400 mx-auto mb-2"/>
-                <h3 className="text-white mb-1">Shooting Range</h3>
-                <p className="text-blue-200 text-sm">
-                  Organize shooting experiences in Gdańsk area
-                </p>
+          <div className="mt-12 mb-10 max-w-4xl mx-auto">
+            <div className="rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm px-6 py-6 shadow-xl">
+              <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
+                <h2 className="text-blue-100 text-lg sm:text-xl">Our Premium Services</h2>
+                <span className="text-xs uppercase tracking-[0.2em] text-blue-200/80">Extras</span>
               </div>
-              <div
-                  className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/15 transition-all">
-                <Sparkles className="w-8 h-8 text-yellow-400 mx-auto mb-2"/>
-                <h3 className="text-white mb-1">Limousine Service</h3>
-                <p className="text-blue-200 text-sm">
-                  Luxury transportation for special occasions
-                </p>
-              </div>
-              <div
-                  className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/15 transition-all">
-                <Plus className="w-8 h-8 text-green-400 mx-auto mb-2"/>
-                <h3 className="text-white mb-1">+18 Entertainment</h3>
-                <p className="text-blue-200 text-sm">
-                  Adult entertainment & nightlife organization
-                </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div
+                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all">
+                  <Target className="w-8 h-8 text-orange-400 mx-auto mb-2"/>
+                  <h3 className="text-white mb-1">Shooting Range</h3>
+                  <p className="text-blue-200 text-sm">
+                    Organize shooting experiences in Gdańsk area
+                  </p>
+                </div>
+                <div
+                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all">
+                  <Sparkles className="w-8 h-8 text-yellow-400 mx-auto mb-2"/>
+                  <h3 className="text-white mb-1">Limousine Service</h3>
+                  <p className="text-blue-200 text-sm">
+                    Luxury transportation for special occasions
+                  </p>
+                </div>
+                <div
+                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all">
+                  <Plus className="w-8 h-8 text-green-400 mx-auto mb-2"/>
+                  <h3 className="text-white mb-1">+18 Entertainment</h3>
+                  <p className="text-blue-200 text-sm">
+                    Adult entertainment & nightlife organization
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -75,8 +82,12 @@ export function Hero() {
 
         {/* Fleet Section */}
         <div id="fleet" className="mt-12">
-          <h3 className="text-center text-blue-100 mb-6">Our Fleet</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          <div className="max-w-4xl mx-auto rounded-3xl border border-white/10 bg-gradient-to-br from-blue-800/40 to-blue-700/20 backdrop-blur-sm px-6 py-8 shadow-xl">
+            <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
+              <h3 className="text-blue-100 text-lg sm:text-xl">Our Fleet</h3>
+              <span className="text-xs uppercase tracking-[0.2em] text-blue-200/80">Vehicles</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {/* Standard Cars Card */}
             <div
                 className="bg-gradient-to-br from-gray-100/20 to-gray-200/20 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-white/30 hover:border-white/50 transition-all flex flex-col items-center justify-center p-8">
@@ -95,6 +106,7 @@ export function Hero() {
                 5-8 passengers | Perfect for larger groups
               </p>
             </div>
+          </div>
           </div>
         </div>
       </div>

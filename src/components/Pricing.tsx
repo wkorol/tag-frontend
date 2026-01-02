@@ -84,36 +84,36 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
           {displayRoutes.map((route, index) => (
             <div 
               key={index}
-              className={`rounded-xl p-6 border-2 hover:shadow-lg transition-all ${
+              className={`rounded-2xl p-6 border-2 hover:shadow-xl transition-all ${
                 vehicleType === 'bus' 
-                  ? 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-300 hover:border-blue-500'
-                  : 'bg-gray-50 border-gray-200 hover:border-blue-500'
+                  ? 'bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200 border-blue-300 hover:border-blue-500'
+                  : 'bg-gradient-to-br from-gray-50 via-white to-gray-100 border-gray-200 hover:border-blue-500'
               }`}
             >
               <div className="flex items-start gap-3 mb-4">
                 <MapPin className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
                 <div>
-                  <div className="text-gray-900 mb-1">{route.from}</div>
+                  <div className="text-gray-900 font-semibold mb-1">{route.from}</div>
                   <div className="text-gray-500 text-sm">to</div>
-                  <div className="text-gray-900">{route.to}</div>
+                  <div className="text-gray-900 font-semibold">{route.to}</div>
                 </div>
               </div>
 
               <div className="space-y-3 mt-6">
-                <div className="flex items-center justify-between bg-white p-3 rounded-lg">
+                <div className="flex items-center justify-between bg-white/90 p-3 rounded-lg border border-blue-200 shadow-sm">
                   <div className="flex items-center gap-2">
                     <Sun className="w-5 h-5 text-yellow-500" />
-                    <span className="text-gray-700">Day rate</span>
+                    <span className="text-gray-800 font-medium">Day rate</span>
                   </div>
-                  <span className="text-blue-900">{route.priceDay} PLN</span>
+                  <span className="text-blue-900 font-semibold">{route.priceDay} PLN</span>
                 </div>
                 
-                <div className="flex items-center justify-between bg-gray-900 p-3 rounded-lg">
+                <div className="flex items-center justify-between bg-gray-900 p-3 rounded-lg border border-blue-800 shadow-sm text-white">
                   <div className="flex items-center gap-2">
                     <Moon className="w-5 h-5 text-blue-300" />
-                    <span className="text-gray-200">Night rate</span>
+                    <span className="font-medium">Night rate</span>
                   </div>
-                  <span className="text-white">{route.priceNight} PLN</span>
+                  <span className="font-semibold">{route.priceNight} PLN</span>
                 </div>
               </div>
 
