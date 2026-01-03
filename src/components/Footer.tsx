@@ -4,7 +4,7 @@ export function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300 py-12">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-white mb-4">Taxi Airport Gdańsk</h3>
             <p className="text-sm">
@@ -37,6 +37,21 @@ export function Footer() {
             <p className="text-sm mt-2">
               Airport pickups, city transfers, and custom routes
             </p>
+          </div>
+
+          <div>
+            <h4 className="text-white mb-4">Popular Routes</h4>
+            <div className="space-y-2 text-sm">
+              <a href="/gdansk-airport-taxi" className="block hover:text-white transition-colors">
+                Gdańsk Airport Taxi
+              </a>
+              <a href="/gdansk-airport-to-sopot" className="block hover:text-white transition-colors">
+                Airport → Sopot
+              </a>
+              <a href="/gdansk-airport-to-gdynia" className="block hover:text-white transition-colors">
+                Airport → Gdynia
+              </a>
+            </div>
           </div>
         </div>
 

@@ -45,11 +45,35 @@ export function Navbar() {
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
             <a
+              href="/"
+              className="text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              Home
+            </a>
+            <a
               href="/#fleet"
               onClick={(event) => handleNavClick(event, 'fleet')}
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
               Our Fleet
+            </a>
+            <a
+              href="/gdansk-airport-taxi"
+              className="text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              Gdańsk Airport Taxi
+            </a>
+            <a
+              href="/gdansk-airport-to-sopot"
+              className="text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              Airport → Sopot
+            </a>
+            <a
+              href="/gdansk-airport-to-gdynia"
+              className="text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              Airport → Gdynia
             </a>
             <a
               href="/#vehicle-selection"
@@ -84,11 +108,35 @@ export function Navbar() {
         {isMenuOpen && (
           <div className="md:hidden pb-4 space-y-3">
             <a
+              href="/"
+              className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              Home
+            </a>
+            <a
               href="/#fleet"
               onClick={(event) => handleNavClick(event, 'fleet')}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
               Our Fleet
+            </a>
+            <a
+              href="/gdansk-airport-taxi"
+              className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              Gdańsk Airport Taxi
+            </a>
+            <a
+              href="/gdansk-airport-to-sopot"
+              className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              Airport → Sopot
+            </a>
+            <a
+              href="/gdansk-airport-to-gdynia"
+              className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              Airport → Gdynia
             </a>
             <a
               href="/#vehicle-selection"
