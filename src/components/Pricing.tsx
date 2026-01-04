@@ -80,7 +80,7 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
             {title}
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Fixed prices for airport transfers. No hidden fees. Night rate applies from 10 PM to 6 AM.
+            Fixed prices for airport transfers. No hidden fees. Night rate applies from 10 PM to 6 AM and on Sundays & public holidays.
           </p>
         </div>
 
@@ -122,22 +122,27 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
                   </div>
                 </div>
                 
-                <div className="flex items-center justify-between bg-gray-900 p-3 rounded-lg border border-blue-800 shadow-sm text-white">
-                  <div className="flex items-center gap-2">
-                    <Moon className="w-5 h-5 text-blue-300" />
-                    <span className="font-medium">Night rate</span>
+                <div className="bg-gray-900 p-3 rounded-lg border border-blue-800 shadow-sm text-white">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Moon className="w-5 h-5 text-blue-300" />
+                      <span className="font-medium">Night rate</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="font-semibold">{route.priceNight} PLN</span>
+                      {eurText(route.priceNight) && (
+                        <div className="flex items-center justify-end gap-2 text-blue-200">
+                          <span className="eur-text">{eurText(route.priceNight)}</span>
+                          <span className="live-badge">
+                            ACTUAL
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <span className="font-semibold">{route.priceNight} PLN</span>
-                    {eurText(route.priceNight) && (
-                      <div className="flex items-center justify-end gap-2 text-blue-200">
-                        <span className="eur-text">{eurText(route.priceNight)}</span>
-                        <span className="live-badge">
-                          ACTUAL
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                  <span className="mt-2 block text-center text-blue-200 leading-none" style={{ fontSize: '8px' }}>
+                    (Sundays & holidays)
+                  </span>
                 </div>
               </div>
 

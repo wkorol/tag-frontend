@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Calendar, Users, Luggage, MapPin, FileText, Plane, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { useEurRate } from '../lib/useEurRate';
 import { formatEur } from '../lib/currency';
@@ -17,6 +17,84 @@ interface OrderFormProps {
   onClose: () => void;
 }
 
+const POLISH_FIXED_HOLIDAYS: Array<[number, number]> = [
+  [1, 1],
+  [1, 6],
+  [5, 1],
+  [5, 3],
+  [8, 15],
+  [11, 1],
+  [11, 11],
+  [12, 25],
+  [12, 26],
+];
+
+const getTodayDateString = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+const formatDateKey = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+const getEasterSunday = (year: number) => {
+  const a = year % 19;
+  const b = Math.floor(year / 100);
+  const c = year % 100;
+  const d = Math.floor(b / 4);
+  const e = b % 4;
+  const f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4);
+  const k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const month = Math.floor((h + l - 7 * m + 114) / 31);
+  const day = ((h + l - 7 * m + 114) % 31) + 1;
+  return new Date(year, month - 1, day);
+};
+
+const addDays = (date: Date, days: number) => {
+  const next = new Date(date);
+  next.setDate(next.getDate() + days);
+  return next;
+};
+
+const getPolishHolidayKeys = (year: number) => {
+  const keys = new Set<string>();
+  POLISH_FIXED_HOLIDAYS.forEach(([month, day]) => {
+    keys.add(formatDateKey(new Date(year, month - 1, day)));
+  });
+
+  const easterSunday = getEasterSunday(year);
+  keys.add(formatDateKey(easterSunday));
+  keys.add(formatDateKey(addDays(easterSunday, 1))); // Easter Monday
+  keys.add(formatDateKey(addDays(easterSunday, 49))); // Pentecost Sunday
+  keys.add(formatDateKey(addDays(easterSunday, 60))); // Corpus Christi
+
+  return keys;
+};
+
+const isPolishPublicHoliday = (date: Date, apiHolidayKeys: Set<string> | null) => {
+  if (date.getDay() === 0) {
+    return true;
+  }
+  const dateKey = formatDateKey(date);
+  if (apiHolidayKeys?.has(dateKey)) {
+    return true;
+  }
+  const fallbackKeys = getPolishHolidayKeys(date.getFullYear());
+  return fallbackKeys.has(dateKey);
+};
+
 export function OrderForm({ route, onClose }: OrderFormProps) {
   const [formData, setFormData] = useState({
     pickupType: 'airport',
@@ -25,7 +103,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     passengers: '1',
     largeLuggage: 'no',
     address: '',
-    date: '',
+    date: getTodayDateString(),
     time: '',
     name: '',
     phone: '',
@@ -39,8 +117,40 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [currentPrice, setCurrentPrice] = useState(route.priceDay);
+  const [rateContext, setRateContext] = useState({
+    label: 'Day rate',
+    reason: 'standard day rate',
+    price: route.priceDay,
+  });
+  const [rateBanner, setRateBanner] = useState<string | null>(null);
+  const lastRatePriceRef = useRef<number | null>(null);
+  const toastTimeoutRef = useRef<number | null>(null);
+  const [holidayKeys, setHolidayKeys] = useState<Set<string> | null>(null);
+  const [holidayYear, setHolidayYear] = useState<number | null>(null);
   const eurRate = useEurRate();
   const eurText = formatEur(currentPrice, eurRate);
+
+  const showRateBanner = (message: string) => {
+    setRateBanner(message);
+    if (toastTimeoutRef.current !== null) {
+      window.clearTimeout(toastTimeoutRef.current);
+      toastTimeoutRef.current = null;
+    }
+  };
+
+  const renderRateBanner = () => {
+    if (!rateBanner) {
+      return null;
+    }
+    return (
+      <div className="mt-3 bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-lg p-4">
+        <div className="flex items-start gap-3">
+          <Info className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <p className="text-sm text-amber-900">{rateBanner}</p>
+        </div>
+      </div>
+    );
+  };
 
   const trackConversion = () => {
     if (typeof window === 'undefined') {
@@ -62,18 +172,96 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     });
   };
 
-  // Calculate if it's night rate based on time (22:00-6:00, accounting for 30min travel)
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const resolvedYear = formData.date
+      ? new Date(`${formData.date}T00:00:00`).getFullYear()
+      : new Date().getFullYear();
+
+    if (!Number.isFinite(resolvedYear) || holidayYear === resolvedYear) {
+      return;
+    }
+
+    setHolidayYear(resolvedYear);
+
+    const cacheKey = `pl-holidays-${resolvedYear}`;
+    const cached = window.localStorage.getItem(cacheKey);
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed)) {
+          setHolidayKeys(new Set(parsed));
+          return;
+        }
+      } catch {
+        // ignore cache parse errors
+      }
+    }
+
+    fetch(`https://date.nager.at/api/v3/PublicHolidays/${resolvedYear}/PL`)
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data: Array<{ date?: string }>) => {
+        const keys = Array.isArray(data)
+          ? data.map((entry) => entry.date).filter((date): date is string => Boolean(date))
+          : [];
+        setHolidayKeys(new Set(keys));
+        window.localStorage.setItem(cacheKey, JSON.stringify(keys));
+      })
+      .catch(() => {
+        setHolidayKeys(null);
+      });
+  }, [formData.date, holidayYear]);
+
+  // Calculate if it's night rate based on time or Polish public holidays
+  useEffect(() => {
+    let isNight = false;
+    const reasons: string[] = [];
+
     if (formData.time) {
       const [hours, minutes] = formData.time.split(':').map(Number);
       const totalMinutes = hours * 60 + minutes + 30; // Add 30 minutes for travel
       const adjustedHours = Math.floor(totalMinutes / 60) % 24;
-      
-      // Night rate: 22:00-6:00 (after adding 30min travel time)
-      const isNight = adjustedHours >= 22 || adjustedHours < 6;
-      setCurrentPrice(isNight ? route.priceNight : route.priceDay);
+      const isNightTime = adjustedHours >= 22 || adjustedHours < 6;
+      if (isNightTime) {
+        reasons.push('pickup after 21:30 or before 5:30');
+      }
+      isNight = isNight || isNightTime;
     }
-  }, [formData.time, route.priceDay, route.priceNight]);
+
+    if (formData.date) {
+      const date = new Date(`${formData.date}T00:00:00`);
+      if (!Number.isNaN(date.getTime()) && isPolishPublicHoliday(date, holidayKeys)) {
+        reasons.push('Sunday/public holiday');
+        isNight = true;
+      }
+    }
+
+    const price = isNight ? route.priceNight : route.priceDay;
+    setCurrentPrice(price);
+    setRateContext({
+      label: isNight ? 'Night rate' : 'Day rate',
+      reason: reasons.length ? reasons.join(' + ') : 'standard day rate',
+      price,
+    });
+  }, [formData.time, formData.date, holidayKeys, route.priceDay, route.priceNight]);
+
+  useEffect(() => {
+    if (!formData.time && !formData.date) {
+      return;
+    }
+    if (lastRatePriceRef.current === null) {
+      lastRatePriceRef.current = rateContext.price;
+      showRateBanner(`Applied ${rateContext.label}: ${rateContext.price} PLN (${rateContext.reason}).`);
+      return;
+    }
+    if (lastRatePriceRef.current !== rateContext.price) {
+      lastRatePriceRef.current = rateContext.price;
+      showRateBanner(`Applied ${rateContext.label}: ${rateContext.price} PLN (${rateContext.reason}).`);
+    }
+  }, [rateContext.price, formData.time, formData.date]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -143,7 +331,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   if (submitted) {
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-xl max-w-md w-full p-8">
+        <div className="bg-white rounded-xl max-w-md w-full p-8 relative">
           <div className="bg-green-50 border-2 border-green-500 rounded-xl p-6 text-center">
             <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -159,7 +347,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
               <span className="inline-flex h-2.5 w-2.5 rounded-full bg-green-500 animate-pulse"></span>
               <span className="text-sm">Awaiting confirmation...</span>
             </div>
-            <div className="bg-white rounded-lg p-4 mb-4">
+            <div className="bg-white rounded-lg p-4 mb-2">
               <p className="text-gray-700">
                 Total Price: <span className="font-bold text-blue-600">{currentPrice} PLN</span>
               </p>
@@ -172,6 +360,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                 </div>
               )}
             </div>
+            {renderRateBanner()}
             {orderId && (
               <div className="bg-white rounded-lg p-4 mb-4">
                 {generatedId && (
@@ -200,7 +389,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <div className="bg-white rounded-xl max-w-2xl w-full my-8 max-h-[90vh] flex flex-col">
+      <div className="bg-white rounded-xl max-w-2xl w-full my-8 max-h-[90vh] flex flex-col relative">
         <div className="p-6 border-b flex items-center justify-between flex-shrink-0">
           <div>
             <h3 className="text-gray-900">Order Transfer</h3>
@@ -239,12 +428,8 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                 )}
               </div>
             </div>
-            {formData.time && (
-              <p className="text-sm text-gray-600 mt-2">
-                {currentPrice === route.priceNight ? 'Night rate applied (pickup after 21:30 or before 5:30)' : 'Day rate applied'}
-              </p>
-            )}
           </div>
+          {renderRateBanner()}
 
           {/* Date and Time */}
           <div className="grid sm:grid-cols-2 gap-4">

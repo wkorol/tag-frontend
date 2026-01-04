@@ -4,6 +4,14 @@ import { buildAdditionalNotes } from '../lib/orderNotes';
 import { hasMarketingConsent } from '../lib/consent';
 import { getApiBaseUrl } from '../lib/api';
 
+const getTodayDateString = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 interface QuoteFormProps {
   onClose: () => void;
 }
@@ -18,7 +26,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
     flightNumber: '',
     passengers: '1',
     largeLuggage: 'no',
-    date: '',
+    date: getTodayDateString(),
     time: '',
     name: '',
     phone: '',
