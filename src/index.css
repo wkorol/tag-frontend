@@ -1972,6 +1972,16 @@ html {
   letter-spacing: 0.01em;
 }
 
+.booking-form {
+  user-select: none;
+}
+
+.booking-form input,
+.booking-form textarea,
+.booking-form select {
+  user-select: text;
+}
+
 .rate-toast {
   animation: rate-toast-in 0.35s ease, rate-toast-out 0.35s ease 4.65s;
 }

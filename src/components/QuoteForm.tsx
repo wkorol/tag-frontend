@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Calendar, Users, Luggage, MapPin, FileText, Plane, DollarSign, Info, Lock } from 'lucide-react';
 import { buildAdditionalNotes } from '../lib/orderNotes';
 import { hasMarketingConsent } from '../lib/consent';
@@ -38,6 +38,7 @@ interface QuoteFormProps {
 }
 
 export function QuoteForm({ onClose }: QuoteFormProps) {
+  const priceInputRef = useRef<HTMLInputElement | null>(null);
   const [formData, setFormData] = useState({
     pickupAddress: '',
     destinationAddress: '',
@@ -290,7 +291,21 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6 overflow-y-auto">
+        <form
+          onSubmit={handleSubmit}
+          className="booking-form p-6 space-y-6 overflow-y-auto cursor-default"
+          onPointerDownCapture={(event) => {
+            if (
+              showPriceInput
+              && formData.proposedPrice.trim() === ''
+              && priceInputRef.current
+              && !priceInputRef.current.contains(event.target as Node)
+            ) {
+              setShowPriceInput(false);
+              setFormData(prev => ({ ...prev, proposedPrice: 'taximeter' }));
+            }
+          }}
+        >
           {error && (
             <div className="bg-red-50 border-2 border-red-500 rounded-lg p-4 text-red-800">
               {error}
@@ -391,7 +406,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
               <div>
                 <label htmlFor="proposedPrice" className="block text-gray-700 mb-2">
                   <DollarSign className="w-4 h-4 inline mr-2" />
-                  Your Proposed Price (PLN)
+                  Price
                 </label>
                 {!showPriceInput ? (
                   <button
@@ -428,9 +443,22 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                       id="proposedPrice"
                       name="proposedPrice"
                       value={formData.proposedPrice}
+                      ref={priceInputRef}
                       onChange={(e) => {
                         handleChange(e);
                         handlePhoneChange(e.target.value);
+                      }}
+                      onBlur={(event) => {
+                        if (event.currentTarget.value.trim() === '') {
+                          setShowPriceInput(false);
+                          setFormData(prev => ({ ...prev, proposedPrice: 'taximeter' }));
+                        }
+                      }}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Escape' && formData.proposedPrice.trim() === '') {
+                          setShowPriceInput(false);
+                          setFormData(prev => ({ ...prev, proposedPrice: 'taximeter' }));
+                        }
                       }}
                       placeholder="Enter your offer in PLN (e.g., 150)"
                       min="0"

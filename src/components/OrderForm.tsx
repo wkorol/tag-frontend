@@ -477,7 +477,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6 overflow-y-auto">
+        <form
+          onSubmit={handleSubmit}
+          className="booking-form p-6 space-y-6 overflow-y-auto cursor-default"
+        >
           {error && (
             <div className="bg-red-50 border-2 border-red-500 rounded-lg p-4 text-red-800">
               {error}

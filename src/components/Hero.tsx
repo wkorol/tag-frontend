@@ -1,4 +1,4 @@
-import { MessageCircle, Mail, Bus, Car, Clock, BadgeCheck, Plane } from 'lucide-react';
+import { MessageCircle, Mail, Bus, Car, Clock, BadgeCheck, Plane, CalendarCheck2, BadgeDollarSign, MapPin, Headphones } from 'lucide-react';
 import logo from 'figma:asset/9bf12920b9f211a57ac7e4ff94480c867662dafa.png';
 import { trackContactClick } from '../lib/tracking';
 
@@ -92,6 +92,38 @@ export function Hero() {
                   <h3 className="text-white mb-1">Flexible payments</h3>
                   <p className="text-blue-200 text-sm">
                     Card, Apple Pay, Google Pay, Revolut, or cash.
+                  </p>
+                </div>
+                <div
+                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
+                  <CalendarCheck2 className="w-8 h-8 text-cyan-300 mx-auto mb-2"/>
+                  <h3 className="text-white mb-1">Free prebooking</h3>
+                  <p className="text-blue-200 text-sm">
+                    Cancel anytime for free. Fully automated, no support needed.
+                  </p>
+                </div>
+                <div
+                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
+                  <BadgeDollarSign className="w-8 h-8 text-emerald-300 mx-auto mb-2"/>
+                  <h3 className="text-white mb-1">Fixed price guarantee</h3>
+                  <p className="text-blue-200 text-sm">
+                    No surprises on arrival. The price you book is the price you pay.
+                  </p>
+                </div>
+                <div
+                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
+                  <MapPin className="w-8 h-8 text-indigo-200 mx-auto mb-2"/>
+                  <h3 className="text-white mb-1">Local expertise</h3>
+                  <p className="text-blue-200 text-sm">
+                    Experienced Tri-City drivers who know the fastest routes.
+                  </p>
+                </div>
+                <div
+                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
+                  <Headphones className="w-8 h-8 text-rose-200 mx-auto mb-2"/>
+                  <h3 className="text-white mb-1">24/7 assistance</h3>
+                  <p className="text-blue-200 text-sm">
+                    Always available before, during, and after your ride.
                   </p>
                 </div>
               </div>
