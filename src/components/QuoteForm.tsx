@@ -4,6 +4,27 @@ import { buildAdditionalNotes } from '../lib/orderNotes';
 import { hasMarketingConsent } from '../lib/consent';
 import { getApiBaseUrl } from '../lib/api';
 
+const validatePhoneNumber = (value: string) => {
+  const trimmed = value.trim();
+  if (/[A-Za-z]/.test(trimmed)) {
+    return 'Please enter a valid phone number (digits only).';
+  }
+  const digitsOnly = trimmed.replace(/\D/g, '');
+  if (digitsOnly.length < 7 || digitsOnly.length > 15) {
+    return 'Please enter a valid phone number (7–15 digits, optional +).';
+  }
+  return null;
+};
+
+const validateEmail = (value: string) => {
+  const trimmed = value.trim();
+  const basicEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!basicEmail.test(trimmed)) {
+    return 'Please enter a valid email address.';
+  }
+  return null;
+};
+
 const getTodayDateString = () => {
   const now = new Date();
   const year = now.getFullYear();
@@ -38,8 +59,27 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   const [orderId, setOrderId] = useState<string | null>(null);
   const [generatedId, setGeneratedId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [phoneError, setPhoneError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [showPriceInput, setShowPriceInput] = useState(false);
+  const isPhoneValid = !validatePhoneNumber(formData.phone);
+  const isEmailValid = !validateEmail(formData.email);
+  const isPickupComplete = formData.pickupType === 'airport'
+    ? formData.signText.trim() !== '' && formData.flightNumber.trim() !== ''
+    : formData.pickupType === 'address' && formData.pickupAddress.trim() !== '';
+  const isPriceValid = showPriceInput ? formData.proposedPrice.trim() !== '' : true;
+  const isFormInvalid = !formData.pickupType
+    || !formData.destinationAddress.trim()
+    || !formData.date
+    || !formData.time
+    || formData.name.trim() === ''
+    || !isEmailValid
+    || !isPhoneValid
+    || !formData.passengers
+    || !formData.largeLuggage
+    || !isPickupComplete
+    || !isPriceValid;
 
   const trackConversion = () => {
     if (typeof window === 'undefined') {
@@ -75,6 +115,20 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setPhoneError(null);
+    setEmailError(null);
+    const phoneError = validatePhoneNumber(formData.phone);
+    if (phoneError) {
+      setPhoneError(phoneError);
+      setError(phoneError);
+      return;
+    }
+    const emailError = validateEmail(formData.email);
+    if (emailError) {
+      setEmailError(emailError);
+      setError(emailError);
+      return;
+    }
     setSubmitting(true);
 
     const apiBaseUrl = getApiBaseUrl();
@@ -154,6 +208,27 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
         ...formData,
         [name]: value,
       });
+    }
+  };
+
+  const handlePhoneChange = (value: string) => {
+    const nextError = validatePhoneNumber(value);
+    setPhoneError(nextError);
+    if (!nextError && error === phoneError) {
+      setError(null);
+    }
+  };
+
+  const handlePhoneBlur = () => {
+    const phoneError = validatePhoneNumber(formData.phone);
+    setPhoneError(phoneError);
+  };
+
+  const handleEmailChange = (value: string) => {
+    const nextError = validateEmail(value);
+    setEmailError(nextError);
+    if (!nextError && error === emailError) {
+      setError(null);
     }
   };
 
@@ -353,7 +428,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                       id="proposedPrice"
                       name="proposedPrice"
                       value={formData.proposedPrice}
-                      onChange={handleChange}
+                      onChange={(e) => {
+                        handleChange(e);
+                        handlePhoneChange(e.target.value);
+                      }}
                       placeholder="Enter your offer in PLN (e.g., 150)"
                       min="0"
                       step="10"
@@ -530,10 +608,15 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
+                      onBlur={handlePhoneBlur}
+                      inputMode="tel"
                       placeholder="+48 123 456 789"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
+                    {phoneError && (
+                      <p className="text-sm text-red-600 mt-2">{phoneError}</p>
+                    )}
                   </div>
 
                   <div>
@@ -545,11 +628,17 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                       id="email"
                       name="email"
                       value={formData.email}
-                      onChange={handleChange}
+                      onChange={(e) => {
+                        handleChange(e);
+                        handleEmailChange(e.target.value);
+                      }}
                       placeholder="your@email.com"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
+                    {emailError && (
+                      <p className="text-sm text-red-600 mt-2">{emailError}</p>
+                    )}
                     <p className="text-sm text-gray-500 mt-1">
                       You'll receive a response within 5-10 minutes
                     </p>
@@ -579,10 +668,21 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
-                disabled={submitting}
+                className={`w-full py-4 rounded-lg transition-colors ${
+                  submitting || isFormInvalid
+                    ? 'bg-slate-200 text-slate-700 border border-slate-300 shadow-inner cursor-not-allowed'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
+                disabled={submitting || isFormInvalid}
               >
-                {submitting ? 'Submitting...' : 'Submit Quote Request'}
+                {submitting ? 'Submitting...' : (
+                  isFormInvalid ? (
+                    <span className="inline-flex items-center gap-2">
+                      <Lock className="h-4 w-4" />
+                      <span>Complete the form to continue</span>
+                    </span>
+                  ) : 'Submit Quote Request'
+                )}
               </button>
             </>
           )}

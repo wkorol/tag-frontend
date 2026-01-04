@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Calendar, Users, Luggage, MapPin, FileText, Plane, ChevronDown, ChevronUp, Info } from 'lucide-react';
+import { Calendar, Users, Luggage, MapPin, FileText, Plane, ChevronDown, ChevronUp, Info, Lock } from 'lucide-react';
 import { useEurRate } from '../lib/useEurRate';
 import { formatEur } from '../lib/currency';
 import { buildAdditionalNotes } from '../lib/orderNotes';
@@ -35,6 +35,27 @@ const getTodayDateString = () => {
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const day = String(now.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+};
+
+const validatePhoneNumber = (value: string) => {
+  const trimmed = value.trim();
+  if (/[A-Za-z]/.test(trimmed)) {
+    return 'Please enter a valid phone number (digits only).';
+  }
+  const digitsOnly = trimmed.replace(/\D/g, '');
+  if (digitsOnly.length < 7 || digitsOnly.length > 15) {
+    return 'Please enter a valid phone number (7–15 digits, optional +).';
+  }
+  return null;
+};
+
+const validateEmail = (value: string) => {
+  const trimmed = value.trim();
+  const basicEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!basicEmail.test(trimmed)) {
+    return 'Please enter a valid email address.';
+  }
+  return null;
 };
 
 const formatDateKey = (date: Date) => {
@@ -111,10 +132,17 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     description: '',
   });
 
+  const handlePhoneBlur = () => {
+    const phoneError = validatePhoneNumber(formData.phone);
+    setPhoneError(phoneError);
+  };
+
   const [submitted, setSubmitted] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [generatedId, setGeneratedId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [phoneError, setPhoneError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [currentPrice, setCurrentPrice] = useState(route.priceDay);
   const [rateContext, setRateContext] = useState({
@@ -129,6 +157,20 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const [holidayYear, setHolidayYear] = useState<number | null>(null);
   const eurRate = useEurRate();
   const eurText = formatEur(currentPrice, eurRate);
+  const isPhoneValid = !validatePhoneNumber(formData.phone);
+  const isEmailValid = !validateEmail(formData.email);
+  const isPickupComplete = formData.pickupType === 'airport'
+    ? formData.signText.trim() !== '' && formData.flightNumber.trim() !== ''
+    : formData.address.trim() !== '';
+  const isFormInvalid = !formData.date
+    || !formData.time
+    || formData.name.trim() === ''
+    || !isEmailValid
+    || !isPhoneValid
+    || !formData.passengers
+    || !formData.largeLuggage
+    || !formData.pickupType
+    || !isPickupComplete;
 
   const showRateBanner = (message: string) => {
     setRateBanner(message);
@@ -266,6 +308,20 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setPhoneError(null);
+    setEmailError(null);
+    const phoneError = validatePhoneNumber(formData.phone);
+    if (phoneError) {
+      setPhoneError(phoneError);
+      setError(phoneError);
+      return;
+    }
+    const emailError = validateEmail(formData.email);
+    if (emailError) {
+      setEmailError(emailError);
+      setError(emailError);
+      return;
+    }
     setSubmitting(true);
 
     const apiBaseUrl = getApiBaseUrl();
@@ -318,6 +374,22 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       setError('Network error while submitting the order. Please try again.');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handlePhoneChange = (value: string) => {
+    const nextError = validatePhoneNumber(value);
+    setPhoneError(nextError);
+    if (!nextError && error === phoneError) {
+      setError(null);
+    }
+  };
+
+  const handleEmailChange = (value: string) => {
+    const nextError = validateEmail(value);
+    setEmailError(nextError);
+    if (!nextError && error === emailError) {
+      setError(null);
     }
   };
 
@@ -479,7 +551,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   name="pickupType"
                   value="airport"
                   checked={formData.pickupType === 'airport'}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handlePhoneChange(e.target.value);
+                  }}
                   className="w-4 h-4 text-blue-600"
                 />
                 <Plane className="w-5 h-5 text-gray-700" />
@@ -662,10 +737,15 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
+                  onBlur={handlePhoneBlur}
+                  inputMode="tel"
                   placeholder="+48 123 456 789"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
+                {phoneError && (
+                  <p className="text-sm text-red-600 mt-2">{phoneError}</p>
+                )}
               </div>
 
               <div>
@@ -677,11 +757,17 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   id="email"
                   name="email"
                   value={formData.email}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmailChange(e.target.value);
+                  }}
                   placeholder="your@email.com"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
+                {emailError && (
+                  <p className="text-sm text-red-600 mt-2">{emailError}</p>
+                )}
                 <p className="text-sm text-gray-500 mt-1">
                   You'll receive a confirmation email with a link to edit or cancel your order
                 </p>
@@ -711,23 +797,34 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
-            disabled={submitting}
+            className={`w-full py-4 rounded-lg transition-colors ${
+              submitting || isFormInvalid
+                ? 'bg-slate-200 text-slate-700 border border-slate-300 shadow-inner cursor-not-allowed'
+                : 'bg-blue-600 text-white hover:bg-blue-700'
+            }`}
+            disabled={submitting || isFormInvalid}
           >
             {submitting ? (
               'Submitting...'
             ) : (
-              <span className="flex flex-col items-center gap-1">
-                <span>{`Confirm Order - ${currentPrice} PLN`}</span>
-                {eurText && (
-                  <span className="inline-flex items-center gap-2 text-[11px] text-blue-100">
-                    <span>{eurText}</span>
-                    <span className="live-badge">
-                      ACTUAL
+              isFormInvalid ? (
+                <span className="inline-flex items-center gap-2">
+                  <Lock className="h-4 w-4" />
+                  <span>Complete the form to continue</span>
+                </span>
+              ) : (
+                <span className="flex flex-col items-center gap-1">
+                  <span>{`Confirm Order - ${currentPrice} PLN`}</span>
+                  {eurText && (
+                    <span className="inline-flex items-center gap-2 text-[11px] text-blue-100">
+                      <span>{eurText}</span>
+                      <span className="live-badge">
+                        ACTUAL
+                      </span>
                     </span>
-                  </span>
-                )}
-              </span>
+                  )}
+                </span>
+              )
             )}
           </button>
         </form>
