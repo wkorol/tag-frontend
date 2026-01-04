@@ -274,8 +274,29 @@ export function AdminOrderPage() {
                     Passengers: {parsedNotes?.passengers ?? '—'}
                   </div>
                   <div className="text-sm text-slate-700">
+                    Large luggage: {parsedNotes?.largeLuggage ?? '—'}
+                  </div>
+                  <div className="text-sm text-slate-700">
+                    Pickup type: {parsedNotes?.pickupType ?? '—'}
+                  </div>
+                  {parsedNotes?.pickupType === 'airport' && (
+                    <div className="text-sm text-slate-700">
+                      Flight number: {order.flightNumber || '—'}
+                    </div>
+                  )}
+                  {parsedNotes?.signText && (
+                    <div className="text-sm text-slate-700">
+                      Sign text: {parsedNotes.signText}
+                    </div>
+                  )}
+                  <div className="text-sm text-slate-700">
                     Route: {parsedNotes?.route?.from ?? '—'} → {parsedNotes?.route?.to ?? '—'}
                   </div>
+                  {parsedNotes?.notes && (
+                    <div className="text-sm text-slate-700">
+                      Notes: {parsedNotes.notes}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

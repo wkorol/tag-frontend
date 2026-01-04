@@ -62,11 +62,13 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
   );
   const hasUpdateFields = updateFields.size > 0;
   const [updateCompleted, setUpdateCompleted] = useState(false);
+  const [updateSuccessOpen, setUpdateSuccessOpen] = useState(false);
   const [order, setOrder] = useState<OrderState | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [cancelled, setCancelled] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [selfUpdateOpen, setSelfUpdateOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [inputEmail, setInputEmail] = useState('');
@@ -92,9 +94,8 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
     description: '',
   });
 
-  const updateRequestActive = hasUpdateFields;
   const effectiveUpdateRequest = hasUpdateFields && !updateCompleted;
-  const isFieldEditable = (field: string) => isEditing && (!updateRequestActive || updateFields.has(field));
+  const isFieldEditable = (field: string) => isEditing && (!effectiveUpdateRequest || updateFields.has(field));
 
   const inputClass = (field: string, editable: boolean) => {
     const highlight = effectiveUpdateRequest && updateFields.has(field);
@@ -229,19 +230,22 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
       notes: formData.description.trim(),
     });
 
+    const includeFlightNumber = order.pickupType === 'airport'
+      || (effectiveUpdateRequest && updateFields.has('flight'));
     const payload = {
       carType: order.route.type === 'bus' ? 1 : 2,
       pickupAddress: order.pickupType === 'address' ? formData.address : order.route.from,
       proposedPrice: String(order.price),
       date: formData.date,
       pickupTime: formData.time,
-      flightNumber: order.pickupType === 'airport' ? formData.flightNumber : 'N/A',
+      flightNumber: includeFlightNumber ? formData.flightNumber : 'N/A',
       fullName: formData.name,
       emailAddress: formData.email,
       currentEmailAddress: authEmail,
       phoneNumber: formData.phone,
       additionalNotes,
-      adminUpdateRequest: updateRequestActive,
+      adminUpdateRequest: effectiveUpdateRequest,
+      adminUpdateFields: effectiveUpdateRequest ? Array.from(updateFields) : [],
     };
 
     try {
@@ -272,7 +276,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
         phone: formData.phone,
         pickupAddress: payload.pickupAddress,
         description: formData.description.trim(),
-        status: order.status === 'confirmed' && !updateRequestActive ? 'pending' : order.status,
+        status: order.status === 'confirmed' && !effectiveUpdateRequest ? 'pending' : order.status,
       });
       if (formData.email && formData.email !== authEmail) {
         setAuthEmail(formData.email);
@@ -280,9 +284,11 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
       setIsEditing(false);
       if (effectiveUpdateRequest) {
         setUpdateCompleted(true);
+        setUpdateSuccessOpen(true);
       }
-      setSaved(true);
-      setTimeout(() => setSaved(false), 3000);
+      if (!effectiveUpdateRequest) {
+        setSelfUpdateOpen(true);
+      }
     } catch (saveError) {
       setError('Network error while saving changes.');
     }
@@ -460,25 +466,71 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
             </div>
           )}
 
-          {/* Success Message */}
-          {saved && (
-            <div className="bg-green-50 border-l-4 border-green-500 p-4 m-6">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-green-700">
-                    {effectiveUpdateRequest
-                      ? `Thank you! Your details were updated successfully. Your transfer remains confirmed for ${formData.date} at ${formData.time}. We will see you then.`
-                      : 'Your changes have been saved successfully!'}
+          {updateSuccessOpen && (
+            <div
+              className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+              onClick={() => setUpdateSuccessOpen(false)}
+            >
+              <div
+                className="bg-white rounded-xl max-w-md w-full p-8 relative"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <div className="bg-green-50 border-2 border-green-500 rounded-xl p-6 text-center">
+                  <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <h3 className="text-green-900 mb-2">Details updated</h3>
+                  <p className="text-green-800 mb-4">
+                    Thank you! Your details were updated successfully. Your transfer remains confirmed for {formData.date} at {formData.time}.
+                    We will see you then.
                   </p>
+                  <button
+                    onClick={() => setUpdateSuccessOpen(false)}
+                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                  >
+                    Close
+                  </button>
                 </div>
               </div>
             </div>
           )}
+
+          {selfUpdateOpen && (
+            <div
+              className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+              onClick={() => setSelfUpdateOpen(false)}
+            >
+              <div
+                className="bg-white rounded-xl max-w-md w-full p-8 relative"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <div className="bg-yellow-50 border-2 border-yellow-400 rounded-xl p-6 text-center">
+                  <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <AlertCircle className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-yellow-900 mb-2">Update submitted</h3>
+                  <p className="text-yellow-800 mb-4">
+                    Your updates were sent for confirmation. Please wait for the approval email.
+                  </p>
+                  <div className="flex items-center justify-center gap-2 text-yellow-700 mb-4">
+                    <span className="inline-flex h-2.5 w-2.5 rounded-full bg-yellow-500 animate-pulse"></span>
+                    <span className="text-sm">Awaiting confirmation...</span>
+                  </div>
+                  <button
+                    onClick={() => setSelfUpdateOpen(false)}
+                    className="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Success Message */}
+          {saved && null}
 
           {/* Order Details */}
           <div className="p-6 space-y-6">
@@ -543,7 +595,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                     className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
                   >
                     <Edit className="w-4 h-4" />
-                    {updateRequestActive ? 'Update Requested Fields' : 'Edit Details'}
+                    {effectiveUpdateRequest ? 'Update Requested Fields' : 'Edit Details'}
                   </button>
                 )}
               </div>
@@ -633,7 +685,8 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
               </div>
 
               {/* Airport Pickup Details */}
-              {order.pickupType === 'airport' && (
+              {(order.pickupType === 'airport'
+                || (effectiveUpdateRequest && updateFields.has('flight'))) && (
                 <>
                   <div>
                     <label htmlFor="signText" className="block text-gray-700 mb-2">
