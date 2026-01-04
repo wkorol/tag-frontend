@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Calendar, Users, Luggage, MapPin, FileText, Plane, AlertCircle, Trash2, Edit, Copy } from 'lucide-react';
 import { useEurRate } from '../lib/useEurRate';
 import { formatEur } from '../lib/currency';
@@ -55,6 +55,13 @@ type OrderState = {
 
 export function ManageOrder({ orderId }: ManageOrderProps) {
   const cancelledParam = new URLSearchParams(window.location.search).get('cancelled') === '1';
+  const updateParam = new URLSearchParams(window.location.search).get('update') ?? '';
+  const updateFields = useMemo(
+    () => new Set(updateParam.split(',').map((value) => value.trim()).filter(Boolean)),
+    [updateParam]
+  );
+  const hasUpdateFields = updateFields.size > 0;
+  const [updateCompleted, setUpdateCompleted] = useState(false);
   const [order, setOrder] = useState<OrderState | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
@@ -69,6 +76,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
   const [toast, setToast] = useState<string | null>(null);
   const toastTimeoutRef = useRef<number | null>(null);
   const eurRate = useEurRate();
+  const canEdit = order?.status === 'pending' || order?.status === 'confirmed';
 
   const [formData, setFormData] = useState({
     signText: '',
@@ -83,6 +91,18 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
     address: '',
     description: '',
   });
+
+  const updateRequestActive = hasUpdateFields;
+  const effectiveUpdateRequest = hasUpdateFields && !updateCompleted;
+  const isFieldEditable = (field: string) => isEditing && (!updateRequestActive || updateFields.has(field));
+
+  const inputClass = (field: string, editable: boolean) => {
+    const highlight = effectiveUpdateRequest && updateFields.has(field);
+    const base = highlight ? 'border-red-400 bg-red-50' : 'border-gray-300';
+    const focus = editable ? 'focus:ring-2 focus:ring-blue-500 focus:border-transparent' : '';
+    const disabled = !editable && !highlight ? 'bg-gray-50' : '';
+    return `w-full px-4 py-3 border ${base} rounded-lg ${focus} ${disabled}`;
+  };
 
   useEffect(() => {
     const loadOrder = async () => {
@@ -180,6 +200,12 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
     }
   }, [orderId, authEmail, accessRequestId]);
 
+  useEffect(() => {
+    if (order && effectiveUpdateRequest && canEdit) {
+      setIsEditing(true);
+    }
+  }, [order, effectiveUpdateRequest, canEdit]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
@@ -211,9 +237,11 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
       pickupTime: formData.time,
       flightNumber: order.pickupType === 'airport' ? formData.flightNumber : 'N/A',
       fullName: formData.name,
-      emailAddress: authEmail,
+      emailAddress: formData.email,
+      currentEmailAddress: authEmail,
       phoneNumber: formData.phone,
       additionalNotes,
+      adminUpdateRequest: updateRequestActive,
     };
 
     try {
@@ -244,9 +272,15 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
         phone: formData.phone,
         pickupAddress: payload.pickupAddress,
         description: formData.description.trim(),
-        status: order.status === 'confirmed' ? 'pending' : order.status,
+        status: order.status === 'confirmed' && !updateRequestActive ? 'pending' : order.status,
       });
+      if (formData.email && formData.email !== authEmail) {
+        setAuthEmail(formData.email);
+      }
       setIsEditing(false);
+      if (effectiveUpdateRequest) {
+        setUpdateCompleted(true);
+      }
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch (saveError) {
@@ -382,8 +416,6 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
     );
   }
 
-  const canEdit = order?.status === 'pending' || order?.status === 'confirmed';
-
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-3xl mx-auto">
@@ -439,7 +471,9 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                 </div>
                 <div className="ml-3">
                   <p className="text-sm text-green-700">
-                    Your changes have been saved successfully!
+                    {effectiveUpdateRequest
+                      ? `Thank you! Your details were updated successfully. Your transfer remains confirmed for ${formData.date} at ${formData.time}. We will see you then.`
+                      : 'Your changes have been saved successfully!'}
                   </p>
                 </div>
               </div>
@@ -509,15 +543,20 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                     className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
                   >
                     <Edit className="w-4 h-4" />
-                    Edit Details
+                    {updateRequestActive ? 'Update Requested Fields' : 'Edit Details'}
                   </button>
                 )}
               </div>
-              {!isEditing && order.status === 'confirmed' && (
-                <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-                  Editing a confirmed order will send it back for approval. You will receive a new confirmation email.
-                </div>
-              )}
+                {!isEditing && order.status === 'confirmed' && !effectiveUpdateRequest && (
+                  <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                    Editing a confirmed order will send it back for approval. You will receive a new confirmation email.
+                  </div>
+                )}
+                {effectiveUpdateRequest && (
+                  <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+                    Please update the highlighted fields and save your changes.
+                  </div>
+                )}
               {!canEdit && (
                 <div className={`border-l-4 p-4 ${
                   order.status === 'confirmed'
@@ -572,10 +611,8 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                     name="date"
                     value={formData.date}
                     onChange={handleChange}
-                    disabled={!isEditing}
-                    className={`w-full px-4 py-3 border border-gray-300 rounded-lg ${
-                      isEditing ? 'focus:ring-2 focus:ring-blue-500 focus:border-transparent' : 'bg-gray-50'
-                    }`}
+                    disabled={!isFieldEditable('date')}
+                    className={inputClass('date', isFieldEditable('date'))}
                   />
                 </div>
 
@@ -589,10 +626,8 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                     name="time"
                     value={formData.time}
                     onChange={handleChange}
-                    disabled={!isEditing}
-                    className={`w-full px-4 py-3 border border-gray-300 rounded-lg ${
-                      isEditing ? 'focus:ring-2 focus:ring-blue-500 focus:border-transparent' : 'bg-gray-50'
-                    }`}
+                    disabled={!isFieldEditable('time')}
+                    className={inputClass('time', isFieldEditable('time'))}
                   />
                 </div>
               </div>
@@ -611,10 +646,8 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                       name="signText"
                       value={formData.signText}
                       onChange={handleChange}
-                      disabled={!isEditing}
-                      className={`w-full px-4 py-3 border border-gray-300 rounded-lg ${
-                        isEditing ? 'focus:ring-2 focus:ring-blue-500 focus:border-transparent' : 'bg-gray-50'
-                      }`}
+                      disabled={!isFieldEditable('signText')}
+                      className={inputClass('signText', isFieldEditable('signText'))}
                     />
                   </div>
 
@@ -629,10 +662,8 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                       name="flightNumber"
                       value={formData.flightNumber}
                       onChange={handleChange}
-                      disabled={!isEditing}
-                      className={`w-full px-4 py-3 border border-gray-300 rounded-lg ${
-                        isEditing ? 'focus:ring-2 focus:ring-blue-500 focus:border-transparent' : 'bg-gray-50'
-                      }`}
+                      disabled={!isFieldEditable('flight')}
+                      className={inputClass('flight', isFieldEditable('flight'))}
                     />
                   </div>
                 </>
@@ -650,11 +681,9 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                     name="address"
                     value={formData.address}
                     onChange={handleChange}
-                    disabled={!isEditing}
+                    disabled={!isFieldEditable('address')}
                     rows={3}
-                    className={`w-full px-4 py-3 border border-gray-300 rounded-lg ${
-                      isEditing ? 'focus:ring-2 focus:ring-blue-500 focus:border-transparent' : 'bg-gray-50'
-                    }`}
+                    className={inputClass('address', isFieldEditable('address'))}
                   />
                 </div>
               )}
@@ -671,10 +700,8 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                     name="passengers"
                     value={formData.passengers}
                     onChange={handleChange}
-                    disabled={!isEditing}
-                    className={`w-full px-4 py-3 border border-gray-300 rounded-lg ${
-                      isEditing ? 'focus:ring-2 focus:ring-blue-500 focus:border-transparent' : 'bg-gray-50'
-                    }`}
+                    disabled={!isFieldEditable('passengers')}
+                    className={inputClass('passengers', isFieldEditable('passengers'))}
                   >
                     {order.route.type === 'bus' ? (
                       <>
@@ -704,10 +731,8 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                     name="largeLuggage"
                     value={formData.largeLuggage}
                     onChange={handleChange}
-                    disabled={!isEditing}
-                    className={`w-full px-4 py-3 border border-gray-300 rounded-lg ${
-                      isEditing ? 'focus:ring-2 focus:ring-blue-500 focus:border-transparent' : 'bg-gray-50'
-                    }`}
+                    disabled={!isFieldEditable('largeLuggage')}
+                    className={inputClass('largeLuggage', isFieldEditable('largeLuggage'))}
                   >
                     <option value="no">No</option>
                     <option value="yes">Yes</option>
@@ -730,10 +755,8 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      disabled={!isEditing}
-                      className={`w-full px-4 py-3 border border-gray-300 rounded-lg ${
-                        isEditing ? 'focus:ring-2 focus:ring-blue-500 focus:border-transparent' : 'bg-gray-50'
-                      }`}
+                      disabled={!isFieldEditable('name')}
+                      className={inputClass('name', isFieldEditable('name'))}
                     />
                   </div>
 
@@ -747,10 +770,8 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      disabled={!isEditing}
-                      className={`w-full px-4 py-3 border border-gray-300 rounded-lg ${
-                        isEditing ? 'focus:ring-2 focus:ring-blue-500 focus:border-transparent' : 'bg-gray-50'
-                      }`}
+                      disabled={!isFieldEditable('phone')}
+                      className={inputClass('phone', isFieldEditable('phone'))}
                     />
                   </div>
 
@@ -764,10 +785,8 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    disabled
-                    className={`w-full px-4 py-3 border border-gray-300 rounded-lg ${
-                      isEditing ? 'focus:ring-2 focus:ring-blue-500 focus:border-transparent' : 'bg-gray-50'
-                    }`}
+                    disabled={!isFieldEditable('email')}
+                    className={inputClass('email', isFieldEditable('email'))}
                   />
                 </div>
 
@@ -781,11 +800,9 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                       name="description"
                       value={formData.description}
                       onChange={handleChange}
-                      disabled={!isEditing}
+                      disabled={!isFieldEditable('description')}
                       rows={3}
-                      className={`w-full px-4 py-3 border border-gray-300 rounded-lg ${
-                        isEditing ? 'focus:ring-2 focus:ring-blue-500 focus:border-transparent' : 'bg-gray-50'
-                      }`}
+                      className={inputClass('description', isFieldEditable('description'))}
                     />
                   </div>
                 </div>
@@ -826,13 +843,24 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                   </button>
                 </div>
               ) : (
-                <button
-                  onClick={() => setShowCancelConfirm(true)}
-                  className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
-                >
-                  <Trash2 className="w-5 h-5" />
-                  Cancel Booking
-                </button>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {canEdit && (
+                    <button
+                      onClick={() => setIsEditing(true)}
+                      className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                    >
+                      <Edit className="w-5 h-5" />
+                      Edit Order
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setShowCancelConfirm(true)}
+                    className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                    Cancel Order
+                  </button>
+                </div>
               )}
             </div>
 

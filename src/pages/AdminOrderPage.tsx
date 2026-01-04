@@ -50,6 +50,11 @@ export function AdminOrderPage() {
   const [actionMessage, setActionMessage] = useState<string | null>(null);
   const [priceInput, setPriceInput] = useState('');
   const [rejectReason, setRejectReason] = useState('');
+  const [updateFields, setUpdateFields] = useState({
+    phone: false,
+    email: false,
+    flight: false,
+  });
   const [submitting, setSubmitting] = useState(false);
 
   const parsedNotes = useMemo(() => parseNotes(order?.additionalNotes), [order?.additionalNotes]);
@@ -148,6 +153,44 @@ export function AdminOrderPage() {
       fetchOrder();
     } catch (err) {
       setActionMessage(err instanceof Error ? err.message : 'Failed to update order.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const postUpdateRequest = async () => {
+    if (!id || !token) {
+      return;
+    }
+
+    const fields = Object.entries(updateFields)
+      .filter(([, selected]) => selected)
+      .map(([field]) => field);
+
+    if (fields.length === 0) {
+      setActionMessage('Select at least one field to update.');
+      return;
+    }
+
+    setSubmitting(true);
+    setActionMessage(null);
+    const apiBaseUrl = getApiBaseUrl();
+    try {
+      const response = await fetch(
+        `${apiBaseUrl}/api/admin/orders/${id}/request-update?token=${encodeURIComponent(token)}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields }),
+        }
+      );
+      const data = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(data?.error ?? 'Failed to send update request.');
+      }
+      setActionMessage('Update request sent to the customer.');
+    } catch (err) {
+      setActionMessage(err instanceof Error ? err.message : 'Failed to send update request.');
     } finally {
       setSubmitting(false);
     }
@@ -292,6 +335,46 @@ export function AdminOrderPage() {
                     />
                   </div>
                 </div>
+              </div>
+            )}
+
+            {(order.status === 'pending' || order.status === 'confirmed') && (
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+                <h3 className="text-lg text-slate-900">Request customer update</h3>
+                <p className="text-sm text-slate-600">
+                  Select the fields the customer should update. They will receive an email with a link to edit their booking.
+                </p>
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {(['phone', 'email', 'flight'] as const).map((field) => (
+                    <label
+                      key={field}
+                      className="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={updateFields[field]}
+                        onChange={(event) =>
+                          setUpdateFields((prev) => ({
+                            ...prev,
+                            [field]: event.target.checked,
+                          }))
+                        }
+                      />
+                      {field === 'phone'
+                        ? 'Phone number'
+                        : field === 'email'
+                          ? 'Email address'
+                          : 'Flight number'}
+                    </label>
+                  ))}
+                </div>
+                <button
+                  className="w-full rounded-lg border border-red-600 px-4 py-2 text-red-700 hover:bg-red-50 transition-colors"
+                  disabled={submitting}
+                  onClick={postUpdateRequest}
+                >
+                  Request update
+                </button>
               </div>
             )}
 
