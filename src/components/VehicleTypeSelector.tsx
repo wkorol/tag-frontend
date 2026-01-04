@@ -1,10 +1,15 @@
 import { Car, Users } from 'lucide-react';
+import { useEurRate } from '../lib/useEurRate';
+import { formatEur } from '../lib/currency';
 
 interface VehicleTypeSelectorProps {
   onSelectType: (type: 'standard' | 'bus') => void;
 }
 
 export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) {
+  const eurRate = useEurRate();
+  const eurText = (pln: number) => formatEur(pln, eurRate);
+
   return (
     <section id="vehicle-selection" className="py-16 bg-white">
       <div className="max-w-4xl mx-auto px-4">
@@ -42,17 +47,47 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
             <div className="bg-white rounded-lg p-4 mb-4">
               <p className="text-sm text-gray-600 mb-2">Example prices:</p>
               <div className="space-y-1 text-sm">
-                <div className="flex justify-between">
+                <div className="flex justify-between items-start gap-2">
                   <span className="text-gray-700">Airport → Gdańsk</span>
-                  <span className="text-blue-900">from 120 PLN</span>
+                  <div className="text-right">
+                    <span className="text-blue-900">from 120 PLN</span>
+                    {eurText(120) && (
+                      <div className="flex items-center justify-end gap-2 text-gray-500">
+                        <span className="eur-text">{eurText(120)}</span>
+                        <span className="live-badge">
+                          ACTUAL
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-start gap-2">
                   <span className="text-gray-700">Airport → Sopot</span>
-                  <span className="text-blue-900">from 120 PLN</span>
+                  <div className="text-right">
+                    <span className="text-blue-900">from 120 PLN</span>
+                    {eurText(120) && (
+                      <div className="flex items-center justify-end gap-2 text-gray-500">
+                        <span className="eur-text">{eurText(120)}</span>
+                        <span className="live-badge">
+                          ACTUAL
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-start gap-2">
                   <span className="text-gray-700">Airport → Gdynia</span>
-                  <span className="text-blue-900">from 200 PLN</span>
+                  <div className="text-right">
+                    <span className="text-blue-900">from 200 PLN</span>
+                    {eurText(200) && (
+                      <div className="flex items-center justify-end gap-2 text-gray-500">
+                        <span className="eur-text">{eurText(200)}</span>
+                        <span className="live-badge">
+                          ACTUAL
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -88,17 +123,47 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
             <div className="bg-white rounded-lg p-4 mb-4">
               <p className="text-sm text-gray-600 mb-2">Example prices:</p>
               <div className="space-y-1 text-sm">
-                <div className="flex justify-between">
+                <div className="flex justify-between items-start gap-2">
                   <span className="text-gray-700">Airport → Gdańsk</span>
-                  <span className="text-blue-900">from 140 PLN</span>
+                  <div className="text-right">
+                    <span className="text-blue-900">from 140 PLN</span>
+                    {eurText(140) && (
+                      <div className="flex items-center justify-end gap-2 text-gray-500">
+                        <span className="eur-text">{eurText(140)}</span>
+                        <span className="live-badge">
+                          ACTUAL
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-start gap-2">
                   <span className="text-gray-700">Airport → Sopot</span>
-                  <span className="text-blue-900">from 140 PLN</span>
+                  <div className="text-right">
+                    <span className="text-blue-900">from 140 PLN</span>
+                    {eurText(140) && (
+                      <div className="flex items-center justify-end gap-2 text-gray-500">
+                        <span className="eur-text">{eurText(140)}</span>
+                        <span className="live-badge">
+                          ACTUAL
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-start gap-2">
                   <span className="text-gray-700">Airport → Gdynia</span>
-                  <span className="text-blue-900">from 250 PLN</span>
+                  <div className="text-right">
+                    <span className="text-blue-900">from 250 PLN</span>
+                    {eurText(250) && (
+                      <div className="flex items-center justify-end gap-2 text-gray-500">
+                        <span className="eur-text">{eurText(250)}</span>
+                        <span className="live-badge">
+                          ACTUAL
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

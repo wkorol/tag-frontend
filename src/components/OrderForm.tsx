@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Calendar, Users, Luggage, MapPin, FileText, Plane, ChevronDown, ChevronUp, Info } from 'lucide-react';
+import { useEurRate } from '../lib/useEurRate';
+import { formatEur } from '../lib/currency';
 import { buildAdditionalNotes } from '../lib/orderNotes';
 import { hasMarketingConsent } from '../lib/consent';
 import { getApiBaseUrl } from '../lib/api';
@@ -37,6 +39,8 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [currentPrice, setCurrentPrice] = useState(route.priceDay);
+  const eurRate = useEurRate();
+  const eurText = formatEur(currentPrice, eurRate);
 
   const trackConversion = () => {
     if (typeof window === 'undefined') {
@@ -156,7 +160,17 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
               <span className="text-sm">Awaiting confirmation...</span>
             </div>
             <div className="bg-white rounded-lg p-4 mb-4">
-              <p className="text-gray-700">Total Price: <span className="font-bold text-blue-600">{currentPrice} PLN</span></p>
+              <p className="text-gray-700">
+                Total Price: <span className="font-bold text-blue-600">{currentPrice} PLN</span>
+              </p>
+              {eurText && (
+                <div className="mt-1 flex items-center justify-center gap-2 text-gray-500">
+                  <span className="eur-text">{eurText}</span>
+                  <span className="live-badge">
+                    ACTUAL
+                  </span>
+                </div>
+              )}
             </div>
             {orderId && (
               <div className="bg-white rounded-lg p-4 mb-4">
@@ -213,7 +227,17 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
           <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <span className="text-gray-700">Total Price:</span>
-              <span className="text-blue-900 text-2xl">{currentPrice} PLN</span>
+              <div className="text-right">
+                <span className="text-blue-900 text-2xl">{currentPrice} PLN</span>
+                {eurText && (
+                  <div className="flex items-center justify-end gap-2 text-gray-500">
+                    <span className="eur-text">{eurText}</span>
+                    <span className="live-badge">
+                      ACTUAL
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
             {formData.time && (
               <p className="text-sm text-gray-600 mt-2">
@@ -321,7 +345,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   </div>
                   {/* Visual Sign Preview */}
                   <div className="bg-white border-2 border-gray-300 rounded-lg p-4 shadow-sm">
-                    <p className="text-xs text-gray-500 mb-2 text-center">Sign Preview:</p>
+                    <p className="text-[8px] text-gray-500 mb-2 text-center">Sign Preview:</p>
                     <div className="bg-white border-4 border-blue-900 rounded p-3 text-center min-h-[60px] flex items-center justify-center">
                       <p className="text-blue-900 text-lg break-words">
                         {formData.signText || 'Your name will appear here'}
@@ -505,7 +529,21 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
             className="w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
             disabled={submitting}
           >
-            {submitting ? 'Submitting...' : `Confirm Order - ${currentPrice} PLN`}
+            {submitting ? (
+              'Submitting...'
+            ) : (
+              <span className="flex flex-col items-center gap-1">
+                <span>{`Confirm Order - ${currentPrice} PLN`}</span>
+                {eurText && (
+                  <span className="inline-flex items-center gap-2 text-[11px] text-blue-100">
+                    <span>{eurText}</span>
+                    <span className="live-badge">
+                      ACTUAL
+                    </span>
+                  </span>
+                )}
+              </span>
+            )}
           </button>
         </form>
       </div>

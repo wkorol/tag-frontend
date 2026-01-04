@@ -1,4 +1,6 @@
 import { Moon, Sun, MapPin, Calculator, ChevronLeft } from 'lucide-react';
+import { useEurRate } from '../lib/useEurRate';
+import { formatEur } from '../lib/currency';
 
 interface PricingProps {
   vehicleType: 'standard' | 'bus';
@@ -58,6 +60,8 @@ const busRoutes = [
 export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: PricingProps) {
   const displayRoutes = vehicleType === 'bus' ? busRoutes : routes;
   const title = vehicleType === 'bus' ? 'BUS Service (5-8 passengers)' : 'Standard Car (1-4 passengers)';
+  const eurRate = useEurRate();
+  const eurText = (pln: number) => formatEur(pln, eurRate);
   
   return (
     <section id="pricing" className="py-16 bg-white">
@@ -105,7 +109,17 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
                     <Sun className="w-5 h-5 text-yellow-500" />
                     <span className="text-gray-800 font-medium">Day rate</span>
                   </div>
-                  <span className="text-blue-900 font-semibold">{route.priceDay} PLN</span>
+                  <div className="text-right">
+                    <span className="text-blue-900 font-semibold">{route.priceDay} PLN</span>
+                    {eurText(route.priceDay) && (
+                      <div className="flex items-center justify-end gap-2 text-gray-500">
+                        <span className="eur-text">{eurText(route.priceDay)}</span>
+                        <span className="live-badge">
+                          ACTUAL
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 
                 <div className="flex items-center justify-between bg-gray-900 p-3 rounded-lg border border-blue-800 shadow-sm text-white">
@@ -113,7 +127,17 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
                     <Moon className="w-5 h-5 text-blue-300" />
                     <span className="font-medium">Night rate</span>
                   </div>
-                  <span className="font-semibold">{route.priceNight} PLN</span>
+                  <div className="text-right">
+                    <span className="font-semibold">{route.priceNight} PLN</span>
+                    {eurText(route.priceNight) && (
+                      <div className="flex items-center justify-end gap-2 text-blue-200">
+                        <span className="eur-text">{eurText(route.priceNight)}</span>
+                        <span className="live-badge">
+                          ACTUAL
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -139,7 +163,7 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
             <div className="space-y-4 mt-6">
               <div className="bg-white rounded-lg p-3">
                 <div className="text-gray-700 text-sm mb-2">Price per kilometer</div>
-                <div className="text-xs text-gray-600">
+                <div className="text-[8px] text-gray-600">
                   Flexible pricing based on your specific route
                 </div>
               </div>

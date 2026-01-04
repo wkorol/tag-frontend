@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Calendar, Users, Luggage, MapPin, FileText, Plane, AlertCircle, Trash2, Edit, Copy } from 'lucide-react';
+import { useEurRate } from '../lib/useEurRate';
+import { formatEur } from '../lib/currency';
 import { buildAdditionalNotes, parseAdditionalNotes, RouteType } from '../lib/orderNotes';
 import { getApiBaseUrl } from '../lib/api';
 
@@ -66,6 +68,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
   const [accessRequestId, setAccessRequestId] = useState(0);
   const [toast, setToast] = useState<string | null>(null);
   const toastTimeoutRef = useRef<number | null>(null);
+  const eurRate = useEurRate();
 
   const [formData, setFormData] = useState({
     signText: '',
@@ -392,7 +395,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                 <button
                   type="button"
                   onClick={() => handleCopy(order.generatedId, 'Order #')}
-                  className="inline-flex items-center gap-1 bg-white/15 hover:bg-white/25 px-2.5 py-1 rounded-full text-xs"
+                  className="inline-flex items-center gap-1 bg-white/15 hover:bg-white/25 px-2.5 py-1 rounded-full text-[8px]"
                 >
                   <Copy className="w-3 h-3" />
                   Copy
@@ -403,7 +406,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                 <button
                   type="button"
                   onClick={() => handleCopy(order.id, 'Order ID')}
-                  className="inline-flex items-center gap-1 bg-white/15 hover:bg-white/25 px-2.5 py-1 rounded-full text-xs"
+                  className="inline-flex items-center gap-1 bg-white/15 hover:bg-white/25 px-2.5 py-1 rounded-full text-[8px]"
                 >
                   <Copy className="w-3 h-3" />
                   Copy
@@ -447,8 +450,18 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                   <span className="text-gray-700">{order.route.from} → {order.route.to}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-700">Price: <span className="font-bold text-blue-600">{order.price} PLN</span></span>
+                  <span className="text-gray-700">
+                    Price: <span className="font-bold text-blue-600">{order.price} PLN</span>
+                  </span>
                 </div>
+                {formatEur(order.price, eurRate) && (
+                  <div className="flex items-center gap-2 text-gray-500">
+                    <span className="eur-text">{formatEur(order.price, eurRate)}</span>
+                    <span className="live-badge">
+                      ACTUAL
+                    </span>
+                  </div>
+                )}
                 <div className="flex items-center gap-2">
                   <span className={`px-3 py-1 rounded-full text-sm ${
                     order.status === 'confirmed'
