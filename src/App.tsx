@@ -13,6 +13,8 @@ import { CookiesPage } from './pages/CookiesPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { TrustSection } from './components/TrustSection';
 import { RouteLanding } from './pages/RouteLanding';
+import { AdminOrdersPage } from './pages/AdminOrdersPage';
+import { AdminOrderPage } from './pages/AdminOrderPage';
 import { trackContactClick } from './lib/tracking';
 
 function Landing() {
@@ -164,6 +166,8 @@ export default function App() {
     <>
       <Routes>
         <Route path="/" element={<Landing />} />
+        <Route path="/admin" element={<AdminOrdersPage />} />
+        <Route path="/admin/orders/:id" element={<AdminOrderPage />} />
         <Route path="/cookies" element={<CookiesPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route

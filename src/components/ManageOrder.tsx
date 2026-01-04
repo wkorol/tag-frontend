@@ -46,7 +46,7 @@ type OrderState = {
   email: string;
   phone: string;
   price: number;
-  status: 'confirmed' | 'pending' | 'rejected' | 'price_proposed';
+  status: 'confirmed' | 'pending' | 'rejected' | 'price_proposed' | 'completed' | 'failed';
   generatedId: string;
   pickupAddress: string;
   description: string;
@@ -137,6 +137,10 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
           price,
           status: orderData.status === 'confirmed'
             ? 'confirmed'
+            : orderData.status === 'completed'
+              ? 'completed'
+              : orderData.status === 'failed'
+                ? 'failed'
             : orderData.status === 'rejected'
               ? 'rejected'
               : orderData.status === 'price_proposed'
@@ -240,6 +244,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
         phone: formData.phone,
         pickupAddress: payload.pickupAddress,
         description: formData.description.trim(),
+        status: order.status === 'confirmed' ? 'pending' : order.status,
       });
       setIsEditing(false);
       setSaved(true);
@@ -377,6 +382,8 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
     );
   }
 
+  const canEdit = order?.status === 'pending' || order?.status === 'confirmed';
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-3xl mx-auto">
@@ -466,7 +473,11 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                   <span className={`px-3 py-1 rounded-full text-sm ${
                     order.status === 'confirmed'
                       ? 'bg-green-100 text-green-800'
-                      : order.status === 'rejected'
+                      : order.status === 'completed'
+                        ? 'bg-emerald-100 text-emerald-800'
+                        : order.status === 'failed'
+                          ? 'bg-orange-100 text-orange-800'
+                          : order.status === 'rejected'
                         ? 'bg-red-100 text-red-800'
                         : order.status === 'price_proposed'
                           ? 'bg-blue-100 text-blue-800'
@@ -474,6 +485,10 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                   }`}>
                     {order.status === 'confirmed'
                       ? 'Confirmed'
+                      : order.status === 'completed'
+                        ? 'Completed'
+                        : order.status === 'failed'
+                          ? 'Not completed'
                       : order.status === 'rejected'
                         ? 'Rejected'
                         : order.status === 'price_proposed'
@@ -488,7 +503,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
             <div className="space-y-4">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-gray-900">Booking Details</h3>
-                {!isEditing && order.status === 'pending' && (
+                {!isEditing && canEdit && (
                   <button
                     onClick={() => setIsEditing(true)}
                     className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
@@ -498,10 +513,19 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                   </button>
                 )}
               </div>
-              {order.status !== 'pending' && (
+              {!isEditing && order.status === 'confirmed' && (
+                <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  Editing a confirmed order will send it back for approval. You will receive a new confirmation email.
+                </div>
+              )}
+              {!canEdit && (
                 <div className={`border-l-4 p-4 ${
                   order.status === 'confirmed'
                     ? 'bg-green-50 border-green-500'
+                    : order.status === 'completed'
+                      ? 'bg-emerald-50 border-emerald-500'
+                      : order.status === 'failed'
+                        ? 'bg-orange-50 border-orange-500'
                     : order.status === 'price_proposed'
                       ? 'bg-blue-50 border-blue-500'
                       : 'bg-red-50 border-red-500'
@@ -509,12 +533,20 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                   <p className={`text-sm ${
                     order.status === 'confirmed'
                       ? 'text-green-700'
+                      : order.status === 'completed'
+                        ? 'text-emerald-700'
+                        : order.status === 'failed'
+                          ? 'text-orange-700'
                       : order.status === 'price_proposed'
                         ? 'text-blue-700'
                         : 'text-red-700'
                   }`}>
                     {order.status === 'confirmed'
-                      ? 'This order has been confirmed. Editing is disabled, but you can still cancel the booking.'
+                      ? 'This order has been confirmed.'
+                      : order.status === 'completed'
+                        ? 'This order has been marked as completed.'
+                        : order.status === 'failed'
+                          ? 'This order has been marked as not completed.'
                       : order.status === 'price_proposed'
                         ? 'A new price has been proposed to you. Please check your email to accept or reject the new price.'
                         : 'This order has been rejected. Editing is disabled, but you can still cancel the booking.'}
@@ -767,7 +799,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                   <button
                     onClick={handleSave}
                     className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors"
-                    disabled={order.status !== 'pending'}
+                    disabled={!canEdit}
                   >
                     Save Changes
                   </button>
