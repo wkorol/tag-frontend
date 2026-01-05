@@ -14,6 +14,15 @@ export function Hero() {
       
       <div className="relative max-w-6xl mx-auto px-4 py-16 sm:py-24">
         <div className="text-center">
+          <div className="mb-4 flex justify-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-4 py-2 text-xs sm:text-sm text-white shadow-sm backdrop-blur-sm">
+              <span className="font-semibold">ONLY 90 PLN</span>
+              <span>to City Center (day)</span>
+              <span className="text-white/70">•</span>
+              <span className="font-semibold">120 PLN</span>
+              <span>at night</span>
+            </div>
+          </div>
           <div className="flex justify-center mb-6">
             <img
                 src={logo}

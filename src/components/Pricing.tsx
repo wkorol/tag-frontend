@@ -13,8 +13,8 @@ const routes = [
   {
     from: 'Airport',
     to: 'Gdańsk City Center',
-    priceDay: 120,
-    priceNight: 150,
+    priceDay: 90,
+    priceNight: 120,
     type: 'standard' as const,
   },
   {
@@ -37,8 +37,8 @@ const busRoutes = [
   {
     from: 'Airport',
     to: 'Gdańsk City Center',
-    priceDay: 140,
-    priceNight: 170,
+    priceDay: 120,
+    priceNight: 150,
     type: 'bus' as const,
   },
   {

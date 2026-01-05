@@ -50,10 +50,10 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                 <div className="flex justify-between items-start gap-2">
                   <span className="text-gray-700">Airport → Gdańsk</span>
                   <div className="text-right">
-                    <span className="text-blue-900">from 120 PLN</span>
-                    {eurText(120) && (
+                    <span className="text-blue-900">from 90 PLN</span>
+                    {eurText(90) && (
                       <div className="flex items-center justify-end gap-2 text-gray-500">
-                        <span className="eur-text">{eurText(120)}</span>
+                        <span className="eur-text">{eurText(90)}</span>
                         <span className="live-badge">
                           ACTUAL
                         </span>
@@ -126,10 +126,10 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                 <div className="flex justify-between items-start gap-2">
                   <span className="text-gray-700">Airport → Gdańsk</span>
                   <div className="text-right">
-                    <span className="text-blue-900">from 140 PLN</span>
-                    {eurText(140) && (
+                    <span className="text-blue-900">from 120 PLN</span>
+                    {eurText(120) && (
                       <div className="flex items-center justify-end gap-2 text-gray-500">
-                        <span className="eur-text">{eurText(140)}</span>
+                        <span className="eur-text">{eurText(120)}</span>
                         <span className="live-badge">
                           ACTUAL
                         </span>
