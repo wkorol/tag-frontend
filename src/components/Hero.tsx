@@ -116,7 +116,7 @@ export function Hero() {
                   <BadgeDollarSign className="w-8 h-8 text-emerald-300 mx-auto mb-2"/>
                   <h3 className="text-white mb-1">Fixed price guarantee</h3>
                   <p className="text-blue-200 text-sm">
-                    No surprises on arrival. The price you book is the price you pay.
+                    Fixed price both ways. The price you book is the price you pay.
                   </p>
                 </div>
                 <div

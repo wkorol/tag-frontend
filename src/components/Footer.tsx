@@ -46,10 +46,10 @@ export function Footer() {
                 Gdańsk Airport Taxi
               </a>
               <a href="/gdansk-airport-to-sopot" className="block hover:text-white transition-colors">
-                Airport → Sopot
+                Airport ↔ Sopot
               </a>
               <a href="/gdansk-airport-to-gdynia" className="block hover:text-white transition-colors">
-                Airport → Gdynia
+                Airport ↔ Gdynia
               </a>
             </div>
           </div>

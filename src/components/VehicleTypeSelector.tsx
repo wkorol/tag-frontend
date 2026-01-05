@@ -48,7 +48,7 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
               <p className="text-sm text-gray-600 mb-2">Example prices:</p>
               <div className="space-y-1 text-sm">
                 <div className="flex justify-between items-start gap-2">
-                  <span className="text-gray-700">Airport → Gdańsk</span>
+                  <span className="text-gray-700">Airport ↔ Gdańsk</span>
                   <div className="text-right">
                     <span className="text-blue-900">from 90 PLN</span>
                     {eurText(90) && (
@@ -62,7 +62,7 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                   </div>
                 </div>
                 <div className="flex justify-between items-start gap-2">
-                  <span className="text-gray-700">Airport → Sopot</span>
+                  <span className="text-gray-700">Airport ↔ Sopot</span>
                   <div className="text-right">
                     <span className="text-blue-900">from 120 PLN</span>
                     {eurText(120) && (
@@ -76,7 +76,7 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                   </div>
                 </div>
                 <div className="flex justify-between items-start gap-2">
-                  <span className="text-gray-700">Airport → Gdynia</span>
+                  <span className="text-gray-700">Airport ↔ Gdynia</span>
                   <div className="text-right">
                     <span className="text-blue-900">from 200 PLN</span>
                     {eurText(200) && (
@@ -124,7 +124,7 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
               <p className="text-sm text-gray-600 mb-2">Example prices:</p>
               <div className="space-y-1 text-sm">
                 <div className="flex justify-between items-start gap-2">
-                  <span className="text-gray-700">Airport → Gdańsk</span>
+                  <span className="text-gray-700">Airport ↔ Gdańsk</span>
                   <div className="text-right">
                     <span className="text-blue-900">from 120 PLN</span>
                     {eurText(120) && (
@@ -138,7 +138,7 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                   </div>
                 </div>
                 <div className="flex justify-between items-start gap-2">
-                  <span className="text-gray-700">Airport → Sopot</span>
+                  <span className="text-gray-700">Airport ↔ Sopot</span>
                   <div className="text-right">
                     <span className="text-blue-900">from 140 PLN</span>
                     {eurText(140) && (
@@ -152,7 +152,7 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                   </div>
                 </div>
                 <div className="flex justify-between items-start gap-2">
-                  <span className="text-gray-700">Airport → Gdynia</span>
+                  <span className="text-gray-700">Airport ↔ Gdynia</span>
                   <div className="text-right">
                     <span className="text-blue-900">from 250 PLN</span>
                     {eurText(250) && (

@@ -465,7 +465,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
         <div className="p-6 border-b flex items-center justify-between flex-shrink-0">
           <div>
             <h3 className="text-gray-900">Order Transfer</h3>
-            <p className="text-gray-600 text-sm mt-1">{route.from} → {route.to}</p>
+            <p className="text-gray-600 text-sm mt-1">{route.from} ↔ {route.to}</p>
           </div>
           <button 
             onClick={onClose}

@@ -80,7 +80,7 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
             {title}
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Fixed prices for airport transfers. No hidden fees. Night rate applies from 10 PM to 6 AM and on Sundays & public holidays.
+            Fixed prices both ways (to and from the airport). No hidden fees. Night rate applies from 10 PM to 6 AM and on Sundays & public holidays.
           </p>
         </div>
 
@@ -97,8 +97,8 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
               <div className="flex items-start gap-3 mb-4">
                 <MapPin className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
                 <div>
-                  <div className="text-gray-900 font-semibold mb-1">{route.from}</div>
-                  <div className="text-gray-500 text-sm">to</div>
+                  <div className="text-gray-900 font-semibold">{route.from}</div>
+                  <div className="text-gray-500 text-sm">↕</div>
                   <div className="text-gray-900 font-semibold">{route.to}</div>
                 </div>
               </div>

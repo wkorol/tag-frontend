@@ -34,7 +34,7 @@ export function RouteLanding({ title, description, route, examples }: RouteLandi
             <ul className="list-disc pl-5 space-y-2 text-gray-600 text-sm">
               <li>Meet &amp; greet at the airport with clear pickup instructions.</li>
               <li>Flight tracking and flexible pickup time.</li>
-              <li>Fixed pricing with no hidden fees.</li>
+              <li>Fixed pricing both ways with no hidden fees.</li>
               <li>Professional, English-speaking drivers.</li>
             </ul>
           </div>

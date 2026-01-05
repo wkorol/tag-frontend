@@ -175,7 +175,7 @@ export default function App() {
           element={
             <RouteLanding
               title="Gdańsk Airport Taxi"
-              description="Book a fast, reliable airport taxi from Gdańsk Airport. Fixed pricing, professional drivers, and quick confirmation."
+              description="Book a fast, reliable airport taxi from Gdańsk Airport. Fixed pricing both ways, professional drivers, and quick confirmation."
               route="Gdańsk Airport"
               examples={[
                 'Gdańsk Old Town',
@@ -191,8 +191,8 @@ export default function App() {
           element={
             <RouteLanding
               title="Gdańsk Airport to Sopot Transfer"
-              description="Private transfer from Gdańsk Airport to Sopot with fixed pricing and flight tracking."
-              route="Gdańsk Airport → Sopot"
+              description="Private transfer between Gdańsk Airport and Sopot with fixed pricing both ways and flight tracking."
+              route="Gdańsk Airport ↔ Sopot"
               examples={[
                 'Sopot Pier',
                 'Sopot Centre',
@@ -207,8 +207,8 @@ export default function App() {
           element={
             <RouteLanding
               title="Gdańsk Airport to Gdynia Transfer"
-              description="Comfortable airport transfer to Gdynia with professional drivers and quick confirmation."
-              route="Gdańsk Airport → Gdynia"
+              description="Comfortable transfer between Gdańsk Airport and Gdynia with fixed pricing both ways."
+              route="Gdańsk Airport ↔ Gdynia"
               examples={[
                 'Gdynia Centre',
                 'Gdynia Port',

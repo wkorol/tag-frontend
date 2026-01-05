@@ -67,13 +67,13 @@ export function Navbar() {
               href="/gdansk-airport-to-sopot"
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
-              Airport → Sopot
+              Airport ↔ Sopot
             </a>
             <a
               href="/gdansk-airport-to-gdynia"
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
-              Airport → Gdynia
+              Airport ↔ Gdynia
             </a>
             <a
               href="/#vehicle-selection"
@@ -130,13 +130,13 @@ export function Navbar() {
               href="/gdansk-airport-to-sopot"
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
-              Airport → Sopot
+              Airport ↔ Sopot
             </a>
             <a
               href="/gdansk-airport-to-gdynia"
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
-              Airport → Gdynia
+              Airport ↔ Gdynia
             </a>
             <a
               href="/#vehicle-selection"
