@@ -4,6 +4,7 @@ import { useEurRate } from '../lib/useEurRate';
 import { formatEur } from '../lib/currency';
 import { buildAdditionalNotes, parseAdditionalNotes, RouteType } from '../lib/orderNotes';
 import { getApiBaseUrl } from '../lib/api';
+import { useI18n } from '../lib/i18n';
 
 const API_BASE_URL = getApiBaseUrl();
 
@@ -54,6 +55,7 @@ type OrderState = {
 };
 
 export function ManageOrder({ orderId }: ManageOrderProps) {
+  const { t, locale } = useI18n();
   const cancelledParam = new URLSearchParams(window.location.search).get('cancelled') === '1';
   const updateParam = new URLSearchParams(window.location.search).get('update') ?? '';
   const updateFields = useMemo(
@@ -122,7 +124,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
         const data = await response.json().catch(() => null);
 
         if (!response.ok) {
-          setError(data?.error ?? 'Unable to load the order.');
+          setError(data?.error ?? t.manageOrder.errors.load);
           return;
         }
 
@@ -187,7 +189,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
           description,
         });
       } catch (loadError) {
-        setError('Network error while loading the order.');
+        setError(t.manageOrder.errors.loadNetwork);
       } finally {
         setLoading(false);
         setIsAuthorizing(false);
@@ -246,6 +248,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
       additionalNotes,
       adminUpdateRequest: effectiveUpdateRequest,
       adminUpdateFields: effectiveUpdateRequest ? Array.from(updateFields) : [],
+      locale,
     };
 
     try {
@@ -253,13 +256,14 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Accept-Language': locale,
         },
         body: JSON.stringify(payload),
       });
 
       const data = await response.json().catch(() => null);
       if (!response.ok) {
-        setError(data?.error ?? 'Unable to save changes.');
+        setError(data?.error ?? t.manageOrder.errors.save);
         return;
       }
 
@@ -290,7 +294,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
         setSelfUpdateOpen(true);
       }
     } catch (saveError) {
-      setError('Network error while saving changes.');
+      setError(t.manageOrder.errors.saveNetwork);
     }
   };
 
@@ -312,23 +316,23 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
 
       if (!response.ok) {
         const data = await response.json().catch(() => null);
-        setError(data?.error ?? 'Unable to cancel the order.');
+        setError(data?.error ?? t.manageOrder.errors.cancel);
         return;
       }
 
       setCancelled(true);
       setShowCancelConfirm(false);
     } catch (cancelError) {
-      setError('Network error while cancelling the order.');
+      setError(t.manageOrder.errors.cancelNetwork);
     }
   };
 
   const handleCopy = async (value: string, label: string) => {
     try {
       await navigator.clipboard.writeText(value);
-      setToast('Copied to clipboard');
+      setToast(t.manageOrder.errors.copySuccess);
     } catch {
-      setToast('Unable to copy to clipboard');
+      setToast(t.manageOrder.errors.copyFail);
     }
 
     if (toastTimeoutRef.current !== null) {
@@ -344,7 +348,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl max-w-md w-full p-8 text-center">
-          <p className="text-gray-700">Loading your order...</p>
+          <p className="text-gray-700">{t.manageOrder.loading}</p>
         </div>
       </div>
     );
@@ -364,16 +368,16 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl max-w-md w-full p-8">
-          <h2 className="text-xl text-gray-900 mb-4">Access your booking</h2>
+          <h2 className="text-xl text-gray-900 mb-4">{t.manageOrder.accessTitle}</h2>
           <p className="text-sm text-gray-600 mb-6">
-            Enter the email address used for this order to manage your booking.
+            {t.manageOrder.accessBody}
           </p>
           <div className="space-y-4">
             <input
               type="email"
               value={inputEmail}
               onChange={(event) => setInputEmail(event.target.value)}
-              placeholder="you@example.com"
+              placeholder={t.manageOrder.accessPlaceholder}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -385,7 +389,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
             <button
               onClick={() => {
                 if (!inputEmail) {
-                  setError('Please enter your email address.');
+                  setError(t.manageOrder.errors.emailRequired);
                   return;
                 }
                 setError(null);
@@ -395,7 +399,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
               className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-70"
               disabled={isAuthorizing}
             >
-              {isAuthorizing ? 'Checking...' : 'Continue'}
+              {isAuthorizing ? t.manageOrder.accessChecking : t.manageOrder.accessAction}
             </button>
           </div>
         </div>
@@ -411,11 +415,11 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
             <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <Trash2 className="w-8 h-8 text-white" />
             </div>
-            <h3 className="text-red-900 mb-2">Order Cancelled</h3>
+            <h3 className="text-red-900 mb-2">{t.manageOrder.cancelledTitle}</h3>
             <p className="text-red-800 mb-4">
-              Your transfer booking has been cancelled. You will receive a confirmation email shortly.
+              {t.manageOrder.cancelledBody}
             </p>
-            <p className="text-sm text-gray-600">Order ID: {order?.id ?? orderId}</p>
+            <p className="text-sm text-gray-600">{t.orderForm.orderId} {order?.id ?? orderId}</p>
           </div>
         </div>
       </div>
@@ -433,28 +437,28 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
           )}
           {/* Header */}
           <div className="bg-blue-600 text-white p-6">
-            <h1 className="text-2xl mb-2">Manage Your Transfer</h1>
+            <h1 className="text-2xl mb-2">{t.manageOrder.manageTitle}</h1>
             <div className="space-y-2 text-blue-100 text-sm">
               <div className="flex flex-wrap items-center gap-2">
-                <span>Order #{order.generatedId}</span>
+                <span>{t.manageOrder.orderLabel} {order.generatedId}</span>
                 <button
                   type="button"
-                  onClick={() => handleCopy(order.generatedId, 'Order #')}
+                  onClick={() => handleCopy(order.generatedId, t.manageOrder.copyOrderLabel)}
                   className="inline-flex items-center gap-1 bg-white/15 hover:bg-white/25 px-2.5 py-1 rounded-full text-[8px]"
                 >
                   <Copy className="w-3 h-3" />
-                  Copy
+                  {t.manageOrder.copyAction}
                 </button>
               </div>
               <div className="flex flex-wrap items-center gap-2">
-                <span>Order ID: {order.id}</span>
+                <span>{t.manageOrder.orderIdLabel}: {order.id}</span>
                 <button
                   type="button"
-                  onClick={() => handleCopy(order.id, 'Order ID')}
+                  onClick={() => handleCopy(order.id, t.manageOrder.copyOrderIdLabel)}
                   className="inline-flex items-center gap-1 bg-white/15 hover:bg-white/25 px-2.5 py-1 rounded-full text-[8px]"
                 >
                   <Copy className="w-3 h-3" />
-                  Copy
+                  {t.manageOrder.copyAction}
                 </button>
               </div>
             </div>
@@ -481,16 +485,15 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <h3 className="text-green-900 mb-2">Details updated</h3>
+                  <h3 className="text-green-900 mb-2">{t.manageOrder.detailsUpdatedTitle}</h3>
                   <p className="text-green-800 mb-4">
-                    Thank you! Your details were updated successfully. Your transfer remains confirmed for {formData.date} at {formData.time}.
-                    We will see you then.
+                    {t.manageOrder.detailsUpdatedBody(formData.date, formData.time)}
                   </p>
                   <button
                     onClick={() => setUpdateSuccessOpen(false)}
                     className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
                   >
-                    Close
+                    {t.common.close}
                   </button>
                 </div>
               </div>
@@ -510,19 +513,19 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                   <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4">
                     <AlertCircle className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="text-yellow-900 mb-2">Update submitted</h3>
+                  <h3 className="text-yellow-900 mb-2">{t.manageOrder.updateSubmittedTitle}</h3>
                   <p className="text-yellow-800 mb-4">
-                    Your updates were sent for confirmation. Please wait for the approval email.
+                    {t.manageOrder.updateSubmittedBody}
                   </p>
                   <div className="flex items-center justify-center gap-2 text-yellow-700 mb-4">
                     <span className="inline-flex h-2.5 w-2.5 rounded-full bg-yellow-500 animate-pulse"></span>
-                    <span className="text-sm">Awaiting confirmation...</span>
+                    <span className="text-sm">{t.manageOrder.awaiting}</span>
                   </div>
                   <button
                     onClick={() => setSelfUpdateOpen(false)}
                     className="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors"
                   >
-                    Close
+                    {t.common.close}
                   </button>
                 </div>
               </div>
@@ -536,7 +539,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
           <div className="p-6 space-y-6">
             {/* Route Information */}
             <div className="bg-blue-50 rounded-lg p-4">
-              <h3 className="text-gray-900 mb-3">Transfer Route</h3>
+              <h3 className="text-gray-900 mb-3">{t.manageOrder.transferRoute}</h3>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <MapPin className="w-5 h-5 text-blue-600" />
@@ -544,14 +547,14 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-gray-700">
-                    Price: <span className="font-bold text-blue-600">{order.price} PLN</span>
+                    {t.manageOrder.priceLabel} <span className="font-bold text-blue-600">{order.price} PLN</span>
                   </span>
                 </div>
                 {formatEur(order.price, eurRate) && (
                   <div className="flex items-center gap-2 text-gray-500">
                     <span className="eur-text">{formatEur(order.price, eurRate)}</span>
                     <span className="live-badge">
-                      ACTUAL
+                      {t.common.actualBadge}
                     </span>
                   </div>
                 )}
@@ -570,16 +573,16 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                           : 'bg-yellow-100 text-yellow-800'
                   }`}>
                     {order.status === 'confirmed'
-                      ? 'Confirmed'
+                      ? t.manageOrder.statusConfirmed
                       : order.status === 'completed'
-                        ? 'Completed'
+                        ? t.manageOrder.statusCompleted
                         : order.status === 'failed'
-                          ? 'Not completed'
+                          ? t.manageOrder.statusFailed
                       : order.status === 'rejected'
-                        ? 'Rejected'
+                        ? t.manageOrder.statusRejected
                         : order.status === 'price_proposed'
-                          ? 'Price Proposed'
-                          : 'Pending'}
+                          ? t.manageOrder.statusPriceProposed
+                          : t.manageOrder.statusPending}
                   </span>
                 </div>
               </div>
@@ -588,25 +591,25 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
             {/* Editable Fields */}
             <div className="space-y-4">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-gray-900">Booking Details</h3>
+                <h3 className="text-gray-900">{t.manageOrder.bookingDetails}</h3>
                 {!isEditing && canEdit && (
                   <button
                     onClick={() => setIsEditing(true)}
                     className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
                   >
                     <Edit className="w-4 h-4" />
-                    {effectiveUpdateRequest ? 'Update Requested Fields' : 'Edit Details'}
+                    {effectiveUpdateRequest ? t.manageOrder.updateRequested : t.manageOrder.editDetails}
                   </button>
                 )}
               </div>
                 {!isEditing && order.status === 'confirmed' && !effectiveUpdateRequest && (
                   <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-                    Editing a confirmed order will send it back for approval. You will receive a new confirmation email.
+                    {t.manageOrder.confirmedEditNote}
                   </div>
                 )}
                 {effectiveUpdateRequest && (
                   <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
-                    Please update the highlighted fields and save your changes.
+                    {t.manageOrder.updateFieldsNote}
                   </div>
                 )}
               {!canEdit && (
@@ -633,18 +636,18 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                         : 'text-red-700'
                   }`}>
                     {order.status === 'confirmed'
-                      ? 'This order has been confirmed.'
+                      ? t.manageOrder.confirmedNote
                       : order.status === 'completed'
-                        ? 'This order has been marked as completed.'
+                        ? t.manageOrder.completedNote
                         : order.status === 'failed'
-                          ? 'This order has been marked as not completed.'
+                          ? t.manageOrder.failedNote
                       : order.status === 'price_proposed'
-                        ? 'A new price has been proposed to you. Please check your email to accept or reject the new price.'
-                        : 'This order has been rejected. Editing is disabled, but you can still cancel the booking.'}
+                        ? t.manageOrder.priceProposedNote
+                        : t.manageOrder.rejectedNote}
                   </p>
                   {order.status === 'rejected' && order.rejectionReason && (
                     <p className="mt-2 text-sm text-red-700">
-                      Reason: {order.rejectionReason}
+                      {t.manageOrder.rejectionReasonLabel} {order.rejectionReason}
                     </p>
                   )}
                 </div>
@@ -655,7 +658,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                 <div>
                   <label htmlFor="date" className="block text-gray-700 mb-2">
                     <Calendar className="w-4 h-4 inline mr-2" />
-                    Date
+                    {t.manageOrder.date}
                   </label>
                   <input
                     type="date"
@@ -670,7 +673,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
 
                 <div>
                   <label htmlFor="time" className="block text-gray-700 mb-2">
-                    Pickup Time
+                    {t.manageOrder.pickupTime}
                   </label>
                   <input
                     type="time"
@@ -691,7 +694,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                   <div>
                     <label htmlFor="signText" className="block text-gray-700 mb-2">
                       <FileText className="w-4 h-4 inline mr-2" />
-                      Name Sign Text
+                      {t.manageOrder.signText}
                     </label>
                     <input
                       type="text"
@@ -707,7 +710,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                   <div>
                     <label htmlFor="flightNumber" className="block text-gray-700 mb-2">
                       <Plane className="w-4 h-4 inline mr-2" />
-                      Flight Number
+                      {t.manageOrder.flightNumber}
                     </label>
                     <input
                       type="text"
@@ -727,7 +730,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                 <div>
                   <label htmlFor="address" className="block text-gray-700 mb-2">
                     <MapPin className="w-4 h-4 inline mr-2" />
-                    Pickup Address
+                    {t.manageOrder.pickupAddress}
                   </label>
                   <textarea
                     id="address"
@@ -746,7 +749,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                 <div>
                   <label htmlFor="passengers" className="block text-gray-700 mb-2">
                     <Users className="w-4 h-4 inline mr-2" />
-                    Number of Passengers
+                    {t.manageOrder.passengers}
                   </label>
                   <select
                     id="passengers"
@@ -758,17 +761,15 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                   >
                     {order.route.type === 'bus' ? (
                       <>
-                        <option value="5">5 people</option>
-                        <option value="6">6 people</option>
-                        <option value="7">7 people</option>
-                        <option value="8">8 people</option>
+                        {t.manageOrder.passengersBus.map((label, index) => (
+                          <option key={label} value={5 + index}>{label}</option>
+                        ))}
                       </>
                     ) : (
                       <>
-                        <option value="1">1 person</option>
-                        <option value="2">2 people</option>
-                        <option value="3">3 people</option>
-                        <option value="4">4 people</option>
+                        {t.manageOrder.passengersStandard.map((label, index) => (
+                          <option key={label} value={1 + index}>{label}</option>
+                        ))}
                       </>
                     )}
                   </select>
@@ -777,7 +778,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                 <div>
                   <label htmlFor="largeLuggage" className="block text-gray-700 mb-2">
                     <Luggage className="w-4 h-4 inline mr-2" />
-                    Large Luggage
+                    {t.manageOrder.largeLuggage}
                   </label>
                   <select
                     id="largeLuggage"
@@ -787,20 +788,20 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                     disabled={!isFieldEditable('largeLuggage')}
                     className={inputClass('largeLuggage', isFieldEditable('largeLuggage'))}
                   >
-                    <option value="no">No</option>
-                    <option value="yes">Yes</option>
+                    <option value="no">{t.manageOrder.luggageNo}</option>
+                    <option value="yes">{t.manageOrder.luggageYes}</option>
                   </select>
                 </div>
               </div>
 
               {/* Contact Information */}
               <div className="border-t pt-4">
-                <h4 className="text-gray-900 mb-4">Contact Information</h4>
+                <h4 className="text-gray-900 mb-4">{t.manageOrder.contactTitle}</h4>
 
                 <div className="space-y-4">
                   <div>
                     <label htmlFor="name" className="block text-gray-700 mb-2">
-                      Full Name
+                      {t.manageOrder.fullName}
                     </label>
                     <input
                       type="text"
@@ -815,7 +816,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
 
                   <div>
                     <label htmlFor="phone" className="block text-gray-700 mb-2">
-                      Phone Number
+                      {t.manageOrder.phoneNumber}
                     </label>
                     <input
                       type="tel"
@@ -830,7 +831,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
 
                   <div>
                     <label htmlFor="email" className="block text-gray-700 mb-2">
-                      Email Address
+                      {t.manageOrder.email}
                     </label>
                   <input
                     type="email"
@@ -846,7 +847,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                   <div>
                     <label htmlFor="description" className="block text-gray-700 mb-2">
                       <FileText className="w-4 h-4 inline mr-2" />
-                      Additional Notes
+                      {t.manageOrder.notesTitle}
                     </label>
                     <textarea
                       id="description"
@@ -871,7 +872,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                     className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors"
                     disabled={!canEdit}
                   >
-                    Save Changes
+                    {t.manageOrder.saveChanges}
                   </button>
                   <button
                     onClick={() => {
@@ -892,7 +893,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                     }}
                     className="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg hover:bg-gray-300 transition-colors"
                   >
-                    Cancel
+                    {t.manageOrder.cancelEdit}
                   </button>
                 </div>
               ) : (
@@ -903,7 +904,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                       className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
                     >
                       <Edit className="w-5 h-5" />
-                      Edit Order
+                      {t.manageOrder.editBooking}
                     </button>
                   )}
                   <button
@@ -911,7 +912,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                     className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
                   >
                     <Trash2 className="w-5 h-5" />
-                    Cancel Order
+                    {t.manageOrder.cancelBooking}
                   </button>
                 </div>
               )}
@@ -925,7 +926,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                 </div>
                 <div className="ml-3">
                   <p className="text-sm text-yellow-700">
-                    Changes to your booking will be confirmed via email. For urgent changes, please contact us directly at booking@taxiairportgdansk.com
+                    {t.manageOrder.changesNotice}
                   </p>
                 </div>
               </div>
@@ -942,23 +943,23 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
                 <AlertCircle className="w-6 h-6 text-red-600" />
               </div>
-              <h3 className="text-gray-900">Cancel Booking?</h3>
+              <h3 className="text-gray-900">{t.manageOrder.cancelPromptTitle}</h3>
             </div>
             <p className="text-gray-700 mb-6">
-              Are you sure you want to cancel your transfer booking? This action cannot be undone.
+              {t.manageOrder.cancelPromptBody}
             </p>
             <div className="flex gap-3">
               <button
                 onClick={handleCancel}
                 className="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors"
               >
-                Yes, Cancel Booking
+                {t.manageOrder.confirmCancel}
               </button>
               <button
                 onClick={() => setShowCancelConfirm(false)}
                 className="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg hover:bg-gray-300 transition-colors"
               >
-                Keep Booking
+                {t.manageOrder.keepBooking}
               </button>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Calendar, Users, Luggage, MapPin, FileText, Plane, ChevronDown, ChevronUp, DollarSign } from 'lucide-react';
+import { useI18n } from '../lib/i18n';
 
 const getTodayDateString = () => {
   const now = new Date();
@@ -10,6 +11,7 @@ const getTodayDateString = () => {
 };
 
 export function BookingForm() {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
     pickupAddress: '',
     destinationAddress: '',
@@ -53,9 +55,9 @@ export function BookingForm() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h3 className="text-green-900 mb-2">Quote Request Received!</h3>
+            <h3 className="text-green-900 mb-2">{t.quoteForm.submittedTitle}</h3>
             <p className="text-green-800 mb-6">
-              Thank you for your request. You will receive an email within 5-10 minutes confirming whether your ride has been accepted or declined.
+              {t.quoteForm.submittedBody}
             </p>
             <button
               onClick={() => {
@@ -64,7 +66,7 @@ export function BookingForm() {
               }}
               className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
             >
-              Request Another Quote
+              {t.quoteForm.requestAnother}
             </button>
           </div>
         </div>
@@ -80,7 +82,7 @@ export function BookingForm() {
             onClick={() => setIsFormOpen(!isFormOpen)}
             className="inline-flex items-center gap-3 bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl"
           >
-            <span>Request Quote</span>
+            <span>{t.quoteForm.requestButton}</span>
             {isFormOpen ? (
               <ChevronUp className="w-5 h-5" />
             ) : (
@@ -90,7 +92,7 @@ export function BookingForm() {
           
           {isFormOpen && (
             <p className="text-gray-600 mt-4">
-              Provide your ride details and propose your price. You will receive an email within 5-10 minutes confirming whether your offer has been accepted or declined.
+              {t.quoteForm.toggleDescription}
             </p>
           )}
         </div>
@@ -101,14 +103,14 @@ export function BookingForm() {
             <div>
               <label htmlFor="pickupAddress" className="block text-gray-700 mb-2">
                 <MapPin className="w-4 h-4 inline mr-2" />
-                Pickup Address
+                {t.quoteForm.pickupAddress}
               </label>
               <textarea
                 id="pickupAddress"
                 name="pickupAddress"
                 value={formData.pickupAddress}
                 onChange={handleChange}
-                placeholder="Enter full pickup address (e.g., Gdańsk Airport, ul. Słowackiego 200)"
+                placeholder={t.quoteForm.pickupPlaceholder}
                 rows={2}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
@@ -119,14 +121,14 @@ export function BookingForm() {
             <div>
               <label htmlFor="destinationAddress" className="block text-gray-700 mb-2">
                 <MapPin className="w-4 h-4 inline mr-2" />
-                Destination Address
+                {t.quoteForm.destinationAddress}
               </label>
               <textarea
                 id="destinationAddress"
                 name="destinationAddress"
                 value={formData.destinationAddress}
                 onChange={handleChange}
-                placeholder="Enter destination address (e.g., Gdańsk Centrum, ul. Długa 1)"
+                placeholder={t.quoteForm.destinationPlaceholder}
                 rows={2}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
@@ -137,7 +139,7 @@ export function BookingForm() {
             <div>
               <label htmlFor="proposedPrice" className="block text-gray-700 mb-2">
                 <DollarSign className="w-4 h-4 inline mr-2" />
-                Your Proposed Price (PLN)
+                {t.quoteForm.proposedPriceLabel}
               </label>
               <input
                 type="number"
@@ -145,21 +147,21 @@ export function BookingForm() {
                 name="proposedPrice"
                 value={formData.proposedPrice}
                 onChange={handleChange}
-                placeholder="Enter your offer in PLN (e.g., 150)"
+                placeholder={t.quoteForm.pricePlaceholder}
                 min="0"
                 step="10"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               />
               <p className="text-sm text-gray-500 mt-1">
-                Propose your price for this ride. We'll review and respond within 5-10 minutes.
+                {t.quoteForm.priceHelp}
               </p>
             </div>
 
             {/* Pickup Type */}
             <div>
               <label className="block text-gray-700 mb-2">
-                Pickup Type
+                {t.quoteForm.pickupType}
               </label>
               <div className="grid grid-cols-2 gap-4">
                 <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
@@ -174,7 +176,7 @@ export function BookingForm() {
                     className="w-4 h-4 text-blue-600"
                   />
                   <Plane className="w-5 h-5 text-gray-700" />
-                  <span>Airport Pickup</span>
+                  <span>{t.quoteForm.airportPickup}</span>
                 </label>
                 
                 <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
@@ -189,7 +191,7 @@ export function BookingForm() {
                     className="w-4 h-4 text-blue-600"
                   />
                   <MapPin className="w-5 h-5 text-gray-700" />
-                  <span>Address Pickup</span>
+                  <span>{t.quoteForm.addressPickup}</span>
                 </label>
               </div>
             </div>
@@ -200,7 +202,7 @@ export function BookingForm() {
                 <div>
                   <label htmlFor="signText" className="block text-gray-700 mb-2">
                     <FileText className="w-4 h-4 inline mr-2" />
-                    Name Sign Text
+                    {t.quoteForm.signText}
                   </label>
                   <input
                     type="text"
@@ -208,7 +210,7 @@ export function BookingForm() {
                     name="signText"
                     value={formData.signText}
                     onChange={handleChange}
-                    placeholder="Text to display on the pickup sign"
+                    placeholder={t.quoteForm.signPlaceholder}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
@@ -217,7 +219,7 @@ export function BookingForm() {
                 <div>
                   <label htmlFor="flightNumber" className="block text-gray-700 mb-2">
                     <Plane className="w-4 h-4 inline mr-2" />
-                    Flight Number
+                    {t.quoteForm.flightNumber}
                   </label>
                   <input
                     type="text"
@@ -225,7 +227,7 @@ export function BookingForm() {
                     name="flightNumber"
                     value={formData.flightNumber}
                     onChange={handleChange}
-                    placeholder="e.g. LO123"
+                    placeholder={t.quoteForm.flightPlaceholder}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
@@ -238,7 +240,7 @@ export function BookingForm() {
               <div>
                 <label htmlFor="date" className="block text-gray-700 mb-2">
                   <Calendar className="w-4 h-4 inline mr-2" />
-                  Date
+                  {t.quoteForm.date}
                 </label>
                 <input
                   type="date"
@@ -253,7 +255,7 @@ export function BookingForm() {
 
               <div>
                 <label htmlFor="time" className="block text-gray-700 mb-2">
-                  Time
+                  {t.quoteForm.pickupTime}
                 </label>
                 <input
                   type="time"
@@ -272,7 +274,7 @@ export function BookingForm() {
               <div>
                 <label htmlFor="passengers" className="block text-gray-700 mb-2">
                   <Users className="w-4 h-4 inline mr-2" />
-                  Number of Passengers
+                  {t.quoteForm.passengers}
                 </label>
                 <select
                   id="passengers"
@@ -282,18 +284,16 @@ export function BookingForm() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 >
-                  <option value="1">1 person</option>
-                  <option value="2">2 people</option>
-                  <option value="3">3 people</option>
-                  <option value="4">4 people</option>
-                  <option value="5">5+ people</option>
+                  {t.quoteForm.passengersOptions.map((label, index) => (
+                    <option key={label} value={index + 1}>{label}</option>
+                  ))}
                 </select>
               </div>
 
               <div>
                 <label htmlFor="largeLuggage" className="block text-gray-700 mb-2">
                   <Luggage className="w-4 h-4 inline mr-2" />
-                  Large Luggage
+                  {t.quoteForm.largeLuggage}
                 </label>
                 <select
                   id="largeLuggage"
@@ -303,20 +303,20 @@ export function BookingForm() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 >
-                  <option value="no">No</option>
-                  <option value="yes">Yes</option>
+                  <option value="no">{t.quoteForm.luggageNo}</option>
+                  <option value="yes">{t.quoteForm.luggageYes}</option>
                 </select>
               </div>
             </div>
 
             {/* Contact Information */}
             <div className="border-t pt-6">
-              <h3 className="text-gray-900 mb-4">Contact Information</h3>
+              <h3 className="text-gray-900 mb-4">{t.quoteForm.contactTitle}</h3>
               
               <div className="space-y-4">
                 <div>
                   <label htmlFor="name" className="block text-gray-700 mb-2">
-                    Full Name
+                    {t.quoteForm.fullName}
                   </label>
                   <input
                     type="text"
@@ -324,7 +324,7 @@ export function BookingForm() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    placeholder="Your name"
+                    placeholder={t.quoteForm.namePlaceholder}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
@@ -332,7 +332,7 @@ export function BookingForm() {
 
                 <div>
                   <label htmlFor="phone" className="block text-gray-700 mb-2">
-                    Phone Number
+                    {t.quoteForm.phoneNumber}
                   </label>
                   <input
                     type="tel"
@@ -348,7 +348,7 @@ export function BookingForm() {
 
                 <div>
                   <label htmlFor="email" className="block text-gray-700 mb-2">
-                    Email Address
+                    {t.quoteForm.email}
                   </label>
                   <input
                     type="email"
@@ -356,7 +356,7 @@ export function BookingForm() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="your@email.com"
+                    placeholder={t.quoteForm.emailPlaceholder}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
@@ -369,7 +369,7 @@ export function BookingForm() {
               type="submit"
               className="w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 transition-colors"
             >
-              Request Quote
+              {t.quoteForm.submit}
             </button>
           </form>
         )}

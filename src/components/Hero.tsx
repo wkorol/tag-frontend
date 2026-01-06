@@ -1,9 +1,11 @@
 import { MessageCircle, Mail, Bus, Car, Clock, BadgeCheck, Plane, CalendarCheck2, BadgeDollarSign, MapPin, Headphones } from 'lucide-react';
 import logo from 'figma:asset/9bf12920b9f211a57ac7e4ff94480c867662dafa.png';
 import { trackContactClick } from '../lib/tracking';
+import { useI18n } from '../lib/i18n';
 
 export function Hero() {
-  const whatsappLink = 'https://wa.me/48694347548?text=Hello%20Taxi%20Airport%20Gda%C5%84sk,%20I%20would%20like%20to%20book%20a%20transfer.';
+  const { t } = useI18n();
+  const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
 
   return (
     <div id="hero" className="relative bg-gradient-to-br from-blue-900 to-blue-700 text-white">
@@ -16,17 +18,17 @@ export function Hero() {
         <div className="text-center">
           <div className="mb-4 flex justify-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-4 py-2 text-xs sm:text-sm text-white shadow-sm backdrop-blur-sm">
-              <span className="font-semibold">ONLY 90 PLN</span>
-              <span>to City Center (day)</span>
+              <span className="font-semibold">{t.hero.promo.dayPrice}</span>
+              <span>{t.hero.promo.dayLabel}</span>
               <span className="text-white/70">•</span>
-              <span className="font-semibold">120 PLN</span>
-              <span>at night</span>
+              <span className="font-semibold">{t.hero.promo.nightPrice}</span>
+              <span>{t.hero.promo.nightLabel}</span>
             </div>
           </div>
           <div className="flex justify-center mb-6">
             <img
                 src={logo}
-                alt="Taxi Airport Gdańsk - Airport Transfer & Limousine Service"
+                alt={t.hero.logoAlt}
                 className="w-64 sm:w-80 h-auto"
             />
           </div>
@@ -38,28 +40,28 @@ export function Hero() {
                 className="inline-flex items-center gap-2 bg-white text-blue-900 px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors"
             >
               <MessageCircle className="w-5 h-5"/>
-              WhatsApp
+              {t.common.whatsapp}
             </a>
             <a
                 href="mailto:booking@taxiairportgdansk.com"
                 className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-6 py-3 rounded-lg hover:bg-white/20 transition-colors"
             >
               <Mail className="w-5 h-5" />
-              Order via email
+              {t.hero.orderViaEmail}
             </a>
             <a
                 href="#vehicle-selection"
                 className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-400 transition-colors animate-pulse-glow"
             >
-              Order Online Now
+              {t.common.orderOnlineNow}
             </a>
           </div>
           <div className="mt-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-6 py-5 max-w-2xl mx-auto">
             <h1 className="text-xl sm:text-2xl text-blue-100 mb-3">
-              Professional Airport Transfer Service in Gdańsk, Sopot & Gdynia
+              {t.hero.headline}
             </h1>
             <p className="text-blue-200">
-              Reliable, comfortable, and on time transfers across Tri-City area
+              {t.hero.subheadline}
             </p>
           </div>
 
@@ -67,72 +69,72 @@ export function Hero() {
           <div className="mt-12 mb-10 max-w-4xl mx-auto">
             <div className="rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm px-6 py-6 shadow-xl">
               <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
-                <h2 className="text-blue-100 text-lg sm:text-xl">Why choose Taxi Airport Gdańsk</h2>
-                <span className="text-xs uppercase tracking-[0.2em] text-blue-200/80">Benefits</span>
+                <h2 className="text-blue-100 text-lg sm:text-xl">{t.hero.whyChoose}</h2>
+                <span className="text-xs uppercase tracking-[0.2em] text-blue-200/80">{t.hero.benefits}</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
                   <Plane className="w-8 h-8 text-orange-400 mx-auto mb-2"/>
-                  <h3 className="text-white mb-1">Flight tracking</h3>
+                  <h3 className="text-white mb-1">{t.hero.benefitsList.flightTrackingTitle}</h3>
                   <p className="text-blue-200 text-sm">
-                    We monitor arrivals and adjust pickup time automatically.
+                    {t.hero.benefitsList.flightTrackingBody}
                   </p>
                 </div>
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
                   <BadgeCheck className="w-8 h-8 text-yellow-400 mx-auto mb-2"/>
-                  <h3 className="text-white mb-1">Meet &amp; greet</h3>
+                  <h3 className="text-white mb-1">{t.hero.benefitsList.meetGreetTitle}</h3>
                   <p className="text-blue-200 text-sm">
-                    Professional drivers, clear communication, and help with luggage.
+                    {t.hero.benefitsList.meetGreetBody}
                   </p>
                 </div>
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
                   <Clock className="w-8 h-8 text-green-400 mx-auto mb-2"/>
-                  <h3 className="text-white mb-1">Fast confirmation</h3>
+                  <h3 className="text-white mb-1">{t.hero.benefitsList.fastConfirmationTitle}</h3>
                   <p className="text-blue-200 text-sm">
-                    Most bookings are confirmed within 5–10 minutes.
+                    {t.hero.benefitsList.fastConfirmationBody}
                   </p>
                 </div>
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
                   <span className="text-2xl block text-center mb-2">💳</span>
-                  <h3 className="text-white mb-1">Flexible payments</h3>
+                  <h3 className="text-white mb-1">{t.hero.benefitsList.flexiblePaymentsTitle}</h3>
                   <p className="text-blue-200 text-sm">
-                    Card, Apple Pay, Google Pay, Revolut, or cash.
+                    {t.hero.benefitsList.flexiblePaymentsBody}
                   </p>
                 </div>
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
                   <CalendarCheck2 className="w-8 h-8 text-cyan-300 mx-auto mb-2"/>
-                  <h3 className="text-white mb-1">Free prebooking</h3>
+                  <h3 className="text-white mb-1">{t.hero.benefitsList.freePrebookingTitle}</h3>
                   <p className="text-blue-200 text-sm">
-                    Cancel anytime for free. Fully automated, no support needed.
+                    {t.hero.benefitsList.freePrebookingBody}
                   </p>
                 </div>
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
                   <BadgeDollarSign className="w-8 h-8 text-emerald-300 mx-auto mb-2"/>
-                  <h3 className="text-white mb-1">Fixed price guarantee</h3>
+                  <h3 className="text-white mb-1">{t.hero.benefitsList.fixedPriceTitle}</h3>
                   <p className="text-blue-200 text-sm">
-                    Fixed price both ways. The price you book is the price you pay.
+                    {t.hero.benefitsList.fixedPriceBody}
                   </p>
                 </div>
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
                   <MapPin className="w-8 h-8 text-indigo-200 mx-auto mb-2"/>
-                  <h3 className="text-white mb-1">Local expertise</h3>
+                  <h3 className="text-white mb-1">{t.hero.benefitsList.localExpertiseTitle}</h3>
                   <p className="text-blue-200 text-sm">
-                    Experienced Tri-City drivers who know the fastest routes.
+                    {t.hero.benefitsList.localExpertiseBody}
                   </p>
                 </div>
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
                   <Headphones className="w-8 h-8 text-rose-200 mx-auto mb-2"/>
-                  <h3 className="text-white mb-1">24/7 assistance</h3>
+                  <h3 className="text-white mb-1">{t.hero.benefitsList.assistanceTitle}</h3>
                   <p className="text-blue-200 text-sm">
-                    Always available before, during, and after your ride.
+                    {t.hero.benefitsList.assistanceBody}
                   </p>
                 </div>
               </div>
@@ -144,26 +146,26 @@ export function Hero() {
         <div id="fleet" className="mt-12">
           <div className="max-w-4xl mx-auto rounded-3xl border border-white/10 bg-gradient-to-br from-blue-800/40 to-blue-700/20 backdrop-blur-sm px-6 py-8 shadow-xl">
             <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
-              <h3 className="text-blue-100 text-lg sm:text-xl">Our Fleet</h3>
-              <span className="text-xs uppercase tracking-[0.2em] text-blue-200/80">Vehicles</span>
+              <h3 className="text-blue-100 text-lg sm:text-xl">{t.hero.fleetTitle}</h3>
+              <span className="text-xs uppercase tracking-[0.2em] text-blue-200/80">{t.hero.fleetLabel}</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {/* Standard Cars Card */}
             <div
                 className="bg-gradient-to-br from-gray-100/20 to-gray-200/20 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-white/30 hover:border-white/50 transition-all flex flex-col items-center justify-center p-8">
               <Car className="w-16 h-16 text-blue-100 mb-3"/>
-              <p className="text-white text-center mb-2">Standard Cars</p>
+              <p className="text-white text-center mb-2">{t.hero.standardCarsTitle}</p>
               <p className="text-blue-200 text-sm text-center">
-                1-4 passengers | Comfortable sedans and SUVs
+                {t.hero.standardCarsBody}
               </p>
             </div>
 
             {/* Buses Card */}
             <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/20 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-blue-300/30 hover:border-blue-300/50 transition-all flex flex-col items-center justify-center p-8">
               <Bus className="w-16 h-16 text-blue-200 mb-3" />
-              <p className="text-white text-center mb-2">& More Buses</p>
+              <p className="text-white text-center mb-2">{t.hero.busTitle}</p>
               <p className="text-blue-200 text-sm text-center">
-                5-8 passengers | Perfect for larger groups
+                {t.hero.busBody}
               </p>
             </div>
           </div>

@@ -1,6 +1,10 @@
 import { Mail, MapPin } from 'lucide-react';
+import { localeToPath, useI18n } from '../lib/i18n';
 
 export function Footer() {
+  const { t, locale } = useI18n();
+  const basePath = localeToPath(locale);
+
   return (
     <footer className="bg-gray-900 text-gray-300 py-12">
       <div className="max-w-6xl mx-auto px-4">
@@ -8,12 +12,12 @@ export function Footer() {
           <div>
             <h3 className="text-white mb-4">Taxi Airport Gdańsk</h3>
             <p className="text-sm">
-              Professional airport transfer service in the Tri-City area. Available 24/7.
+              {t.footer.description}
             </p>
           </div>
 
           <div>
-            <h4 className="text-white mb-4">Contact</h4>
+            <h4 className="text-white mb-4">{t.footer.contactTitle}</h4>
             <div className="space-y-3 text-sm">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
@@ -23,33 +27,33 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
-                <span>Gdańsk, Poland</span>
+                <span>{t.footer.location}</span>
               </div>
               <p className="text-xs text-gray-400 mt-4">
-                Book online, via WhatsApp, or email
+                {t.footer.bookingNote}
               </p>
             </div>
           </div>
 
           <div>
-            <h4 className="text-white mb-4">Service Hours</h4>
-            <p className="text-sm">24/7 - Available every day</p>
+            <h4 className="text-white mb-4">{t.footer.hoursTitle}</h4>
+            <p className="text-sm">{t.footer.hoursBody}</p>
             <p className="text-sm mt-2">
-              Airport pickups, city transfers, and custom routes
+              {t.footer.hoursSub}
             </p>
           </div>
 
           <div>
-            <h4 className="text-white mb-4">Popular Routes</h4>
+            <h4 className="text-white mb-4">{t.footer.routesTitle}</h4>
             <div className="space-y-2 text-sm">
-              <a href="/gdansk-airport-taxi" className="block hover:text-white transition-colors">
-                Gdańsk Airport Taxi
+              <a href={`${basePath}/gdansk-airport-taxi`} className="block hover:text-white transition-colors">
+                {t.navbar.airportTaxi}
               </a>
-              <a href="/gdansk-airport-to-sopot" className="block hover:text-white transition-colors">
-                Airport ↔ Sopot
+              <a href={`${basePath}/gdansk-airport-to-sopot`} className="block hover:text-white transition-colors">
+                {t.navbar.airportSopot}
               </a>
-              <a href="/gdansk-airport-to-gdynia" className="block hover:text-white transition-colors">
-                Airport ↔ Gdynia
+              <a href={`${basePath}/gdansk-airport-to-gdynia`} className="block hover:text-white transition-colors">
+                {t.navbar.airportGdynia}
               </a>
             </div>
           </div>
@@ -57,16 +61,16 @@ export function Footer() {
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
           <p>
-            &copy; {new Date().getFullYear()} Taxi Airport Gdańsk. All rights reserved.
+            &copy; {new Date().getFullYear()} Taxi Airport Gdańsk. {t.footer.rights}
             {' '}
-            <a href="/cookies" className="text-gray-300 hover:text-white underline">
-              Cookie Policy
+            <a href={`${basePath}/cookies`} className="text-gray-300 hover:text-white underline">
+              {t.footer.cookiePolicy}
             </a>
             {' '}
             <span className="text-gray-500">|</span>
             {' '}
-            <a href="/privacy" className="text-gray-300 hover:text-white underline">
-              Privacy Policy
+            <a href={`${basePath}/privacy`} className="text-gray-300 hover:text-white underline">
+              {t.footer.privacyPolicy}
             </a>
           </p>
         </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Route, Routes, useSearchParams } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { VehicleTypeSelector } from './components/VehicleTypeSelector';
@@ -16,8 +16,10 @@ import { RouteLanding } from './pages/RouteLanding';
 import { AdminOrdersPage } from './pages/AdminOrdersPage';
 import { AdminOrderPage } from './pages/AdminOrderPage';
 import { trackContactClick } from './lib/tracking';
+import { Locale, localeToPath, useI18n } from './lib/i18n';
 
 function Landing() {
+  const { t } = useI18n();
   const [step, setStep] = useState<'vehicle' | 'pricing'>('vehicle');
   const [vehicleType, setVehicleType] = useState<'standard' | 'bus'>('standard');
   const [selectedRoute, setSelectedRoute] = useState<{ from: string; to: string; priceDay: number; priceNight: number; type: 'standard' | 'bus' } | null>(null);
@@ -90,7 +92,7 @@ function Landing() {
   }, []);
 
   const showFloating = !targetVisible && !selectedRoute && !showQuoteForm;
-  const whatsappLink = 'https://wa.me/48694347548?text=Hello%20Taxi%20Airport%20Gda%C5%84sk,%20I%20would%20like%20to%20book%20a%20transfer.';
+  const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
 
   useEffect(() => {
     if (!showFloating) {
@@ -144,7 +146,7 @@ function Landing() {
             floatingReady ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
         >
-          Order Online Now
+          {t.common.orderOnlineNow}
         </a>
       )}
 
@@ -154,7 +156,7 @@ function Landing() {
           onClick={() => trackContactClick('whatsapp')}
           className="bg-white text-slate-900 px-4 py-3 rounded-full shadow-lg border border-slate-200 flex items-center gap-2"
         >
-          WhatsApp
+          {t.common.whatsapp}
         </a>
       </div>
     </div>
@@ -162,64 +164,138 @@ function Landing() {
 }
 
 export default function App() {
+  const { t } = useI18n();
+
   return (
     <>
       <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/admin" element={<AdminOrdersPage />} />
-        <Route path="/admin/orders/:id" element={<AdminOrderPage />} />
-        <Route path="/cookies" element={<CookiesPage />} />
-        <Route path="/privacy" element={<PrivacyPage />} />
-        <Route
-          path="/gdansk-airport-taxi"
-          element={
-            <RouteLanding
-              title="Gdańsk Airport Taxi"
-              description="Book a fast, reliable airport taxi from Gdańsk Airport. Fixed pricing both ways, professional drivers, and quick confirmation."
-              route="Gdańsk Airport"
-              examples={[
-                'Gdańsk Old Town',
-                'Gdańsk Oliwa',
-                'Gdańsk Main Station',
-                'Brzeźno Beach',
-              ]}
-            />
-          }
-        />
-        <Route
-          path="/gdansk-airport-to-sopot"
-          element={
-            <RouteLanding
-              title="Gdańsk Airport to Sopot Transfer"
-              description="Private transfer between Gdańsk Airport and Sopot with fixed pricing both ways and flight tracking."
-              route="Gdańsk Airport ↔ Sopot"
-              examples={[
-                'Sopot Pier',
-                'Sopot Centre',
-                'Sopot Hotels',
-                'Sopot Railway Station',
-              ]}
-            />
-          }
-        />
-        <Route
-          path="/gdansk-airport-to-gdynia"
-          element={
-            <RouteLanding
-              title="Gdańsk Airport to Gdynia Transfer"
-              description="Comfortable transfer between Gdańsk Airport and Gdynia with fixed pricing both ways."
-              route="Gdańsk Airport ↔ Gdynia"
-              examples={[
-                'Gdynia Centre',
-                'Gdynia Port',
-                'Gdynia Hotels',
-                'Gdynia Orłowo',
-              ]}
-            />
-          }
-        />
+        <Route path="/" element={<AutoRedirect />} />
+        <Route path="/en" element={<LocalizedShell locale="en" />}>
+          <Route index element={<Landing />} />
+          <Route path="admin" element={<AdminOrdersPage />} />
+          <Route path="admin/orders/:id" element={<AdminOrderPage />} />
+          <Route path="cookies" element={<CookiesPage />} />
+          <Route path="privacy" element={<PrivacyPage />} />
+          <Route
+            path="gdansk-airport-taxi"
+            element={
+              <RouteLanding
+                title={t.pages.gdanskTaxi.title}
+                description={t.pages.gdanskTaxi.description}
+                route={t.pages.gdanskTaxi.route}
+                examples={t.pages.gdanskTaxi.examples}
+              />
+            }
+          />
+          <Route
+            path="gdansk-airport-to-sopot"
+            element={
+              <RouteLanding
+                title={t.pages.gdanskSopot.title}
+                description={t.pages.gdanskSopot.description}
+                route={t.pages.gdanskSopot.route}
+                examples={t.pages.gdanskSopot.examples}
+              />
+            }
+          />
+          <Route
+            path="gdansk-airport-to-gdynia"
+            element={
+              <RouteLanding
+                title={t.pages.gdanskGdynia.title}
+                description={t.pages.gdanskGdynia.description}
+                route={t.pages.gdanskGdynia.route}
+                examples={t.pages.gdanskGdynia.examples}
+              />
+            }
+          />
+        </Route>
+        <Route path="/pl" element={<LocalizedShell locale="pl" />}>
+          <Route index element={<Landing />} />
+          <Route path="admin" element={<AdminOrdersPage />} />
+          <Route path="admin/orders/:id" element={<AdminOrderPage />} />
+          <Route path="cookies" element={<CookiesPage />} />
+          <Route path="privacy" element={<PrivacyPage />} />
+          <Route
+            path="gdansk-airport-taxi"
+            element={
+              <RouteLanding
+                title={t.pages.gdanskTaxi.title}
+                description={t.pages.gdanskTaxi.description}
+                route={t.pages.gdanskTaxi.route}
+                examples={t.pages.gdanskTaxi.examples}
+              />
+            }
+          />
+          <Route
+            path="gdansk-airport-to-sopot"
+            element={
+              <RouteLanding
+                title={t.pages.gdanskSopot.title}
+                description={t.pages.gdanskSopot.description}
+                route={t.pages.gdanskSopot.route}
+                examples={t.pages.gdanskSopot.examples}
+              />
+            }
+          />
+          <Route
+            path="gdansk-airport-to-gdynia"
+            element={
+              <RouteLanding
+                title={t.pages.gdanskGdynia.title}
+                description={t.pages.gdanskGdynia.description}
+                route={t.pages.gdanskGdynia.route}
+                examples={t.pages.gdanskGdynia.examples}
+              />
+            }
+          />
+        </Route>
+        <Route path="/cookies" element={<LegacyRedirect to="cookies" />} />
+        <Route path="/privacy" element={<LegacyRedirect to="privacy" />} />
+        <Route path="/admin" element={<LegacyRedirect to="admin" />} />
+        <Route path="/admin/orders/:id" element={<LegacyAdminOrderRedirect />} />
+        <Route path="/gdansk-airport-taxi" element={<LegacyRedirect to="gdansk-airport-taxi" />} />
+        <Route path="/gdansk-airport-to-sopot" element={<LegacyRedirect to="gdansk-airport-to-sopot" />} />
+        <Route path="/gdansk-airport-to-gdynia" element={<LegacyRedirect to="gdansk-airport-to-gdynia" />} />
       </Routes>
       <CookieBanner />
     </>
   );
+}
+
+function LocalizedShell({ locale }: { locale: Locale }) {
+  const { setLocale } = useI18n();
+
+  useEffect(() => {
+    setLocale(locale);
+  }, [locale, setLocale]);
+
+  return <Outlet />;
+}
+
+function AutoRedirect() {
+  const { locale } = useI18n();
+  const location = useLocation();
+  const target = `${localeToPath(locale)}${location.search}${location.hash}`;
+
+  return <Navigate to={target} replace />;
+}
+
+function LegacyRedirect({ to }: { to: string }) {
+  const { locale } = useI18n();
+  const location = useLocation();
+  const basePath = localeToPath(locale);
+  const target = `${basePath}/${to}${location.search}${location.hash}`;
+
+  return <Navigate to={target} replace />;
+}
+
+function LegacyAdminOrderRedirect() {
+  const { locale } = useI18n();
+  const { id } = useParams();
+  const location = useLocation();
+  const basePath = localeToPath(locale);
+  const target = `${basePath}/admin/orders/${id ?? ''}${location.search}${location.hash}`;
+
+  return <Navigate to={target} replace />;
 }

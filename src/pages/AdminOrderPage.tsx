@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { Calendar, CheckCircle2, XCircle } from 'lucide-react';
 import { getApiBaseUrl } from '../lib/api';
+import { localeToPath, useI18n } from '../lib/i18n';
 
 type AdminOrder = {
   id: string;
@@ -41,6 +42,8 @@ const parseNotes = (notes?: string | null) => {
 };
 
 export function AdminOrderPage() {
+  const { t, locale } = useI18n();
+  const basePath = localeToPath(locale);
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token') ?? '';
@@ -71,7 +74,7 @@ export function AdminOrderPage() {
 
   const fetchOrder = () => {
     if (!id || !token) {
-      setError('Missing admin token.');
+      setError(t.adminOrder.missingToken);
       setLoading(false);
       return;
     }
@@ -81,7 +84,7 @@ export function AdminOrderPage() {
       .then(async (res) => {
         const data = await res.json().catch(() => null);
         if (!res.ok) {
-          throw new Error(data?.error ?? 'Failed to load order.');
+          throw new Error(data?.error ?? t.adminOrder.errorLoad);
         }
         return data;
       })
@@ -120,10 +123,10 @@ export function AdminOrderPage() {
       if (!response.ok) {
         throw new Error(data?.error ?? 'Failed to update order.');
       }
-      setActionMessage('Order updated.');
+      setActionMessage(t.adminOrder.updated);
       fetchOrder();
     } catch (err) {
-      setActionMessage(err instanceof Error ? err.message : 'Failed to update order.');
+      setActionMessage(err instanceof Error ? err.message : t.adminOrder.updateError);
     } finally {
       setSubmitting(false);
     }
@@ -149,10 +152,10 @@ export function AdminOrderPage() {
       if (!response.ok) {
         throw new Error(data?.error ?? 'Failed to update order.');
       }
-      setActionMessage('Order status updated.');
+      setActionMessage(t.adminOrder.statusUpdated);
       fetchOrder();
     } catch (err) {
-      setActionMessage(err instanceof Error ? err.message : 'Failed to update order.');
+      setActionMessage(err instanceof Error ? err.message : t.adminOrder.updateError);
     } finally {
       setSubmitting(false);
     }
@@ -168,7 +171,7 @@ export function AdminOrderPage() {
       .map(([field]) => field);
 
     if (fields.length === 0) {
-      setActionMessage('Select at least one field to update.');
+      setActionMessage(t.adminOrder.updateRequestSelect);
       return;
     }
 
@@ -186,11 +189,11 @@ export function AdminOrderPage() {
       );
       const data = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new Error(data?.error ?? 'Failed to send update request.');
+        throw new Error(data?.error ?? t.adminOrder.updateRequestError);
       }
-      setActionMessage('Update request sent to the customer.');
+      setActionMessage(t.adminOrder.updateRequestSent);
     } catch (err) {
-      setActionMessage(err instanceof Error ? err.message : 'Failed to send update request.');
+      setActionMessage(err instanceof Error ? err.message : t.adminOrder.updateRequestError);
     } finally {
       setSubmitting(false);
     }
@@ -201,22 +204,22 @@ export function AdminOrderPage() {
       <div className="mx-auto max-w-5xl">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl text-slate-900">Admin Order Details</h1>
-            <p className="text-sm text-slate-600">Manage, confirm, or reject this order.</p>
+            <h1 className="text-2xl text-slate-900">{t.adminOrder.title}</h1>
+            <p className="text-sm text-slate-600">{t.adminOrder.subtitle}</p>
           </div>
           {order?.canViewAll && (
             <Link
-              to={`/admin?token=${encodeURIComponent(token)}`}
+              to={`${basePath}/admin?token=${encodeURIComponent(token)}`}
               className="text-sm text-blue-600 hover:text-blue-700"
             >
-              Back to all orders
+              {t.adminOrder.back}
             </Link>
           )}
         </div>
 
         {loading && (
           <div className="rounded-xl border border-slate-200 bg-white p-6 text-slate-600">
-            Loading order...
+            {t.adminOrder.loading}
           </div>
         )}
 
@@ -231,8 +234,8 @@ export function AdminOrderPage() {
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-xl text-slate-900">Order #{order.generatedId}</h2>
-                  <p className="text-sm text-slate-600">ID: {order.id}</p>
+                  <h2 className="text-xl text-slate-900">{t.adminOrder.orderLabel} #{order.generatedId}</h2>
+                  <p className="text-sm text-slate-600">{t.adminOrder.idLabel}: {order.id}</p>
                 </div>
                 <span
                   className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${
@@ -245,13 +248,13 @@ export function AdminOrderPage() {
 
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-                  <div className="text-xs uppercase text-slate-500">Customer</div>
+                  <div className="text-xs uppercase text-slate-500">{t.adminOrder.customerLabel}</div>
                   <div className="text-slate-900">{order.fullName}</div>
                   <div className="text-sm text-slate-600">{order.emailAddress}</div>
                   <div className="text-sm text-slate-600">{order.phoneNumber}</div>
                 </div>
                 <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-                  <div className="text-xs uppercase text-slate-500">Pickup</div>
+                  <div className="text-xs uppercase text-slate-500">{t.adminOrder.pickupLabel}</div>
                   <div className="flex items-center gap-2 text-slate-900">
                     <Calendar className="h-4 w-4 text-blue-600" />
                     {order.date} {order.pickupTime}
@@ -262,39 +265,39 @@ export function AdminOrderPage() {
 
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-                  <div className="text-xs uppercase text-slate-500">Price</div>
+                  <div className="text-xs uppercase text-slate-500">{t.adminOrder.priceLabel}</div>
                   <div className="text-slate-900">{order.proposedPrice} PLN</div>
                   {order.pendingPrice && (
-                    <div className="text-sm text-blue-700">Pending: {order.pendingPrice} PLN</div>
+                    <div className="text-sm text-blue-700">{t.adminOrder.pendingPrice(order.pendingPrice)}</div>
                   )}
                 </div>
                 <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-                  <div className="text-xs uppercase text-slate-500">Additional info</div>
+                  <div className="text-xs uppercase text-slate-500">{t.adminOrder.additionalInfo}</div>
                   <div className="text-sm text-slate-700">
-                    Passengers: {parsedNotes?.passengers ?? '—'}
+                    {t.adminOrder.passengers} {parsedNotes?.passengers ?? '—'}
                   </div>
                   <div className="text-sm text-slate-700">
-                    Large luggage: {parsedNotes?.largeLuggage ?? '—'}
+                    {t.adminOrder.largeLuggage} {parsedNotes?.largeLuggage ?? '—'}
                   </div>
                   <div className="text-sm text-slate-700">
-                    Pickup type: {parsedNotes?.pickupType ?? '—'}
+                    {t.adminOrder.pickupType} {parsedNotes?.pickupType ?? '—'}
                   </div>
                   {parsedNotes?.pickupType === 'airport' && (
                     <div className="text-sm text-slate-700">
-                      Flight number: {order.flightNumber || '—'}
+                      {t.adminOrder.flightNumber} {order.flightNumber || '—'}
                     </div>
                   )}
                   {parsedNotes?.signText && (
                     <div className="text-sm text-slate-700">
-                      Sign text: {parsedNotes.signText}
+                      {t.adminOrder.signText} {parsedNotes.signText}
                     </div>
                   )}
                   <div className="text-sm text-slate-700">
-                    Route: {parsedNotes?.route?.from ?? '—'} → {parsedNotes?.route?.to ?? '—'}
+                    {t.adminOrder.route} {parsedNotes?.route?.from ?? '—'} → {parsedNotes?.route?.to ?? '—'}
                   </div>
                   {parsedNotes?.notes && (
                     <div className="text-sm text-slate-700">
-                      Notes: {parsedNotes.notes}
+                      {t.adminOrder.notes} {parsedNotes.notes}
                     </div>
                   )}
                 </div>
@@ -309,7 +312,7 @@ export function AdminOrderPage() {
 
             {order.status === 'pending' && (
               <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
-                <h3 className="text-lg text-slate-900">Admin Actions</h3>
+                <h3 className="text-lg text-slate-900">{t.adminOrder.adminActions}</h3>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <button
                     className="flex items-center justify-center gap-2 rounded-lg bg-green-600 px-4 py-3 text-white hover:bg-green-700 transition-colors"
@@ -317,7 +320,7 @@ export function AdminOrderPage() {
                     onClick={() => postDecision({ action: 'confirm' })}
                   >
                     <CheckCircle2 className="h-4 w-4" />
-                    Confirm order
+                    {t.adminOrder.confirmOrder}
                   </button>
                   <button
                     className="flex items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-3 text-white hover:bg-red-700 transition-colors"
@@ -325,13 +328,13 @@ export function AdminOrderPage() {
                     onClick={() => postDecision({ action: 'reject', message: rejectReason })}
                   >
                     <XCircle className="h-4 w-4" />
-                    Reject order
+                    {t.adminOrder.rejectOrder}
                   </button>
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="text-sm text-slate-700">Propose new price (PLN)</label>
+                    <label className="text-sm text-slate-700">{t.adminOrder.proposePrice}</label>
                     <input
                       type="text"
                       value={priceInput}
@@ -343,11 +346,11 @@ export function AdminOrderPage() {
                       disabled={submitting}
                       onClick={() => postDecision({ action: 'price', price: priceInput })}
                     >
-                      Send price proposal
+                      {t.adminOrder.sendPrice}
                     </button>
                   </div>
                   <div>
-                    <label className="text-sm text-slate-700">Rejection reason (optional)</label>
+                    <label className="text-sm text-slate-700">{t.adminOrder.rejectionReason}</label>
                     <textarea
                       value={rejectReason}
                       onChange={(event) => setRejectReason(event.target.value)}
@@ -361,9 +364,9 @@ export function AdminOrderPage() {
 
             {(order.status === 'pending' || order.status === 'confirmed') && (
               <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
-                <h3 className="text-lg text-slate-900">Request customer update</h3>
+                <h3 className="text-lg text-slate-900">{t.adminOrder.requestUpdate}</h3>
                 <p className="text-sm text-slate-600">
-                  Select the fields the customer should update. They will receive an email with a link to edit their booking.
+                  {t.adminOrder.requestUpdateBody}
                 </p>
                 <div className="grid gap-3 sm:grid-cols-3">
                   {(['phone', 'email', 'flight'] as const).map((field) => (
@@ -382,10 +385,10 @@ export function AdminOrderPage() {
                         }
                       />
                       {field === 'phone'
-                        ? 'Phone number'
+                        ? t.adminOrder.fieldPhone
                         : field === 'email'
-                          ? 'Email address'
-                          : 'Flight number'}
+                          ? t.adminOrder.fieldEmail
+                          : t.adminOrder.fieldFlight}
                     </label>
                   ))}
                 </div>
@@ -394,28 +397,28 @@ export function AdminOrderPage() {
                   disabled={submitting}
                   onClick={postUpdateRequest}
                 >
-                  Request update
+                  {t.adminOrder.requestUpdateAction}
                 </button>
               </div>
             )}
 
             {canFulfill && (
               <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h3 className="text-lg text-slate-900 mb-3">Completion status</h3>
+                <h3 className="text-lg text-slate-900 mb-3">{t.adminOrder.completionTitle}</h3>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <button
                     className="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-white hover:bg-emerald-700 transition-colors"
                     disabled={submitting}
                     onClick={() => postFulfillment('completed')}
                   >
-                    Mark completed
+                    {t.adminOrder.markCompleted}
                   </button>
                   <button
                     className="flex items-center justify-center gap-2 rounded-lg bg-orange-500 px-4 py-3 text-white hover:bg-orange-600 transition-colors"
                     disabled={submitting}
                     onClick={() => postFulfillment('failed')}
                   >
-                    Mark not completed
+                    {t.adminOrder.markFailed}
                   </button>
                 </div>
               </div>

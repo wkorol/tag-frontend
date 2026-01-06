@@ -1,35 +1,36 @@
+import { useI18n } from '../lib/i18n';
+
 export function CookiePolicy() {
+  const { t } = useI18n();
+
   return (
     <section id="cookie-policy" className="bg-white border-t border-gray-200 py-12">
       <div className="max-w-4xl mx-auto px-4 text-gray-700">
-        <h2 className="text-2xl text-gray-900 mb-4">Cookie Policy</h2>
-        <p className="text-sm text-gray-500 mb-6">Last updated: January 2, 2026</p>
+        <h2 className="text-2xl text-gray-900 mb-4">{t.cookiePolicy.title}</h2>
+        <p className="text-sm text-gray-500 mb-6">{t.cookiePolicy.updated}</p>
 
         <p className="mb-4">
-          This website uses cookies to ensure the site works reliably and to keep your booking safe.
-          With your consent, we also use marketing cookies to measure ad conversions.
+          {t.cookiePolicy.intro}
         </p>
 
-        <h3 className="text-lg text-gray-900 mb-2">What cookies we use</h3>
+        <h3 className="text-lg text-gray-900 mb-2">{t.cookiePolicy.sectionCookies}</h3>
         <ul className="list-disc pl-5 space-y-2 mb-6">
-          <li>Essential cookies to keep the site secure and prevent abuse.</li>
-          <li>Preference cookies to remember basic choices during a session.</li>
-          <li>Marketing cookies to measure conversions from ads (Google Ads).</li>
+          {t.cookiePolicy.cookiesList.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
         </ul>
 
-        <h3 className="text-lg text-gray-900 mb-2">How you can manage cookies</h3>
+        <h3 className="text-lg text-gray-900 mb-2">{t.cookiePolicy.sectionManage}</h3>
         <p className="mb-4">
-          You can delete cookies at any time from your browser settings. Blocking essential cookies may
-          prevent the booking form and order management from working properly.
+          {t.cookiePolicy.manageBody1}
         </p>
         <p className="mb-4">
-          You can also change your marketing cookie preference by clearing your browser storage and
-          revisiting this site.
+          {t.cookiePolicy.manageBody2}
         </p>
 
-        <h3 className="text-lg text-gray-900 mb-2">Contact</h3>
+        <h3 className="text-lg text-gray-900 mb-2">{t.cookiePolicy.contact}</h3>
         <p>
-          If you have questions about this policy, contact us at{' '}
+          {t.cookiePolicy.contactBody}{' '}
           <a
             href="mailto:booking@taxiairportgdansk.com"
             className="text-blue-600 hover:text-blue-700 underline"

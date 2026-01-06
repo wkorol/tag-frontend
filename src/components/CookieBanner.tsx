@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { getConsentStatus, setConsentStatus, updateGtagConsent } from '../lib/consent';
+import { localeToPath, useI18n } from '../lib/i18n';
 
 export function CookieBanner() {
+  const { t, locale } = useI18n();
+  const basePath = localeToPath(locale);
   const [visible, setVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -53,18 +56,15 @@ export function CookieBanner() {
       >
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-2">
-            <p className="text-base font-semibold tracking-wide">Cookie settings</p>
+            <p className="text-base font-semibold tracking-wide">{t.cookieBanner.title}</p>
             <p className="text-sm text-slate-200 leading-relaxed">
-              We use essential cookies to keep the booking process secure and reliable. With your
-              permission, we also use marketing cookies to measure ad conversions and improve how we
-              communicate offers. You can update your choice at any time by clearing your browser
-              storage.
+              {t.cookieBanner.body}
             </p>
             <a
-              href="/cookies"
+              href={`${basePath}/cookies`}
               className="inline-block text-sm text-slate-300 hover:text-white underline"
             >
-              Read the policy
+              {t.cookieBanner.readPolicy}
             </a>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
@@ -73,14 +73,14 @@ export function CookieBanner() {
               onClick={reject}
               className="border border-white/25 text-white text-base font-semibold px-7 py-3 rounded-full hover:border-white/60 transition"
             >
-              Decline
+              {t.cookieBanner.decline}
             </button>
             <button
               type="button"
               onClick={accept}
               className="bg-amber-400 hover:bg-amber-300 text-slate-900 text-base font-semibold px-8 py-3 rounded-full shadow-lg shadow-amber-400/35 transition"
             >
-              Accept cookies
+              {t.cookieBanner.accept}
             </button>
           </div>
         </div>

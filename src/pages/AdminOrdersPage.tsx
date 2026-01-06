@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { getApiBaseUrl } from '../lib/api';
+import { localeToPath, useI18n } from '../lib/i18n';
 
 type AdminOrder = {
   id: string;
@@ -26,6 +27,8 @@ const statusStyles: Record<string, string> = {
 };
 
 export function AdminOrdersPage() {
+  const { t, locale } = useI18n();
+  const basePath = localeToPath(locale);
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token') ?? '';
   const [orders, setOrders] = useState<AdminOrder[]>([]);
@@ -34,7 +37,7 @@ export function AdminOrdersPage() {
 
   useEffect(() => {
     if (!token) {
-      setError('Missing admin token.');
+      setError(t.adminOrders.missingToken);
       setLoading(false);
       return;
     }
@@ -44,7 +47,7 @@ export function AdminOrdersPage() {
       .then(async (res) => {
         const data = await res.json().catch(() => null);
         if (!res.ok) {
-          throw new Error(data?.error ?? 'Failed to load orders.');
+          throw new Error(data?.error ?? t.adminOrders.errorLoad);
         }
         return data;
       })
@@ -63,14 +66,14 @@ export function AdminOrdersPage() {
       <div className="mx-auto max-w-6xl">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl text-slate-900">Admin Orders</h1>
-            <p className="text-sm text-slate-600">All recent orders and statuses.</p>
+            <h1 className="text-2xl text-slate-900">{t.adminOrders.title}</h1>
+            <p className="text-sm text-slate-600">{t.adminOrders.subtitle}</p>
           </div>
         </div>
 
         {loading && (
           <div className="rounded-xl border border-slate-200 bg-white p-6 text-slate-600">
-            Loading orders...
+            {t.adminOrders.loading}
           </div>
         )}
 
@@ -83,15 +86,15 @@ export function AdminOrdersPage() {
         {!loading && !error && (
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="grid grid-cols-12 gap-4 border-b border-slate-200 px-6 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
-              <div className="col-span-2">Order</div>
-              <div className="col-span-2">Pickup</div>
-              <div className="col-span-3">Customer</div>
-              <div className="col-span-2">Price</div>
-              <div className="col-span-2">Status</div>
-              <div className="col-span-1 text-right">Open</div>
+              <div className="col-span-2">{t.adminOrders.columns.order}</div>
+              <div className="col-span-2">{t.adminOrders.columns.pickup}</div>
+              <div className="col-span-3">{t.adminOrders.columns.customer}</div>
+              <div className="col-span-2">{t.adminOrders.columns.price}</div>
+              <div className="col-span-2">{t.adminOrders.columns.status}</div>
+              <div className="col-span-1 text-right">{t.adminOrders.columns.open}</div>
             </div>
             {orders.length === 0 && (
-              <div className="px-6 py-8 text-sm text-slate-500">No orders found.</div>
+              <div className="px-6 py-8 text-sm text-slate-500">{t.adminOrders.empty}</div>
             )}
             {orders.map((order) => (
               <div
@@ -113,7 +116,7 @@ export function AdminOrdersPage() {
                 <div className="col-span-2">
                   <div className="text-slate-900">{order.proposedPrice} PLN</div>
                   {order.pendingPrice && (
-                    <div className="text-xs text-blue-600">Pending: {order.pendingPrice} PLN</div>
+                    <div className="text-xs text-blue-600">{t.adminOrders.pendingPrice(order.pendingPrice)}</div>
                   )}
                 </div>
                 <div className="col-span-2">
@@ -127,10 +130,10 @@ export function AdminOrdersPage() {
                 </div>
                 <div className="col-span-1 text-right">
                   <Link
-                    to={`/admin/orders/${order.id}?token=${encodeURIComponent(token)}`}
+                    to={`${basePath}/admin/orders/${order.id}?token=${encodeURIComponent(token)}`}
                     className="text-blue-600 hover:text-blue-700"
                   >
-                    View
+                    {t.adminOrders.view}
                   </Link>
                 </div>
               </div>

@@ -3,24 +3,25 @@ import { Calendar, Users, Luggage, MapPin, FileText, Plane, DollarSign, Info, Lo
 import { buildAdditionalNotes } from '../lib/orderNotes';
 import { hasMarketingConsent } from '../lib/consent';
 import { getApiBaseUrl } from '../lib/api';
+import { localeToPath, useI18n } from '../lib/i18n';
 
-const validatePhoneNumber = (value: string) => {
+const validatePhoneNumber = (value: string, messages: { phoneLetters: string; phoneLength: string }) => {
   const trimmed = value.trim();
   if (/[A-Za-z]/.test(trimmed)) {
-    return 'Please enter a valid phone number (digits only).';
+    return messages.phoneLetters;
   }
   const digitsOnly = trimmed.replace(/\D/g, '');
   if (digitsOnly.length < 7 || digitsOnly.length > 15) {
-    return 'Please enter a valid phone number (7–15 digits, optional +).';
+    return messages.phoneLength;
   }
   return null;
 };
 
-const validateEmail = (value: string) => {
+const validateEmail = (value: string, message: string) => {
   const trimmed = value.trim();
   const basicEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!basicEmail.test(trimmed)) {
-    return 'Please enter a valid email address.';
+    return message;
   }
   return null;
 };
@@ -38,6 +39,8 @@ interface QuoteFormProps {
 }
 
 export function QuoteForm({ onClose }: QuoteFormProps) {
+  const { t, locale } = useI18n();
+  const basePath = localeToPath(locale);
   const priceInputRef = useRef<HTMLInputElement | null>(null);
   const [formData, setFormData] = useState({
     pickupAddress: '',
@@ -64,8 +67,8 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   const [emailError, setEmailError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [showPriceInput, setShowPriceInput] = useState(false);
-  const isPhoneValid = !validatePhoneNumber(formData.phone);
-  const isEmailValid = !validateEmail(formData.email);
+  const isPhoneValid = !validatePhoneNumber(formData.phone, t.quoteForm.validation);
+  const isEmailValid = !validateEmail(formData.email, t.quoteForm.validation.email);
   const isPickupComplete = formData.pickupType === 'airport'
     ? formData.signText.trim() !== '' && formData.flightNumber.trim() !== ''
     : formData.pickupType === 'address' && formData.pickupAddress.trim() !== '';
@@ -118,13 +121,13 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
     setError(null);
     setPhoneError(null);
     setEmailError(null);
-    const phoneError = validatePhoneNumber(formData.phone);
+    const phoneError = validatePhoneNumber(formData.phone, t.quoteForm.validation);
     if (phoneError) {
       setPhoneError(phoneError);
       setError(phoneError);
       return;
     }
-    const emailError = validateEmail(formData.email);
+    const emailError = validateEmail(formData.email, t.quoteForm.validation.email);
     if (emailError) {
       setEmailError(emailError);
       setError(emailError);
@@ -159,6 +162,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
       emailAddress: formData.email,
       phoneNumber: formData.phone,
       additionalNotes,
+      locale,
     };
 
     try {
@@ -166,13 +170,14 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept-Language': locale,
         },
         body: JSON.stringify(payload),
       });
 
       const data = await response.json().catch(() => null);
       if (!response.ok) {
-        setError(data?.error ?? 'Failed to submit quote request. Please try again.');
+        setError(data?.error ?? t.quoteForm.submitError);
         return;
       }
 
@@ -181,7 +186,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
       setSubmitted(true);
       trackConversion();
     } catch {
-      setError('Network error while submitting the quote request. Please try again.');
+      setError(t.quoteForm.submitNetworkError);
     } finally {
       setSubmitting(false);
     }
@@ -213,7 +218,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   };
 
   const handlePhoneChange = (value: string) => {
-    const nextError = validatePhoneNumber(value);
+    const nextError = validatePhoneNumber(value, t.quoteForm.validation);
     setPhoneError(nextError);
     if (!nextError && error === phoneError) {
       setError(null);
@@ -221,12 +226,12 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   };
 
   const handlePhoneBlur = () => {
-    const phoneError = validatePhoneNumber(formData.phone);
+    const phoneError = validatePhoneNumber(formData.phone, t.quoteForm.validation);
     setPhoneError(phoneError);
   };
 
   const handleEmailChange = (value: string) => {
-    const nextError = validateEmail(value);
+    const nextError = validateEmail(value, t.quoteForm.validation.email);
     setEmailError(nextError);
     if (!nextError && error === emailError) {
       setError(null);
@@ -243,21 +248,21 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h3 className="text-green-900 mb-2">Quote Request Received!</h3>
+            <h3 className="text-green-900 mb-2">{t.quoteForm.submittedTitle}</h3>
             <p className="text-green-800 mb-4">
-              Thank you for your request. You will receive an email within 5-10 minutes confirming whether your offer has been accepted or declined.
+              {t.quoteForm.submittedBody}
             </p>
             {orderId && (
               <div className="bg-white rounded-lg p-4 mb-4">
                 {generatedId && (
-                  <p className="text-gray-700">Order #: <span className="font-semibold">{generatedId}</span></p>
+                  <p className="text-gray-700">{t.orderForm.orderNumber} <span className="font-semibold">{generatedId}</span></p>
                 )}
-                <p className="text-gray-700">Order ID: <span className="font-semibold">{orderId}</span></p>
+                <p className="text-gray-700">{t.orderForm.orderId} <span className="font-semibold">{orderId}</span></p>
                 <a
-                  href={`/?orderId=${orderId}`}
+                  href={`${basePath}/?orderId=${orderId}`}
                   className="text-blue-600 hover:text-blue-700 text-sm underline"
                 >
-                  Manage your order
+                  {t.quoteForm.manageLink}
                 </a>
               </div>
             )}
@@ -265,7 +270,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
               onClick={onClose}
               className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
             >
-              Close
+              {t.common.close}
             </button>
           </div>
         </div>
@@ -278,8 +283,8 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
       <div className="bg-white rounded-xl max-w-2xl w-full my-8 max-h-[90vh] flex flex-col">
         <div className="p-6 border-b flex items-center justify-between flex-shrink-0">
           <div>
-            <h3 className="text-gray-900">Request Custom Quote</h3>
-            <p className="text-gray-600 text-sm mt-1">Propose your price and get a response within 5-10 minutes</p>
+            <h3 className="text-gray-900">{t.quoteForm.title}</h3>
+            <p className="text-gray-600 text-sm mt-1">{t.quoteForm.subtitle}</p>
           </div>
           <button 
             onClick={onClose}
@@ -315,7 +320,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
           {/* Pickup Type */}
           <div>
             <label className="block text-gray-700 mb-2">
-              Pickup Type
+              {t.quoteForm.pickupType}
             </label>
             <div className="grid grid-cols-2 gap-4">
               <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
@@ -330,7 +335,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                   className="w-4 h-4 text-blue-600"
                 />
                 <Plane className="w-5 h-5 text-gray-700" />
-                <span>Airport Pickup</span>
+                <span>{t.quoteForm.airportPickup}</span>
               </label>
               
               <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
@@ -345,7 +350,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                   className="w-4 h-4 text-blue-600"
                 />
                 <MapPin className="w-5 h-5 text-gray-700" />
-                <span>Address Pickup</span>
+                <span>{t.quoteForm.addressPickup}</span>
               </label>
             </div>
           </div>
@@ -354,7 +359,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
             <div className="rounded-xl bg-slate-900/85 px-6 py-10 text-center text-white shadow-inner">
               <div className="mx-auto flex w-fit items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm backdrop-blur-sm">
                 <Lock className="h-4 w-4" />
-                Select a pickup type to unlock the rest of the form.
+                {t.quoteForm.lockMessage}
               </div>
             </div>
           ) : (
@@ -363,14 +368,14 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
               <div>
                 <label htmlFor="pickupAddress" className="block text-gray-700 mb-2">
                   <MapPin className="w-4 h-4 inline mr-2" />
-                  Pickup Address
+                  {t.quoteForm.pickupAddress}
                 </label>
                 <textarea
                   id="pickupAddress"
                   name="pickupAddress"
                   value={formData.pickupAddress}
                   onChange={handleChange}
-                  placeholder="Enter full pickup address (e.g., Gdańsk Airport, ul. Słowackiego 200)"
+                  placeholder={t.quoteForm.pickupPlaceholder}
                   rows={2}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                   disabled={formData.pickupType === 'airport'}
@@ -379,7 +384,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                 {formData.pickupType === 'airport' && (
                   <p className="text-sm text-blue-600 mt-1 flex items-center gap-1">
                     <Plane className="w-3 h-3" />
-                    Airport pickup location is automatically set
+                    {t.quoteForm.pickupAutoNote}
                   </p>
                 )}
               </div>
@@ -388,14 +393,14 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
               <div>
                 <label htmlFor="destinationAddress" className="block text-gray-700 mb-2">
                   <MapPin className="w-4 h-4 inline mr-2" />
-                  Destination Address
+                  {t.quoteForm.destinationAddress}
                 </label>
                 <textarea
                   id="destinationAddress"
                   name="destinationAddress"
                   value={formData.destinationAddress}
                   onChange={handleChange}
-                  placeholder="Enter destination address (e.g., Gdańsk Centrum, ul. Długa 1)"
+                  placeholder={t.quoteForm.destinationPlaceholder}
                   rows={2}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
@@ -406,7 +411,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
               <div>
                 <label htmlFor="proposedPrice" className="block text-gray-700 mb-2">
                   <DollarSign className="w-4 h-4 inline mr-2" />
-                  Price
+                  {t.quoteForm.price}
                 </label>
                 {!showPriceInput ? (
                   <button
@@ -418,22 +423,22 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                     className="w-full rounded-xl border-2 border-slate-200 bg-white px-4 py-4 text-left text-slate-800 shadow-sm hover:border-blue-500 hover:bg-blue-50/40 transition-colors"
                   >
                     <span className="block text-sm font-semibold text-slate-900">
-                      Price is calculated by taximeter.
+                      {t.quoteForm.taximeterTitle}
                     </span>
                     <span className="mt-2 block text-xs text-slate-600">
-                      Tariff 1 (city, 6–22): 3.90 PLN/km.
+                      {t.quoteForm.tariff1}
                     </span>
                     <span className="block text-xs text-slate-600">
-                      Tariff 2 (city, 22–6): 5.85 PLN/km.
+                      {t.quoteForm.tariff2}
                     </span>
                     <span className="block text-xs text-slate-600">
-                      Tariff 3 (outside city, 6–22): 7.80 PLN/km.
+                      {t.quoteForm.tariff3}
                     </span>
                     <span className="block text-xs text-slate-600">
-                      Tariff 4 (outside city, 22–6): 11.70 PLN/km.
+                      {t.quoteForm.tariff4}
                     </span>
                     <span className="mt-3 block text-xs font-semibold text-blue-700">
-                      If you want to propose a fixed price, click here and fill the input.
+                      {t.quoteForm.fixedPriceHint}
                     </span>
                   </button>
                 ) : (
@@ -460,14 +465,14 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                           setFormData(prev => ({ ...prev, proposedPrice: 'taximeter' }));
                         }
                       }}
-                      placeholder="Enter your offer in PLN (e.g., 150)"
+                      placeholder={t.quoteForm.pricePlaceholder}
                       min="0"
                       step="10"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
                     <p className="text-sm text-gray-500 mt-1">
-                      Propose your price for this ride. We'll review and respond within 5-10 minutes.
+                      {t.quoteForm.priceHelp}
                     </p>
                   </>
                 )}
@@ -478,7 +483,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                 <div>
                   <label htmlFor="date" className="block text-gray-700 mb-2">
                     <Calendar className="w-4 h-4 inline mr-2" />
-                    Date
+                    {t.quoteForm.date}
                   </label>
                   <input
                     type="date"
@@ -493,7 +498,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
 
                 <div>
                   <label htmlFor="time" className="block text-gray-700 mb-2">
-                    Pickup Time
+                    {t.quoteForm.pickupTime}
                   </label>
                   <input
                     type="time"
@@ -513,7 +518,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                   <div>
                     <label htmlFor="signText" className="block text-gray-700 mb-2">
                       <FileText className="w-4 h-4 inline mr-2" />
-                      Name Sign Text
+                      {t.quoteForm.signText}
                     </label>
                     <input
                       type="text"
@@ -521,7 +526,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                       name="signText"
                       value={formData.signText}
                       onChange={handleChange}
-                      placeholder="Text to display on the pickup sign"
+                      placeholder={t.quoteForm.signPlaceholder}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -529,15 +534,15 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                       <div className="flex items-start gap-3 mb-3">
                         <Info className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
                         <p className="text-sm text-amber-900">
-                          The driver will be waiting for you with a sign displaying this text until you exit the arrivals hall
+                          {t.quoteForm.signHelp}
                         </p>
                       </div>
                       {/* Visual Sign Preview */}
                       <div className="bg-white border-2 border-gray-300 rounded-lg p-4 shadow-sm">
-                        <p className="text-xs text-gray-500 mb-2 text-center">Sign Preview:</p>
+                        <p className="text-xs text-gray-500 mb-2 text-center">{t.quoteForm.signPreview}</p>
                         <div className="bg-white border-4 border-blue-900 rounded p-3 text-center min-h-[60px] flex items-center justify-center">
                           <p className="text-blue-900 text-lg break-words">
-                            {formData.signText || 'Your name will appear here'}
+                            {formData.signText || t.quoteForm.signEmpty}
                           </p>
                         </div>
                       </div>
@@ -547,7 +552,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                   <div>
                     <label htmlFor="flightNumber" className="block text-gray-700 mb-2">
                       <Plane className="w-4 h-4 inline mr-2" />
-                      Flight Number
+                      {t.quoteForm.flightNumber}
                     </label>
                     <input
                       type="text"
@@ -555,7 +560,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                       name="flightNumber"
                       value={formData.flightNumber}
                       onChange={handleChange}
-                      placeholder="e.g. LO123"
+                      placeholder={t.quoteForm.flightPlaceholder}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -568,7 +573,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                 <div>
                   <label htmlFor="passengers" className="block text-gray-700 mb-2">
                     <Users className="w-4 h-4 inline mr-2" />
-                    Number of Passengers
+                    {t.quoteForm.passengers}
                   </label>
                   <select
                     id="passengers"
@@ -578,18 +583,16 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   >
-                    <option value="1">1 person</option>
-                    <option value="2">2 people</option>
-                    <option value="3">3 people</option>
-                    <option value="4">4 people</option>
-                    <option value="5">5+ people</option>
+                    {t.quoteForm.passengersOptions.map((label, index) => (
+                      <option key={label} value={index + 1}>{label}</option>
+                    ))}
                   </select>
                 </div>
 
                 <div>
                   <label htmlFor="largeLuggage" className="block text-gray-700 mb-2">
                     <Luggage className="w-4 h-4 inline mr-2" />
-                    Large Luggage
+                    {t.quoteForm.largeLuggage}
                   </label>
                   <select
                     id="largeLuggage"
@@ -599,20 +602,20 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   >
-                    <option value="no">No</option>
-                    <option value="yes">Yes</option>
+                    <option value="no">{t.quoteForm.luggageNo}</option>
+                    <option value="yes">{t.quoteForm.luggageYes}</option>
                   </select>
                 </div>
               </div>
 
               {/* Contact Information */}
               <div className="border-t pt-6">
-                <h4 className="text-gray-900 mb-4">Contact Information</h4>
+                <h4 className="text-gray-900 mb-4">{t.quoteForm.contactTitle}</h4>
                 
                 <div className="space-y-4">
                   <div>
                     <label htmlFor="name" className="block text-gray-700 mb-2">
-                      Full Name
+                      {t.quoteForm.fullName}
                     </label>
                     <input
                       type="text"
@@ -620,7 +623,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      placeholder="Your name"
+                      placeholder={t.quoteForm.namePlaceholder}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -628,7 +631,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
 
                   <div>
                     <label htmlFor="phone" className="block text-gray-700 mb-2">
-                      Phone Number
+                      {t.quoteForm.phoneNumber}
                     </label>
                     <input
                       type="tel"
@@ -649,7 +652,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
 
                   <div>
                     <label htmlFor="email" className="block text-gray-700 mb-2">
-                      Email Address
+                      {t.quoteForm.email}
                     </label>
                     <input
                       type="email"
@@ -660,7 +663,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                         handleChange(e);
                         handleEmailChange(e.target.value);
                       }}
-                      placeholder="your@email.com"
+                      placeholder={t.quoteForm.emailPlaceholder}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -668,26 +671,26 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                       <p className="text-sm text-red-600 mt-2">{emailError}</p>
                     )}
                     <p className="text-sm text-gray-500 mt-1">
-                      You'll receive a response within 5-10 minutes
+                      {t.quoteForm.emailHelp}
                     </p>
                   </div>
 
                   <div>
                     <label htmlFor="description" className="block text-gray-700 mb-2">
                       <FileText className="w-4 h-4 inline mr-2" />
-                      Additional Notes (Optional)
+                      {t.quoteForm.notesTitle}
                     </label>
                     <textarea
                       id="description"
                       name="description"
                       value={formData.description}
                       onChange={handleChange}
-                      placeholder="Any special requests or additional information..."
+                      placeholder={t.quoteForm.notesPlaceholder}
                       rows={4}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                     <p className="text-sm text-gray-500 mt-1">
-                      E.g., child seat required, waiting time, special instructions
+                      {t.quoteForm.notesHelp}
                     </p>
                   </div>
                 </div>
@@ -703,13 +706,13 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                 }`}
                 disabled={submitting || isFormInvalid}
               >
-                {submitting ? 'Submitting...' : (
+                {submitting ? t.quoteForm.submitting : (
                   isFormInvalid ? (
                     <span className="inline-flex items-center gap-2">
                       <Lock className="h-4 w-4" />
-                      <span>Complete the form to continue</span>
+                      <span>{t.quoteForm.formIncomplete}</span>
                     </span>
-                  ) : 'Submit Quote Request'
+                  ) : t.quoteForm.submit
                 )}
               </button>
             </>

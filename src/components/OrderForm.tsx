@@ -5,6 +5,7 @@ import { formatEur } from '../lib/currency';
 import { buildAdditionalNotes } from '../lib/orderNotes';
 import { hasMarketingConsent } from '../lib/consent';
 import { getApiBaseUrl } from '../lib/api';
+import { localeToPath, useI18n } from '../lib/i18n';
 
 interface OrderFormProps {
   route: {
@@ -37,23 +38,23 @@ const getTodayDateString = () => {
   return `${year}-${month}-${day}`;
 };
 
-const validatePhoneNumber = (value: string) => {
+const validatePhoneNumber = (value: string, messages: { phoneLetters: string; phoneLength: string }) => {
   const trimmed = value.trim();
   if (/[A-Za-z]/.test(trimmed)) {
-    return 'Please enter a valid phone number (digits only).';
+    return messages.phoneLetters;
   }
   const digitsOnly = trimmed.replace(/\D/g, '');
   if (digitsOnly.length < 7 || digitsOnly.length > 15) {
-    return 'Please enter a valid phone number (7–15 digits, optional +).';
+    return messages.phoneLength;
   }
   return null;
 };
 
-const validateEmail = (value: string) => {
+const validateEmail = (value: string, message: string) => {
   const trimmed = value.trim();
   const basicEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!basicEmail.test(trimmed)) {
-    return 'Please enter a valid email address.';
+    return message;
   }
   return null;
 };
@@ -117,6 +118,8 @@ const isPolishPublicHoliday = (date: Date, apiHolidayKeys: Set<string> | null) =
 };
 
 export function OrderForm({ route, onClose }: OrderFormProps) {
+  const { t, locale } = useI18n();
+  const basePath = localeToPath(locale);
   const [formData, setFormData] = useState({
     pickupType: 'airport',
     signText: '',
@@ -133,7 +136,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   });
 
   const handlePhoneBlur = () => {
-    const phoneError = validatePhoneNumber(formData.phone);
+    const phoneError = validatePhoneNumber(formData.phone, t.orderForm.validation);
     setPhoneError(phoneError);
   };
 
@@ -146,8 +149,8 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const [submitting, setSubmitting] = useState(false);
   const [currentPrice, setCurrentPrice] = useState(route.priceDay);
   const [rateContext, setRateContext] = useState({
-    label: 'Day rate',
-    reason: 'standard day rate',
+    label: t.orderForm.rate.day,
+    reason: t.orderForm.rate.reasonDay,
     price: route.priceDay,
   });
   const [rateBanner, setRateBanner] = useState<string | null>(null);
@@ -157,8 +160,8 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const [holidayYear, setHolidayYear] = useState<number | null>(null);
   const eurRate = useEurRate();
   const eurText = formatEur(currentPrice, eurRate);
-  const isPhoneValid = !validatePhoneNumber(formData.phone);
-  const isEmailValid = !validateEmail(formData.email);
+  const isPhoneValid = !validatePhoneNumber(formData.phone, t.orderForm.validation);
+  const isEmailValid = !validateEmail(formData.email, t.orderForm.validation.email);
   const isPickupComplete = formData.pickupType === 'airport'
     ? formData.signText.trim() !== '' && formData.flightNumber.trim() !== ''
     : formData.address.trim() !== '';
@@ -268,7 +271,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       const adjustedHours = Math.floor(totalMinutes / 60) % 24;
       const isNightTime = adjustedHours >= 22 || adjustedHours < 6;
       if (isNightTime) {
-        reasons.push('pickup after 21:30 or before 5:30');
+        reasons.push(t.orderForm.rate.reasonLate);
       }
       isNight = isNight || isNightTime;
     }
@@ -276,7 +279,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     if (formData.date) {
       const date = new Date(`${formData.date}T00:00:00`);
       if (!Number.isNaN(date.getTime()) && isPolishPublicHoliday(date, holidayKeys)) {
-        reasons.push('Sunday/public holiday');
+        reasons.push(t.orderForm.rate.reasonHoliday);
         isNight = true;
       }
     }
@@ -284,11 +287,11 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     const price = isNight ? route.priceNight : route.priceDay;
     setCurrentPrice(price);
     setRateContext({
-      label: isNight ? 'Night rate' : 'Day rate',
-      reason: reasons.length ? reasons.join(' + ') : 'standard day rate',
+      label: isNight ? t.orderForm.rate.night : t.orderForm.rate.day,
+      reason: reasons.length ? reasons.join(' + ') : t.orderForm.rate.reasonDay,
       price,
     });
-  }, [formData.time, formData.date, holidayKeys, route.priceDay, route.priceNight]);
+  }, [formData.time, formData.date, holidayKeys, route.priceDay, route.priceNight, t]);
 
   useEffect(() => {
     if (!formData.time && !formData.date) {
@@ -296,27 +299,27 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     }
     if (lastRatePriceRef.current === null) {
       lastRatePriceRef.current = rateContext.price;
-      showRateBanner(`Applied ${rateContext.label}: ${rateContext.price} PLN (${rateContext.reason}).`);
+      showRateBanner(t.orderForm.rate.banner(rateContext.label, rateContext.price, rateContext.reason));
       return;
     }
     if (lastRatePriceRef.current !== rateContext.price) {
       lastRatePriceRef.current = rateContext.price;
-      showRateBanner(`Applied ${rateContext.label}: ${rateContext.price} PLN (${rateContext.reason}).`);
+      showRateBanner(t.orderForm.rate.banner(rateContext.label, rateContext.price, rateContext.reason));
     }
-  }, [rateContext.price, formData.time, formData.date]);
+  }, [rateContext.price, rateContext.label, rateContext.reason, formData.time, formData.date, t]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setPhoneError(null);
     setEmailError(null);
-    const phoneError = validatePhoneNumber(formData.phone);
+    const phoneError = validatePhoneNumber(formData.phone, t.orderForm.validation);
     if (phoneError) {
       setPhoneError(phoneError);
       setError(phoneError);
       return;
     }
-    const emailError = validateEmail(formData.email);
+    const emailError = validateEmail(formData.email, t.orderForm.validation.email);
     if (emailError) {
       setEmailError(emailError);
       setError(emailError);
@@ -349,6 +352,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       emailAddress: formData.email,
       phoneNumber: formData.phone,
       additionalNotes,
+      locale,
     };
 
     try {
@@ -356,13 +360,14 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept-Language': locale,
         },
         body: JSON.stringify(payload),
       });
 
       const data = await response.json().catch(() => null);
       if (!response.ok) {
-        setError(data?.error ?? 'Failed to submit order. Please try again.');
+        setError(data?.error ?? t.orderForm.submitError);
         return;
       }
 
@@ -371,14 +376,14 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       setSubmitted(true);
       trackConversion();
     } catch (submitError) {
-      setError('Network error while submitting the order. Please try again.');
+      setError(t.orderForm.submitNetworkError);
     } finally {
       setSubmitting(false);
     }
   };
 
   const handlePhoneChange = (value: string) => {
-    const nextError = validatePhoneNumber(value);
+    const nextError = validatePhoneNumber(value, t.orderForm.validation);
     setPhoneError(nextError);
     if (!nextError && error === phoneError) {
       setError(null);
@@ -386,7 +391,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   };
 
   const handleEmailChange = (value: string) => {
-    const nextError = validateEmail(value);
+    const nextError = validateEmail(value, t.orderForm.validation.email);
     setEmailError(nextError);
     if (!nextError && error === emailError) {
       setError(null);
@@ -410,24 +415,23 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h3 className="text-green-900 mb-2">Order received</h3>
+            <h3 className="text-green-900 mb-2">{t.orderForm.submittedTitle}</h3>
             <p className="text-green-800 mb-4">
-              Thanks! Your request is in the queue. Please wait for acceptance – it usually takes 5–10 minutes.
-              You will receive a confirmation email shortly.
+              {t.orderForm.submittedBody}
             </p>
             <div className="flex items-center justify-center gap-2 text-green-700 mb-4">
               <span className="inline-flex h-2.5 w-2.5 rounded-full bg-green-500 animate-pulse"></span>
-              <span className="text-sm">Awaiting confirmation...</span>
+              <span className="text-sm">{t.orderForm.awaiting}</span>
             </div>
             <div className="bg-white rounded-lg p-4 mb-2">
               <p className="text-gray-700">
-                Total Price: <span className="font-bold text-blue-600">{currentPrice} PLN</span>
+                {t.orderForm.totalPrice} <span className="font-bold text-blue-600">{currentPrice} PLN</span>
               </p>
               {eurText && (
                 <div className="mt-1 flex items-center justify-center gap-2 text-gray-500">
                   <span className="eur-text">{eurText}</span>
                   <span className="live-badge">
-                    ACTUAL
+                    {t.common.actualBadge}
                   </span>
                 </div>
               )}
@@ -436,14 +440,14 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
             {orderId && (
               <div className="bg-white rounded-lg p-4 mb-4">
                 {generatedId && (
-                  <p className="text-gray-700">Order #: <span className="font-semibold">{generatedId}</span></p>
+                  <p className="text-gray-700">{t.orderForm.orderNumber} <span className="font-semibold">{generatedId}</span></p>
                 )}
-                <p className="text-gray-700">Order ID: <span className="font-semibold">{orderId}</span></p>
+                <p className="text-gray-700">{t.orderForm.orderId} <span className="font-semibold">{orderId}</span></p>
                 <a
-                  href={`/?orderId=${orderId}`}
+                  href={`${basePath}/?orderId=${orderId}`}
                   className="text-blue-600 hover:text-blue-700 text-sm underline"
                 >
-                  Manage or edit your order
+                  {t.orderForm.manageLink}
                 </a>
               </div>
             )}
@@ -451,7 +455,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
               onClick={onClose}
               className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
             >
-              Close
+              {t.common.close}
             </button>
           </div>
         </div>
@@ -464,7 +468,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       <div className="bg-white rounded-xl max-w-2xl w-full my-8 max-h-[90vh] flex flex-col relative">
         <div className="p-6 border-b flex items-center justify-between flex-shrink-0">
           <div>
-            <h3 className="text-gray-900">Order Transfer</h3>
+            <h3 className="text-gray-900">{t.orderForm.title}</h3>
             <p className="text-gray-600 text-sm mt-1">{route.from} ↔ {route.to}</p>
           </div>
           <button 
@@ -490,14 +494,14 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
           {/* Price Display */}
           <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
             <div className="flex items-center justify-between">
-              <span className="text-gray-700">Total Price:</span>
+              <span className="text-gray-700">{t.orderForm.totalPrice}</span>
               <div className="text-right">
                 <span className="text-blue-900 text-2xl">{currentPrice} PLN</span>
                 {eurText && (
                   <div className="flex items-center justify-end gap-2 text-gray-500">
                     <span className="eur-text">{eurText}</span>
                     <span className="live-badge">
-                      ACTUAL
+                      {t.common.actualBadge}
                     </span>
                   </div>
                 )}
@@ -511,7 +515,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
             <div>
               <label htmlFor="date" className="block text-gray-700 mb-2">
                 <Calendar className="w-4 h-4 inline mr-2" />
-                Date
+                {t.orderForm.date}
               </label>
               <input
                 type="date"
@@ -526,7 +530,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
 
             <div>
               <label htmlFor="time" className="block text-gray-700 mb-2">
-                Pickup Time
+                {t.orderForm.pickupTime}
               </label>
               <input
                 type="time"
@@ -543,7 +547,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
           {/* Pickup Type */}
           <div>
             <label className="block text-gray-700 mb-2">
-              Pickup Type
+              {t.orderForm.pickupType}
             </label>
             <div className="grid grid-cols-2 gap-4">
               <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
@@ -561,7 +565,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   className="w-4 h-4 text-blue-600"
                 />
                 <Plane className="w-5 h-5 text-gray-700" />
-                <span>Airport Pickup</span>
+                <span>{t.orderForm.airportPickup}</span>
               </label>
               
               <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
@@ -576,7 +580,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   className="w-4 h-4 text-blue-600"
                 />
                 <MapPin className="w-5 h-5 text-gray-700" />
-                <span>Address Pickup</span>
+                <span>{t.orderForm.addressPickup}</span>
               </label>
             </div>
           </div>
@@ -587,7 +591,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
               <div>
                 <label htmlFor="signText" className="block text-gray-700 mb-2">
                   <FileText className="w-4 h-4 inline mr-2" />
-                  Name Sign Text
+                  {t.orderForm.signText}
                 </label>
                 <input
                   type="text"
@@ -595,7 +599,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   name="signText"
                   value={formData.signText}
                   onChange={handleChange}
-                  placeholder="Text to display on the pickup sign"
+                  placeholder={t.orderForm.signPlaceholder}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
@@ -603,15 +607,15 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   <div className="flex items-start gap-3 mb-3">
                     <Info className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
                     <p className="text-sm text-amber-900">
-                      The driver will be waiting for you with a sign displaying this text until you exit the arrivals hall
+                      {t.orderForm.signHelp}
                     </p>
                   </div>
                   {/* Visual Sign Preview */}
                   <div className="bg-white border-2 border-gray-300 rounded-lg p-4 shadow-sm">
-                    <p className="text-[8px] text-gray-500 mb-2 text-center">Sign Preview:</p>
+                    <p className="text-[8px] text-gray-500 mb-2 text-center">{t.orderForm.signPreview}</p>
                     <div className="bg-white border-4 border-blue-900 rounded p-3 text-center min-h-[60px] flex items-center justify-center">
                       <p className="text-blue-900 text-lg break-words">
-                        {formData.signText || 'Your name will appear here'}
+                        {formData.signText || t.orderForm.signEmpty}
                       </p>
                     </div>
                   </div>
@@ -621,7 +625,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
               <div>
                 <label htmlFor="flightNumber" className="block text-gray-700 mb-2">
                   <Plane className="w-4 h-4 inline mr-2" />
-                  Flight Number
+                  {t.orderForm.flightNumber}
                 </label>
                 <input
                   type="text"
@@ -629,7 +633,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   name="flightNumber"
                   value={formData.flightNumber}
                   onChange={handleChange}
-                  placeholder="e.g. LO123"
+                  placeholder={t.orderForm.flightPlaceholder}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
@@ -642,14 +646,14 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
             <div>
               <label htmlFor="address" className="block text-gray-700 mb-2">
                 <MapPin className="w-4 h-4 inline mr-2" />
-                Pickup Address
+                {t.orderForm.pickupAddress}
               </label>
               <textarea
                 id="address"
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
-                placeholder="Enter full pickup address"
+                placeholder={t.orderForm.pickupPlaceholder}
                 rows={3}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
@@ -662,7 +666,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
             <div>
               <label htmlFor="passengers" className="block text-gray-700 mb-2">
                 <Users className="w-4 h-4 inline mr-2" />
-                Number of Passengers
+                {t.orderForm.passengers}
               </label>
               <select
                 id="passengers"
@@ -674,17 +678,15 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
               >
                 {route.type === 'bus' ? (
                   <>
-                    <option value="5">5 people</option>
-                    <option value="6">6 people</option>
-                    <option value="7">7 people</option>
-                    <option value="8">8 people</option>
+                    {t.orderForm.passengersBus.map((label, index) => (
+                      <option key={label} value={5 + index}>{label}</option>
+                    ))}
                   </>
                 ) : (
                   <>
-                    <option value="1">1 person</option>
-                    <option value="2">2 people</option>
-                    <option value="3">3 people</option>
-                    <option value="4">4 people</option>
+                    {t.orderForm.passengersStandard.map((label, index) => (
+                      <option key={label} value={1 + index}>{label}</option>
+                    ))}
                   </>
                 )}
               </select>
@@ -693,7 +695,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
             <div>
               <label htmlFor="largeLuggage" className="block text-gray-700 mb-2">
                 <Luggage className="w-4 h-4 inline mr-2" />
-                Large Luggage
+                {t.orderForm.largeLuggage}
               </label>
               <select
                 id="largeLuggage"
@@ -703,20 +705,20 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
-                <option value="no">No</option>
-                <option value="yes">Yes</option>
+                <option value="no">{t.orderForm.luggageNo}</option>
+                <option value="yes">{t.orderForm.luggageYes}</option>
               </select>
             </div>
           </div>
 
           {/* Contact Information */}
           <div className="border-t pt-6">
-            <h4 className="text-gray-900 mb-4">Contact Information</h4>
+            <h4 className="text-gray-900 mb-4">{t.orderForm.contactTitle}</h4>
             
             <div className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-gray-700 mb-2">
-                  Full Name
+                  {t.orderForm.fullName}
                 </label>
                 <input
                   type="text"
@@ -724,7 +726,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="Your name"
+                  placeholder={t.orderForm.namePlaceholder}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
@@ -732,7 +734,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
 
               <div>
                 <label htmlFor="phone" className="block text-gray-700 mb-2">
-                  Phone Number
+                  {t.orderForm.phoneNumber}
                 </label>
                 <input
                   type="tel"
@@ -753,7 +755,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
 
               <div>
                 <label htmlFor="email" className="block text-gray-700 mb-2">
-                  Email Address
+                  {t.orderForm.email}
                 </label>
                 <input
                   type="email"
@@ -764,7 +766,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                     handleChange(e);
                     handleEmailChange(e.target.value);
                   }}
-                  placeholder="your@email.com"
+                  placeholder={t.orderForm.emailPlaceholder}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
@@ -772,26 +774,26 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   <p className="text-sm text-red-600 mt-2">{emailError}</p>
                 )}
                 <p className="text-sm text-gray-500 mt-1">
-                  You'll receive a confirmation email with a link to edit or cancel your order
+                  {t.orderForm.emailHelp}
                 </p>
               </div>
 
               <div>
                 <label htmlFor="description" className="block text-gray-700 mb-2">
                   <FileText className="w-4 h-4 inline mr-2" />
-                  Additional Notes (Optional)
+                  {t.orderForm.notesTitle}
                 </label>
                 <textarea
                   id="description"
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
-                  placeholder="Any special requests or additional information..."
+                  placeholder={t.orderForm.notesPlaceholder}
                   rows={4}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
                 <p className="text-sm text-gray-500 mt-1">
-                  E.g., child seat required, waiting time, special instructions
+                  {t.orderForm.notesHelp}
                 </p>
               </div>
             </div>
@@ -808,21 +810,21 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
             disabled={submitting || isFormInvalid}
           >
             {submitting ? (
-              'Submitting...'
+              t.orderForm.submitting
             ) : (
               isFormInvalid ? (
                 <span className="inline-flex items-center gap-2">
                   <Lock className="h-4 w-4" />
-                  <span>Complete the form to continue</span>
+                  <span>{t.orderForm.formIncomplete}</span>
                 </span>
               ) : (
                 <span className="flex flex-col items-center gap-1">
-                  <span>{`Confirm Order - ${currentPrice} PLN`}</span>
+                  <span>{t.orderForm.confirmOrder(currentPrice)}</span>
                   {eurText && (
                     <span className="inline-flex items-center gap-2 text-[11px] text-blue-100">
                       <span>{eurText}</span>
                       <span className="live-badge">
-                        ACTUAL
+                        {t.common.actualBadge}
                       </span>
                     </span>
                   )}
