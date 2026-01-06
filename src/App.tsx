@@ -31,6 +31,7 @@ function Landing() {
   const [floatingReady, setFloatingReady] = useState(false);
   const [cookieBannerOffset, setCookieBannerOffset] = useState(0);
   const [pricingTracked, setPricingTracked] = useState(false);
+  const [showStickyCtas, setShowStickyCtas] = useState(false);
   
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get('orderId');
@@ -90,6 +91,20 @@ function Landing() {
       window.removeEventListener('resize', updateVisibility);
     };
   }, [pricingTracked]);
+
+  useEffect(() => {
+    const updateSticky = () => {
+      setShowStickyCtas(window.scrollY > 120);
+    };
+
+    updateSticky();
+    window.addEventListener('scroll', updateSticky, { passive: true });
+    window.addEventListener('resize', updateSticky);
+    return () => {
+      window.removeEventListener('scroll', updateSticky);
+      window.removeEventListener('resize', updateSticky);
+    };
+  }, []);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -223,7 +238,7 @@ function Landing() {
         </a>
       )}
 
-      {!selectedRoute && !showQuoteForm && (
+      {!selectedRoute && !showQuoteForm && showStickyCtas && (
         <div
           className="fixed left-0 right-0 z-50 sm:hidden border-t border-slate-200 bg-white/95 px-4 py-3 backdrop-blur"
           style={{ bottom: cookieBannerOffset }}

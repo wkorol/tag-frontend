@@ -1,7 +1,6 @@
 import { Menu, X, Globe } from 'lucide-react';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import logo from 'figma:asset/9bf12920b9f211a57ac7e4ff94480c867662dafa.png';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
 import { getRoutePath } from '../lib/routes';
 import { requestScrollTo } from '../lib/scroll';
@@ -41,11 +40,10 @@ export function Navbar() {
             onClick={(event) => handleNavClick(event, 'hero')}
             className="flex items-center"
           >
-            <img
-              src={logo}
-              alt={t.hero.logoAlt}
-              className="h-12 w-auto"
-            />
+            <span className="leading-tight text-sm font-semibold text-gray-900">
+              <span className="block">Taxi Airport</span>
+              <span className="block text-xs font-medium text-gray-500">Gdańsk</span>
+            </span>
           </a>
 
           {/* Desktop Menu */}

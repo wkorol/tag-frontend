@@ -16,26 +16,32 @@ export function Hero() {
         style={{ backgroundImage: `url('https://images.unsplash.com/photo-1727806823305-451437800778?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0YXhpJTIwYWlycG9ydHxlbnwxfHx8fDE3NjcwODUyODV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral')` }}
       />
       
-      <div className="relative max-w-6xl mx-auto px-4 py-16 sm:py-24">
+      <div className="relative max-w-6xl mx-auto px-4 py-12 sm:py-24">
         <div className="text-center">
-          <div className="mb-4 flex justify-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-4 py-2 text-xs sm:text-sm text-white shadow-sm backdrop-blur-sm">
-              <span className="font-semibold">{t.hero.promo.dayPrice}</span>
-              <span>{t.hero.promo.dayLabel}</span>
-              <span className="text-white/70">•</span>
-              <span className="font-semibold">{t.hero.promo.nightPrice}</span>
-              <span>{t.hero.promo.nightLabel}</span>
+          <div style={{ marginTop: '-3.5rem' }}>
+            <div className="mb-4 flex justify-center" style={{ marginTop: '0.5rem' }}>
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-4 py-2 text-xs sm:text-sm text-white shadow-sm backdrop-blur-sm">
+                <span className="font-semibold">{t.hero.promo.dayPrice}</span>
+                <span>{t.hero.promo.dayLabel}</span>
+                <span className="text-white/70">•</span>
+                <span className="font-semibold">{t.hero.promo.nightPrice}</span>
+                <span>{t.hero.promo.nightLabel}</span>
+              </div>
+            </div>
+            <div className="flex justify-center mb-0" style={{ marginTop: '-0.75rem' }}>
+              <img
+                  src={logo}
+                  alt={t.hero.logoAlt}
+                  className="h-auto"
+                  style={{ width: '31rem' }}
+              />
             </div>
           </div>
-          <div className="flex justify-center mb-6">
-            <img
-                src={logo}
-                alt={t.hero.logoAlt}
-                className="w-64 sm:w-80 h-auto"
-            />
-          </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            style={{ marginTop: '-4.5rem' }}
+          >
             <a
                 href={whatsappLink}
                 onClick={() => trackContactClick('whatsapp')}
