@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { getConsentStatus, setConsentStatus, updateGtagConsent } from '../lib/consent';
-import { localeToPath, useI18n } from '../lib/i18n';
+import { useI18n } from '../lib/i18n';
+import { getRoutePath } from '../lib/routes';
 
 export function CookieBanner() {
   const { t, locale } = useI18n();
-  const basePath = localeToPath(locale);
   const [visible, setVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -61,7 +61,7 @@ export function CookieBanner() {
               {t.cookieBanner.body}
             </p>
             <a
-              href={`${basePath}/cookies`}
+              href={getRoutePath(locale, 'cookies')}
               className="inline-block text-sm text-slate-300 hover:text-white underline"
             >
               {t.cookieBanner.readPolicy}

@@ -32,7 +32,7 @@ const translations = {
     },
     hero: {
       promo: {
-        dayPrice: 'ONLY 90 PLN',
+        dayPrice: 'ONLY 100 PLN',
         dayLabel: 'to City Center (day)',
         nightPrice: '120 PLN',
         nightLabel: 'at night',
@@ -272,6 +272,7 @@ const translations = {
       notesHelp: 'E.g., child seat required, waiting time, special instructions',
       submitting: 'Submitting...',
       formIncomplete: 'Complete the form to continue',
+      missingFields: (fields: string) => `Please complete: ${fields}.`,
       confirmOrder: (price: number) => `Confirm Order - ${price} PLN`,
     },
     quoteForm: {
@@ -335,6 +336,7 @@ const translations = {
       notesHelp: 'E.g., child seat required, waiting time, special instructions',
       submitting: 'Submitting...',
       formIncomplete: 'Complete the form to continue',
+      missingFields: (fields: string) => `Please complete: ${fields}.`,
       submit: 'Submit Quote Request',
     },
     manageOrder: {
@@ -522,7 +524,7 @@ const translations = {
     },
     hero: {
       promo: {
-        dayPrice: 'TYLKO 90 PLN',
+        dayPrice: 'TYLKO 100 PLN',
         dayLabel: 'do centrum (dzień)',
         nightPrice: '120 PLN',
         nightLabel: 'nocą',
@@ -762,6 +764,7 @@ const translations = {
       notesHelp: 'Np. fotelik dziecięcy, czas oczekiwania, specjalne instrukcje',
       submitting: 'Wysyłanie...',
       formIncomplete: 'Uzupełnij formularz, aby kontynuować',
+      missingFields: (fields: string) => `Uzupełnij proszę: ${fields}.`,
       confirmOrder: (price: number) => `Potwierdź zamówienie - ${price} PLN`,
     },
     quoteForm: {
@@ -825,6 +828,7 @@ const translations = {
       notesHelp: 'Np. fotelik dziecięcy, czas oczekiwania, specjalne instrukcje',
       submitting: 'Wysyłanie...',
       formIncomplete: 'Uzupełnij formularz, aby kontynuować',
+      missingFields: (fields: string) => `Uzupełnij proszę: ${fields}.`,
       submit: 'Wyślij zapytanie o wycenę',
     },
     manageOrder: {

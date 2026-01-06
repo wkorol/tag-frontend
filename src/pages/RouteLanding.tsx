@@ -1,6 +1,8 @@
 import { Footer } from '../components/Footer';
 import { Navbar } from '../components/Navbar';
 import { localeToPath, useI18n } from '../lib/i18n';
+import { trackCtaClick } from '../lib/tracking';
+import { requestScrollTo } from '../lib/scroll';
 
 interface RouteLandingProps {
   title: string;
@@ -22,7 +24,15 @@ export function RouteLanding({ title, description, route, examples }: RouteLandi
             <h1 className="text-3xl text-gray-900 mb-4">{title}</h1>
             <p className="text-gray-600 mb-6">{description}</p>
             <a
-              href={`${basePath}/#vehicle-selection`}
+              href={`${basePath}/`}
+              onClick={(event) => {
+                event.preventDefault();
+                trackCtaClick('route_landing_order');
+                const scrolled = requestScrollTo('vehicle-selection');
+                if (!scrolled) {
+                  window.location.href = `${basePath}/`;
+                }
+              }}
               className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-400 transition-colors animate-pulse-glow"
             >
               {t.routeLanding.orderNow}

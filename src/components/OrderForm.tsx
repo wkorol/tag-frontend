@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import { Calendar, Users, Luggage, MapPin, FileText, Plane, ChevronDown, ChevronUp, Info, Lock } from 'lucide-react';
+import { Calendar, Users, Luggage, MapPin, FileText, Plane, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { useEurRate } from '../lib/useEurRate';
 import { formatEur } from '../lib/currency';
 import { buildAdditionalNotes } from '../lib/orderNotes';
 import { hasMarketingConsent } from '../lib/consent';
 import { getApiBaseUrl } from '../lib/api';
+import { trackFormStart } from '../lib/tracking';
 import { localeToPath, useI18n } from '../lib/i18n';
 
 interface OrderFormProps {
@@ -159,22 +160,11 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const [holidayKeys, setHolidayKeys] = useState<Set<string> | null>(null);
   const [holidayYear, setHolidayYear] = useState<number | null>(null);
   const eurRate = useEurRate();
+  const formStartedRef = useRef(false);
+  const [submitAttempted, setSubmitAttempted] = useState(false);
   const eurText = formatEur(currentPrice, eurRate);
   const isPhoneValid = !validatePhoneNumber(formData.phone, t.orderForm.validation);
   const isEmailValid = !validateEmail(formData.email, t.orderForm.validation.email);
-  const isPickupComplete = formData.pickupType === 'airport'
-    ? formData.signText.trim() !== '' && formData.flightNumber.trim() !== ''
-    : formData.address.trim() !== '';
-  const isFormInvalid = !formData.date
-    || !formData.time
-    || formData.name.trim() === ''
-    || !isEmailValid
-    || !isPhoneValid
-    || !formData.passengers
-    || !formData.largeLuggage
-    || !formData.pickupType
-    || !isPickupComplete;
-
   const showRateBanner = (message: string) => {
     setRateBanner(message);
     if (toastTimeoutRef.current !== null) {
@@ -195,6 +185,37 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
         </div>
       </div>
     );
+  };
+
+  const showValidation = submitAttempted;
+  const pickupTypeError = showValidation && !formData.pickupType;
+  const pickupAddressError = showValidation && formData.pickupType === 'address' && !formData.address.trim();
+  const signTextError = showValidation && formData.pickupType === 'airport' && !formData.signText.trim();
+  const flightNumberError = showValidation && formData.pickupType === 'airport' && !formData.flightNumber.trim();
+  const dateError = showValidation && !formData.date;
+  const timeError = showValidation && !formData.time;
+  const passengersError = showValidation && !formData.passengers;
+  const luggageError = showValidation && !formData.largeLuggage;
+  const nameError = showValidation && !formData.name.trim();
+  const phoneErrorState = showValidation && (!formData.phone.trim() || !isPhoneValid);
+  const emailErrorState = showValidation && (!formData.email.trim() || !isEmailValid);
+
+  const fieldClass = (base: string, invalid: boolean) =>
+    `${base}${invalid ? ' border-red-400 bg-red-50 focus:ring-red-200 focus:border-red-500' : ''}`;
+
+  const scrollToField = (fieldId: string) => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.requestAnimationFrame(() => {
+      const target = document.getElementById(fieldId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (target instanceof HTMLElement) {
+          target.focus({ preventScroll: true });
+        }
+      }
+    });
   };
 
   const trackConversion = () => {
@@ -313,6 +334,47 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     setError(null);
     setPhoneError(null);
     setEmailError(null);
+    setSubmitAttempted(true);
+    const missingFieldIds: string[] = [];
+    if (!formData.date) {
+      missingFieldIds.push('date');
+    }
+    if (!formData.time) {
+      missingFieldIds.push('time');
+    }
+    if (!formData.pickupType) {
+      missingFieldIds.push('pickupType');
+    }
+    if (formData.pickupType === 'airport') {
+      if (!formData.signText.trim()) {
+        missingFieldIds.push('signText');
+      }
+      if (!formData.flightNumber.trim()) {
+        missingFieldIds.push('flightNumber');
+      }
+    }
+    if (formData.pickupType === 'address' && !formData.address.trim()) {
+      missingFieldIds.push('address');
+    }
+    if (!formData.passengers) {
+      missingFieldIds.push('passengers');
+    }
+    if (!formData.largeLuggage) {
+      missingFieldIds.push('largeLuggage');
+    }
+    if (!formData.name.trim()) {
+      missingFieldIds.push('name');
+    }
+    if (!formData.phone.trim() || !isPhoneValid) {
+      missingFieldIds.push('phone');
+    }
+    if (!formData.email.trim() || !isEmailValid) {
+      missingFieldIds.push('email');
+    }
+    if (missingFieldIds.length > 0) {
+      scrollToField(missingFieldIds[0]);
+      return;
+    }
     const phoneError = validatePhoneNumber(formData.phone, t.orderForm.validation);
     if (phoneError) {
       setPhoneError(phoneError);
@@ -399,6 +461,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    if (!formStartedRef.current) {
+      formStartedRef.current = true;
+      trackFormStart('order');
+    }
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -483,6 +549,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
 
         <form
           onSubmit={handleSubmit}
+          noValidate
           className="booking-form p-6 space-y-6 overflow-y-auto cursor-default"
         >
           {error && (
@@ -523,7 +590,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={fieldClass(
+                  'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                  dateError,
+                )}
                 required
               />
             </div>
@@ -538,20 +608,25 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                 name="time"
                 value={formData.time}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={fieldClass(
+                  'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                  timeError,
+                )}
                 required
               />
             </div>
           </div>
 
           {/* Pickup Type */}
-          <div>
+          <div id="pickupType" tabIndex={-1}>
             <label className="block text-gray-700 mb-2">
               {t.orderForm.pickupType}
             </label>
             <div className="grid grid-cols-2 gap-4">
               <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                formData.pickupType === 'airport' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+                formData.pickupType === 'airport'
+                  ? 'border-blue-500 bg-blue-50'
+                  : pickupTypeError ? 'border-red-400 ring-1 ring-red-200' : 'border-gray-200 hover:border-gray-300'
               }`}>
                 <input
                   type="radio"
@@ -569,7 +644,9 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
               </label>
               
               <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                formData.pickupType === 'address' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+                formData.pickupType === 'address'
+                  ? 'border-blue-500 bg-blue-50'
+                  : pickupTypeError ? 'border-red-400 ring-1 ring-red-200' : 'border-gray-200 hover:border-gray-300'
               }`}>
                 <input
                   type="radio"
@@ -600,7 +677,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   value={formData.signText}
                   onChange={handleChange}
                   placeholder={t.orderForm.signPlaceholder}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={fieldClass(
+                    'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                    signTextError,
+                  )}
                   required
                 />
                 <div className="mt-3 bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-lg p-4">
@@ -634,7 +714,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   value={formData.flightNumber}
                   onChange={handleChange}
                   placeholder={t.orderForm.flightPlaceholder}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={fieldClass(
+                    'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                    flightNumberError,
+                  )}
                   required
                 />
               </div>
@@ -655,7 +738,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                 onChange={handleChange}
                 placeholder={t.orderForm.pickupPlaceholder}
                 rows={3}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={fieldClass(
+                  'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                  pickupAddressError,
+                )}
                 required
               />
             </div>
@@ -673,7 +759,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                 name="passengers"
                 value={formData.passengers}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={fieldClass(
+                  'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                  passengersError,
+                )}
                 required
               >
                 {route.type === 'bus' ? (
@@ -702,7 +791,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                 name="largeLuggage"
                 value={formData.largeLuggage}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={fieldClass(
+                  'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                  luggageError,
+                )}
                 required
               >
                 <option value="no">{t.orderForm.luggageNo}</option>
@@ -727,7 +819,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder={t.orderForm.namePlaceholder}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={fieldClass(
+                    'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                    nameError,
+                  )}
                   required
                 />
               </div>
@@ -745,7 +840,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   onBlur={handlePhoneBlur}
                   inputMode="tel"
                   placeholder="+48 123 456 789"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={fieldClass(
+                    'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                    phoneErrorState,
+                  )}
                   required
                 />
                 {phoneError && (
@@ -767,7 +865,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                     handleEmailChange(e.target.value);
                   }}
                   placeholder={t.orderForm.emailPlaceholder}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={fieldClass(
+                    'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                    emailErrorState,
+                  )}
                   required
                 />
                 {emailError && (
@@ -803,33 +904,26 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
           <button
             type="submit"
             className={`w-full py-4 rounded-lg transition-colors ${
-              submitting || isFormInvalid
+              submitting
                 ? 'bg-slate-200 text-slate-700 border border-slate-300 shadow-inner cursor-not-allowed'
                 : 'bg-blue-600 text-white hover:bg-blue-700'
             }`}
-            disabled={submitting || isFormInvalid}
+            disabled={submitting}
           >
             {submitting ? (
               t.orderForm.submitting
             ) : (
-              isFormInvalid ? (
-                <span className="inline-flex items-center gap-2">
-                  <Lock className="h-4 w-4" />
-                  <span>{t.orderForm.formIncomplete}</span>
-                </span>
-              ) : (
-                <span className="flex flex-col items-center gap-1">
-                  <span>{t.orderForm.confirmOrder(currentPrice)}</span>
-                  {eurText && (
-                    <span className="inline-flex items-center gap-2 text-[11px] text-blue-100">
-                      <span>{eurText}</span>
-                      <span className="live-badge">
-                        {t.common.actualBadge}
-                      </span>
+              <span className="flex flex-col items-center gap-1">
+                <span>{t.orderForm.confirmOrder(currentPrice)}</span>
+                {eurText && (
+                  <span className="inline-flex items-center gap-2 text-[11px] text-blue-100">
+                    <span>{eurText}</span>
+                    <span className="live-badge">
+                      {t.common.actualBadge}
                     </span>
-                  )}
-                </span>
-              )
+                  </span>
+                )}
+              </span>
             )}
           </button>
         </form>

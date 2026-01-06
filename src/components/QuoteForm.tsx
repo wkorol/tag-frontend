@@ -3,6 +3,7 @@ import { Calendar, Users, Luggage, MapPin, FileText, Plane, DollarSign, Info, Lo
 import { buildAdditionalNotes } from '../lib/orderNotes';
 import { hasMarketingConsent } from '../lib/consent';
 import { getApiBaseUrl } from '../lib/api';
+import { trackFormStart } from '../lib/tracking';
 import { localeToPath, useI18n } from '../lib/i18n';
 
 const validatePhoneNumber = (value: string, messages: { phoneLetters: string; phoneLength: string }) => {
@@ -67,23 +68,42 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   const [emailError, setEmailError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [showPriceInput, setShowPriceInput] = useState(false);
+  const formStartedRef = useRef(false);
+  const [submitAttempted, setSubmitAttempted] = useState(false);
   const isPhoneValid = !validatePhoneNumber(formData.phone, t.quoteForm.validation);
   const isEmailValid = !validateEmail(formData.email, t.quoteForm.validation.email);
-  const isPickupComplete = formData.pickupType === 'airport'
-    ? formData.signText.trim() !== '' && formData.flightNumber.trim() !== ''
-    : formData.pickupType === 'address' && formData.pickupAddress.trim() !== '';
   const isPriceValid = showPriceInput ? formData.proposedPrice.trim() !== '' : true;
-  const isFormInvalid = !formData.pickupType
-    || !formData.destinationAddress.trim()
-    || !formData.date
-    || !formData.time
-    || formData.name.trim() === ''
-    || !isEmailValid
-    || !isPhoneValid
-    || !formData.passengers
-    || !formData.largeLuggage
-    || !isPickupComplete
-    || !isPriceValid;
+  const showValidation = submitAttempted;
+  const pickupTypeError = showValidation && !formData.pickupType;
+  const pickupAddressError = showValidation && formData.pickupType === 'address' && !formData.pickupAddress.trim();
+  const destinationError = showValidation && !formData.destinationAddress.trim();
+  const signTextError = showValidation && formData.pickupType === 'airport' && !formData.signText.trim();
+  const flightNumberError = showValidation && formData.pickupType === 'airport' && !formData.flightNumber.trim();
+  const dateError = showValidation && !formData.date;
+  const timeError = showValidation && !formData.time;
+  const passengersError = showValidation && !formData.passengers;
+  const luggageError = showValidation && !formData.largeLuggage;
+  const nameError = showValidation && !formData.name.trim();
+  const phoneErrorState = showValidation && (!formData.phone.trim() || !isPhoneValid);
+  const emailErrorState = showValidation && (!formData.email.trim() || !isEmailValid);
+  const priceError = showValidation && !isPriceValid;
+  const fieldClass = (base: string, invalid: boolean) =>
+    `${base}${invalid ? ' border-red-400 bg-red-50 focus:ring-red-200 focus:border-red-500' : ''}`;
+
+  const scrollToField = (fieldId: string) => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.requestAnimationFrame(() => {
+      const target = document.getElementById(fieldId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (target instanceof HTMLElement) {
+          target.focus({ preventScroll: true });
+        }
+      }
+    });
+  };
 
   const trackConversion = () => {
     if (typeof window === 'undefined') {
@@ -121,6 +141,53 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
     setError(null);
     setPhoneError(null);
     setEmailError(null);
+    setSubmitAttempted(true);
+    const missingFieldIds: string[] = [];
+    if (!formData.pickupType) {
+      missingFieldIds.push('pickupType');
+    }
+    if (formData.pickupType === 'address' && !formData.pickupAddress.trim()) {
+      missingFieldIds.push('pickupAddress');
+    }
+    if (!formData.destinationAddress.trim()) {
+      missingFieldIds.push('destinationAddress');
+    }
+    if (formData.pickupType === 'airport') {
+      if (!formData.signText.trim()) {
+        missingFieldIds.push('signText');
+      }
+      if (!formData.flightNumber.trim()) {
+        missingFieldIds.push('flightNumber');
+      }
+    }
+    if (!formData.date) {
+      missingFieldIds.push('date');
+    }
+    if (!formData.time) {
+      missingFieldIds.push('time');
+    }
+    if (!formData.passengers) {
+      missingFieldIds.push('passengers');
+    }
+    if (!formData.largeLuggage) {
+      missingFieldIds.push('largeLuggage');
+    }
+    if (!formData.name.trim()) {
+      missingFieldIds.push('name');
+    }
+    if (!formData.phone.trim() || !isPhoneValid) {
+      missingFieldIds.push('phone');
+    }
+    if (!formData.email.trim() || !isEmailValid) {
+      missingFieldIds.push('email');
+    }
+    if (!isPriceValid && showPriceInput) {
+      missingFieldIds.push('proposedPrice');
+    }
+    if (missingFieldIds.length > 0) {
+      scrollToField(missingFieldIds[0]);
+      return;
+    }
     const phoneError = validatePhoneNumber(formData.phone, t.quoteForm.validation);
     if (phoneError) {
       setPhoneError(phoneError);
@@ -193,6 +260,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    if (!formStartedRef.current) {
+      formStartedRef.current = true;
+      trackFormStart('quote');
+    }
     const { name, value } = e.target;
     
     // Auto-fill airport address when Airport Pickup is selected
@@ -298,6 +369,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
 
         <form
           onSubmit={handleSubmit}
+          noValidate
           className="booking-form p-6 space-y-6 overflow-y-auto cursor-default"
           onPointerDownCapture={(event) => {
             if (
@@ -318,13 +390,15 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
           )}
 
           {/* Pickup Type */}
-          <div>
+          <div id="pickupType" tabIndex={-1}>
             <label className="block text-gray-700 mb-2">
               {t.quoteForm.pickupType}
             </label>
             <div className="grid grid-cols-2 gap-4">
               <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                formData.pickupType === 'airport' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+                formData.pickupType === 'airport'
+                  ? 'border-blue-500 bg-blue-50'
+                  : pickupTypeError ? 'border-red-400 ring-1 ring-red-200' : 'border-gray-200 hover:border-gray-300'
               }`}>
                 <input
                   type="radio"
@@ -339,7 +413,9 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
               </label>
               
               <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                formData.pickupType === 'address' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+                formData.pickupType === 'address'
+                  ? 'border-blue-500 bg-blue-50'
+                  : pickupTypeError ? 'border-red-400 ring-1 ring-red-200' : 'border-gray-200 hover:border-gray-300'
               }`}>
                 <input
                   type="radio"
@@ -377,7 +453,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                   onChange={handleChange}
                   placeholder={t.quoteForm.pickupPlaceholder}
                   rows={2}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className={fieldClass(
+                    'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed',
+                    pickupAddressError,
+                  )}
                   disabled={formData.pickupType === 'airport'}
                   required
                 />
@@ -402,7 +481,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                   onChange={handleChange}
                   placeholder={t.quoteForm.destinationPlaceholder}
                   rows={2}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={fieldClass(
+                    'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                    destinationError,
+                  )}
                   required
                 />
               </div>
@@ -417,6 +499,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                   <button
                     type="button"
                     onClick={() => {
+                      if (!formStartedRef.current) {
+                        formStartedRef.current = true;
+                        trackFormStart('quote');
+                      }
                       setShowPriceInput(true);
                       setFormData(prev => ({ ...prev, proposedPrice: '' }));
                     }}
@@ -468,7 +554,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                       placeholder={t.quoteForm.pricePlaceholder}
                       min="0"
                       step="10"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={fieldClass(
+                        'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                        priceError,
+                      )}
                       required
                     />
                     <p className="text-sm text-gray-500 mt-1">
@@ -491,7 +580,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                     name="date"
                     value={formData.date}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={fieldClass(
+                      'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                      dateError,
+                    )}
                     required
                   />
                 </div>
@@ -506,7 +598,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                     name="time"
                     value={formData.time}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={fieldClass(
+                      'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                      timeError,
+                    )}
                     required
                   />
                 </div>
@@ -527,7 +622,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                       value={formData.signText}
                       onChange={handleChange}
                       placeholder={t.quoteForm.signPlaceholder}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={fieldClass(
+                        'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                        signTextError,
+                      )}
                       required
                     />
                     <div className="mt-3 bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-lg p-4">
@@ -561,7 +659,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                       value={formData.flightNumber}
                       onChange={handleChange}
                       placeholder={t.quoteForm.flightPlaceholder}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={fieldClass(
+                        'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                        flightNumberError,
+                      )}
                       required
                     />
                   </div>
@@ -580,7 +681,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                     name="passengers"
                     value={formData.passengers}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={fieldClass(
+                      'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                      passengersError,
+                    )}
                     required
                   >
                     {t.quoteForm.passengersOptions.map((label, index) => (
@@ -599,7 +703,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                     name="largeLuggage"
                     value={formData.largeLuggage}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={fieldClass(
+                      'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                      luggageError,
+                    )}
                     required
                   >
                     <option value="no">{t.quoteForm.luggageNo}</option>
@@ -624,7 +731,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                       value={formData.name}
                       onChange={handleChange}
                       placeholder={t.quoteForm.namePlaceholder}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={fieldClass(
+                        'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                        nameError,
+                      )}
                       required
                     />
                   </div>
@@ -642,7 +752,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                       onBlur={handlePhoneBlur}
                       inputMode="tel"
                       placeholder="+48 123 456 789"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={fieldClass(
+                        'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                        phoneErrorState,
+                      )}
                       required
                     />
                     {phoneError && (
@@ -664,7 +777,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                         handleEmailChange(e.target.value);
                       }}
                       placeholder={t.quoteForm.emailPlaceholder}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={fieldClass(
+                        'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                        emailErrorState,
+                      )}
                       required
                     />
                     {emailError && (
@@ -700,20 +816,13 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
               <button
                 type="submit"
                 className={`w-full py-4 rounded-lg transition-colors ${
-                  submitting || isFormInvalid
+                  submitting
                     ? 'bg-slate-200 text-slate-700 border border-slate-300 shadow-inner cursor-not-allowed'
                     : 'bg-blue-600 text-white hover:bg-blue-700'
                 }`}
-                disabled={submitting || isFormInvalid}
+                disabled={submitting}
               >
-                {submitting ? t.quoteForm.submitting : (
-                  isFormInvalid ? (
-                    <span className="inline-flex items-center gap-2">
-                      <Lock className="h-4 w-4" />
-                      <span>{t.quoteForm.formIncomplete}</span>
-                    </span>
-                  ) : t.quoteForm.submit
-                )}
+                {submitting ? t.quoteForm.submitting : t.quoteForm.submit}
               </button>
             </>
           )}

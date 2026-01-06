@@ -1,9 +1,9 @@
 import { Mail, MapPin } from 'lucide-react';
-import { localeToPath, useI18n } from '../lib/i18n';
+import { useI18n } from '../lib/i18n';
+import { getRoutePath } from '../lib/routes';
 
 export function Footer() {
   const { t, locale } = useI18n();
-  const basePath = localeToPath(locale);
 
   return (
     <footer className="bg-gray-900 text-gray-300 py-12">
@@ -46,13 +46,13 @@ export function Footer() {
           <div>
             <h4 className="text-white mb-4">{t.footer.routesTitle}</h4>
             <div className="space-y-2 text-sm">
-              <a href={`${basePath}/gdansk-airport-taxi`} className="block hover:text-white transition-colors">
+              <a href={getRoutePath(locale, 'airportTaxi')} className="block hover:text-white transition-colors">
                 {t.navbar.airportTaxi}
               </a>
-              <a href={`${basePath}/gdansk-airport-to-sopot`} className="block hover:text-white transition-colors">
+              <a href={getRoutePath(locale, 'airportSopot')} className="block hover:text-white transition-colors">
                 {t.navbar.airportSopot}
               </a>
-              <a href={`${basePath}/gdansk-airport-to-gdynia`} className="block hover:text-white transition-colors">
+              <a href={getRoutePath(locale, 'airportGdynia')} className="block hover:text-white transition-colors">
                 {t.navbar.airportGdynia}
               </a>
             </div>
@@ -63,13 +63,13 @@ export function Footer() {
           <p>
             &copy; {new Date().getFullYear()} Taxi Airport Gdańsk. {t.footer.rights}
             {' '}
-            <a href={`${basePath}/cookies`} className="text-gray-300 hover:text-white underline">
+            <a href={getRoutePath(locale, 'cookies')} className="text-gray-300 hover:text-white underline">
               {t.footer.cookiePolicy}
             </a>
             {' '}
             <span className="text-gray-500">|</span>
             {' '}
-            <a href={`${basePath}/privacy`} className="text-gray-300 hover:text-white underline">
+            <a href={getRoutePath(locale, 'privacy')} className="text-gray-300 hover:text-white underline">
               {t.footer.privacyPolicy}
             </a>
           </p>

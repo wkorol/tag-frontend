@@ -1,10 +1,12 @@
 import { MessageCircle, Mail, Bus, Car, Clock, BadgeCheck, Plane, CalendarCheck2, BadgeDollarSign, MapPin, Headphones } from 'lucide-react';
 import logo from 'figma:asset/9bf12920b9f211a57ac7e4ff94480c867662dafa.png';
-import { trackContactClick } from '../lib/tracking';
-import { useI18n } from '../lib/i18n';
+import { trackContactClick, trackCtaClick } from '../lib/tracking';
+import { useI18n, localeToPath } from '../lib/i18n';
+import { requestScrollTo } from '../lib/scroll';
 
 export function Hero() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const basePath = localeToPath(locale);
   const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
 
   return (
@@ -50,7 +52,12 @@ export function Hero() {
               {t.hero.orderViaEmail}
             </a>
             <a
-                href="#vehicle-selection"
+                href={`${basePath}/`}
+                onClick={(event) => {
+                  event.preventDefault();
+                  trackCtaClick('hero_order_online');
+                  requestScrollTo('vehicle-selection');
+                }}
                 className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-400 transition-colors animate-pulse-glow"
             >
               {t.common.orderOnlineNow}

@@ -52,10 +52,10 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                 <div className="flex justify-between items-start gap-2">
                   <span className="text-gray-700">{t.vehicle.airportGdansk}</span>
                   <div className="text-right">
-                    <span className="text-blue-900">{t.common.priceFrom} 90 PLN</span>
-                    {eurText(90) && (
+                    <span className="text-blue-900">{t.common.priceFrom} 100 PLN</span>
+                    {eurText(100) && (
                       <div className="flex items-center justify-end gap-2 text-gray-500">
-                        <span className="eur-text">{eurText(90)}</span>
+                        <span className="eur-text">{eurText(100)}</span>
                         <span className="live-badge">
                           {t.common.actualBadge}
                         </span>

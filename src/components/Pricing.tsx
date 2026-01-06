@@ -16,7 +16,7 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
     {
       from: t.pricing.routes.airport,
       to: t.pricing.routes.gdansk,
-      priceDay: 90,
+      priceDay: 100,
       priceNight: 120,
       type: 'standard' as const,
     },
@@ -64,7 +64,7 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
   const eurText = (pln: number) => formatEur(pln, eurRate);
   
   return (
-    <section id="pricing" className="py-16 bg-white">
+    <section id="vehicle-selection" className="py-16 bg-white">
       <div className="max-w-6xl mx-auto px-4">
         {/* Back Button */}
         <button

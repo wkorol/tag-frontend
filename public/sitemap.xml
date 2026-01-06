@@ -7,31 +7,73 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://taxiairportgdansk.com/cookies</loc>
+    <loc>https://taxiairportgdansk.com/en/</loc>
+    <lastmod>2026-01-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://taxiairportgdansk.com/pl/</loc>
+    <lastmod>2026-01-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://taxiairportgdansk.com/en/cookies</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://taxiairportgdansk.com/privacy</loc>
+    <loc>https://taxiairportgdansk.com/pl/polityka-cookies</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://taxiairportgdansk.com/gdansk-airport-taxi</loc>
+    <loc>https://taxiairportgdansk.com/en/privacy</loc>
+    <lastmod>2026-01-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://taxiairportgdansk.com/pl/polityka-prywatnosci</loc>
+    <lastmod>2026-01-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://taxiairportgdansk.com/en/gdansk-airport-taxi</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://taxiairportgdansk.com/gdansk-airport-to-sopot</loc>
+    <loc>https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://taxiairportgdansk.com/gdansk-airport-to-gdynia</loc>
+    <loc>https://taxiairportgdansk.com/en/gdansk-airport-to-sopot</loc>
+    <lastmod>2026-01-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://taxiairportgdansk.com/pl/lotnisko-gdansk-sopot</loc>
+    <lastmod>2026-01-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://taxiairportgdansk.com/en/gdansk-airport-to-gdynia</loc>
+    <lastmod>2026-01-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://taxiairportgdansk.com/pl/lotnisko-gdansk-gdynia</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>

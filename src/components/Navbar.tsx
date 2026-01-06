@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import logo from 'figma:asset/9bf12920b9f211a57ac7e4ff94480c867662dafa.png';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
+import { getRoutePath } from '../lib/routes';
+import { requestScrollTo } from '../lib/scroll';
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,29 +17,18 @@ export function Navbar() {
     setLocale(nextLocale);
     const nextBasePath = localeToPath(nextLocale);
     const strippedPath = location.pathname.replace(/^\/(en|pl)/, '');
-    const targetPath = `${nextBasePath}${strippedPath || ''}${location.search}${location.hash}`;
+    const targetPath = `${nextBasePath}${strippedPath || ''}${location.search}`;
     navigate(targetPath || nextBasePath);
     setIsMenuOpen(false);
   };
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsMenuOpen(false);
-      return;
-    }
-    window.location.href = `${basePath}/#${sectionId}`;
-    setIsMenuOpen(false);
-  };
-
   const handleNavClick = (event: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      event.preventDefault();
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsMenuOpen(false);
+    event.preventDefault();
+    const scrolled = requestScrollTo(sectionId);
+    if (!scrolled) {
+      navigate(basePath);
     }
+    setIsMenuOpen(false);
   };
 
   return (
@@ -46,7 +37,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <a
-            href={`${basePath}/#hero`}
+            href={`${basePath}/`}
             onClick={(event) => handleNavClick(event, 'hero')}
             className="flex items-center"
           >
@@ -68,32 +59,32 @@ export function Navbar() {
               {t.navbar.home}
             </a>
             <a
-              href={`${basePath}/#fleet`}
+              href={`${basePath}/`}
               onClick={(event) => handleNavClick(event, 'fleet')}
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
               {t.navbar.fleet}
             </a>
             <a
-              href={`${basePath}/gdansk-airport-taxi`}
+              href={getRoutePath(locale, 'airportTaxi')}
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
               {t.navbar.airportTaxi}
             </a>
             <a
-              href={`${basePath}/gdansk-airport-to-sopot`}
+              href={getRoutePath(locale, 'airportSopot')}
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
               {t.navbar.airportSopot}
             </a>
             <a
-              href={`${basePath}/gdansk-airport-to-gdynia`}
+              href={getRoutePath(locale, 'airportGdynia')}
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
               {t.navbar.airportGdynia}
             </a>
             <a
-              href={`${basePath}/#vehicle-selection`}
+              href={`${basePath}/`}
               onClick={(event) => handleNavClick(event, 'vehicle-selection')}
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
@@ -115,7 +106,7 @@ export function Navbar() {
               </select>
             </div>
             <a
-              href={`${basePath}/#vehicle-selection`}
+              href={`${basePath}/`}
               onClick={(event) => handleNavClick(event, 'vehicle-selection')}
               className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
             >
@@ -146,32 +137,32 @@ export function Navbar() {
               {t.navbar.home}
             </a>
             <a
-              href={`${basePath}/#fleet`}
+              href={`${basePath}/`}
               onClick={(event) => handleNavClick(event, 'fleet')}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
               {t.navbar.fleet}
             </a>
             <a
-              href={`${basePath}/gdansk-airport-taxi`}
+              href={getRoutePath(locale, 'airportTaxi')}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
               {t.navbar.airportTaxi}
             </a>
             <a
-              href={`${basePath}/gdansk-airport-to-sopot`}
+              href={getRoutePath(locale, 'airportSopot')}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
               {t.navbar.airportSopot}
             </a>
             <a
-              href={`${basePath}/gdansk-airport-to-gdynia`}
+              href={getRoutePath(locale, 'airportGdynia')}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
               {t.navbar.airportGdynia}
             </a>
             <a
-              href={`${basePath}/#vehicle-selection`}
+              href={`${basePath}/`}
               onClick={(event) => handleNavClick(event, 'vehicle-selection')}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
@@ -193,7 +184,7 @@ export function Navbar() {
               </select>
             </div>
             <a
-              href={`${basePath}/#vehicle-selection`}
+              href={`${basePath}/`}
               onClick={(event) => handleNavClick(event, 'vehicle-selection')}
               className="block w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
             >
