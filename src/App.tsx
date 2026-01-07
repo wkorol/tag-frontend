@@ -94,7 +94,15 @@ function Landing() {
 
   useEffect(() => {
     const updateSticky = () => {
-      setShowStickyCtas(window.scrollY > 120);
+      const footer = document.querySelector('footer');
+      if (!footer) {
+        setShowStickyCtas(window.scrollY > 120);
+        return;
+      }
+      const footerTop = footer.getBoundingClientRect().top + window.scrollY;
+      const viewportBottom = window.scrollY + window.innerHeight;
+      const nearFooter = viewportBottom >= footerTop - 80;
+      setShowStickyCtas(window.scrollY > 120 && !nearFooter);
     };
 
     updateSticky();
@@ -312,6 +320,206 @@ export default function App() {
           />
           <Route
             path={getRouteSlug('en', 'airportGdynia')}
+            element={
+              <RouteLanding
+                title={t.pages.gdanskGdynia.title}
+                description={t.pages.gdanskGdynia.description}
+                route={t.pages.gdanskGdynia.route}
+                examples={t.pages.gdanskGdynia.examples}
+              />
+            }
+          />
+        </Route>
+        <Route path="/de" element={<LocalizedShell locale="de" />}>
+          <Route index element={<Landing />} />
+          <Route path="admin" element={<AdminOrdersPage />} />
+          <Route path="admin/orders/:id" element={<AdminOrderPage />} />
+          <Route path={getRouteSlug('de', 'cookies')} element={<CookiesPage />} />
+          <Route path={getRouteSlug('de', 'privacy')} element={<PrivacyPage />} />
+          <Route
+            path={getRouteSlug('de', 'airportTaxi')}
+            element={
+              <RouteLanding
+                title={t.pages.gdanskTaxi.title}
+                description={t.pages.gdanskTaxi.description}
+                route={t.pages.gdanskTaxi.route}
+                examples={t.pages.gdanskTaxi.examples}
+              />
+            }
+          />
+          <Route
+            path={getRouteSlug('de', 'airportSopot')}
+            element={
+              <RouteLanding
+                title={t.pages.gdanskSopot.title}
+                description={t.pages.gdanskSopot.description}
+                route={t.pages.gdanskSopot.route}
+                examples={t.pages.gdanskSopot.examples}
+              />
+            }
+          />
+          <Route
+            path={getRouteSlug('de', 'airportGdynia')}
+            element={
+              <RouteLanding
+                title={t.pages.gdanskGdynia.title}
+                description={t.pages.gdanskGdynia.description}
+                route={t.pages.gdanskGdynia.route}
+                examples={t.pages.gdanskGdynia.examples}
+              />
+            }
+          />
+        </Route>
+        <Route path="/fi" element={<LocalizedShell locale="fi" />}>
+          <Route index element={<Landing />} />
+          <Route path="admin" element={<AdminOrdersPage />} />
+          <Route path="admin/orders/:id" element={<AdminOrderPage />} />
+          <Route path={getRouteSlug('fi', 'cookies')} element={<CookiesPage />} />
+          <Route path={getRouteSlug('fi', 'privacy')} element={<PrivacyPage />} />
+          <Route
+            path={getRouteSlug('fi', 'airportTaxi')}
+            element={
+              <RouteLanding
+                title={t.pages.gdanskTaxi.title}
+                description={t.pages.gdanskTaxi.description}
+                route={t.pages.gdanskTaxi.route}
+                examples={t.pages.gdanskTaxi.examples}
+              />
+            }
+          />
+          <Route
+            path={getRouteSlug('fi', 'airportSopot')}
+            element={
+              <RouteLanding
+                title={t.pages.gdanskSopot.title}
+                description={t.pages.gdanskSopot.description}
+                route={t.pages.gdanskSopot.route}
+                examples={t.pages.gdanskSopot.examples}
+              />
+            }
+          />
+          <Route
+            path={getRouteSlug('fi', 'airportGdynia')}
+            element={
+              <RouteLanding
+                title={t.pages.gdanskGdynia.title}
+                description={t.pages.gdanskGdynia.description}
+                route={t.pages.gdanskGdynia.route}
+                examples={t.pages.gdanskGdynia.examples}
+              />
+            }
+          />
+        </Route>
+        <Route path="/no" element={<LocalizedShell locale="no" />}>
+          <Route index element={<Landing />} />
+          <Route path="admin" element={<AdminOrdersPage />} />
+          <Route path="admin/orders/:id" element={<AdminOrderPage />} />
+          <Route path={getRouteSlug('no', 'cookies')} element={<CookiesPage />} />
+          <Route path={getRouteSlug('no', 'privacy')} element={<PrivacyPage />} />
+          <Route
+            path={getRouteSlug('no', 'airportTaxi')}
+            element={
+              <RouteLanding
+                title={t.pages.gdanskTaxi.title}
+                description={t.pages.gdanskTaxi.description}
+                route={t.pages.gdanskTaxi.route}
+                examples={t.pages.gdanskTaxi.examples}
+              />
+            }
+          />
+          <Route
+            path={getRouteSlug('no', 'airportSopot')}
+            element={
+              <RouteLanding
+                title={t.pages.gdanskSopot.title}
+                description={t.pages.gdanskSopot.description}
+                route={t.pages.gdanskSopot.route}
+                examples={t.pages.gdanskSopot.examples}
+              />
+            }
+          />
+          <Route
+            path={getRouteSlug('no', 'airportGdynia')}
+            element={
+              <RouteLanding
+                title={t.pages.gdanskGdynia.title}
+                description={t.pages.gdanskGdynia.description}
+                route={t.pages.gdanskGdynia.route}
+                examples={t.pages.gdanskGdynia.examples}
+              />
+            }
+          />
+        </Route>
+        <Route path="/sv" element={<LocalizedShell locale="sv" />}>
+          <Route index element={<Landing />} />
+          <Route path="admin" element={<AdminOrdersPage />} />
+          <Route path="admin/orders/:id" element={<AdminOrderPage />} />
+          <Route path={getRouteSlug('sv', 'cookies')} element={<CookiesPage />} />
+          <Route path={getRouteSlug('sv', 'privacy')} element={<PrivacyPage />} />
+          <Route
+            path={getRouteSlug('sv', 'airportTaxi')}
+            element={
+              <RouteLanding
+                title={t.pages.gdanskTaxi.title}
+                description={t.pages.gdanskTaxi.description}
+                route={t.pages.gdanskTaxi.route}
+                examples={t.pages.gdanskTaxi.examples}
+              />
+            }
+          />
+          <Route
+            path={getRouteSlug('sv', 'airportSopot')}
+            element={
+              <RouteLanding
+                title={t.pages.gdanskSopot.title}
+                description={t.pages.gdanskSopot.description}
+                route={t.pages.gdanskSopot.route}
+                examples={t.pages.gdanskSopot.examples}
+              />
+            }
+          />
+          <Route
+            path={getRouteSlug('sv', 'airportGdynia')}
+            element={
+              <RouteLanding
+                title={t.pages.gdanskGdynia.title}
+                description={t.pages.gdanskGdynia.description}
+                route={t.pages.gdanskGdynia.route}
+                examples={t.pages.gdanskGdynia.examples}
+              />
+            }
+          />
+        </Route>
+        <Route path="/da" element={<LocalizedShell locale="da" />}>
+          <Route index element={<Landing />} />
+          <Route path="admin" element={<AdminOrdersPage />} />
+          <Route path="admin/orders/:id" element={<AdminOrderPage />} />
+          <Route path={getRouteSlug('da', 'cookies')} element={<CookiesPage />} />
+          <Route path={getRouteSlug('da', 'privacy')} element={<PrivacyPage />} />
+          <Route
+            path={getRouteSlug('da', 'airportTaxi')}
+            element={
+              <RouteLanding
+                title={t.pages.gdanskTaxi.title}
+                description={t.pages.gdanskTaxi.description}
+                route={t.pages.gdanskTaxi.route}
+                examples={t.pages.gdanskTaxi.examples}
+              />
+            }
+          />
+          <Route
+            path={getRouteSlug('da', 'airportSopot')}
+            element={
+              <RouteLanding
+                title={t.pages.gdanskSopot.title}
+                description={t.pages.gdanskSopot.description}
+                route={t.pages.gdanskSopot.route}
+                examples={t.pages.gdanskSopot.examples}
+              />
+            }
+          />
+          <Route
+            path={getRouteSlug('da', 'airportGdynia')}
             element={
               <RouteLanding
                 title={t.pages.gdanskGdynia.title}

@@ -122,7 +122,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
   const [formData, setFormData] = useState({
-    pickupType: 'airport',
+    pickupType: '',
     signText: '',
     flightNumber: '',
     passengers: '1',
@@ -558,70 +558,14 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
             </div>
           )}
 
-          {/* Price Display */}
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-700">{t.orderForm.totalPrice}</span>
-              <div className="text-right">
-                <span className="text-blue-900 text-2xl">{currentPrice} PLN</span>
-                {eurText && (
-                  <div className="flex items-center justify-end gap-2 text-gray-500">
-                    <span className="eur-text">{eurText}</span>
-                    <span className="live-badge">
-                      {t.common.actualBadge}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-          {renderRateBanner()}
-
-          {/* Date and Time */}
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="date" className="block text-gray-700 mb-2">
-                <Calendar className="w-4 h-4 inline mr-2" />
-                {t.orderForm.date}
-              </label>
-              <input
-                type="date"
-                id="date"
-                name="date"
-                value={formData.date}
-                onChange={handleChange}
-                className={fieldClass(
-                  'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                  dateError,
-                )}
-                required
-              />
-            </div>
-
-            <div>
-              <label htmlFor="time" className="block text-gray-700 mb-2">
-                {t.orderForm.pickupTime}
-              </label>
-              <input
-                type="time"
-                id="time"
-                name="time"
-                value={formData.time}
-                onChange={handleChange}
-                className={fieldClass(
-                  'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                  timeError,
-                )}
-                required
-              />
-            </div>
-          </div>
-
           {/* Pickup Type */}
           <div id="pickupType" tabIndex={-1}>
             <label className="block text-gray-700 mb-2">
               {t.orderForm.pickupType}
             </label>
+            <p className="text-sm text-gray-500 mb-3">
+              {t.orderForm.pickupTypeHint}
+            </p>
             <div className="grid grid-cols-2 gap-4">
               <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
                 formData.pickupType === 'airport'
@@ -661,6 +605,67 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
               </label>
             </div>
           </div>
+
+          {formData.pickupType && (
+            <>
+              {/* Price Display */}
+              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-700">{t.orderForm.totalPrice}</span>
+                  <div className="text-right">
+                    <span className="text-blue-900 text-2xl">{currentPrice} PLN</span>
+                    {eurText && (
+                      <div className="flex items-center justify-end gap-2 text-gray-500">
+                        <span className="eur-text">{eurText}</span>
+                        <span className="live-badge">
+                          {t.common.actualBadge}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              {renderRateBanner()}
+
+              {/* Date and Time */}
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="date" className="block text-gray-700 mb-2">
+                    <Calendar className="w-4 h-4 inline mr-2" />
+                    {t.orderForm.date}
+                  </label>
+                  <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    value={formData.date}
+                    onChange={handleChange}
+                    className={fieldClass(
+                      'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                      dateError,
+                    )}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="time" className="block text-gray-700 mb-2">
+                    {t.orderForm.pickupTime}
+                  </label>
+                  <input
+                    type="time"
+                    id="time"
+                    name="time"
+                    value={formData.time}
+                    onChange={handleChange}
+                    className={fieldClass(
+                      'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                      timeError,
+                    )}
+                    required
+                  />
+                </div>
+              </div>
 
           {/* Airport Pickup Fields */}
           {formData.pickupType === 'airport' && (
@@ -926,6 +931,8 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
               </span>
             )}
           </button>
+            </>
+          )}
         </form>
       </div>
     </div>

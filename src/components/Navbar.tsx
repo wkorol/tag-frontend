@@ -2,7 +2,7 @@ import { Menu, X, Globe } from 'lucide-react';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
-import { getRoutePath } from '../lib/routes';
+import { getRouteKeyFromSlug, getRoutePath, getRouteSlug } from '../lib/routes';
 import { requestScrollTo } from '../lib/scroll';
 
 export function Navbar() {
@@ -15,8 +15,16 @@ export function Navbar() {
   const handleLocaleChange = (nextLocale: Locale) => {
     setLocale(nextLocale);
     const nextBasePath = localeToPath(nextLocale);
-    const strippedPath = location.pathname.replace(/^\/(en|pl)/, '');
-    const targetPath = `${nextBasePath}${strippedPath || ''}${location.search}`;
+    const strippedPath = location.pathname.replace(/^\/(en|pl|de|fi|no|sv|da)/, '');
+    const pathWithoutLeading = strippedPath.replace(/^\//, '');
+    const [firstSegment, ...restSegments] = pathWithoutLeading.split('/').filter(Boolean);
+    const routeKey = firstSegment ? getRouteKeyFromSlug(locale, firstSegment) : null;
+    const nextSlug = routeKey ? getRouteSlug(nextLocale, routeKey) : '';
+    const nextPath =
+      nextSlug !== ''
+        ? `/${[nextSlug, ...restSegments].filter(Boolean).join('/')}`
+        : strippedPath;
+    const targetPath = `${nextBasePath}${nextPath || ''}${location.search}${location.hash}`;
     navigate(targetPath || nextBasePath);
     setIsMenuOpen(false);
   };
@@ -41,8 +49,8 @@ export function Navbar() {
             className="flex items-center"
           >
             <span className="leading-tight text-sm font-semibold text-gray-900">
-              <span className="block">Taxi Airport</span>
-              <span className="block text-xs font-medium text-gray-500">Gdańsk</span>
+              <span className="block text-base tracking-wide">Taxi Airport</span>
+              <span className="block text-xs font-semibold text-blue-700">Gdańsk</span>
             </span>
           </a>
 
@@ -101,6 +109,11 @@ export function Navbar() {
               >
                 <option value="en">EN</option>
                 <option value="pl">PL</option>
+                <option value="de">DE</option>
+                <option value="fi">FI</option>
+                <option value="no">NO</option>
+                <option value="sv">SV</option>
+                <option value="da">DA</option>
               </select>
             </div>
             <a
@@ -179,6 +192,11 @@ export function Navbar() {
               >
                 <option value="en">EN</option>
                 <option value="pl">PL</option>
+                <option value="de">DE</option>
+                <option value="fi">FI</option>
+                <option value="no">NO</option>
+                <option value="sv">SV</option>
+                <option value="da">DA</option>
               </select>
             </div>
             <a
