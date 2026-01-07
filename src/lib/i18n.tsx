@@ -291,6 +291,7 @@ const baseEn = {
       submitting: 'Submitting...',
       formIncomplete: 'Complete the form to continue',
       missingFields: (fields: string) => `Please complete: ${fields}.`,
+      reassurance: 'No prepayment. Free cancellation. Confirmation in 5–10 min.',
       confirmOrder: (price: number) => `Confirm Order - ${price} PLN`,
     },
     quoteForm: {
@@ -787,6 +788,7 @@ const translations = {
       submitting: 'Wysyłanie...',
       formIncomplete: 'Uzupełnij formularz, aby kontynuować',
       missingFields: (fields: string) => `Uzupełnij proszę: ${fields}.`,
+      reassurance: 'Bez przedpłaty. Darmowa anulacja. Potwierdzenie w 5–10 min.',
       confirmOrder: (price: number) => `Potwierdź zamówienie - ${price} PLN`,
     },
     quoteForm: {
@@ -1280,6 +1282,7 @@ const translations = {
       submitting: 'Wird gesendet...',
       formIncomplete: 'Formular ausfüllen, um fortzufahren',
       missingFields: (fields: string) => `Bitte ausfüllen: ${fields}.`,
+      reassurance: 'Keine Vorauszahlung. Kostenlose Stornierung. Bestätigung in 5–10 Min.',
       confirmOrder: (price: number) => `Bestellung bestätigen - ${price} PLN`,
     },
     quoteForm: {
@@ -1773,6 +1776,7 @@ const translations = {
       submitting: 'Lähetetään...',
       formIncomplete: 'Täytä lomake jatkaaksesi',
       missingFields: (fields: string) => `Täytä: ${fields}.`,
+      reassurance: 'Ei ennakkomaksua. Ilmainen peruutus. Vahvistus 5–10 min.',
       confirmOrder: (price: number) => `Vahvista tilaus - ${price} PLN`,
     },
     quoteForm: {
@@ -2266,6 +2270,7 @@ const translations = {
       submitting: 'Sender...',
       formIncomplete: 'Fyll ut skjemaet for å fortsette',
       missingFields: (fields: string) => `Vennligst fyll ut: ${fields}.`,
+      reassurance: 'Ingen forhåndsbetaling. Gratis avbestilling. Bekreftelse på 5–10 min.',
       confirmOrder: (price: number) => `Bekreft bestilling - ${price} PLN`,
     },
     quoteForm: {
@@ -2759,6 +2764,7 @@ const translations = {
       submitting: 'Skickar...',
       formIncomplete: 'Fyll i formuläret för att fortsätta',
       missingFields: (fields: string) => `Vänligen fyll i: ${fields}.`,
+      reassurance: 'Ingen förskottsbetalning. Gratis avbokning. Bekräftelse inom 5–10 min.',
       confirmOrder: (price: number) => `Bekräfta beställning - ${price} PLN`,
     },
     quoteForm: {
@@ -3252,6 +3258,7 @@ const translations = {
       submitting: 'Sender...',
       formIncomplete: 'Udfyld formularen for at fortsætte',
       missingFields: (fields: string) => `Udfyld venligst: ${fields}.`,
+      reassurance: 'Ingen forudbetaling. Gratis afbestilling. Bekræftelse på 5–10 min.',
       confirmOrder: (price: number) => `Bekræft bestilling - ${price} PLN`,
     },
     quoteForm: {

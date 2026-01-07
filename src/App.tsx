@@ -94,6 +94,10 @@ function Landing() {
 
   useEffect(() => {
     const updateSticky = () => {
+      if (window.innerWidth >= 640) {
+        setShowStickyCtas(true);
+        return;
+      }
       const footer = document.querySelector('footer');
       if (!footer) {
         setShowStickyCtas(window.scrollY > 120);

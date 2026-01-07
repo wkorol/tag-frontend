@@ -18,8 +18,7 @@ export function Hero() {
       
       <div className="relative max-w-6xl mx-auto px-4 py-12 sm:py-24">
         <div className="text-center">
-          <div style={{ marginTop: '-3.5rem' }}>
-            <div className="mb-4 flex justify-center" style={{ marginTop: '1.75rem', marginBottom: '0.5rem' }}>
+          <div className="mb-4 flex justify-center">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-4 py-2 text-xs sm:text-sm text-white shadow-sm backdrop-blur-sm">
                 <span className="font-semibold">{t.hero.promo.dayPrice}</span>
                 <span>{t.hero.promo.dayLabel}</span>
@@ -28,7 +27,7 @@ export function Hero() {
                 <span>{t.hero.promo.nightLabel}</span>
               </div>
             </div>
-            <div className="flex justify-center mb-0" style={{ marginTop: '-0.75rem' }}>
+          <div className="flex justify-center mb-0.5">
               <img
                   src={logo}
                   alt={t.hero.logoAlt}
@@ -36,11 +35,10 @@ export function Hero() {
                   style={{ width: '31rem' }}
               />
             </div>
-          </div>
 
           <div
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-            style={{ marginTop: '-4.5rem' }}
+            style={{ marginTop: '-3.5rem' }}
           >
             <a
                 href={whatsappLink}

@@ -579,7 +579,6 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   checked={formData.pickupType === 'airport'}
                   onChange={(e) => {
                     handleChange(e);
-                    handlePhoneChange(e.target.value);
                   }}
                   className="w-4 h-4 text-blue-600"
                 />
@@ -931,6 +930,9 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
               </span>
             )}
           </button>
+          <p className="text-xs text-center text-gray-500 mt-2">
+            {t.orderForm.reassurance}
+          </p>
             </>
           )}
         </form>
