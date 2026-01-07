@@ -67,6 +67,11 @@ export function Hero() {
               {t.common.orderOnlineNow}
             </a>
           </div>
+          <div className="mt-2 flex justify-center">
+            <span className="inline-flex items-center rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-semibold text-white">
+              {t.common.noPrepayment}
+            </span>
+          </div>
           <div className="mt-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-6 py-5 max-w-2xl mx-auto">
             <h1 className="text-xl sm:text-2xl text-blue-100 mb-3">
               {t.hero.headline}
