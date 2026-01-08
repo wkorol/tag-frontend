@@ -9,11 +9,20 @@ export function Hero() {
   const basePath = localeToPath(locale);
   const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
 
+  const heroBgUrl = 'https://images.unsplash.com/photo-1727806823305-451437800778?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0YXhpJTIwYWlycG9ydHxlbnwxfHx8fDE3NjcwODUyODV8MA&ixlib=rb-4.1.0&q=70&w=960&utm_source=figma&utm_medium=referral';
+
   return (
-    <div id="hero" className="relative bg-gradient-to-br from-blue-900 to-blue-700 text-white">
-      <div 
-        className="absolute inset-0 opacity-20 bg-cover bg-center"
-        style={{ backgroundImage: `url('https://images.unsplash.com/photo-1727806823305-451437800778?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0YXhpJTIwYWlycG9ydHxlbnwxfHx8fDE3NjcwODUyODV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral')` }}
+    <div id="hero" className="relative overflow-hidden bg-gradient-to-br from-blue-900 to-blue-700 text-white">
+      <img
+        src={heroBgUrl}
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 h-full w-full object-cover opacity-20 pointer-events-none"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        width={960}
+        height={640}
       />
       
       <div className="relative max-w-6xl mx-auto px-4 py-12 sm:py-24">
@@ -29,10 +38,13 @@ export function Hero() {
             </div>
           <div className="flex justify-center mb-0.5">
               <img
-                  src={logo}
-                  alt={t.hero.logoAlt}
-                  className="h-auto"
-                  style={{ width: '31rem' }}
+                src={logo}
+                alt={t.hero.logoAlt}
+                className="h-auto"
+                style={{ width: '31rem' }}
+                width={1024}
+                height={1024}
+                decoding="async"
               />
             </div>
 
