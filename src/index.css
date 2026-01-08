@@ -2169,6 +2169,22 @@ html {
     margin-top: -0.25rem;
   }
 
+  .vehicle-price-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 0.5rem;
+  }
+
+  .vehicle-price-label {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .vehicle-price-value {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
   .vehicle-eur-row {
     font-size: 0.6rem;
     gap: 0.25rem;
