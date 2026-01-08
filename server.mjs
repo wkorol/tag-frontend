@@ -75,7 +75,11 @@ const server = createServer(async (req, res) => {
 
   if (isFileRequest(urlPath)) {
     const filePath = path.join(clientDir, urlPath);
-    const cacheControl = urlPath.startsWith('/assets/')
+    const ext = path.extname(urlPath);
+    const isLongCache =
+      urlPath.startsWith('/assets/') ||
+      ['.webp', '.avif', '.png', '.jpg', '.jpeg', '.svg', '.ico'].includes(ext);
+    const cacheControl = isLongCache
       ? 'public, max-age=31536000, immutable'
       : 'public, max-age=3600';
     await serveFile(res, filePath, cacheControl);
