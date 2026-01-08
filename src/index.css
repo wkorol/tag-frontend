@@ -2151,4 +2151,8 @@ html {
   .vehicle-card__prices-list {
     line-height: 1.2;
   }
+
+  .live-badge {
+    display: none;
+  }
 }
