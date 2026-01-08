@@ -2163,6 +2163,7 @@ html {
 
   .vehicle-card__info {
     min-height: 8rem;
+    margin-bottom: 0;
   }
 
   .vehicle-card__prices {
@@ -2214,6 +2215,17 @@ html {
 
   .live-badge {
     display: none;
+  }
+}
+
+.vehicle-grid-mobile {
+  align-items: stretch;
+}
+
+@media (min-width: 40rem) {
+  .vehicle-card__info {
+    min-height: 7.5rem;
+    margin-bottom: 1.5rem;
   }
 }
 
