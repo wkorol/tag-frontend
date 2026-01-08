@@ -2170,19 +2170,23 @@ html {
   }
 
   .vehicle-price-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    column-gap: 0.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
   }
 
   .vehicle-price-label {
-    overflow-wrap: anywhere;
-    word-break: break-word;
+    flex: 1;
+    min-width: 0;
+    font-size: 0.7rem;
+    line-height: 1.2;
+    overflow-wrap: break-word;
   }
 
   .vehicle-price-value {
     flex-shrink: 0;
     white-space: nowrap;
+    font-size: 0.7rem;
   }
 
   .vehicle-eur-row {
