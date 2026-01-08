@@ -11,20 +11,6 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
   const { t } = useI18n();
   const eurRate = useEurRate();
   const eurText = (pln: number) => formatEur(pln, eurRate);
-  const renderRouteLabel = (label: string) => {
-    const parts = label.split('↔');
-    if (parts.length === 2) {
-      const [from, to] = parts.map((part) => part.trim());
-      return (
-        <span className="vehicle-route">
-          <span className="vehicle-route-from">{from}</span>
-          <span className="vehicle-route-arrow">↕</span>
-          <span className="vehicle-route-to">{to}</span>
-        </span>
-      );
-    }
-    return <span className="vehicle-route">{label}</span>;
-  };
 
   return (
     <section id="vehicle-selection" className="py-16 bg-white">
@@ -62,9 +48,9 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
 
             <div className="vehicle-card__prices bg-white rounded-lg p-4 mb-4">
               <p className="vehicle-card__prices-label text-gray-600 mb-2 text-sm">{t.vehicle.examplePrices}</p>
-              <div className="vehicle-card__prices-list space-y-1 text-sm">
-                <div className="vehicle-price-row flex justify-between items-start gap-2">
-                  <span className="vehicle-price-label text-gray-700">{renderRouteLabel(t.vehicle.airportGdansk)}</span>
+              <div className="vehicle-card__prices-list divide-y divide-gray-200/70 text-sm">
+                <div className="vehicle-price-row flex justify-between items-start gap-2 py-2">
+                  <span className="vehicle-price-label text-gray-700">{t.vehicle.airportGdansk}</span>
                   <div className="vehicle-price-value text-right">
                     <span className="text-blue-900">{t.common.priceFrom} 100 PLN</span>
                     {eurText(100) && (
@@ -77,8 +63,8 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                     )}
                   </div>
                 </div>
-                <div className="vehicle-price-row flex justify-between items-start gap-2">
-                  <span className="vehicle-price-label text-gray-700">{renderRouteLabel(t.vehicle.airportSopot)}</span>
+                <div className="vehicle-price-row flex justify-between items-start gap-2 py-2">
+                  <span className="vehicle-price-label text-gray-700">{t.vehicle.airportSopot}</span>
                   <div className="vehicle-price-value text-right">
                     <span className="text-blue-900">{t.common.priceFrom} 120 PLN</span>
                     {eurText(120) && (
@@ -91,8 +77,8 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                     )}
                   </div>
                 </div>
-                <div className="vehicle-price-row flex justify-between items-start gap-2">
-                  <span className="vehicle-price-label text-gray-700">{renderRouteLabel(t.vehicle.airportGdynia)}</span>
+                <div className="vehicle-price-row flex justify-between items-start gap-2 py-2">
+                  <span className="vehicle-price-label text-gray-700">{t.vehicle.airportGdynia}</span>
                   <div className="vehicle-price-value text-right">
                     <span className="text-blue-900">{t.common.priceFrom} 200 PLN</span>
                     {eurText(200) && (
@@ -138,9 +124,9 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
 
             <div className="vehicle-card__prices bg-white rounded-lg p-4 mb-4">
               <p className="vehicle-card__prices-label text-gray-600 mb-2 text-sm">{t.vehicle.examplePrices}</p>
-              <div className="vehicle-card__prices-list space-y-1 text-sm">
-                <div className="vehicle-price-row flex justify-between items-start gap-2">
-                  <span className="vehicle-price-label text-gray-700">{renderRouteLabel(t.vehicle.airportGdansk)}</span>
+              <div className="vehicle-card__prices-list divide-y divide-gray-200/70 text-sm">
+                <div className="vehicle-price-row flex justify-between items-start gap-2 py-2">
+                  <span className="vehicle-price-label text-gray-700">{t.vehicle.airportGdansk}</span>
                   <div className="vehicle-price-value text-right">
                     <span className="text-blue-900">{t.common.priceFrom} 120 PLN</span>
                     {eurText(120) && (
@@ -153,8 +139,8 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                     )}
                   </div>
                 </div>
-                <div className="vehicle-price-row flex justify-between items-start gap-2">
-                  <span className="vehicle-price-label text-gray-700">{renderRouteLabel(t.vehicle.airportSopot)}</span>
+                <div className="vehicle-price-row flex justify-between items-start gap-2 py-2">
+                  <span className="vehicle-price-label text-gray-700">{t.vehicle.airportSopot}</span>
                   <div className="vehicle-price-value text-right">
                     <span className="text-blue-900">{t.common.priceFrom} 140 PLN</span>
                     {eurText(140) && (
@@ -167,8 +153,8 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                     )}
                   </div>
                 </div>
-                <div className="vehicle-price-row flex justify-between items-start gap-2">
-                  <span className="vehicle-price-label text-gray-700">{renderRouteLabel(t.vehicle.airportGdynia)}</span>
+                <div className="vehicle-price-row flex justify-between items-start gap-2 py-2">
+                  <span className="vehicle-price-label text-gray-700">{t.vehicle.airportGdynia}</span>
                   <div className="vehicle-price-value text-right">
                     <span className="text-blue-900">{t.common.priceFrom} 250 PLN</span>
                     {eurText(250) && (
