@@ -12,13 +12,13 @@ export function Hero() {
   const basePath = localeToPath(locale);
   const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
 
-  const heroBgBase = 'https://images.unsplash.com/photo-1727806823305-451437800778?crop=entropy&cs=tinysrgb&fit=max&fm=webp&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0YXhpJTIwYWlycG9ydHxlbnwxfHx8fDE3NjcwODUyODV8MA&ixlib=rb-4.1.0&q=70&utm_source=figma&utm_medium=referral';
+  const heroBgUrl = '/background-1600.webp';
 
   return (
     <div id="hero" className="relative overflow-hidden bg-gradient-to-br from-blue-900 to-blue-700 text-white">
       <img
-        src={`${heroBgBase}&w=1280`}
-        srcSet={`${heroBgBase}&w=640 640w, ${heroBgBase}&w=960 960w, ${heroBgBase}&w=1280 1280w`}
+        src={heroBgUrl}
+        srcSet="/background-960.webp 960w, /background-1600.webp 1600w"
         sizes="100vw"
         alt=""
         aria-hidden="true"
@@ -26,8 +26,8 @@ export function Hero() {
         loading="eager"
         fetchpriority="high"
         decoding="async"
-        width={960}
-        height={640}
+        width={1600}
+        height={900}
       />
       
       <div className="hero-content relative max-w-6xl mx-auto px-4 py-12 sm:py-24">
