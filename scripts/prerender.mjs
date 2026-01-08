@@ -11,13 +11,12 @@ const ssrEntryCandidates = [
   path.join(rootDir, 'build-ssr', 'entry-server.mjs'),
 ];
 
+const locales = ['en', 'pl', 'de', 'fi', 'no', 'sv', 'da'];
 const routes = [
   '/',
   '/cookies',
   '/privacy',
-  '/gdansk-airport-taxi',
-  '/gdansk-airport-to-sopot',
-  '/gdansk-airport-to-gdynia',
+  ...locales.map((locale) => `/${locale}`),
 ];
 
 let render;

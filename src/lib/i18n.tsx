@@ -3504,12 +3504,7 @@ type I18nContextValue = {
 
 const I18nContext = createContext<I18nContextValue | null>(null);
 
-const detectLocale = (): Locale => {
-  if (typeof window === 'undefined') {
-    return 'en';
-  }
-
-  const pathname = window.location.pathname;
+export const getLocaleFromPathname = (pathname: string): Locale | null => {
   if (pathname.startsWith('/pl')) return 'pl';
   if (pathname.startsWith('/en')) return 'en';
   if (pathname.startsWith('/de')) return 'de';
@@ -3517,6 +3512,19 @@ const detectLocale = (): Locale => {
   if (pathname.startsWith('/no')) return 'no';
   if (pathname.startsWith('/sv')) return 'sv';
   if (pathname.startsWith('/da')) return 'da';
+  return null;
+};
+
+const detectLocale = (): Locale => {
+  if (typeof window === 'undefined') {
+    return 'en';
+  }
+
+  const pathname = window.location.pathname;
+  const fromPath = getLocaleFromPathname(pathname);
+  if (fromPath) {
+    return fromPath;
+  }
 
   const stored = window.localStorage.getItem(STORAGE_KEY);
   if (stored === 'pl' || stored === 'en' || stored === 'de' || stored === 'fi' || stored === 'no' || stored === 'sv' || stored === 'da') {
@@ -3534,8 +3542,8 @@ const detectLocale = (): Locale => {
   return 'en';
 };
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocale] = useState<Locale>(detectLocale);
+export function I18nProvider({ children, initialLocale }: { children: ReactNode; initialLocale?: Locale }) {
+  const [locale, setLocale] = useState<Locale>(initialLocale ?? detectLocale);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
