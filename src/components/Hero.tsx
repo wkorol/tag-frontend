@@ -1,5 +1,6 @@
 import { MessageCircle, Mail, Bus, Car, Clock, BadgeCheck, Plane, CalendarCheck2, BadgeDollarSign, MapPin, Headphones } from 'lucide-react';
 import logo from 'figma:asset/9bf12920b9f211a57ac7e4ff94480c867662dafa.png';
+import logoAvif from '../assets/7a4ddc58-4604-4ddd-9d85-e57bfd26feba.avif';
 import { trackContactClick, trackCtaClick } from '../lib/tracking';
 import { useI18n, localeToPath } from '../lib/i18n';
 import { requestScrollTo } from '../lib/scroll';
@@ -9,15 +10,17 @@ export function Hero() {
   const basePath = localeToPath(locale);
   const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
 
-  const heroBgUrl = 'https://images.unsplash.com/photo-1727806823305-451437800778?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0YXhpJTIwYWlycG9ydHxlbnwxfHx8fDE3NjcwODUyODV8MA&ixlib=rb-4.1.0&q=70&w=960&utm_source=figma&utm_medium=referral';
+  const heroBgBase = 'https://images.unsplash.com/photo-1727806823305-451437800778?crop=entropy&cs=tinysrgb&fit=max&fm=webp&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0YXhpJTIwYWlycG9ydHxlbnwxfHx8fDE3NjcwODUyODV8MA&ixlib=rb-4.1.0&q=70&utm_source=figma&utm_medium=referral';
 
   return (
     <div id="hero" className="relative overflow-hidden bg-gradient-to-br from-blue-900 to-blue-700 text-white">
       <img
-        src={heroBgUrl}
+        src={`${heroBgBase}&w=1920`}
+        srcSet={`${heroBgBase}&w=960 960w, ${heroBgBase}&w=1440 1440w, ${heroBgBase}&w=1920 1920w`}
+        sizes="100vw"
         alt=""
         aria-hidden="true"
-        className="absolute inset-0 -z-10 h-full w-full object-cover opacity-20 pointer-events-none"
+        className="hero-bg absolute inset-0 -z-10 h-full w-full object-cover opacity-20 pointer-events-none"
         loading="eager"
         fetchpriority="high"
         decoding="async"
@@ -25,8 +28,8 @@ export function Hero() {
         height={640}
       />
       
-      <div className="relative max-w-6xl mx-auto px-4 py-12 sm:py-24">
-        <div className="text-center">
+      <div className="hero-content relative max-w-6xl mx-auto px-4 py-12 sm:py-24">
+          <div className="text-center">
           <div className="mb-4 flex justify-center">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-4 py-2 text-xs sm:text-sm text-white shadow-sm backdrop-blur-sm">
                 <span className="font-semibold">{t.hero.promo.dayPrice}</span>
@@ -36,22 +39,24 @@ export function Hero() {
                 <span>{t.hero.promo.nightLabel}</span>
               </div>
             </div>
-          <div className="flex justify-center mb-0.5">
-              <img
-                src={logo}
-                alt={t.hero.logoAlt}
-                className="h-auto"
-                style={{ width: '31rem' }}
-                width={1024}
-                height={1024}
-                decoding="async"
-              />
+            <div className="hero-logo flex justify-center mb-2">
+              <picture>
+                <source srcSet={logoAvif} type="image/avif" />
+                <img
+                  src={logo}
+                  alt={t.hero.logoAlt}
+                  className="h-auto"
+                  style={{ width: '31rem' }}
+                  width={1024}
+                  height={1024}
+                  decoding="async"
+                  loading="eager"
+                  fetchpriority="high"
+                />
+              </picture>
             </div>
 
-          <div
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-            style={{ marginTop: '-3.5rem' }}
-          >
+          <div className="hero-cta flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a
                 href={whatsappLink}
                 onClick={() => trackContactClick('whatsapp')}

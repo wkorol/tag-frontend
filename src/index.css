@@ -2034,6 +2034,28 @@ html {
 
 /* Mobile-only sizing for pricing and vehicle cards */
 @media (max-width: 39.9375rem) {
+  .hero-bg {
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.35;
+    filter: blur(3px);
+    transform: scale(1.2);
+  }
+
+  .hero-content {
+    min-height: 100vh;
+    padding-top: 1.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .hero-cta {
+    margin-top: 0.5rem;
+  }
+
+  .hero-logo {
+    margin-bottom: 0.5rem;
+  }
+
   .pricing-grid-mobile {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.75rem;
