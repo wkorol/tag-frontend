@@ -78,17 +78,25 @@ export function useEurRate() {
         });
     };
 
-    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      const idleId = window.requestIdleCallback(scheduleFetch, { timeout: 3000 });
-      return () => {
-        cancelled = true;
-        window.cancelIdleCallback(idleId);
-      };
+    const onFirstInteraction = () => {
+      scheduleFetch();
+      window.removeEventListener('scroll', onFirstInteraction);
+      window.removeEventListener('click', onFirstInteraction);
+      window.removeEventListener('touchstart', onFirstInteraction);
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', onFirstInteraction, { passive: true, once: true });
+      window.addEventListener('click', onFirstInteraction, { once: true });
+      window.addEventListener('touchstart', onFirstInteraction, { passive: true, once: true });
     }
 
-    const timeoutId = window.setTimeout(scheduleFetch, 1500);
+    const timeoutId = window.setTimeout(scheduleFetch, 8000);
     return () => {
       cancelled = true;
+      window.removeEventListener('scroll', onFirstInteraction);
+      window.removeEventListener('click', onFirstInteraction);
+      window.removeEventListener('touchstart', onFirstInteraction);
       window.clearTimeout(timeoutId);
     };
   }, []);
