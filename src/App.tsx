@@ -98,6 +98,15 @@ function Landing() {
         setShowStickyCtas(true);
         return;
       }
+      const vehicleSection = document.getElementById('vehicle-selection');
+      if (vehicleSection) {
+        const rect = vehicleSection.getBoundingClientRect();
+        const inView = rect.top < window.innerHeight && rect.bottom > 0;
+        if (inView) {
+          setShowStickyCtas(false);
+          return;
+        }
+      }
       const footer = document.querySelector('footer');
       if (!footer) {
         setShowStickyCtas(window.scrollY > 120);
