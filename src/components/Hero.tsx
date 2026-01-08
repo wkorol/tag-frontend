@@ -79,7 +79,7 @@ export function Hero() {
                   trackCtaClick('hero_order_online');
                   requestScrollTo('vehicle-selection');
                 }}
-                className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-400 transition-colors animate-pulse-glow"
+                className="inline-flex items-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-500 transition-colors animate-pulse-glow"
             >
               {t.common.orderOnlineNow}
             </a>

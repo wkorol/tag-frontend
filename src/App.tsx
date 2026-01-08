@@ -202,20 +202,22 @@ function Landing() {
   return (
     <div className="min-h-screen bg-gray-50 pb-32 sm:pb-0">
       <Navbar />
-      <Hero />
-      
-      {step === 'vehicle' ? (
-        <VehicleTypeSelector onSelectType={handleVehicleSelect} />
-      ) : (
-        <Pricing 
-          vehicleType={vehicleType}
-          onOrderRoute={handleOrderRoute}
-          onRequestQuote={handleRequestQuote}
-          onBack={handleBackToVehicleSelection}
-        />
-      )}
+      <main>
+        <Hero />
+        
+        {step === 'vehicle' ? (
+          <VehicleTypeSelector onSelectType={handleVehicleSelect} />
+        ) : (
+          <Pricing 
+            vehicleType={vehicleType}
+            onOrderRoute={handleOrderRoute}
+            onRequestQuote={handleRequestQuote}
+            onBack={handleBackToVehicleSelection}
+          />
+        )}
 
-      <TrustSection />
+        <TrustSection />
+      </main>
       
       <Footer />
 
@@ -242,7 +244,7 @@ function Landing() {
             trackCtaClick('floating_order_online');
             requestScrollTo('vehicle-selection');
           }}
-          className={`fixed bottom-24 left-1/2 -translate-x-1/2 bg-orange-500 text-white px-6 py-3 rounded-full shadow-xl flex items-center gap-2 animate-pulse-glow transition-all duration-300 ease-out z-50 ${
+          className={`fixed bottom-24 left-1/2 -translate-x-1/2 bg-orange-600 text-white px-6 py-3 rounded-full shadow-xl flex items-center gap-2 animate-pulse-glow hover:bg-orange-500 transition-all duration-300 ease-out z-50 ${
             floatingReady ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
         >
@@ -276,7 +278,7 @@ function Landing() {
                 requestScrollTo('vehicle-selection');
               }}
               className="flex-1 rounded-full px-4 py-3 text-center text-white shadow-sm"
-              style={{ backgroundColor: '#f97316' }}
+              style={{ backgroundColor: '#ea580c' }}
             >
               {t.common.orderOnlineNow}
             </a>

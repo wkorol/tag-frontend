@@ -128,6 +128,9 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-nav"
             className="md:hidden text-gray-700 hover:text-blue-600"
           >
             {isMenuOpen ? (
@@ -140,7 +143,7 @@ export function Navbar() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden pb-4 space-y-3">
+          <div id="mobile-nav" className="md:hidden pb-4 space-y-3">
             <a
               href={`${basePath}/`}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
