@@ -48,6 +48,97 @@ if (typeof render !== 'function') {
 
 const isFileRequest = (urlPath) => urlPath.includes('.') || urlPath.startsWith('/assets/');
 
+const locales = ['en', 'pl', 'de', 'fi', 'no', 'sv', 'da'];
+const routeSlugs = {
+  en: {
+    airportTaxi: 'gdansk-airport-taxi',
+    airportSopot: 'gdansk-airport-to-sopot',
+    airportGdynia: 'gdansk-airport-to-gdynia',
+    cookies: 'cookies',
+    privacy: 'privacy',
+  },
+  pl: {
+    airportTaxi: 'taxi-lotnisko-gdansk',
+    airportSopot: 'lotnisko-gdansk-sopot',
+    airportGdynia: 'lotnisko-gdansk-gdynia',
+    cookies: 'polityka-cookies',
+    privacy: 'polityka-prywatnosci',
+  },
+  de: {
+    airportTaxi: 'gdansk-flughafen-taxi',
+    airportSopot: 'gdansk-flughafen-sopot',
+    airportGdynia: 'gdansk-flughafen-gdynia',
+    cookies: 'cookie-richtlinie',
+    privacy: 'datenschutz',
+  },
+  fi: {
+    airportTaxi: 'gdansk-lentokentta-taksi',
+    airportSopot: 'gdansk-lentokentta-sopot',
+    airportGdynia: 'gdansk-lentokentta-gdynia',
+    cookies: 'evasteet',
+    privacy: 'tietosuoja',
+  },
+  no: {
+    airportTaxi: 'gdansk-flyplass-taxi',
+    airportSopot: 'gdansk-flyplass-sopot',
+    airportGdynia: 'gdansk-flyplass-gdynia',
+    cookies: 'informasjonskapsler',
+    privacy: 'personvern',
+  },
+  sv: {
+    airportTaxi: 'gdansk-flygplats-taxi',
+    airportSopot: 'gdansk-flygplats-sopot',
+    airportGdynia: 'gdansk-flygplats-gdynia',
+    cookies: 'kakor',
+    privacy: 'integritetspolicy',
+  },
+  da: {
+    airportTaxi: 'gdansk-lufthavn-taxa',
+    airportSopot: 'gdansk-lufthavn-sopot',
+    airportGdynia: 'gdansk-lufthavn-gdynia',
+    cookies: 'cookiepolitik',
+    privacy: 'privatlivspolitik',
+  },
+};
+
+const getLocaleFromPath = (urlPath) => {
+  const [, first] = urlPath.split('/');
+  return locales.includes(first) ? first : null;
+};
+
+const getRouteKeyFromSlug = (locale, slug) => {
+  const entries = Object.entries(routeSlugs[locale] || {});
+  const match = entries.find(([, value]) => value === slug);
+  return match ? match[0] : null;
+};
+
+const buildLocalizedUrl = (locale, routeKey) => {
+  const base = `https://taxiairportgdansk.com/${locale}`;
+  if (!routeKey) {
+    return `${base}/`;
+  }
+  return `${base}/${routeSlugs[locale][routeKey]}`;
+};
+
+const buildHeadLinks = (urlPath) => {
+  const locale = getLocaleFromPath(urlPath);
+  if (!locale) {
+    return '';
+  }
+  const pathParts = urlPath.replace(/\/$/, '').split('/').filter(Boolean);
+  const slug = pathParts[1] ?? '';
+  const routeKey = slug ? getRouteKeyFromSlug(locale, slug) : null;
+  if (slug && !routeKey) {
+    return '';
+  }
+  const canonical = buildLocalizedUrl(locale, routeKey);
+  const alternates = locales
+    .map((lang) => `<link rel="alternate" hreflang="${lang}" href="${buildLocalizedUrl(lang, routeKey)}">`)
+    .join('');
+  const xDefault = `<link rel="alternate" hreflang="x-default" href="${buildLocalizedUrl('en', routeKey)}">`;
+  return `<link rel="canonical" href="${canonical}">${alternates}${xDefault}`;
+};
+
 const serveFile = async (res, filePath, cacheControl) => {
   try {
     const data = await fs.readFile(filePath);
@@ -88,12 +179,14 @@ const server = createServer(async (req, res) => {
 
   try {
     const appHtml = render(urlPath);
+    const headLinks = buildHeadLinks(urlPath);
     const html = template.replace(
       '<div id="root"></div>',
       `<div id="root">${appHtml}</div>`
     );
+    const finalHtml = headLinks ? html.replace('</head>', `${headLinks}</head>`) : html;
     res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end(html);
+    res.end(finalHtml);
   } catch {
     res.writeHead(500);
     res.end('Server error');
