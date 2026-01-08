@@ -27,8 +27,8 @@ export const localeToPath = (locale: Locale) => {
 const baseEn = {
     common: {
       whatsapp: 'WhatsApp',
-      orderOnlineNow: 'Order Online Now',
-      orderNow: 'Order Now',
+      orderOnlineNow: 'Book Online Now',
+      orderNow: 'Book Now',
       close: 'Close',
       noPrepayment: 'No prepayment',
       backToHome: '← Back to home',
@@ -45,7 +45,7 @@ const baseEn = {
       airportSopot: 'Airport ↔ Sopot',
       airportGdynia: 'Airport ↔ Gdynia',
       prices: 'Prices',
-      orderNow: 'ORDER NOW',
+      orderNow: 'BOOK NOW',
       language: 'Language',
     },
     hero: {
@@ -114,7 +114,7 @@ const baseEn = {
       customRouteBody: 'Need a different destination?',
       customRoutePrice: 'Price per kilometer',
       customRoutePriceBody: 'Flexible pricing based on your specific route',
-      requestQuote: 'Request Quote',
+      requestQuote: 'Book now',
       pricesNote: 'Prices include VAT. Additional destinations available on request.',
       routes: {
         airport: 'Airport',
@@ -204,7 +204,7 @@ const baseEn = {
       contactBody: 'For privacy-related requests, contact us at',
     },
     routeLanding: {
-      orderNow: 'Order Online Now',
+      orderNow: 'Book Online Now',
       includedTitle: 'What is included',
       includedList: [
         'Meet & greet at the airport with clear pickup instructions.',
@@ -525,8 +525,8 @@ const translations = {
   pl: {
     common: {
       whatsapp: 'WhatsApp',
-      orderOnlineNow: 'Zamów online teraz',
-      orderNow: 'Zamów teraz',
+      orderOnlineNow: 'Rezerwuj online teraz',
+      orderNow: 'Rezerwuj',
       close: 'Zamknij',
       noPrepayment: 'Bez przedpłaty',
       backToHome: '← Wróć na stronę główną',
@@ -543,7 +543,7 @@ const translations = {
       airportSopot: 'Lotnisko ↔ Sopot',
       airportGdynia: 'Lotnisko ↔ Gdynia',
       prices: 'Cennik',
-      orderNow: 'ZAMÓW TERAZ',
+      orderNow: 'REZERWUJ',
       language: 'Język',
     },
     hero: {
@@ -612,7 +612,7 @@ const translations = {
       customRouteBody: 'Inny cel podróży?',
       customRoutePrice: 'Cena za kilometr',
       customRoutePriceBody: 'Elastyczna wycena na podstawie Twojej trasy',
-      requestQuote: 'Poproś o wycenę',
+      requestQuote: 'Rezerwuj',
       pricesNote: 'Ceny zawierają VAT. Dodatkowe destynacje dostępne na zapytanie.',
       routes: {
         airport: 'Lotnisko',
@@ -702,7 +702,7 @@ const translations = {
       contactBody: 'W sprawach prywatności skontaktuj się z nami pod adresem',
     },
     routeLanding: {
-      orderNow: 'Zamów online teraz',
+      orderNow: 'Rezerwuj online teraz',
       includedTitle: 'Co obejmuje usługa',
       includedList: [
         'Powitanie na lotnisku i jasne instrukcje odbioru.',
@@ -1020,8 +1020,8 @@ const translations = {
   de: {
     common: {
       whatsapp: 'WhatsApp',
-      orderOnlineNow: 'Jetzt online bestellen',
-      orderNow: 'Jetzt bestellen',
+      orderOnlineNow: 'Jetzt online reservieren',
+      orderNow: 'Jetzt reservieren',
       close: 'Schließen',
       noPrepayment: 'Keine Vorauszahlung',
       backToHome: '← Zurück zur Startseite',
@@ -1038,7 +1038,7 @@ const translations = {
       airportSopot: 'Flughafen ↔ Sopot',
       airportGdynia: 'Flughafen ↔ Gdynia',
       prices: 'Preise',
-      orderNow: 'JETZT BESTELLEN',
+      orderNow: 'JETZT RESERVIEREN',
       language: 'Sprache',
     },
     hero: {
@@ -1107,7 +1107,7 @@ const translations = {
       customRouteBody: 'Brauchen Sie ein anderes Ziel?',
       customRoutePrice: 'Preis pro Kilometer',
       customRoutePriceBody: 'Flexible Preise je nach Strecke',
-      requestQuote: 'Angebot anfordern',
+      requestQuote: 'Jetzt reservieren',
       pricesNote: 'Preise inkl. MwSt. Weitere Ziele auf Anfrage.',
       routes: {
         airport: 'Flughafen',
@@ -1197,7 +1197,7 @@ const translations = {
       contactBody: 'Für Datenschutzanfragen kontaktieren Sie uns unter',
     },
     routeLanding: {
-      orderNow: 'Jetzt online bestellen',
+      orderNow: 'Jetzt online reservieren',
       includedTitle: 'Was ist enthalten',
       includedList: [
         'Meet & Greet am Flughafen mit klaren Abholhinweisen.',
@@ -1515,8 +1515,8 @@ const translations = {
   fi: {
     common: {
       whatsapp: 'WhatsApp',
-      orderOnlineNow: 'Tilaa verkossa nyt',
-      orderNow: 'Tilaa nyt',
+      orderOnlineNow: 'Varaa verkossa nyt',
+      orderNow: 'Varaa nyt',
       close: 'Sulje',
       noPrepayment: 'Ei ennakkomaksua',
       backToHome: '← Takaisin etusivulle',
@@ -1533,7 +1533,7 @@ const translations = {
       airportSopot: 'Lentokenttä ↔ Sopot',
       airportGdynia: 'Lentokenttä ↔ Gdynia',
       prices: 'Hinnat',
-      orderNow: 'TILAA NYT',
+      orderNow: 'VARAA NYT',
       language: 'Kieli',
     },
     hero: {
@@ -1602,7 +1602,7 @@ const translations = {
       customRouteBody: 'Tarvitsetko toisen kohteen?',
       customRoutePrice: 'Hinta per kilometri',
       customRoutePriceBody: 'Joustava hinnoittelu reitin mukaan',
-      requestQuote: 'Pyydä tarjous',
+      requestQuote: 'Varaa nyt',
       pricesNote: 'Hinnat sisältävät ALV:n. Lisäkohteet pyynnöstä.',
       routes: {
         airport: 'Lentokenttä',
@@ -1692,7 +1692,7 @@ const translations = {
       contactBody: 'Tietosuojaan liittyvissä pyynnöissä ota yhteyttä',
     },
     routeLanding: {
-      orderNow: 'Tilaa verkossa nyt',
+      orderNow: 'Varaa verkossa nyt',
       includedTitle: 'Mitä sisältyy',
       includedList: [
         'Meet & greet lentokentällä selkeillä nouto-ohjeilla.',
@@ -2010,8 +2010,8 @@ const translations = {
   no: {
     common: {
       whatsapp: 'WhatsApp',
-      orderOnlineNow: 'Bestill online nå',
-      orderNow: 'Bestill nå',
+      orderOnlineNow: 'Reserver online nå',
+      orderNow: 'Reserver nå',
       close: 'Lukk',
       noPrepayment: 'Ingen forhåndsbetaling',
       backToHome: '← Tilbake til forsiden',
@@ -2028,7 +2028,7 @@ const translations = {
       airportSopot: 'Flyplass ↔ Sopot',
       airportGdynia: 'Flyplass ↔ Gdynia',
       prices: 'Priser',
-      orderNow: 'BESTILL NÅ',
+      orderNow: 'RESERVER NÅ',
       language: 'Språk',
     },
     hero: {
@@ -2097,7 +2097,7 @@ const translations = {
       customRouteBody: 'Trenger du et annet reisemål?',
       customRoutePrice: 'Pris per kilometer',
       customRoutePriceBody: 'Fleksible priser basert på ruten',
-      requestQuote: 'Be om tilbud',
+      requestQuote: 'Bestill nå',
       pricesNote: 'Prisene inkluderer MVA. Flere destinasjoner på forespørsel.',
       routes: {
         airport: 'Flyplass',
@@ -2187,7 +2187,7 @@ const translations = {
       contactBody: 'For personvernhenvendelser, kontakt oss på',
     },
     routeLanding: {
-      orderNow: 'Bestill online nå',
+      orderNow: 'Reserver online nå',
       includedTitle: 'Dette er inkludert',
       includedList: [
         'Meet & greet på flyplassen med tydelige instrukser.',
@@ -2505,8 +2505,8 @@ const translations = {
   sv: {
     common: {
       whatsapp: 'WhatsApp',
-      orderOnlineNow: 'Beställ online nu',
-      orderNow: 'Beställ nu',
+      orderOnlineNow: 'Boka online nu',
+      orderNow: 'Boka nu',
       close: 'Stäng',
       noPrepayment: 'Ingen förskottsbetalning',
       backToHome: '← Tillbaka till startsidan',
@@ -2523,7 +2523,7 @@ const translations = {
       airportSopot: 'Flygplats ↔ Sopot',
       airportGdynia: 'Flygplats ↔ Gdynia',
       prices: 'Priser',
-      orderNow: 'BESTÄLL NU',
+      orderNow: 'BOKA NU',
       language: 'Språk',
     },
     hero: {
@@ -2592,7 +2592,7 @@ const translations = {
       customRouteBody: 'Behöver du en annan destination?',
       customRoutePrice: 'Pris per kilometer',
       customRoutePriceBody: 'Flexibel prissättning baserat på din rutt',
-      requestQuote: 'Begär offert',
+      requestQuote: 'Boka nu',
       pricesNote: 'Priserna inkluderar moms. Fler destinationer på begäran.',
       routes: {
         airport: 'Flygplats',
@@ -2682,7 +2682,7 @@ const translations = {
       contactBody: 'För integritetsfrågor, kontakta oss på',
     },
     routeLanding: {
-      orderNow: 'Beställ online nu',
+      orderNow: 'Boka online nu',
       includedTitle: 'Detta ingår',
       includedList: [
         'Meet & greet på flygplatsen med tydliga upphämtningsinstruktioner.',
@@ -3000,8 +3000,8 @@ const translations = {
   da: {
     common: {
       whatsapp: 'WhatsApp',
-      orderOnlineNow: 'Bestil online nu',
-      orderNow: 'Bestil nu',
+      orderOnlineNow: 'Reserver online nu',
+      orderNow: 'Book nu',
       close: 'Luk',
       noPrepayment: 'Ingen forudbetaling',
       backToHome: '← Tilbage til forsiden',
@@ -3018,7 +3018,7 @@ const translations = {
       airportSopot: 'Lufthavn ↔ Sopot',
       airportGdynia: 'Lufthavn ↔ Gdynia',
       prices: 'Priser',
-      orderNow: 'BESTIL NU',
+      orderNow: 'BOOK NU',
       language: 'Sprog',
     },
     hero: {
@@ -3087,7 +3087,7 @@ const translations = {
       customRouteBody: 'Har du brug for en anden destination?',
       customRoutePrice: 'Pris pr. kilometer',
       customRoutePriceBody: 'Fleksible priser baseret på ruten',
-      requestQuote: 'Anmod om tilbud',
+      requestQuote: 'Book nu',
       pricesNote: 'Priserne inkluderer moms. Flere destinationer efter aftale.',
       routes: {
         airport: 'Lufthavn',
@@ -3177,7 +3177,7 @@ const translations = {
       contactBody: 'For henvendelser om privatliv, kontakt os på',
     },
     routeLanding: {
-      orderNow: 'Bestil online nu',
+      orderNow: 'Book online nu',
       includedTitle: 'Hvad er inkluderet',
       includedList: [
         'Meet & greet i lufthavnen med klare afhentningsinstruktioner.',

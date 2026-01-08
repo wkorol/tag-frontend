@@ -2031,3 +2031,124 @@ html {
     background-position: 200% 50%;
   }
 }
+
+/* Mobile-only sizing for pricing and vehicle cards */
+@media (max-width: 39.9375rem) {
+  .pricing-grid-mobile {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .pricing-card-mobile {
+    padding: 0.75rem;
+  }
+
+  .pricing-rate-box {
+    padding: 0.5rem;
+  }
+
+  .pricing-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .pricing-rate-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .pricing-route {
+    font-size: 0.75rem;
+  }
+
+  .pricing-rate-label {
+    font-size: 0.7rem;
+  }
+
+  .pricing-rate-value {
+    font-size: 0.75rem;
+  }
+
+  .pricing-sunday {
+    font-size: 0.6rem;
+  }
+
+  .pricing-custom-title {
+    font-size: 0.85rem;
+  }
+
+  .pricing-custom-body {
+    font-size: 0.75rem;
+  }
+
+  .pricing-custom-price {
+    font-size: 0.7rem;
+  }
+
+  .pricing-custom-note {
+    font-size: 0.65rem;
+  }
+
+  .pricing-cta {
+    font-size: 0.75rem;
+    padding: 0.5rem 0;
+  }
+
+  .eur-row {
+    font-size: 0.6rem;
+    gap: 0.25rem;
+  }
+
+  .vehicle-grid-mobile {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .vehicle-card-mobile {
+    padding: 0.75rem;
+  }
+
+  .vehicle-card__icon {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .vehicle-card__icon-svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .vehicle-card__title {
+    font-size: 0.8rem;
+  }
+
+  .vehicle-card__meta,
+  .vehicle-card__desc,
+  .vehicle-card__prices {
+    font-size: 0.75rem;
+  }
+
+  .vehicle-card__prices-label,
+  .vehicle-card__prices-list {
+    font-size: 0.75rem;
+  }
+
+  .vehicle-card__cta {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .vehicle-eur-row {
+    font-size: 0.6rem;
+    gap: 0.25rem;
+  }
+
+  .vehicle-price-row {
+    gap: 1rem;
+    padding-top: 0.4rem;
+  }
+
+  .vehicle-card__prices-list {
+    line-height: 1.2;
+  }
+}
