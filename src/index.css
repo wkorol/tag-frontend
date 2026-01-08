@@ -2161,6 +2161,10 @@ html {
     padding: 0.5rem 0.75rem;
   }
 
+  .vehicle-card__info {
+    min-height: 4.5rem;
+  }
+
   .vehicle-eur-row {
     font-size: 0.6rem;
     gap: 0.25rem;
