@@ -2153,6 +2153,10 @@ html {
     line-height: 1.2;
   }
 
+  .vehicle-card__prices-list .text-blue-900 {
+    white-space: nowrap;
+  }
+
   .live-badge {
     display: none;
   }
