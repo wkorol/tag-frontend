@@ -7,7 +7,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = __dirname;
 const clientDir = path.join(rootDir, 'build');
-const ssrEntry = path.join(rootDir, 'build-ssr', 'entry-server.js');
+const ssrEntryCandidates = [
+  path.join(rootDir, 'build-ssr', 'entry-server.js'),
+  path.join(rootDir, 'build-ssr', 'entry-server.mjs'),
+];
 
 const port = Number(process.env.PORT || 3000);
 
@@ -28,7 +31,20 @@ const contentTypes = {
 
 const templatePath = path.join(clientDir, 'index.html');
 let template = await fs.readFile(templatePath, 'utf-8');
-const { render } = await import(pathToFileURL(ssrEntry).href);
+let render;
+for (const candidate of ssrEntryCandidates) {
+  try {
+    const module = await import(pathToFileURL(candidate).href);
+    render = module.render;
+    break;
+  } catch {
+    // try next candidate
+  }
+}
+
+if (typeof render !== 'function') {
+  throw new Error('SSR entry module not found.');
+}
 
 const isFileRequest = (urlPath) => urlPath.includes('.') || urlPath.startsWith('/assets/');
 
