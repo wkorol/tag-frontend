@@ -15,8 +15,8 @@ export function Hero() {
   return (
     <div id="hero" className="relative overflow-hidden bg-gradient-to-br from-blue-900 to-blue-700 text-white">
       <img
-        src={`${heroBgBase}&w=1920`}
-        srcSet={`${heroBgBase}&w=960 960w, ${heroBgBase}&w=1440 1440w, ${heroBgBase}&w=1920 1920w`}
+        src={`${heroBgBase}&w=1280`}
+        srcSet={`${heroBgBase}&w=640 640w, ${heroBgBase}&w=960 960w, ${heroBgBase}&w=1280 1280w`}
         sizes="100vw"
         alt=""
         aria-hidden="true"
@@ -47,11 +47,12 @@ export function Hero() {
                   alt={t.hero.logoAlt}
                   className="h-auto"
                   style={{ width: '31rem' }}
-                  width={1024}
-                  height={1024}
+                  width={768}
+                  height={768}
                   decoding="async"
                   loading="eager"
                   fetchpriority="high"
+                  sizes="(max-width: 640px) 80vw, 31rem"
                 />
               </picture>
             </div>
