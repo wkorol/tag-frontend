@@ -8,7 +8,7 @@ interface VehicleTypeSelectorProps {
 }
 
 export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const eurRate = useEurRate();
   const eurText = (pln: number) => formatEur(pln, eurRate);
 
@@ -36,7 +36,7 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
             
             <h3 className="vehicle-card__title text-gray-900 text-center mb-3 text-base">{t.vehicle.standardTitle}</h3>
             
-            <div className="vehicle-card__info space-y-3 mb-6">
+            <div className={`vehicle-card__info space-y-3 mb-6 ${locale === 'pl' ? 'vehicle-card__info--pl' : ''}`}>
               <div className="vehicle-card__meta flex items-center justify-center gap-2 text-gray-700 text-base">
                 <Users className="vehicle-card__meta-icon w-5 h-5 text-blue-600" />
                 <span className="vehicle-card__text">{t.vehicle.standardPassengers}</span>
@@ -112,7 +112,7 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
             
             <h3 className="vehicle-card__title text-gray-900 text-center mb-3 text-base">{t.vehicle.busTitle}</h3>
             
-            <div className="vehicle-card__info space-y-3 mb-6">
+            <div className={`vehicle-card__info space-y-3 mb-6 ${locale === 'pl' ? 'vehicle-card__info--pl' : ''}`}>
               <div className="vehicle-card__meta flex items-center justify-center gap-2 text-gray-700 text-base">
                 <Users className="vehicle-card__meta-icon w-5 h-5 text-blue-600" />
                 <span className="vehicle-card__text">{t.vehicle.busPassengers}</span>
