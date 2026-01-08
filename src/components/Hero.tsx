@@ -1,6 +1,8 @@
 import { MessageCircle, Mail, Bus, Car, Clock, BadgeCheck, Plane, CalendarCheck2, BadgeDollarSign, MapPin, Headphones } from 'lucide-react';
 import logo from 'figma:asset/9bf12920b9f211a57ac7e4ff94480c867662dafa.png';
 import logoAvif from '../assets/7a4ddc58-4604-4ddd-9d85-e57bfd26feba.avif';
+import logoAvif540 from '../assets/540.avif';
+import logoAvif640 from '../assets/640.avif';
 import { trackContactClick, trackCtaClick } from '../lib/tracking';
 import { useI18n, localeToPath } from '../lib/i18n';
 import { requestScrollTo } from '../lib/scroll';
@@ -41,7 +43,11 @@ export function Hero() {
             </div>
             <div className="hero-logo flex justify-center mb-2">
               <picture>
-                <source srcSet={logoAvif} type="image/avif" />
+                <source
+                  srcSet={`${logoAvif540} 540w, ${logoAvif640} 640w, ${logoAvif} 768w`}
+                  type="image/avif"
+                  sizes="(max-width: 640px) 80vw, 31rem"
+                />
                 <img
                   src={logo}
                   alt={t.hero.logoAlt}
