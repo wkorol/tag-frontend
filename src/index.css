@@ -2162,11 +2162,11 @@ html {
   }
 
   .vehicle-card__info {
-    min-height: 6.5rem;
+    min-height: 8rem;
   }
 
-  .vehicle-card__info--pl {
-    min-height: 8rem;
+  .vehicle-card__prices {
+    margin-top: -0.25rem;
   }
 
   .vehicle-eur-row {
