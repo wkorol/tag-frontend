@@ -35,7 +35,6 @@
       <meta name="twitter:image" content="https://taxiairportgdansk.com/og-image.png" />
 
       <!-- Google tag (gtag.js) -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17848598074"></script>
       <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -45,8 +44,34 @@
           functionality_storage: 'granted',
           security_storage: 'granted'
         });
-        gtag('js', new Date());
-        gtag('config', 'AW-17848598074');
+
+        (function() {
+          var gtagLoaded = false;
+          var loadGtag = function() {
+            if (gtagLoaded) return;
+            gtagLoaded = true;
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17848598074';
+            script.onload = function() {
+              gtag('js', new Date());
+              gtag('config', 'AW-17848598074');
+            };
+            document.head.appendChild(script);
+          };
+
+          var onFirstInteraction = function() {
+            loadGtag();
+            window.removeEventListener('scroll', onFirstInteraction);
+            window.removeEventListener('click', onFirstInteraction);
+            window.removeEventListener('touchstart', onFirstInteraction);
+          };
+
+          window.addEventListener('scroll', onFirstInteraction, { once: true, passive: true });
+          window.addEventListener('click', onFirstInteraction, { once: true });
+          window.addEventListener('touchstart', onFirstInteraction, { once: true, passive: true });
+          window.setTimeout(loadGtag, 5000);
+        })();
       </script>
       <script type="application/ld+json">
         {

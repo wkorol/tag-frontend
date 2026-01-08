@@ -1,10 +1,60 @@
 
-  import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
   import react from '@vitejs/plugin-react-swc';
   import path from 'path';
 
-  export default defineConfig({
-    plugins: [react()],
+const preloadCssPlugin = (): Plugin => ({
+  name: 'preload-css-non-blocking',
+  apply: 'build',
+  enforce: 'post',
+  transformIndexHtml(html, ctx) {
+    const bundle = ctx?.bundle;
+    if (!bundle) {
+      return html;
+    }
+    const cssFiles = Object.values(bundle)
+      .filter((asset) => asset.type === 'asset' && asset.fileName.endsWith('.css'))
+      .map((asset) => asset.fileName);
+    if (cssFiles.length === 0) {
+      return html;
+    }
+
+    let nextHtml = html;
+    for (const fileName of cssFiles) {
+      const escaped = fileName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const stylesheetRegex = new RegExp(
+        `<link\\s+rel="stylesheet"[^>]*href="/${escaped}"[^>]*>`,
+        'g',
+      );
+      nextHtml = nextHtml.replace(stylesheetRegex, '');
+    }
+
+    const primaryCss = `/${cssFiles[0]}`;
+    return {
+      html: nextHtml,
+      tags: [
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'preload',
+            as: 'style',
+            href: primaryCss,
+            onload: "this.onload=null;this.rel='stylesheet'",
+          },
+          injectTo: 'head',
+        },
+        {
+          tag: 'noscript',
+          children: `<link rel="stylesheet" href="${primaryCss}">`,
+          injectTo: 'head',
+        },
+      ],
+    };
+  },
+});
+
+export default defineConfig({
+  plugins: [react(), preloadCssPlugin()],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
