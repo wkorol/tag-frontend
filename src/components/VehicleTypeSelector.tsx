@@ -26,7 +26,7 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
           {/* Standard Car */}
           <button
             onClick={() => onSelectType('standard')}
-            className="vehicle-card-mobile group bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 border-3 border-gray-300 hover:border-blue-500 hover:shadow-xl transition-all text-left"
+            className="vehicle-card-mobile group bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 border-3 border-gray-300 hover:border-blue-500 hover:shadow-xl transition-all text-left flex h-full flex-col"
           >
             <div className="flex justify-center mb-6">
               <div className="vehicle-card__icon w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-colors">
@@ -94,7 +94,7 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
               </div>
             </div>
 
-            <div className="vehicle-card__cta bg-blue-600 text-white py-3 px-6 rounded-lg text-center group-hover:bg-blue-700 transition-colors text-sm">
+            <div className="vehicle-card__cta bg-blue-600 text-white py-3 px-6 rounded-lg text-center group-hover:bg-blue-700 transition-colors text-sm mt-auto">
               {t.vehicle.selectStandard}
             </div>
           </button>
@@ -102,7 +102,7 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
           {/* Bus */}
           <button
             onClick={() => onSelectType('bus')}
-            className="vehicle-card-mobile group bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border-3 border-blue-300 hover:border-blue-500 hover:shadow-xl transition-all text-left"
+            className="vehicle-card-mobile group bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border-3 border-blue-300 hover:border-blue-500 hover:shadow-xl transition-all text-left flex h-full flex-col"
           >
             <div className="flex justify-center mb-6">
               <div className="vehicle-card__icon w-24 h-24 bg-blue-200 rounded-full flex items-center justify-center group-hover:bg-blue-300 transition-colors">
@@ -170,7 +170,7 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
               </div>
             </div>
 
-            <div className="vehicle-card__cta bg-blue-600 text-white py-3 px-6 rounded-lg text-center group-hover:bg-blue-700 transition-colors text-sm">
+            <div className="vehicle-card__cta bg-blue-600 text-white py-3 px-6 rounded-lg text-center group-hover:bg-blue-700 transition-colors text-sm mt-auto">
               {t.vehicle.selectBus}
             </div>
           </button>
