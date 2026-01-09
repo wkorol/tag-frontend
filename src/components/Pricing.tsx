@@ -40,22 +40,22 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
     {
       from: t.pricing.routes.airport,
       to: t.pricing.routes.gdansk,
-      priceDay: 120,
-      priceNight: 150,
+      priceDay: 150,
+      priceNight: 180,
       type: 'bus' as const,
     },
     {
       from: t.pricing.routes.airport,
       to: 'Sopot',
-      priceDay: 140,
-      priceNight: 170,
+      priceDay: 170,
+      priceNight: 200,
       type: 'bus' as const,
     },
     {
       from: t.pricing.routes.airport,
       to: t.pricing.routes.gdynia,
-      priceDay: 250,
-      priceNight: 300,
+      priceDay: 280,
+      priceNight: 330,
       type: 'bus' as const,
     },
   ];
@@ -89,7 +89,7 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
           </p>
         </div>
 
-        <div className="pricing-grid-mobile grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="pricing-grid-mobile grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
           {displayRoutes.map((route, index) => (
             <div 
               key={index}
@@ -117,7 +117,7 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
                   <div className="text-right">
                     <span className="pricing-rate-value text-blue-900 font-semibold text-sm">{route.priceDay} PLN</span>
                     {eurText(route.priceDay) && (
-                      <div className="eur-row flex items-center justify-end gap-2 text-gray-500 text-xs">
+                      <div className="eur-row flex items-center justify-end gap-2 text-gray-500 text-xs whitespace-nowrap">
                         <span className="eur-text">{eurText(route.priceDay)}</span>
                         <span className="live-badge">
                           {t.common.actualBadge}
@@ -136,7 +136,7 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
                     <div className="text-right">
                       <span className="pricing-rate-value font-semibold text-sm">{route.priceNight} PLN</span>
                       {eurText(route.priceNight) && (
-                        <div className="eur-row flex items-center justify-end gap-2 text-blue-200 text-xs">
+                        <div className="eur-row flex items-center justify-end gap-2 text-blue-200 text-xs whitespace-nowrap">
                           <span className="eur-text">{eurText(route.priceNight)}</span>
                           <span className="live-badge">
                             {t.common.actualBadge}
@@ -161,7 +161,7 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
           ))}
           
           {/* Custom Route Card */}
-          <div className="pricing-card-mobile pricing-card--custom bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border-2 border-purple-300 hover:border-purple-500 transition-all hover:shadow-lg">
+          <div className="pricing-card-mobile pricing-card--custom bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border-2 border-purple-300 hover:border-purple-500 transition-all hover:shadow-lg h-full flex flex-col">
             <div className="flex items-start gap-3 mb-4">
               <Calculator className="pricing-icon w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
               <div>
@@ -170,7 +170,7 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
               </div>
             </div>
 
-            <div className="space-y-4 mt-6">
+            <div className="space-y-4 mt-6 flex-1 flex flex-col">
               <div className="pricing-rate-box bg-white rounded-lg p-4">
                 <div className="pricing-custom-price text-gray-700 text-sm mb-2">{t.pricing.customRoutePrice}</div>
                 <div className="pricing-custom-note text-gray-600 text-xs">
@@ -180,7 +180,7 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
 
               <button
                 onClick={onRequestQuote}
-                className="pricing-cta block w-full text-center bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors text-sm"
+                className="pricing-cta mt-auto block w-full text-center bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors text-sm"
               >
                 {t.pricing.requestQuote}
               </button>

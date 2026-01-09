@@ -77,7 +77,7 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                   <div className="vehicle-price-value text-right">
                     <span className="text-blue-900">{t.common.priceFrom} 100 PLN</span>
                     {eurText(100) && (
-                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs">
+                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs whitespace-nowrap">
                         <span className="eur-text">{eurText(100)}</span>
                         <span className="live-badge">
                           {t.common.actualBadge}
@@ -91,7 +91,7 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                   <div className="vehicle-price-value text-right">
                     <span className="text-blue-900">{t.common.priceFrom} 120 PLN</span>
                     {eurText(120) && (
-                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs">
+                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs whitespace-nowrap">
                         <span className="eur-text">{eurText(120)}</span>
                         <span className="live-badge">
                           {t.common.actualBadge}
@@ -105,7 +105,7 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                   <div className="vehicle-price-value text-right">
                     <span className="text-blue-900">{t.common.priceFrom} 200 PLN</span>
                     {eurText(200) && (
-                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs">
+                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs whitespace-nowrap">
                         <span className="eur-text">{eurText(200)}</span>
                         <span className="live-badge">
                           {t.common.actualBadge}
@@ -151,10 +151,10 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                 <div className="vehicle-price-row flex justify-between items-start gap-2 py-2">
                   <span className="vehicle-price-label text-gray-700">{t.vehicle.airportGdansk}</span>
                   <div className="vehicle-price-value text-right">
-                    <span className="text-blue-900">{t.common.priceFrom} 120 PLN</span>
-                    {eurText(120) && (
-                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs">
-                        <span className="eur-text">{eurText(120)}</span>
+                    <span className="text-blue-900">{t.common.priceFrom} 150 PLN</span>
+                    {eurText(150) && (
+                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs whitespace-nowrap">
+                        <span className="eur-text">{eurText(150)}</span>
                         <span className="live-badge">
                           {t.common.actualBadge}
                         </span>
@@ -165,10 +165,10 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                 <div className="vehicle-price-row flex justify-between items-start gap-2 py-2">
                   <span className="vehicle-price-label text-gray-700">{t.vehicle.airportSopot}</span>
                   <div className="vehicle-price-value text-right">
-                    <span className="text-blue-900">{t.common.priceFrom} 140 PLN</span>
-                    {eurText(140) && (
-                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs">
-                        <span className="eur-text">{eurText(140)}</span>
+                    <span className="text-blue-900">{t.common.priceFrom} 170 PLN</span>
+                    {eurText(170) && (
+                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs whitespace-nowrap">
+                        <span className="eur-text">{eurText(170)}</span>
                         <span className="live-badge">
                           {t.common.actualBadge}
                         </span>
@@ -179,10 +179,10 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
                 <div className="vehicle-price-row flex justify-between items-start gap-2 py-2">
                   <span className="vehicle-price-label text-gray-700">{t.vehicle.airportGdynia}</span>
                   <div className="vehicle-price-value text-right">
-                    <span className="text-blue-900">{t.common.priceFrom} 250 PLN</span>
-                    {eurText(250) && (
-                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs">
-                        <span className="eur-text">{eurText(250)}</span>
+                    <span className="text-blue-900">{t.common.priceFrom} 280 PLN</span>
+                    {eurText(280) && (
+                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs whitespace-nowrap">
+                        <span className="eur-text">{eurText(280)}</span>
                         <span className="live-badge">
                           {t.common.actualBadge}
                         </span>
