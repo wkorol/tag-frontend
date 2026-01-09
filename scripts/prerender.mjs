@@ -1,6 +1,7 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { buildSeoTags, getHtmlLang, locales, routeSlugs } from '../seo-data.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,12 +12,12 @@ const ssrEntryCandidates = [
   path.join(rootDir, 'build-ssr', 'entry-server.mjs'),
 ];
 
-const locales = ['en', 'pl', 'de', 'fi', 'no', 'sv', 'da'];
 const routes = [
   '/',
-  '/cookies',
-  '/privacy',
   ...locales.map((locale) => `/${locale}`),
+  ...locales.flatMap((locale) =>
+    Object.values(routeSlugs[locale]).map((slug) => `/${locale}/${slug}`)
+  ),
 ];
 
 let render;
@@ -41,6 +42,14 @@ for (const route of routes) {
     '<div id="root"></div>',
     `<div id="root">${appHtml}</div>`
   );
+  const withSeo = html.replace(
+    /<!-- SEO:BEGIN -->[\s\S]*?<!-- SEO:END -->/,
+    `<!-- SEO:BEGIN -->${buildSeoTags(route)}<!-- SEO:END -->`
+  );
+  const withLang = withSeo.replace(
+    /<html lang="[^"]*">/,
+    `<html lang="${getHtmlLang(route)}">`
+  );
 
   const outputPath =
     route === '/'
@@ -48,5 +57,5 @@ for (const route of routes) {
       : path.join(clientDir, route.slice(1), 'index.html');
 
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
-  await fs.writeFile(outputPath, html, 'utf-8');
+  await fs.writeFile(outputPath, withLang, 'utf-8');
 }

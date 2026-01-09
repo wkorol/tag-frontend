@@ -18,6 +18,7 @@ RUN npm ci --omit=dev
 COPY --from=builder /app/build /app/build
 COPY --from=builder /app/build-ssr /app/build-ssr
 COPY --from=builder /app/server.mjs /app/server.mjs
+COPY --from=builder /app/seo-data.mjs /app/seo-data.mjs
 
 ENV NODE_ENV=production
 ENV PORT=3000
