@@ -60,6 +60,8 @@ export const routeSlugs = {
 
 const metaByLocale = {
   en: {
+    noscript:
+      'Taxi Airport Gdańsk provides 24/7 airport transfers across Gdańsk, Sopot, and Gdynia. Fixed pricing, professional drivers, and fast confirmation. Contact: booking@taxiairportgdansk.com.',
     home: {
       title: 'Taxi Gdansk Airport | Taxi Airport Gdańsk Transfers 24/7',
       description:
@@ -90,6 +92,8 @@ const metaByLocale = {
     },
   },
   pl: {
+    noscript:
+      'Taxi Airport Gdańsk zapewnia całodobowe transfery lotniskowe w Gdańsku, Sopocie i Gdyni. Stałe ceny, profesjonalni kierowcy i szybkie potwierdzenie. Kontakt: booking@taxiairportgdansk.com.',
     home: {
       title: 'Taxi Gdańsk Lotnisko | Taxi Airport Gdańsk Transfery 24/7',
       description:
@@ -120,6 +124,8 @@ const metaByLocale = {
     },
   },
   de: {
+    noscript:
+      'Taxi Airport Gdańsk bietet 24/7 Flughafentransfers in Gdańsk, Sopot und Gdynia. Festpreise, professionelle Fahrer und schnelle Bestätigung. Kontakt: booking@taxiairportgdansk.com.',
     home: {
       title: 'Gdańsk Flughafen Taxi | Taxi Airport Gdańsk Transfers 24/7',
       description:
@@ -150,6 +156,8 @@ const metaByLocale = {
     },
   },
   fi: {
+    noscript:
+      'Taxi Airport Gdańsk tarjoaa 24/7 lentokenttäkuljetuksia Gdańskiin, Sopotiin ja Gdyniaan. Kiinteät hinnat, ammattikuljettajat ja nopea vahvistus. Yhteys: booking@taxiairportgdansk.com.',
     home: {
       title: 'Gdańsk lentokenttä taksi | Taxi Airport Gdańsk 24/7',
       description:
@@ -180,6 +188,8 @@ const metaByLocale = {
     },
   },
   no: {
+    noscript:
+      'Taxi Airport Gdańsk tilbyr 24/7 flyplasstransport i Gdańsk, Sopot og Gdynia. Faste priser, profesjonelle sjåfører og rask bekreftelse. Kontakt: booking@taxiairportgdansk.com.',
     home: {
       title: 'Gdańsk flyplass taxi | Taxi Airport Gdańsk 24/7',
       description:
@@ -210,6 +220,8 @@ const metaByLocale = {
     },
   },
   sv: {
+    noscript:
+      'Taxi Airport Gdańsk erbjuder flygplatstransfer 24/7 i Gdańsk, Sopot och Gdynia. Fasta priser, professionella förare och snabb bekräftelse. Kontakt: booking@taxiairportgdansk.com.',
     home: {
       title: 'Gdańsk flygplats taxi | Taxi Airport Gdańsk 24/7',
       description:
@@ -240,6 +252,8 @@ const metaByLocale = {
     },
   },
   da: {
+    noscript:
+      'Taxi Airport Gdańsk tilbyder lufthavnstransfer 24/7 i Gdańsk, Sopot og Gdynia. Faste priser, professionelle chauffører og hurtig bekræftelse. Kontakt: booking@taxiairportgdansk.com.',
     home: {
       title: 'Gdańsk lufthavn taxa | Taxi Airport Gdańsk 24/7',
       description:
@@ -332,4 +346,9 @@ export const buildSeoTags = (urlPath) => {
     alternates,
     xDefault,
   ].join('');
+};
+
+export const buildNoscript = (urlPath) => {
+  const locale = getLocaleFromPath(urlPath) ?? 'en';
+  return metaByLocale[locale]?.noscript ?? metaByLocale.en.noscript;
 };

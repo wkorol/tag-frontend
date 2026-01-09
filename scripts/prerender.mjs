@@ -1,7 +1,7 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { buildSeoTags, getHtmlLang, locales, routeSlugs } from '../seo-data.mjs';
+import { buildNoscript, buildSeoTags, getHtmlLang, locales, routeSlugs } from '../seo-data.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,7 +46,11 @@ for (const route of routes) {
     /<!-- SEO:BEGIN -->[\s\S]*?<!-- SEO:END -->/,
     `<!-- SEO:BEGIN -->${buildSeoTags(route)}<!-- SEO:END -->`
   );
-  const withLang = withSeo.replace(
+  const withNoscript = withSeo.replace(
+    /<!-- NOSCRIPT:BEGIN -->[\s\S]*?<!-- NOSCRIPT:END -->/,
+    `<!-- NOSCRIPT:BEGIN -->${buildNoscript(route)}<!-- NOSCRIPT:END -->`
+  );
+  const withLang = withNoscript.replace(
     /<html lang="[^"]*">/,
     `<html lang="${getHtmlLang(route)}">`
   );

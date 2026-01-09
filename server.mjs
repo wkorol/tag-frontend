@@ -2,7 +2,7 @@ import { createServer } from 'node:http';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { buildSeoTags, getHtmlLang } from './seo-data.mjs';
+import { buildNoscript, buildSeoTags, getHtmlLang } from './seo-data.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -54,6 +54,12 @@ const SEO_BLOCK = /<!-- SEO:BEGIN -->[\s\S]*?<!-- SEO:END -->/;
 const applySeo = (html, urlPath) =>
   html.replace(SEO_BLOCK, `<!-- SEO:BEGIN -->${buildSeoTags(urlPath)}<!-- SEO:END -->`);
 
+const applyNoscript = (html, urlPath) =>
+  html.replace(
+    /<!-- NOSCRIPT:BEGIN -->[\s\S]*?<!-- NOSCRIPT:END -->/,
+    `<!-- NOSCRIPT:BEGIN -->${buildNoscript(urlPath)}<!-- NOSCRIPT:END -->`
+  );
+
 const applyHtmlLang = (html, urlPath) =>
   html.replace(/<html lang="[^"]*">/, `<html lang="${getHtmlLang(urlPath)}">`);
 
@@ -101,7 +107,7 @@ const server = createServer(async (req, res) => {
       '<div id="root"></div>',
       `<div id="root">${appHtml}</div>`
     );
-    const finalHtml = applyHtmlLang(applySeo(html, urlPath), urlPath);
+    const finalHtml = applyHtmlLang(applyNoscript(applySeo(html, urlPath), urlPath), urlPath);
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.end(finalHtml);
   } catch {
