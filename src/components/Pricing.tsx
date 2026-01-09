@@ -1,5 +1,6 @@
 import { Moon, Sun, MapPin, Calculator, ChevronLeft } from 'lucide-react';
-import { useEurRate } from '../lib/useEurRate';
+import { useEffect } from 'react';
+import { preloadEurRate, useEurRate } from '../lib/useEurRate';
 import { formatEur } from '../lib/currency';
 import { useI18n } from '../lib/i18n';
 
@@ -62,6 +63,10 @@ export function Pricing({ vehicleType, onOrderRoute, onRequestQuote, onBack }: P
   const title = vehicleType === 'bus' ? t.pricing.titleBus : t.pricing.titleStandard;
   const eurRate = useEurRate();
   const eurText = (pln: number) => formatEur(pln, eurRate);
+
+  useEffect(() => {
+    preloadEurRate();
+  }, []);
   
   return (
     <section id="vehicle-selection" className="py-16 bg-white">

@@ -6,6 +6,22 @@ let cachedRate: number | null = null;
 let cachedAt = 0;
 let inflight: Promise<number | null> | null = null;
 
+const startFetch = () => {
+  if (cachedRate && Date.now() - cachedAt < CACHE_TTL_MS) {
+    return null;
+  }
+  if (!inflight) {
+    inflight = fetchEurRate().finally(() => {
+      inflight = null;
+    });
+  }
+  return inflight;
+};
+
+export const preloadEurRate = () => {
+  startFetch();
+};
+
 async function fetchEurRate(): Promise<number | null> {
   try {
     const response = await fetch('/api/eur-rate');
@@ -62,20 +78,25 @@ export function useEurRate() {
       return;
     }
     let cancelled = false;
-    const scheduleFetch = () => {
-      if (inflight) {
-        return;
-      }
-      inflight = fetchEurRate();
-      inflight
+    const attach = (promise: Promise<number | null>) => {
+      promise
         .then((value) => {
           if (!cancelled && value) {
             setRate(value);
           }
         })
-        .finally(() => {
-          inflight = null;
-        });
+        .catch(() => null);
+    };
+
+    if (inflight) {
+      attach(inflight);
+    }
+
+    const scheduleFetch = () => {
+      const promise = startFetch();
+      if (promise) {
+        attach(promise);
+      }
     };
 
     const onFirstInteraction = () => {

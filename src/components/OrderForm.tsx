@@ -123,6 +123,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const basePath = localeToPath(locale);
   const [formData, setFormData] = useState({
     pickupType: '',
+    signService: 'self',
     signText: '',
     flightNumber: '',
     passengers: '1',
@@ -162,7 +163,17 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const eurRate = useEurRate();
   const formStartedRef = useRef(false);
   const [submitAttempted, setSubmitAttempted] = useState(false);
-  const eurText = formatEur(currentPrice, eurRate);
+  const signFee = formData.pickupType === 'airport' && formData.signService === 'sign' ? 20 : 0;
+  const totalPrice = currentPrice + signFee;
+  const eurText = formatEur(totalPrice, eurRate);
+  const displayRoute = formData.pickupType === 'address'
+    ? { from: route.to, to: route.from, type: route.type }
+    : route;
+  const signServiceTitle = t.orderForm.signServiceTitle ?? 'Airport pickup options';
+  const signServiceSign = t.orderForm.signServiceSign ?? 'Meet with a name sign';
+  const signServiceFee = t.orderForm.signServiceFee ?? '+20 PLN added to final price';
+  const signServiceSelf = t.orderForm.signServiceSelf ?? 'Find the driver yourself';
+  const signServiceSelfNote = t.orderForm.signServiceSelfNote ?? '';
   const isPhoneValid = !validatePhoneNumber(formData.phone, t.orderForm.validation);
   const isEmailValid = !validateEmail(formData.email, t.orderForm.validation.email);
   const showRateBanner = (message: string) => {
@@ -190,7 +201,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const showValidation = submitAttempted;
   const pickupTypeError = showValidation && !formData.pickupType;
   const pickupAddressError = showValidation && formData.pickupType === 'address' && !formData.address.trim();
-  const signTextError = showValidation && formData.pickupType === 'airport' && !formData.signText.trim();
+  const signTextError = showValidation && formData.pickupType === 'airport' && formData.signService === 'sign' && !formData.signText.trim();
   const flightNumberError = showValidation && formData.pickupType === 'airport' && !formData.flightNumber.trim();
   const dateError = showValidation && !formData.date;
   const timeError = showValidation && !formData.time;
@@ -346,7 +357,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       missingFieldIds.push('pickupType');
     }
     if (formData.pickupType === 'airport') {
-      if (!formData.signText.trim()) {
+      if (formData.signService === 'sign' && !formData.signText.trim()) {
         missingFieldIds.push('signText');
       }
       if (!formData.flightNumber.trim()) {
@@ -392,13 +403,15 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     const apiBaseUrl = getApiBaseUrl();
     const additionalNotes = buildAdditionalNotes({
       pickupType: formData.pickupType as 'airport' | 'address',
+      signService: formData.pickupType === 'airport' ? formData.signService : 'self',
+      signFee,
       signText: formData.signText,
       passengers: formData.passengers,
       largeLuggage: formData.largeLuggage,
       route: {
-        from: route.from,
-        to: route.to,
-        type: route.type,
+        from: displayRoute.from,
+        to: displayRoute.to,
+        type: displayRoute.type,
       },
       notes: formData.description.trim(),
     });
@@ -406,7 +419,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     const payload = {
       carType: route.type === 'bus' ? 1 : 2,
       pickupAddress: formData.pickupType === 'address' ? formData.address : route.from,
-      proposedPrice: String(currentPrice),
+      proposedPrice: String(totalPrice),
       date: formData.date,
       pickupTime: formData.time,
       flightNumber: formData.pickupType === 'airport' ? formData.flightNumber : 'N/A',
@@ -471,6 +484,18 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     });
   };
 
+  const handleSignServiceChange = (value: 'sign' | 'self') => {
+    if (!formStartedRef.current) {
+      formStartedRef.current = true;
+      trackFormStart('order');
+    }
+    setFormData((prev) => ({
+      ...prev,
+      signService: value,
+      signText: value === 'self' ? '' : prev.signText,
+    }));
+  };
+
   if (submitted) {
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -491,7 +516,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
             </div>
             <div className="bg-white rounded-lg p-4 mb-2">
               <p className="text-gray-700">
-                {t.orderForm.totalPrice} <span className="font-bold text-blue-600">{currentPrice} PLN</span>
+                {t.orderForm.totalPrice} <span className="font-bold text-blue-600">{totalPrice} PLN</span>
               </p>
               {eurText && (
                 <div className="mt-1 flex items-center justify-center gap-2 text-gray-500">
@@ -535,7 +560,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
         <div className="p-6 border-b flex items-center justify-between flex-shrink-0">
           <div>
             <h3 className="text-gray-900">{t.orderForm.title}</h3>
-            <p className="text-gray-600 text-sm mt-1">{route.from} ↔ {route.to}</p>
+            <p className="text-gray-600 text-sm mt-1">{displayRoute.from} ↔ {displayRoute.to}</p>
           </div>
           <button 
             onClick={onClose}
@@ -612,7 +637,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                 <div className="flex items-center justify-between">
                   <span className="text-gray-700">{t.orderForm.totalPrice}</span>
                   <div className="text-right">
-                    <span className="text-blue-900 text-2xl">{currentPrice} PLN</span>
+                    <span className="text-blue-900 text-2xl">{totalPrice} PLN</span>
                     {eurText && (
                       <div className="flex items-center justify-end gap-2 text-gray-500">
                         <span className="eur-text">{eurText}</span>
@@ -669,42 +694,93 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
           {/* Airport Pickup Fields */}
           {formData.pickupType === 'airport' && (
             <>
-              <div>
-                <label htmlFor="signText" className="block text-gray-700 mb-2">
-                  <FileText className="w-4 h-4 inline mr-2" />
-                  {t.orderForm.signText}
+              <div id="signService" tabIndex={-1}>
+                <label className="block text-gray-700 mb-2">
+                  {signServiceTitle}
                 </label>
-                <input
-                  type="text"
-                  id="signText"
-                  name="signText"
-                  value={formData.signText}
-                  onChange={handleChange}
-                  placeholder={t.orderForm.signPlaceholder}
-                  className={fieldClass(
-                    'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                    signTextError,
-                  )}
-                  required
-                />
-                <div className="mt-3 bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-lg p-4">
-                  <div className="flex items-start gap-3 mb-3">
-                    <Info className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                    <p className="text-sm text-amber-900">
-                      {t.orderForm.signHelp}
-                    </p>
-                  </div>
-                  {/* Visual Sign Preview */}
-                  <div className="bg-white border-2 border-gray-300 rounded-lg p-4 shadow-sm">
-                    <p className="text-[8px] text-gray-500 mb-2 text-center">{t.orderForm.signPreview}</p>
-                    <div className="bg-white border-4 border-blue-900 rounded p-3 text-center min-h-[60px] flex items-center justify-center">
-                      <p className="text-blue-900 text-lg break-words">
-                        {formData.signText || t.orderForm.signEmpty}
-                      </p>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                    formData.signService === 'sign'
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}>
+                    <input
+                      type="radio"
+                      name="signService"
+                      value="sign"
+                      checked={formData.signService === 'sign'}
+                      onChange={() => handleSignServiceChange('sign')}
+                      className="w-4 h-4 text-blue-600"
+                    />
+                    <FileText className="w-5 h-5 text-gray-700" />
+                    <div>
+                      <div className="text-gray-900">{signServiceSign}</div>
+                      <div className="text-xs text-gray-500">{signServiceFee}</div>
                     </div>
-                  </div>
+                  </label>
+
+                  <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                    formData.signService === 'self'
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}>
+                    <input
+                      type="radio"
+                      name="signService"
+                      value="self"
+                      checked={formData.signService === 'self'}
+                      onChange={() => handleSignServiceChange('self')}
+                      className="w-4 h-4 text-blue-600"
+                    />
+                    <Users className="w-5 h-5 text-gray-700 flex-shrink-0" />
+                    <div>
+                      <div className="text-gray-900">{signServiceSelf}</div>
+                      <div className="text-xs text-gray-500">{signServiceSelfNote}</div>
+                    </div>
+                  </label>
                 </div>
               </div>
+
+              {formData.signService === 'sign' ? (
+                <div>
+                  <label htmlFor="signText" className="block text-gray-700 mb-2">
+                    <FileText className="w-4 h-4 inline mr-2" />
+                    {t.orderForm.signText}
+                  </label>
+                  <>
+                    <input
+                      type="text"
+                      id="signText"
+                      name="signText"
+                      value={formData.signText}
+                      onChange={handleChange}
+                      placeholder={t.orderForm.signPlaceholder}
+                      className={fieldClass(
+                        'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                        signTextError,
+                      )}
+                      required
+                    />
+                    <div className="mt-3 bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-lg p-4">
+                      <div className="flex items-start gap-3 mb-3">
+                        <Info className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                        <p className="text-sm text-amber-900">
+                          {t.orderForm.signHelp}
+                        </p>
+                      </div>
+                      {/* Visual Sign Preview */}
+                      <div className="bg-white border-2 border-gray-300 rounded-lg p-4 shadow-sm">
+                        <p className="text-[8px] text-gray-500 mb-2 text-center">{t.orderForm.signPreview}</p>
+                        <div className="bg-white border-4 border-blue-900 rounded p-3 text-center min-h-[60px] flex items-center justify-center">
+                          <p className="text-blue-900 text-lg break-words">
+                            {formData.signText || t.orderForm.signEmpty}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                </div>
+              ) : null}
 
               <div>
                 <label htmlFor="flightNumber" className="block text-gray-700 mb-2">
@@ -918,7 +994,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
               t.orderForm.submitting
             ) : (
               <span className="flex flex-col items-center gap-1">
-                <span>{t.orderForm.confirmOrder(currentPrice)}</span>
+                <span>{t.orderForm.confirmOrder(totalPrice)}</span>
                 {eurText && (
                   <span className="inline-flex items-center gap-2 text-[11px] text-blue-100">
                     <span>{eurText}</span>

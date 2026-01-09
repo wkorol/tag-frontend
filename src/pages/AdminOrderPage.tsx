@@ -282,6 +282,19 @@ export function AdminOrderPage() {
                   <div className="text-sm text-slate-700">
                     {t.adminOrder.pickupType} {parsedNotes?.pickupType ?? '—'}
                   </div>
+                  {parsedNotes?.signService && (
+                    <div className="text-sm text-slate-700">
+                      {t.adminOrder.signService}{' '}
+                      {parsedNotes.signService === 'sign'
+                        ? t.adminOrder.signServiceSign
+                        : t.adminOrder.signServiceSelf}
+                    </div>
+                  )}
+                  {typeof parsedNotes?.signFee === 'number' && parsedNotes.signFee > 0 && (
+                    <div className="text-sm text-slate-700">
+                      {t.adminOrder.signFee} {parsedNotes.signFee} PLN
+                    </div>
+                  )}
                   {parsedNotes?.pickupType === 'airport' && (
                     <div className="text-sm text-slate-700">
                       {t.adminOrder.flightNumber} {order.flightNumber || '—'}

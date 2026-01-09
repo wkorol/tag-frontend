@@ -1,5 +1,6 @@
 import { Car, Users } from 'lucide-react';
-import { useEurRate } from '../lib/useEurRate';
+import { useEffect, useRef } from 'react';
+import { preloadEurRate, useEurRate } from '../lib/useEurRate';
 import { formatEur } from '../lib/currency';
 import { useI18n } from '../lib/i18n';
 
@@ -11,9 +12,31 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
   const { t } = useI18n();
   const eurRate = useEurRate();
   const eurText = (pln: number) => formatEur(pln, eurRate);
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    const element = sectionRef.current;
+    if (!element) {
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          preloadEurRate();
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px' },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section id="vehicle-selection" className="py-16 bg-white">
+    <section id="vehicle-selection" ref={sectionRef} className="py-16 bg-white">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-gray-900 mb-4">{t.vehicle.title}</h2>

@@ -48,6 +48,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
     destinationAddress: '',
     proposedPrice: 'taximeter',
     pickupType: '',
+    signService: 'self',
     signText: '',
     flightNumber: '',
     passengers: '1',
@@ -70,6 +71,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   const [showPriceInput, setShowPriceInput] = useState(false);
   const formStartedRef = useRef(false);
   const [submitAttempted, setSubmitAttempted] = useState(false);
+  const signFee = formData.pickupType === 'airport' && formData.signService === 'sign' ? 20 : 0;
   const isPhoneValid = !validatePhoneNumber(formData.phone, t.quoteForm.validation);
   const isEmailValid = !validateEmail(formData.email, t.quoteForm.validation.email);
   const isPriceValid = showPriceInput ? formData.proposedPrice.trim() !== '' : true;
@@ -77,7 +79,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   const pickupTypeError = showValidation && !formData.pickupType;
   const pickupAddressError = showValidation && formData.pickupType === 'address' && !formData.pickupAddress.trim();
   const destinationError = showValidation && !formData.destinationAddress.trim();
-  const signTextError = showValidation && formData.pickupType === 'airport' && !formData.signText.trim();
+  const signTextError = showValidation && formData.pickupType === 'airport' && formData.signService === 'sign' && !formData.signText.trim();
   const flightNumberError = showValidation && formData.pickupType === 'airport' && !formData.flightNumber.trim();
   const dateError = showValidation && !formData.date;
   const timeError = showValidation && !formData.time;
@@ -87,6 +89,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   const phoneErrorState = showValidation && (!formData.phone.trim() || !isPhoneValid);
   const emailErrorState = showValidation && (!formData.email.trim() || !isEmailValid);
   const priceError = showValidation && !isPriceValid;
+  const signServiceTitle = t.quoteForm.signServiceTitle ?? 'Airport pickup options';
+  const signServiceSign = t.quoteForm.signServiceSign ?? 'Meet with a name sign';
+  const signServiceFee = t.quoteForm.signServiceFee ?? '+20 PLN added to final price';
+  const signServiceSelf = t.quoteForm.signServiceSelf ?? 'Find the driver myself at the parking';
   const fieldClass = (base: string, invalid: boolean) =>
     `${base}${invalid ? ' border-red-400 bg-red-50 focus:ring-red-200 focus:border-red-500' : ''}`;
 
@@ -153,7 +159,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
       missingFieldIds.push('destinationAddress');
     }
     if (formData.pickupType === 'airport') {
-      if (!formData.signText.trim()) {
+      if (formData.signService === 'sign' && !formData.signText.trim()) {
         missingFieldIds.push('signText');
       }
       if (!formData.flightNumber.trim()) {
@@ -207,6 +213,8 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
     const carType = passengersNumber >= 5 ? 1 : 2;
     const additionalNotes = buildAdditionalNotes({
       pickupType: formData.pickupType as 'airport' | 'address',
+      signService: formData.pickupType === 'airport' ? formData.signService : 'self',
+      signFee,
       signText: formData.signText,
       passengers: formData.passengers,
       largeLuggage: formData.largeLuggage,
@@ -279,6 +287,8 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
         ...formData,
         [name]: value,
         pickupAddress: '',
+        signService: 'self',
+        signText: '',
       });
     } else {
       setFormData({
@@ -286,6 +296,18 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
         [name]: value,
       });
     }
+  };
+
+  const handleSignServiceChange = (value: 'sign' | 'self') => {
+    if (!formStartedRef.current) {
+      formStartedRef.current = true;
+      trackFormStart('quote');
+    }
+    setFormData((prev) => ({
+      ...prev,
+      signService: value,
+      signText: value === 'self' ? '' : prev.signText,
+    }));
   };
 
   const handlePhoneChange = (value: string) => {
@@ -610,42 +632,90 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
               {/* Airport Pickup Fields */}
               {formData.pickupType === 'airport' && (
                 <>
-                  <div>
-                    <label htmlFor="signText" className="block text-gray-700 mb-2">
-                      <FileText className="w-4 h-4 inline mr-2" />
-                      {t.quoteForm.signText}
+                  <div id="signService" tabIndex={-1}>
+                    <label className="block text-gray-700 mb-2">
+                      {signServiceTitle}
                     </label>
-                    <input
-                      type="text"
-                      id="signText"
-                      name="signText"
-                      value={formData.signText}
-                      onChange={handleChange}
-                      placeholder={t.quoteForm.signPlaceholder}
-                      className={fieldClass(
-                        'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                        signTextError,
-                      )}
-                      required
-                    />
-                    <div className="mt-3 bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-lg p-4">
-                      <div className="flex items-start gap-3 mb-3">
-                        <Info className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                        <p className="text-sm text-amber-900">
-                          {t.quoteForm.signHelp}
-                        </p>
-                      </div>
-                      {/* Visual Sign Preview */}
-                      <div className="bg-white border-2 border-gray-300 rounded-lg p-4 shadow-sm">
-                        <p className="text-xs text-gray-500 mb-2 text-center">{t.quoteForm.signPreview}</p>
-                        <div className="bg-white border-4 border-blue-900 rounded p-3 text-center min-h-[60px] flex items-center justify-center">
-                          <p className="text-blue-900 text-lg break-words">
-                            {formData.signText || t.quoteForm.signEmpty}
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                        formData.signService === 'sign'
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}>
+                        <input
+                          type="radio"
+                          name="signService"
+                          value="sign"
+                          checked={formData.signService === 'sign'}
+                          onChange={() => handleSignServiceChange('sign')}
+                          className="w-4 h-4 text-blue-600"
+                        />
+                        <FileText className="w-5 h-5 text-gray-700" />
+                        <div>
+                          <div className="text-gray-900">{signServiceSign}</div>
+                          <div className="text-xs text-gray-500">{signServiceFee}</div>
+                        </div>
+                      </label>
+
+                      <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                        formData.signService === 'self'
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}>
+                        <input
+                          type="radio"
+                          name="signService"
+                          value="self"
+                          checked={formData.signService === 'self'}
+                          onChange={() => handleSignServiceChange('self')}
+                          className="w-4 h-4 text-blue-600"
+                        />
+                        <Users className="w-5 h-5 text-gray-700 flex-shrink-0" />
+                        <div>
+                          <div className="text-gray-900">{signServiceSelf}</div>
+                          <div className="text-xs text-gray-500">{t.quoteForm.signServiceSelfNote}</div>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+
+                  {formData.signService === 'sign' && (
+                    <div>
+                      <label htmlFor="signText" className="block text-gray-700 mb-2">
+                        <FileText className="w-4 h-4 inline mr-2" />
+                        {t.quoteForm.signText}
+                      </label>
+                      <input
+                        type="text"
+                        id="signText"
+                        name="signText"
+                        value={formData.signText}
+                        onChange={handleChange}
+                        placeholder={t.quoteForm.signPlaceholder}
+                        className={fieldClass(
+                          'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                          signTextError,
+                        )}
+                        required
+                      />
+                      <div className="mt-3 bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-lg p-4">
+                        <div className="flex items-start gap-3 mb-3">
+                          <Info className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                          <p className="text-sm text-amber-900">
+                            {t.quoteForm.signHelp}
                           </p>
+                        </div>
+                        <div className="bg-white border-2 border-gray-300 rounded-lg p-4 shadow-sm">
+                          <p className="text-xs text-gray-500 mb-2 text-center">{t.quoteForm.signPreview}</p>
+                          <div className="bg-white border-4 border-blue-900 rounded p-3 text-center min-h-[60px] flex items-center justify-center">
+                            <p className="text-blue-900 text-lg break-words">
+                              {formData.signText || t.quoteForm.signEmpty}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  )}
 
                   <div>
                     <label htmlFor="flightNumber" className="block text-gray-700 mb-2">

@@ -3,6 +3,8 @@ export type PickupType = 'airport' | 'address';
 
 export type OrderNotes = {
   pickupType: PickupType;
+  signService?: 'sign' | 'self';
+  signFee?: number;
   signText: string;
   passengers: string;
   largeLuggage: string;
