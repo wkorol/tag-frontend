@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
 import { getRouteKeyFromSlug, getRoutePath, getRouteSlug } from '../lib/routes';
 import { requestScrollTo } from '../lib/scroll';
+import favicon from '../../public/favicon.svg';
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,8 +47,9 @@ export function Navbar() {
           <a
             href={`${basePath}/`}
             onClick={(event) => handleNavClick(event, 'hero')}
-            className="flex items-center"
+            className="flex items-center gap-3"
           >
+            <img src={favicon} alt="" aria-hidden="true" className="h-8 w-8 rounded-md" />
             <span className="leading-tight text-sm font-semibold text-gray-900">
               <span className="block text-base tracking-wide">Taxi Airport</span>
               <span className="block text-xs font-semibold text-blue-700">Gdańsk</span>
