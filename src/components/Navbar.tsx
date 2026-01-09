@@ -41,7 +41,7 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-md">
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <a
@@ -57,44 +57,42 @@ export function Navbar() {
           </a>
 
           {/* Desktop Menu */}
-          <div
-            className={`hidden md:flex items-center gap-8 ${locale === 'pl' ? 'text-sm' : 'text-base'}`}
-          >
+          <div className="hidden md:flex flex-1 flex-nowrap items-center justify-center gap-4 lg:gap-6 text-[11px] lg:text-[13px] xl:text-sm min-w-0 tracking-tight">
             <a
               href={`${basePath}/`}
-              className="text-gray-700 hover:text-blue-600 transition-colors"
+              className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
             >
               {t.navbar.home}
             </a>
             <a
               href={`${basePath}/`}
               onClick={(event) => handleNavClick(event, 'fleet')}
-              className="text-gray-700 hover:text-blue-600 transition-colors"
+              className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
             >
               {t.navbar.fleet}
             </a>
             <a
               href={getRoutePath(locale, 'airportTaxi')}
-              className="text-gray-700 hover:text-blue-600 transition-colors"
+              className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
             >
               {t.navbar.airportTaxi}
             </a>
             <a
               href={getRoutePath(locale, 'airportSopot')}
-              className="text-gray-700 hover:text-blue-600 transition-colors"
+              className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
             >
               {t.navbar.airportSopot}
             </a>
             <a
               href={getRoutePath(locale, 'airportGdynia')}
-              className="text-gray-700 hover:text-blue-600 transition-colors"
+              className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
             >
               {t.navbar.airportGdynia}
             </a>
             <a
               href={`${basePath}/`}
               onClick={(event) => handleNavClick(event, 'vehicle-selection')}
-              className="text-gray-700 hover:text-blue-600 transition-colors"
+              className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
             >
               {t.navbar.prices}
             </a>
@@ -107,7 +105,7 @@ export function Navbar() {
                 id="language-select"
                 value={locale}
                 onChange={(event) => handleLocaleChange(event.target.value as Locale)}
-                className="border border-gray-200 rounded-md px-2 py-1 text-sm text-gray-700 bg-white"
+                className="border border-gray-200 rounded-md px-2 py-1 text-[11px] lg:text-[13px] xl:text-sm text-gray-700 bg-white"
               >
                 <option value="en">EN</option>
                 <option value="pl">PL</option>
@@ -121,7 +119,7 @@ export function Navbar() {
             <a
               href={`${basePath}/`}
               onClick={(event) => handleNavClick(event, 'vehicle-selection')}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+              className="bg-blue-600 text-white px-3 py-2 lg:px-5 lg:py-3 rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap"
             >
               {t.navbar.orderNow}
             </a>
@@ -145,7 +143,7 @@ export function Navbar() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div id="mobile-nav" className="md:hidden pb-4 space-y-3">
+          <div id="mobile-nav" className="md:hidden pb-4 space-y-3 text-sm">
             <a
               href={`${basePath}/`}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
