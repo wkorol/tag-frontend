@@ -2,6 +2,7 @@ export const site = {
   name: 'Taxi Airport Gdańsk',
   url: 'https://taxiairportgdansk.com',
   ogImage: 'https://taxiairportgdansk.com/og-image.png',
+  sameAs: [],
 };
 
 export const locales = ['en', 'pl', 'de', 'fi', 'no', 'sv', 'da'];
@@ -285,6 +286,191 @@ const metaByLocale = {
   },
 };
 
+const faqByLocale = {
+  en: [
+    {
+      question: 'How fast is confirmation?',
+      answer: 'Most bookings are confirmed within 5–10 minutes by email.',
+    },
+    {
+      question: 'Do you track flights?',
+      answer: 'Yes, we monitor arrivals and adjust pickup time accordingly.',
+    },
+    {
+      question: 'Can I cancel?',
+      answer: 'You can cancel using the link sent in your confirmation email.',
+    },
+    {
+      question: 'Do you offer child seats?',
+      answer: 'Yes, child seats are available on request during booking.',
+    },
+    {
+      question: 'How do I pay?',
+      answer: 'You can pay by card, Apple Pay, Google Pay, Revolut, or cash on request.',
+    },
+    {
+      question: 'Where do I meet the driver?',
+      answer: 'You will receive clear pickup instructions and contact details in the confirmation email.',
+    },
+  ],
+  pl: [
+    {
+      question: 'Jak szybko dostanę potwierdzenie?',
+      answer: 'Większość rezerwacji potwierdzamy e-mailem w 5–10 minut.',
+    },
+    {
+      question: 'Czy śledzicie loty?',
+      answer: 'Tak, monitorujemy przyloty i dostosowujemy czas odbioru.',
+    },
+    {
+      question: 'Czy mogę anulować?',
+      answer: 'Możesz anulować korzystając z linku w e-mailu potwierdzającym.',
+    },
+    {
+      question: 'Czy oferujecie foteliki dziecięce?',
+      answer: 'Tak, foteliki dziecięce są dostępne na życzenie podczas rezerwacji.',
+    },
+    {
+      question: 'Jak mogę zapłacić?',
+      answer: 'Możesz zapłacić kartą, Apple Pay, Google Pay, Revolut lub gotówką na życzenie.',
+    },
+    {
+      question: 'Gdzie spotkam kierowcę?',
+      answer: 'Otrzymasz jasne instrukcje odbioru i kontakt do kierowcy w e-mailu potwierdzającym.',
+    },
+  ],
+  de: [
+    {
+      question: 'Wie schnell kommt die Bestätigung?',
+      answer: 'Die meisten Buchungen werden innerhalb von 5–10 Minuten per E-Mail bestätigt.',
+    },
+    {
+      question: 'Verfolgen Sie Flüge?',
+      answer: 'Ja, wir verfolgen Ankünfte und passen die Abholzeit entsprechend an.',
+    },
+    {
+      question: 'Kann ich stornieren?',
+      answer: 'Sie können über den Link in der Bestätigungs-E-Mail stornieren.',
+    },
+    {
+      question: 'Bieten Sie Kindersitze an?',
+      answer: 'Ja, Kindersitze sind auf Anfrage bei der Buchung verfügbar.',
+    },
+    {
+      question: 'Wie kann ich bezahlen?',
+      answer: 'Zahlung per Karte, Apple Pay, Google Pay, Revolut oder bar auf Anfrage.',
+    },
+    {
+      question: 'Wo treffe ich den Fahrer?',
+      answer: 'Sie erhalten klare Abholhinweise und Kontaktdaten in der Bestätigungs-E-Mail.',
+    },
+  ],
+  fi: [
+    {
+      question: 'Kuinka nopeasti vahvistus tulee?',
+      answer: 'Useimmat varaukset vahvistetaan sähköpostitse 5–10 minuutissa.',
+    },
+    {
+      question: 'Seuraatteko lentoja?',
+      answer: 'Kyllä, seuraamme saapumisia ja säädämme noutoajan sen mukaan.',
+    },
+    {
+      question: 'Voinko perua?',
+      answer: 'Voit perua vahvistusviestin linkin kautta.',
+    },
+    {
+      question: 'Tarjoatteko lastenistuimia?',
+      answer: 'Kyllä, lastenistuimia on saatavilla pyynnöstä varauksen yhteydessä.',
+    },
+    {
+      question: 'Miten voin maksaa?',
+      answer: 'Voit maksaa kortilla, Apple Paylla, Google Paylla, Revolutilla tai käteisellä pyynnöstä.',
+    },
+    {
+      question: 'Missä tapaan kuljettajan?',
+      answer: 'Saat selkeät nouto-ohjeet ja yhteystiedot vahvistusviestissä.',
+    },
+  ],
+  no: [
+    {
+      question: 'Hvor raskt får jeg bekreftelse?',
+      answer: 'De fleste bestillinger bekreftes innen 5–10 minutter på e-post.',
+    },
+    {
+      question: 'Sporer dere fly?',
+      answer: 'Ja, vi følger ankomster og justerer hentetid ved behov.',
+    },
+    {
+      question: 'Kan jeg avbestille?',
+      answer: 'Du kan avbestille via lenken i bekreftelses-e-posten.',
+    },
+    {
+      question: 'Tilbyr dere barneseter?',
+      answer: 'Ja, barneseter er tilgjengelig på forespørsel ved bestilling.',
+    },
+    {
+      question: 'Hvordan kan jeg betale?',
+      answer: 'Du kan betale med kort, Apple Pay, Google Pay, Revolut eller kontant på forespørsel.',
+    },
+    {
+      question: 'Hvor møter jeg sjåføren?',
+      answer: 'Du får tydelige hentebeskrivelser og kontaktinfo i bekreftelses-e-posten.',
+    },
+  ],
+  sv: [
+    {
+      question: 'Hur snabbt får jag bekräftelse?',
+      answer: 'De flesta bokningar bekräftas via e-post inom 5–10 minuter.',
+    },
+    {
+      question: 'Spårar ni flyg?',
+      answer: 'Ja, vi följer ankomster och anpassar hämtningstiden.',
+    },
+    {
+      question: 'Kan jag avboka?',
+      answer: 'Du kan avboka via länken i bekräftelsemejlet.',
+    },
+    {
+      question: 'Erbjuder ni bilbarnstolar?',
+      answer: 'Ja, bilbarnstolar finns på begäran vid bokning.',
+    },
+    {
+      question: 'Hur kan jag betala?',
+      answer: 'Du kan betala med kort, Apple Pay, Google Pay, Revolut eller kontant på begäran.',
+    },
+    {
+      question: 'Var möter jag chauffören?',
+      answer: 'Du får tydliga upphämtningsinstruktioner och kontaktinfo i bekräftelsemejlet.',
+    },
+  ],
+  da: [
+    {
+      question: 'Hvor hurtigt får jeg bekræftelse?',
+      answer: 'De fleste bookinger bekræftes inden for 5–10 minutter via e-mail.',
+    },
+    {
+      question: 'Spore I fly?',
+      answer: 'Ja, vi overvåger ankomster og tilpasser afhentningstid.',
+    },
+    {
+      question: 'Kan jeg afbestille?',
+      answer: 'Du kan afbestille via linket i bekræftelses-e-mailen.',
+    },
+    {
+      question: 'Tilbyder I autostole til børn?',
+      answer: 'Ja, autostole til børn er tilgængelige efter anmodning ved booking.',
+    },
+    {
+      question: 'Hvordan kan jeg betale?',
+      answer: 'Du kan betale med kort, Apple Pay, Google Pay, Revolut eller kontant efter aftale.',
+    },
+    {
+      question: 'Hvor møder jeg chaufføren?',
+      answer: 'Du får klare afhentningsinstruktioner og kontaktinfo i bekræftelses-e-mailen.',
+    },
+  ],
+};
+
 export const getLocaleFromPath = (urlPath) => {
   const [, first] = urlPath.split('/');
   return locales.includes(first) ? first : null;
@@ -328,6 +514,46 @@ export const buildSeoTags = (urlPath) => {
   const xDefault = `<link rel="alternate" hreflang="x-default" href="${buildLocalizedUrl('en', routeKey)}">`;
   const robots = isIndexablePath(urlPath) ? 'index,follow' : 'noindex,nofollow';
 
+  const localBusinessSchema = {
+    '@context': 'https://schema.org',
+    '@type': ['LocalBusiness', 'TaxiService'],
+    name: site.name,
+    url: `${site.url}/`,
+    areaServed: ['Gdańsk', 'Sopot', 'Gdynia'],
+    email: 'booking@taxiairportgdansk.com',
+    priceRange: '$$',
+    telephone: '+48537523437',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Gdańsk',
+      addressCountry: 'PL',
+    },
+    openingHours: 'Mo-Su 00:00-23:59',
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: '54.3520',
+      longitude: '18.6466',
+    },
+    ...(site.sameAs.length ? { sameAs: site.sameAs } : {}),
+  };
+
+  const faq = faqByLocale[locale] ?? faqByLocale.en;
+  const faqSchema =
+    routeKey && ['airportTaxi', 'airportSopot', 'airportGdynia'].includes(routeKey)
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: faq.map((entry) => ({
+            '@type': 'Question',
+            name: entry.question,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: entry.answer,
+            },
+          })),
+        }
+      : null;
+
   return [
     `<title>${meta.title}</title>`,
     `<meta name="description" content="${meta.description}">`,
@@ -345,6 +571,8 @@ export const buildSeoTags = (urlPath) => {
     `<link rel="canonical" href="${canonical}">`,
     alternates,
     xDefault,
+    `<script type="application/ld+json">${JSON.stringify(localBusinessSchema)}</script>`,
+    faqSchema ? `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>` : '',
   ].join('');
 };
 

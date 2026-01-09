@@ -9,9 +9,13 @@ interface RouteLandingProps {
   description: string;
   route: string;
   examples: string[];
+  pricing: {
+    day: number;
+    night: number;
+  };
 }
 
-export function RouteLanding({ title, description, route, examples }: RouteLandingProps) {
+export function RouteLanding({ title, description, route, examples, pricing }: RouteLandingProps) {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
 
@@ -24,6 +28,7 @@ export function RouteLanding({ title, description, route, examples }: RouteLandi
             <div className="bg-white border border-gray-200 rounded-3xl p-8 shadow-sm">
               <h1 className="text-3xl text-gray-900 mb-4">{title}</h1>
               <p className="text-gray-600 mb-6">{description}</p>
+              <p className="text-sm text-gray-500 mb-6">{t.routeLanding.seoParagraph(route)}</p>
               <a
                 href={`${basePath}/`}
                 onClick={(event) => {
@@ -65,10 +70,39 @@ export function RouteLanding({ title, description, route, examples }: RouteLandi
 
         <section className="py-12 bg-white border-t border-gray-200">
           <div className="max-w-5xl mx-auto px-4">
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <div>
+                  <h2 className="text-xl text-gray-900">{t.routeLanding.pricingTitle}</h2>
+                  <p className="text-sm text-gray-600">{t.routeLanding.pricingSubtitle(route)}</p>
+                </div>
+                <span className="text-xs uppercase tracking-wide text-gray-500">{t.routeLanding.vehicleLabel}</span>
+              </div>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="rounded-xl bg-white border border-gray-200 p-4">
+                  <div className="text-sm text-gray-500 mb-1">{t.routeLanding.dayLabel}</div>
+                  <div className="text-2xl text-gray-900 font-semibold">
+                    {pricing.day} {t.routeLanding.currency}
+                  </div>
+                </div>
+                <div className="rounded-xl bg-white border border-gray-200 p-4">
+                  <div className="text-sm text-gray-500 mb-1">{t.routeLanding.nightLabel}</div>
+                  <div className="text-2xl text-gray-900 font-semibold">
+                    {pricing.night} {t.routeLanding.currency}
+                  </div>
+                </div>
+              </div>
+              <p className="text-xs text-gray-500 mt-4">{t.routeLanding.pricingNote}</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-12 bg-white border-t border-gray-200">
+          <div className="max-w-5xl mx-auto px-4">
             <h2 className="text-xl text-gray-900 mb-4">{t.routeLanding.faqTitle}</h2>
             <div className="grid gap-4 md:grid-cols-2 max-w-4xl">
               {t.routeLanding.faq.map((entry) => (
-                <div key={entry.question} className="bg-gray-50 border border-gray-200 rounded-2xl p-5">
+                <div key={entry.question} className="bg-gray-50 border border-gray-200 rounded-2xl p-6 md:p-7">
                   <h3 className="text-gray-900 mb-2">{entry.question}</h3>
                   <p className="text-sm text-gray-600">{entry.answer}</p>
                 </div>

@@ -328,6 +328,7 @@ export default function App() {
                   description={t.pages.gdanskTaxi.description}
                   route={t.pages.gdanskTaxi.route}
                   examples={t.pages.gdanskTaxi.examples}
+                  pricing={{ day: t.pages.gdanskTaxi.priceDay, night: t.pages.gdanskTaxi.priceNight }}
                 />
               }
             />
@@ -339,6 +340,7 @@ export default function App() {
                   description={t.pages.gdanskSopot.description}
                   route={t.pages.gdanskSopot.route}
                   examples={t.pages.gdanskSopot.examples}
+                  pricing={{ day: t.pages.gdanskSopot.priceDay, night: t.pages.gdanskSopot.priceNight }}
                 />
               }
             />
@@ -350,6 +352,7 @@ export default function App() {
                   description={t.pages.gdanskGdynia.description}
                   route={t.pages.gdanskGdynia.route}
                   examples={t.pages.gdanskGdynia.examples}
+                  pricing={{ day: t.pages.gdanskGdynia.priceDay, night: t.pages.gdanskGdynia.priceNight }}
                 />
               }
             />
@@ -368,6 +371,7 @@ export default function App() {
                   description={t.pages.gdanskTaxi.description}
                   route={t.pages.gdanskTaxi.route}
                   examples={t.pages.gdanskTaxi.examples}
+                  pricing={{ day: t.pages.gdanskTaxi.priceDay, night: t.pages.gdanskTaxi.priceNight }}
                 />
               }
             />
@@ -379,6 +383,7 @@ export default function App() {
                   description={t.pages.gdanskSopot.description}
                   route={t.pages.gdanskSopot.route}
                   examples={t.pages.gdanskSopot.examples}
+                  pricing={{ day: t.pages.gdanskSopot.priceDay, night: t.pages.gdanskSopot.priceNight }}
                 />
               }
             />
@@ -390,6 +395,7 @@ export default function App() {
                   description={t.pages.gdanskGdynia.description}
                   route={t.pages.gdanskGdynia.route}
                   examples={t.pages.gdanskGdynia.examples}
+                  pricing={{ day: t.pages.gdanskGdynia.priceDay, night: t.pages.gdanskGdynia.priceNight }}
                 />
               }
             />
@@ -408,6 +414,7 @@ export default function App() {
                   description={t.pages.gdanskTaxi.description}
                   route={t.pages.gdanskTaxi.route}
                   examples={t.pages.gdanskTaxi.examples}
+                  pricing={{ day: t.pages.gdanskTaxi.priceDay, night: t.pages.gdanskTaxi.priceNight }}
                 />
               }
             />
@@ -419,6 +426,7 @@ export default function App() {
                   description={t.pages.gdanskSopot.description}
                   route={t.pages.gdanskSopot.route}
                   examples={t.pages.gdanskSopot.examples}
+                  pricing={{ day: t.pages.gdanskSopot.priceDay, night: t.pages.gdanskSopot.priceNight }}
                 />
               }
             />
@@ -430,6 +438,7 @@ export default function App() {
                   description={t.pages.gdanskGdynia.description}
                   route={t.pages.gdanskGdynia.route}
                   examples={t.pages.gdanskGdynia.examples}
+                  pricing={{ day: t.pages.gdanskGdynia.priceDay, night: t.pages.gdanskGdynia.priceNight }}
                 />
               }
             />
@@ -448,6 +457,7 @@ export default function App() {
                   description={t.pages.gdanskTaxi.description}
                   route={t.pages.gdanskTaxi.route}
                   examples={t.pages.gdanskTaxi.examples}
+                  pricing={{ day: t.pages.gdanskTaxi.priceDay, night: t.pages.gdanskTaxi.priceNight }}
                 />
               }
             />
@@ -459,6 +469,7 @@ export default function App() {
                   description={t.pages.gdanskSopot.description}
                   route={t.pages.gdanskSopot.route}
                   examples={t.pages.gdanskSopot.examples}
+                  pricing={{ day: t.pages.gdanskSopot.priceDay, night: t.pages.gdanskSopot.priceNight }}
                 />
               }
             />
@@ -470,6 +481,7 @@ export default function App() {
                   description={t.pages.gdanskGdynia.description}
                   route={t.pages.gdanskGdynia.route}
                   examples={t.pages.gdanskGdynia.examples}
+                  pricing={{ day: t.pages.gdanskGdynia.priceDay, night: t.pages.gdanskGdynia.priceNight }}
                 />
               }
             />
@@ -488,6 +500,7 @@ export default function App() {
                   description={t.pages.gdanskTaxi.description}
                   route={t.pages.gdanskTaxi.route}
                   examples={t.pages.gdanskTaxi.examples}
+                  pricing={{ day: t.pages.gdanskTaxi.priceDay, night: t.pages.gdanskTaxi.priceNight }}
                 />
               }
             />
@@ -499,6 +512,7 @@ export default function App() {
                   description={t.pages.gdanskSopot.description}
                   route={t.pages.gdanskSopot.route}
                   examples={t.pages.gdanskSopot.examples}
+                  pricing={{ day: t.pages.gdanskSopot.priceDay, night: t.pages.gdanskSopot.priceNight }}
                 />
               }
             />
@@ -510,6 +524,7 @@ export default function App() {
                   description={t.pages.gdanskGdynia.description}
                   route={t.pages.gdanskGdynia.route}
                   examples={t.pages.gdanskGdynia.examples}
+                  pricing={{ day: t.pages.gdanskGdynia.priceDay, night: t.pages.gdanskGdynia.priceNight }}
                 />
               }
             />
@@ -528,6 +543,7 @@ export default function App() {
                   description={t.pages.gdanskTaxi.description}
                   route={t.pages.gdanskTaxi.route}
                   examples={t.pages.gdanskTaxi.examples}
+                  pricing={{ day: t.pages.gdanskTaxi.priceDay, night: t.pages.gdanskTaxi.priceNight }}
                 />
               }
             />
@@ -539,6 +555,7 @@ export default function App() {
                   description={t.pages.gdanskSopot.description}
                   route={t.pages.gdanskSopot.route}
                   examples={t.pages.gdanskSopot.examples}
+                  pricing={{ day: t.pages.gdanskSopot.priceDay, night: t.pages.gdanskSopot.priceNight }}
                 />
               }
             />
@@ -550,6 +567,7 @@ export default function App() {
                   description={t.pages.gdanskGdynia.description}
                   route={t.pages.gdanskGdynia.route}
                   examples={t.pages.gdanskGdynia.examples}
+                  pricing={{ day: t.pages.gdanskGdynia.priceDay, night: t.pages.gdanskGdynia.priceNight }}
                 />
               }
             />
@@ -568,6 +586,7 @@ export default function App() {
                   description={t.pages.gdanskTaxi.description}
                   route={t.pages.gdanskTaxi.route}
                   examples={t.pages.gdanskTaxi.examples}
+                  pricing={{ day: t.pages.gdanskTaxi.priceDay, night: t.pages.gdanskTaxi.priceNight }}
                 />
               }
             />
@@ -579,6 +598,7 @@ export default function App() {
                   description={t.pages.gdanskSopot.description}
                   route={t.pages.gdanskSopot.route}
                   examples={t.pages.gdanskSopot.examples}
+                  pricing={{ day: t.pages.gdanskSopot.priceDay, night: t.pages.gdanskSopot.priceNight }}
                 />
               }
             />
@@ -590,6 +610,7 @@ export default function App() {
                   description={t.pages.gdanskGdynia.description}
                   route={t.pages.gdanskGdynia.route}
                   examples={t.pages.gdanskGdynia.examples}
+                  pricing={{ day: t.pages.gdanskGdynia.priceDay, night: t.pages.gdanskGdynia.priceNight }}
                 />
               }
             />

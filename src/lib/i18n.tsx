@@ -205,6 +205,15 @@ const baseEn = {
     },
     routeLanding: {
       orderNow: 'Book Online Now',
+      seoParagraph: (route: string) =>
+        `Taxi Gdansk airport transfers for ${route}. Fixed prices, 24/7 service, meet & greet, and fast confirmation for taxi airport Gdansk rides.`,
+      pricingTitle: 'Example prices',
+      pricingSubtitle: (route: string) => `Standard car for ${route}`,
+      vehicleLabel: 'Standard car',
+      dayLabel: 'Day rate',
+      nightLabel: 'Night rate',
+      currency: 'PLN',
+      pricingNote: 'Prices include VAT. Night rate applies from 10 PM to 6 AM and on Sundays & public holidays.',
       includedTitle: 'What is included',
       includedList: [
         'Meet & greet at the airport with clear pickup instructions.',
@@ -230,6 +239,14 @@ const baseEn = {
         {
           question: 'Do you offer child seats?',
           answer: 'Yes, child seats are available on request during booking.',
+        },
+        {
+          question: 'How do I pay?',
+          answer: 'You can pay by card, Apple Pay, Google Pay, Revolut, or cash on request.',
+        },
+        {
+          question: 'Where do I meet the driver?',
+          answer: 'You will receive clear pickup instructions and contact details in the confirmation email.',
         },
       ],
     },
@@ -518,18 +535,24 @@ const baseEn = {
         description: 'Book a fast, reliable airport taxi from Gdańsk Airport. Fixed pricing both ways, professional drivers, and quick confirmation.',
         route: 'Gdańsk Airport',
         examples: ['Gdańsk Old Town', 'Gdańsk Oliwa', 'Gdańsk Main Station', 'Brzeźno Beach'],
+        priceDay: 100,
+        priceNight: 120,
       },
       gdanskSopot: {
         title: 'Gdańsk Airport to Sopot Transfer',
         description: 'Private transfer between Gdańsk Airport and Sopot with fixed pricing both ways and flight tracking.',
         route: 'Gdańsk Airport ↔ Sopot',
         examples: ['Sopot Pier', 'Sopot Centre', 'Sopot Hotels', 'Sopot Railway Station'],
+        priceDay: 120,
+        priceNight: 150,
       },
       gdanskGdynia: {
         title: 'Gdańsk Airport to Gdynia Transfer',
         description: 'Comfortable transfer between Gdańsk Airport and Gdynia with fixed pricing both ways.',
         route: 'Gdańsk Airport ↔ Gdynia',
         examples: ['Gdynia Centre', 'Gdynia Port', 'Gdynia Hotels', 'Gdynia Orłowo'],
+        priceDay: 200,
+        priceNight: 250,
       },
     },
 };
@@ -717,6 +740,15 @@ const translations = {
     },
     routeLanding: {
       orderNow: 'Rezerwuj online teraz',
+      seoParagraph: (route: string) =>
+        `Taxi lotnisko Gdańsk dla trasy ${route}. Taxi Gdańsk / taxi gdansk: stałe ceny, 24/7, szybkie potwierdzenie i śledzenie lotu.`,
+      pricingTitle: 'Przykładowe ceny',
+      pricingSubtitle: (route: string) => `Samochód standard dla trasy ${route}`,
+      vehicleLabel: 'Samochód standard',
+      dayLabel: 'Taryfa dzienna',
+      nightLabel: 'Taryfa nocna',
+      currency: 'PLN',
+      pricingNote: 'Ceny zawierają VAT. Taryfa nocna obowiązuje od 22:00 do 6:00 oraz w niedziele i święta.',
       includedTitle: 'Co obejmuje usługa',
       includedList: [
         'Powitanie na lotnisku i jasne instrukcje odbioru.',
@@ -742,6 +774,14 @@ const translations = {
         {
           question: 'Czy oferujecie foteliki dziecięce?',
           answer: 'Tak, foteliki dziecięce są dostępne na życzenie podczas rezerwacji.',
+        },
+        {
+          question: 'Jak mogę zapłacić?',
+          answer: 'Możesz zapłacić kartą, Apple Pay, Google Pay, Revolut lub gotówką na życzenie.',
+        },
+        {
+          question: 'Gdzie spotkam kierowcę?',
+          answer: 'Otrzymasz jasne instrukcje odbioru i kontakt do kierowcy w e-mailu potwierdzającym.',
         },
       ],
     },
@@ -1030,18 +1070,24 @@ const translations = {
         description: 'Zarezerwuj szybki i niezawodny transfer z Lotniska Gdańsk. Stałe ceny w obie strony, profesjonalni kierowcy i szybkie potwierdzenie.',
         route: 'Lotnisko Gdańsk',
         examples: ['Gdańsk Stare Miasto', 'Gdańsk Oliwa', 'Dworzec Główny', 'Plaża w Brzeźnie'],
+        priceDay: 100,
+        priceNight: 120,
       },
       gdanskSopot: {
         title: 'Transfer Lotnisko Gdańsk – Sopot',
         description: 'Prywatny transfer między Lotniskiem Gdańsk a Sopotem ze stałą ceną w obie strony i śledzeniem lotu.',
         route: 'Lotnisko Gdańsk ↔ Sopot',
         examples: ['Molo w Sopocie', 'Centrum Sopotu', 'Hotele w Sopocie', 'Dworzec Sopot'],
+        priceDay: 120,
+        priceNight: 150,
       },
       gdanskGdynia: {
         title: 'Transfer Lotnisko Gdańsk – Gdynia',
         description: 'Komfortowy transfer między Lotniskiem Gdańsk a Gdynią ze stałą ceną w obie strony.',
         route: 'Lotnisko Gdańsk ↔ Gdynia',
         examples: ['Centrum Gdyni', 'Port Gdynia', 'Hotele w Gdyni', 'Gdynia Orłowo'],
+        priceDay: 200,
+        priceNight: 250,
       },
     },
   },
@@ -1226,6 +1272,15 @@ const translations = {
     },
     routeLanding: {
       orderNow: 'Jetzt online reservieren',
+      seoParagraph: (route: string) =>
+        `Gdansk airport taxi für die Strecke ${route}. Festpreise, 24/7 Service, Meet & Greet und schnelle Bestätigung.`,
+      pricingTitle: 'Beispielpreise',
+      pricingSubtitle: (route: string) => `Standardwagen für ${route}`,
+      vehicleLabel: 'Standardwagen',
+      dayLabel: 'Tagestarif',
+      nightLabel: 'Nachttarif',
+      currency: 'PLN',
+      pricingNote: 'Preise inkl. MwSt. Nachttarif gilt von 22:00 bis 6:00 sowie an Sonn- und Feiertagen.',
       includedTitle: 'Was ist enthalten',
       includedList: [
         'Meet & Greet am Flughafen mit klaren Abholhinweisen.',
@@ -1251,6 +1306,14 @@ const translations = {
         {
           question: 'Bieten Sie Kindersitze an?',
           answer: 'Ja, Kindersitze sind auf Anfrage bei der Buchung verfügbar.',
+        },
+        {
+          question: 'Wie kann ich bezahlen?',
+          answer: 'Zahlung per Karte, Apple Pay, Google Pay, Revolut oder bar auf Anfrage.',
+        },
+        {
+          question: 'Wo treffe ich den Fahrer?',
+          answer: 'Sie erhalten klare Abholhinweise und Kontaktdaten in der Bestätigungs-E-Mail.',
         },
       ],
     },
@@ -1539,18 +1602,24 @@ const translations = {
         description: 'Buchen Sie ein schnelles, zuverlässiges Flughafentaxi vom Flughafen Gdańsk. Festpreise in beide Richtungen, professionelle Fahrer und schnelle Bestätigung.',
         route: 'Flughafen Gdańsk',
         examples: ['Altstadt Gdańsk', 'Gdańsk Oliwa', 'Gdańsk Hauptbahnhof', 'Brzeźno Strand'],
+        priceDay: 100,
+        priceNight: 120,
       },
       gdanskSopot: {
         title: 'Transfer vom Flughafen Gdańsk nach Sopot',
         description: 'Privater Transfer zwischen dem Flughafen Gdańsk und Sopot mit Festpreisen in beide Richtungen und Flugverfolgung.',
         route: 'Flughafen Gdańsk ↔ Sopot',
         examples: ['Sopot Pier', 'Sopot Zentrum', 'Hotels in Sopot', 'Bahnhof Sopot'],
+        priceDay: 120,
+        priceNight: 150,
       },
       gdanskGdynia: {
         title: 'Transfer vom Flughafen Gdańsk nach Gdynia',
         description: 'Komfortabler Transfer zwischen dem Flughafen Gdańsk und Gdynia mit Festpreisen in beide Richtungen.',
         route: 'Flughafen Gdańsk ↔ Gdynia',
         examples: ['Gdynia Zentrum', 'Hafen Gdynia', 'Hotels in Gdynia', 'Gdynia Orłowo'],
+        priceDay: 200,
+        priceNight: 250,
       },
     },
   },
@@ -1735,6 +1804,15 @@ const translations = {
     },
     routeLanding: {
       orderNow: 'Varaa verkossa nyt',
+      seoParagraph: (route: string) =>
+        `Gdansk airport taxi reitille ${route}. Kiinteät hinnat, 24/7 palvelu, meet & greet ja nopea vahvistus.`,
+      pricingTitle: 'Esimerkkihinnat',
+      pricingSubtitle: (route: string) => `Perusauto reitille ${route}`,
+      vehicleLabel: 'Perusauto',
+      dayLabel: 'Päivätaksa',
+      nightLabel: 'Yötaksa',
+      currency: 'PLN',
+      pricingNote: 'Hinnat sisältävät ALV:n. Yötaksa on voimassa klo 22–6 sekä sunnuntaisin ja pyhäpäivinä.',
       includedTitle: 'Mitä sisältyy',
       includedList: [
         'Meet & greet lentokentällä selkeillä nouto-ohjeilla.',
@@ -1760,6 +1838,14 @@ const translations = {
         {
           question: 'Tarjoatteko lastenistuimia?',
           answer: 'Kyllä, lastenistuimet ovat saatavilla pyynnöstä varauksen yhteydessä.',
+        },
+        {
+          question: 'Miten voin maksaa?',
+          answer: 'Voit maksaa kortilla, Apple Paylla, Google Paylla, Revolutilla tai käteisellä pyynnöstä.',
+        },
+        {
+          question: 'Missä tapaan kuljettajan?',
+          answer: 'Saat selkeät nouto-ohjeet ja yhteystiedot vahvistusviestissä.',
         },
       ],
     },
@@ -2048,18 +2134,24 @@ const translations = {
         description: 'Varaa nopea ja luotettava lentokenttätaksi Gdańskin lentokentältä. Kiinteä hinta molempiin suuntiin, ammattikuljettajat ja nopea vahvistus.',
         route: 'Gdańskin lentokenttä',
         examples: ['Gdańskin vanhakaupunki', 'Gdańsk Oliwa', 'Gdańskin päärautatieasema', 'Brzeźno Beach'],
+        priceDay: 100,
+        priceNight: 120,
       },
       gdanskSopot: {
         title: 'Kuljetus Gdańskin lentokentältä Sopotiin',
         description: 'Yksityinen kuljetus Gdańskin lentokentän ja Sopotin välillä, kiinteä hinta molempiin suuntiin ja lentoseuranta.',
         route: 'Gdańskin lentokenttä ↔ Sopot',
         examples: ['Sopot Pier', 'Sopotin keskusta', 'Sopotin hotellit', 'Sopotin rautatieasema'],
+        priceDay: 120,
+        priceNight: 150,
       },
       gdanskGdynia: {
         title: 'Kuljetus Gdańskin lentokentältä Gdyniaan',
         description: 'Mukava kuljetus Gdańskin lentokentän ja Gdynian välillä kiinteällä hinnalla.',
         route: 'Gdańskin lentokenttä ↔ Gdynia',
         examples: ['Gdynian keskusta', 'Gdynian satama', 'Gdynian hotellit', 'Gdynia Orłowo'],
+        priceDay: 200,
+        priceNight: 250,
       },
     },
   },
@@ -2244,6 +2336,15 @@ const translations = {
     },
     routeLanding: {
       orderNow: 'Reserver online nå',
+      seoParagraph: (route: string) =>
+        `Gdansk airport taxi for ruten ${route}. Faste priser, 24/7 service, meet & greet og rask bekreftelse.`,
+      pricingTitle: 'Eksempelpriser',
+      pricingSubtitle: (route: string) => `Standardbil for ruten ${route}`,
+      vehicleLabel: 'Standardbil',
+      dayLabel: 'Dagpris',
+      nightLabel: 'Nattpris',
+      currency: 'PLN',
+      pricingNote: 'Prisene inkluderer MVA. Nattpris gjelder 22:00–06:00 samt søndager og helligdager.',
       includedTitle: 'Dette er inkludert',
       includedList: [
         'Meet & greet på flyplassen med tydelige instrukser.',
@@ -2269,6 +2370,14 @@ const translations = {
         {
           question: 'Tilbyr dere barneseter?',
           answer: 'Ja, barneseter er tilgjengelig på forespørsel ved bestilling.',
+        },
+        {
+          question: 'Hvordan kan jeg betale?',
+          answer: 'Du kan betale med kort, Apple Pay, Google Pay, Revolut eller kontant på forespørsel.',
+        },
+        {
+          question: 'Hvor møter jeg sjåføren?',
+          answer: 'Du får tydelige hentebeskrivelser og kontaktinfo i bekreftelses-e-posten.',
         },
       ],
     },
@@ -2557,18 +2666,24 @@ const translations = {
         description: 'Bestill en rask og pålitelig flyplasstaxi fra Gdańsk flyplass. Fast pris begge veier, profesjonelle sjåfører og rask bekreftelse.',
         route: 'Gdańsk flyplass',
         examples: ['Gdańsk gamleby', 'Gdańsk Oliwa', 'Gdańsk hovedstasjon', 'Brzeźno strand'],
+        priceDay: 100,
+        priceNight: 120,
       },
       gdanskSopot: {
         title: 'Transfer fra Gdańsk flyplass til Sopot',
         description: 'Privat transfer mellom Gdańsk flyplass og Sopot med fast pris begge veier og flysporing.',
         route: 'Gdańsk flyplass ↔ Sopot',
         examples: ['Sopot Pier', 'Sopot sentrum', 'Sopot hoteller', 'Sopot jernbanestasjon'],
+        priceDay: 120,
+        priceNight: 150,
       },
       gdanskGdynia: {
         title: 'Transfer fra Gdańsk flyplass til Gdynia',
         description: 'Komfortabel transfer mellom Gdańsk flyplass og Gdynia med fast pris begge veier.',
         route: 'Gdańsk flyplass ↔ Gdynia',
         examples: ['Gdynia sentrum', 'Gdynia havn', 'Gdynia hoteller', 'Gdynia Orłowo'],
+        priceDay: 200,
+        priceNight: 250,
       },
     },
   },
@@ -2753,6 +2868,15 @@ const translations = {
     },
     routeLanding: {
       orderNow: 'Boka online nu',
+      seoParagraph: (route: string) =>
+        `Gdansk airport taxi för rutten ${route}. Fasta priser, 24/7 service, meet & greet och snabb bekräftelse.`,
+      pricingTitle: 'Exempelpriser',
+      pricingSubtitle: (route: string) => `Standardbil för ${route}`,
+      vehicleLabel: 'Standardbil',
+      dayLabel: 'Dagpris',
+      nightLabel: 'Nattpris',
+      currency: 'PLN',
+      pricingNote: 'Priserna inkluderar moms. Nattpris gäller 22:00–06:00 samt söndagar och helgdagar.',
       includedTitle: 'Detta ingår',
       includedList: [
         'Meet & greet på flygplatsen med tydliga upphämtningsinstruktioner.',
@@ -2778,6 +2902,14 @@ const translations = {
         {
           question: 'Erbjuder ni barnstolar?',
           answer: 'Ja, barnstolar finns tillgängliga på begäran vid bokning.',
+        },
+        {
+          question: 'Hur kan jag betala?',
+          answer: 'Du kan betala med kort, Apple Pay, Google Pay, Revolut eller kontant på begäran.',
+        },
+        {
+          question: 'Var möter jag chauffören?',
+          answer: 'Du får tydliga upphämtningsinstruktioner och kontaktinfo i bekräftelsemejlet.',
         },
       ],
     },
@@ -3066,18 +3198,24 @@ const translations = {
         description: 'Boka en snabb och pålitlig flygplatstaxi från Gdańsk flygplats. Fast pris åt båda håll, professionella förare och snabb bekräftelse.',
         route: 'Gdańsk flygplats',
         examples: ['Gdańsk gamla stan', 'Gdańsk Oliwa', 'Gdańsk centralstation', 'Brzeźno Beach'],
+        priceDay: 100,
+        priceNight: 120,
       },
       gdanskSopot: {
         title: 'Transfer från Gdańsk flygplats till Sopot',
         description: 'Privat transfer mellan Gdańsk flygplats och Sopot med fast pris åt båda håll och flygspårning.',
         route: 'Gdańsk flygplats ↔ Sopot',
         examples: ['Sopot Pier', 'Sopot centrum', 'Sopot hotell', 'Sopot järnvägsstation'],
+        priceDay: 120,
+        priceNight: 150,
       },
       gdanskGdynia: {
         title: 'Transfer från Gdańsk flygplats till Gdynia',
         description: 'Bekväm transfer mellan Gdańsk flygplats och Gdynia med fast pris åt båda håll.',
         route: 'Gdańsk flygplats ↔ Gdynia',
         examples: ['Gdynia centrum', 'Gdynia hamn', 'Gdynia hotell', 'Gdynia Orłowo'],
+        priceDay: 200,
+        priceNight: 250,
       },
     },
   },
@@ -3262,6 +3400,15 @@ const translations = {
     },
     routeLanding: {
       orderNow: 'Book online nu',
+      seoParagraph: (route: string) =>
+        `Gdansk airport taxi for ruten ${route}. Faste priser, 24/7 service, meet & greet og hurtig bekræftelse.`,
+      pricingTitle: 'Eksempelpriser',
+      pricingSubtitle: (route: string) => `Standardbil for ruten ${route}`,
+      vehicleLabel: 'Standardbil',
+      dayLabel: 'Dagpris',
+      nightLabel: 'Natpris',
+      currency: 'PLN',
+      pricingNote: 'Priserne inkluderer moms. Natpris gælder 22:00–06:00 samt søndage og helligdage.',
       includedTitle: 'Hvad er inkluderet',
       includedList: [
         'Meet & greet i lufthavnen med klare afhentningsinstruktioner.',
@@ -3287,6 +3434,14 @@ const translations = {
         {
           question: 'Tilbyder I barnesæder?',
           answer: 'Ja, barnesæder er tilgængelige efter aftale ved booking.',
+        },
+        {
+          question: 'Hvordan kan jeg betale?',
+          answer: 'Du kan betale med kort, Apple Pay, Google Pay, Revolut eller kontant efter aftale.',
+        },
+        {
+          question: 'Hvor møder jeg chaufføren?',
+          answer: 'Du får klare afhentningsinstruktioner og kontaktinfo i bekræftelses-e-mailen.',
         },
       ],
     },
@@ -3575,18 +3730,24 @@ const translations = {
         description: 'Book en hurtig og pålidelig lufthavnstaxa fra Gdańsk lufthavn. Fast pris begge veje, professionelle chauffører og hurtig bekræftelse.',
         route: 'Gdańsk lufthavn',
         examples: ['Gdańsk gamle by', 'Gdańsk Oliwa', 'Gdańsk hovedbanegård', 'Brzeźno Beach'],
+        priceDay: 100,
+        priceNight: 120,
       },
       gdanskSopot: {
         title: 'Transfer fra Gdańsk lufthavn til Sopot',
         description: 'Privat transfer mellem Gdańsk lufthavn og Sopot med fast pris begge veje og flysporing.',
         route: 'Gdańsk lufthavn ↔ Sopot',
         examples: ['Sopot Pier', 'Sopot centrum', 'Sopot hoteller', 'Sopot banegård'],
+        priceDay: 120,
+        priceNight: 150,
       },
       gdanskGdynia: {
         title: 'Transfer fra Gdańsk lufthavn til Gdynia',
         description: 'Komfortabel transfer mellem Gdańsk lufthavn og Gdynia med fast pris begge veje.',
         route: 'Gdańsk lufthavn ↔ Gdynia',
         examples: ['Gdynia centrum', 'Gdynia havn', 'Gdynia hoteller', 'Gdynia Orłowo'],
+        priceDay: 200,
+        priceNight: 250,
       },
     },
   },
