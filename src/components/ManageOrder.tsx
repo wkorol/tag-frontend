@@ -925,13 +925,15 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                       {t.manageOrder.editBooking}
                     </button>
                   )}
-                  <button
-                    onClick={() => setShowCancelConfirm(true)}
-                    className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                    {t.manageOrder.cancelBooking}
-                  </button>
+                  {canEdit && (
+                    <button
+                      onClick={() => setShowCancelConfirm(true)}
+                      className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                      {t.manageOrder.cancelBooking}
+                    </button>
+                  )}
                 </div>
               )}
             </div>
