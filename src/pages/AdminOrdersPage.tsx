@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { getApiBaseUrl } from '../lib/api';
-import { localeToPath, useI18n } from '../lib/i18n';
+import { Locale, localeToPath, useI18n } from '../lib/i18n';
 
 type AdminOrder = {
   id: string;
@@ -27,8 +27,9 @@ const statusStyles: Record<string, string> = {
 };
 
 export function AdminOrdersPage() {
-  const { t, locale } = useI18n();
-  const basePath = localeToPath(locale);
+  const { t, locale, setLocale } = useI18n();
+  const adminLocale: Locale = 'pl';
+  const basePath = localeToPath(adminLocale);
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token') ?? '';
   const [orders, setOrders] = useState<AdminOrder[]>([]);
@@ -36,6 +37,9 @@ export function AdminOrdersPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (locale !== adminLocale) {
+      setLocale(adminLocale);
+    }
     if (!token) {
       setError(t.adminOrders.missingToken);
       setLoading(false);
@@ -59,7 +63,7 @@ export function AdminOrdersPage() {
         setError(err.message);
       })
       .finally(() => setLoading(false));
-  }, [token]);
+  }, [token, locale, setLocale]);
 
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-10">

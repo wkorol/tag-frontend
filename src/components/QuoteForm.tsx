@@ -4,7 +4,7 @@ import { buildAdditionalNotes } from '../lib/orderNotes';
 import { hasMarketingConsent } from '../lib/consent';
 import { getApiBaseUrl } from '../lib/api';
 import { trackFormStart } from '../lib/tracking';
-import { localeToPath, useI18n } from '../lib/i18n';
+import { Locale, localeToPath, useI18n } from '../lib/i18n';
 
 const validatePhoneNumber = (value: string, messages: { phoneLetters: string; phoneLength: string }) => {
   const trimmed = value.trim();
@@ -41,6 +41,7 @@ interface QuoteFormProps {
 
 export function QuoteForm({ onClose }: QuoteFormProps) {
   const { t, locale } = useI18n();
+  const emailLocale: Locale = locale === 'pl' ? 'pl' : 'en';
   const basePath = localeToPath(locale);
   const priceInputRef = useRef<HTMLInputElement | null>(null);
   const [formData, setFormData] = useState({
@@ -237,7 +238,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
       emailAddress: formData.email,
       phoneNumber: formData.phone,
       additionalNotes,
-      locale,
+      locale: emailLocale,
     };
 
     try {
@@ -245,7 +246,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept-Language': locale,
+          'Accept-Language': emailLocale,
         },
         body: JSON.stringify(payload),
       });

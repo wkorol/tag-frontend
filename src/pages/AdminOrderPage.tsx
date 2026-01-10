@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { Calendar, CheckCircle2, XCircle } from 'lucide-react';
 import { getApiBaseUrl } from '../lib/api';
-import { localeToPath, useI18n } from '../lib/i18n';
+import { Locale, localeToPath, useI18n } from '../lib/i18n';
 
 type AdminOrder = {
   id: string;
@@ -41,9 +41,62 @@ const parseNotes = (notes?: string | null) => {
   }
 };
 
+const mapFixedLabelToPolish = (value: string) => {
+  const normalized = value.trim();
+  const map: Record<string, string> = {
+    Airport: 'Lotnisko',
+    Flughafen: 'Lotnisko',
+    Lentokenttä: 'Lotnisko',
+    Flyplass: 'Lotnisko',
+    Flygplats: 'Lotnisko',
+    Lufthavn: 'Lotnisko',
+    Lotnisko: 'Lotnisko',
+    'Gdańsk City Center': 'Centrum Gdańska',
+    'Gdańsk Zentrum': 'Centrum Gdańska',
+    'Gdańsk centrum': 'Centrum Gdańska',
+    'Gdańsk sentrum': 'Centrum Gdańska',
+    'Gdańskin keskusta': 'Centrum Gdańska',
+    'Centrum Gdańska': 'Centrum Gdańska',
+    'Gdynia City Center': 'Centrum Gdyni',
+    'Gdynia Zentrum': 'Centrum Gdyni',
+    'Gdynia centrum': 'Centrum Gdyni',
+    'Gdynia sentrum': 'Centrum Gdyni',
+    'Gdynian keskusta': 'Centrum Gdyni',
+    'Centrum Gdyni': 'Centrum Gdyni',
+  };
+  return map[normalized] ?? value;
+};
+
+const normalizeWhatsappNumber = (value: string) => {
+  const digits = value.replace(/\D/g, '');
+  if (!digits) {
+    return null;
+  }
+  if (digits.startsWith('48')) {
+    return digits;
+  }
+  if (digits.length === 9) {
+    return `48${digits}`;
+  }
+  if (digits.length === 10 && digits.startsWith('0')) {
+    return `48${digits.slice(1)}`;
+  }
+  return digits;
+};
+
+const buildWhatsappLink = (phone: string, fullName: string) => {
+  const digits = normalizeWhatsappNumber(phone);
+  if (!digits) {
+    return null;
+  }
+  const message = `Cześć ${fullName}, tu Taxi Airport Gdańsk.`;
+  return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
+};
+
 export function AdminOrderPage() {
-  const { t, locale } = useI18n();
-  const basePath = localeToPath(locale);
+  const { t, locale, setLocale } = useI18n();
+  const adminLocale: Locale = 'pl';
+  const basePath = localeToPath(adminLocale);
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token') ?? '';
@@ -100,8 +153,11 @@ export function AdminOrderPage() {
   };
 
   useEffect(() => {
+    if (locale !== adminLocale) {
+      setLocale(adminLocale);
+    }
     fetchOrder();
-  }, [id, token]);
+  }, [id, token, locale, setLocale]);
 
   const postDecision = async (payload: Record<string, string>) => {
     if (!id || !token) {
@@ -251,7 +307,22 @@ export function AdminOrderPage() {
                   <div className="text-xs uppercase text-slate-500">{t.adminOrder.customerLabel}</div>
                   <div className="text-slate-900">{order.fullName}</div>
                   <div className="text-sm text-slate-600">{order.emailAddress}</div>
-                  <div className="text-sm text-slate-600">{order.phoneNumber}</div>
+                  {(() => {
+                    const whatsappLink = buildWhatsappLink(order.phoneNumber, order.fullName);
+                    if (!whatsappLink) {
+                      return <div className="text-sm text-slate-600">{order.phoneNumber}</div>;
+                    }
+                    return (
+                      <a
+                        className="text-sm text-slate-600 underline underline-offset-2 hover:text-emerald-600"
+                        href={whatsappLink}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {order.phoneNumber}
+                      </a>
+                    );
+                  })()}
                 </div>
                 <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
                   <div className="text-xs uppercase text-slate-500">{t.adminOrder.pickupLabel}</div>
@@ -259,7 +330,7 @@ export function AdminOrderPage() {
                     <Calendar className="h-4 w-4 text-blue-600" />
                     {order.date} {order.pickupTime}
                   </div>
-                  <div className="text-sm text-slate-600">{order.pickupAddress}</div>
+                  <div className="text-sm text-slate-600">{mapFixedLabelToPolish(order.pickupAddress)}</div>
                 </div>
               </div>
 
@@ -306,7 +377,9 @@ export function AdminOrderPage() {
                     </div>
                   )}
                   <div className="text-sm text-slate-700">
-                    {t.adminOrder.route} {parsedNotes?.route?.from ?? '—'} → {parsedNotes?.route?.to ?? '—'}
+                    {t.adminOrder.route}{' '}
+                    {parsedNotes?.route?.from ? mapFixedLabelToPolish(parsedNotes.route.from) : '—'} →{' '}
+                    {parsedNotes?.route?.to ? mapFixedLabelToPolish(parsedNotes.route.to) : '—'}
                   </div>
                   {parsedNotes?.notes && (
                     <div className="text-sm text-slate-700">

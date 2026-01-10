@@ -4,7 +4,7 @@ import { useEurRate } from '../lib/useEurRate';
 import { formatEur } from '../lib/currency';
 import { buildAdditionalNotes, parseAdditionalNotes, RouteType } from '../lib/orderNotes';
 import { getApiBaseUrl } from '../lib/api';
-import { useI18n } from '../lib/i18n';
+import { Locale, useI18n } from '../lib/i18n';
 
 const API_BASE_URL = getApiBaseUrl();
 
@@ -56,6 +56,11 @@ type OrderState = {
 
 export function ManageOrder({ orderId }: ManageOrderProps) {
   const { t, locale } = useI18n();
+  const emailLocale: Locale = locale === 'pl' ? 'pl' : 'en';
+  const accessTokenParam = useMemo(
+    () => new URLSearchParams(window.location.search).get('token') ?? '',
+    []
+  );
   const cancelledParam = new URLSearchParams(window.location.search).get('cancelled') === '1';
   const updateParam = new URLSearchParams(window.location.search).get('update') ?? '';
   const updateFields = useMemo(
@@ -75,6 +80,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
   const [error, setError] = useState<string | null>(null);
   const [inputEmail, setInputEmail] = useState('');
   const [authEmail, setAuthEmail] = useState('');
+  const [accessToken, setAccessToken] = useState(accessTokenParam);
   const [isAuthorizing, setIsAuthorizing] = useState(false);
   const [accessRequestId, setAccessRequestId] = useState(0);
   const [toast, setToast] = useState<string | null>(null);
@@ -114,12 +120,15 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
       setError(null);
 
       try {
+        const payload = accessToken
+          ? { accessToken }
+          : { emailAddress: authEmail };
         const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}/access`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ emailAddress: authEmail }),
+          body: JSON.stringify(payload),
         });
         const data = await response.json().catch(() => null);
 
@@ -196,12 +205,12 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
       }
     };
 
-    if (authEmail) {
+    if (authEmail || accessToken) {
       loadOrder();
     } else {
       setLoading(false);
     }
-  }, [orderId, authEmail, accessRequestId]);
+  }, [orderId, authEmail, accessToken, accessRequestId]);
 
   useEffect(() => {
     if (order && effectiveUpdateRequest && canEdit) {
@@ -234,7 +243,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
 
     const includeFlightNumber = order.pickupType === 'airport'
       || (effectiveUpdateRequest && updateFields.has('flight'));
-    const payload = {
+    const payload: Record<string, unknown> = {
       carType: order.route.type === 'bus' ? 1 : 2,
       pickupAddress: order.pickupType === 'address' ? formData.address : order.route.from,
       proposedPrice: String(order.price),
@@ -248,15 +257,20 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
       additionalNotes,
       adminUpdateRequest: effectiveUpdateRequest,
       adminUpdateFields: effectiveUpdateRequest ? Array.from(updateFields) : [],
-      locale,
+      locale: emailLocale,
     };
+    if (accessToken) {
+      payload.accessToken = accessToken;
+    } else {
+      payload.currentEmailAddress = authEmail;
+    }
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/orders/${order.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Accept-Language': locale,
+          'Accept-Language': emailLocale,
         },
         body: JSON.stringify(payload),
       });
@@ -282,7 +296,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
         description: formData.description.trim(),
         status: order.status === 'confirmed' && !effectiveUpdateRequest ? 'pending' : order.status,
       });
-      if (formData.email && formData.email !== authEmail) {
+      if (!accessToken && formData.email && formData.email !== authEmail) {
         setAuthEmail(formData.email);
       }
       setIsEditing(false);
@@ -306,12 +320,15 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
     setError(null);
 
     try {
+      const payload = accessToken
+        ? { accessToken }
+        : { emailAddress: authEmail };
       const response = await fetch(`${API_BASE_URL}/api/orders/${order.id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ emailAddress: authEmail }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -393,6 +410,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                   return;
                 }
                 setError(null);
+                setAccessToken('');
                 setAuthEmail(inputEmail.trim());
                 setAccessRequestId((value) => value + 1);
               }}

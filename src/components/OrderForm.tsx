@@ -6,7 +6,7 @@ import { buildAdditionalNotes } from '../lib/orderNotes';
 import { hasMarketingConsent } from '../lib/consent';
 import { getApiBaseUrl } from '../lib/api';
 import { trackFormStart } from '../lib/tracking';
-import { localeToPath, useI18n } from '../lib/i18n';
+import { Locale, localeToPath, useI18n } from '../lib/i18n';
 
 interface OrderFormProps {
   route: {
@@ -120,6 +120,7 @@ const isPolishPublicHoliday = (date: Date, apiHolidayKeys: Set<string> | null) =
 
 export function OrderForm({ route, onClose }: OrderFormProps) {
   const { t, locale } = useI18n();
+  const emailLocale: Locale = locale === 'pl' ? 'pl' : 'en';
   const basePath = localeToPath(locale);
   const [formData, setFormData] = useState({
     pickupType: '',
@@ -427,7 +428,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       emailAddress: formData.email,
       phoneNumber: formData.phone,
       additionalNotes,
-      locale,
+      locale: emailLocale,
     };
 
     try {
@@ -435,7 +436,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept-Language': locale,
+          'Accept-Language': emailLocale,
         },
         body: JSON.stringify(payload),
       });
