@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Calendar, CheckCircle2, XCircle } from 'lucide-react';
 import { getApiBaseUrl } from '../lib/api';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
@@ -97,6 +97,7 @@ export function AdminOrderPage() {
   const { t, locale, setLocale } = useI18n();
   const adminLocale: Locale = 'pl';
   const basePath = localeToPath(adminLocale);
+  const navigate = useNavigate();
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token') ?? '';
@@ -181,6 +182,62 @@ export function AdminOrderPage() {
       }
       setActionMessage(t.adminOrder.updated);
       fetchOrder();
+    } catch (err) {
+      setActionMessage(err instanceof Error ? err.message : t.adminOrder.updateError);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const postAdminCancel = async () => {
+    if (!id || !token) {
+      return;
+    }
+    if (!window.confirm(t.adminOrder.cancelConfirmedConfirm)) {
+      return;
+    }
+    setSubmitting(true);
+    setActionMessage(null);
+    const apiBaseUrl = getApiBaseUrl();
+    try {
+      const response = await fetch(
+        `${apiBaseUrl}/api/admin/orders/${id}/cancel?token=${encodeURIComponent(token)}`,
+        { method: 'POST' }
+      );
+      const data = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(data?.error ?? t.adminOrder.updateError);
+      }
+      setActionMessage(t.adminOrder.cancelConfirmedSuccess);
+      fetchOrder();
+    } catch (err) {
+      setActionMessage(err instanceof Error ? err.message : t.adminOrder.updateError);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const postAdminDelete = async () => {
+    if (!id || !token) {
+      return;
+    }
+    if (!window.confirm(t.adminOrder.deleteRejectedConfirm)) {
+      return;
+    }
+    setSubmitting(true);
+    setActionMessage(null);
+    const apiBaseUrl = getApiBaseUrl();
+    try {
+      const response = await fetch(
+        `${apiBaseUrl}/api/admin/orders/${id}/delete?token=${encodeURIComponent(token)}`,
+        { method: 'DELETE' }
+      );
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        throw new Error(data?.error ?? t.adminOrder.updateError);
+      }
+      setActionMessage(t.adminOrder.deleteRejectedSuccess);
+      navigate(`${basePath}/admin?token=${encodeURIComponent(token)}`, { replace: true });
     } catch (err) {
       setActionMessage(err instanceof Error ? err.message : t.adminOrder.updateError);
     } finally {
@@ -484,6 +541,38 @@ export function AdminOrderPage() {
                   onClick={postUpdateRequest}
                 >
                   {t.adminOrder.requestUpdateAction}
+                </button>
+              </div>
+            )}
+
+            {order.status === 'confirmed' && (
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-3">
+                <h3 className="text-lg text-slate-900">{t.adminOrder.cancelConfirmedTitle}</h3>
+                <p className="text-sm text-slate-600">
+                  {t.adminOrder.cancelConfirmedBody}
+                </p>
+                <button
+                  className="w-full rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700 transition-colors"
+                  disabled={submitting}
+                  onClick={postAdminCancel}
+                >
+                  {t.adminOrder.cancelConfirmedAction}
+                </button>
+              </div>
+            )}
+
+            {order.status === 'rejected' && (
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-3">
+                <h3 className="text-lg text-slate-900">{t.adminOrder.deleteRejectedTitle}</h3>
+                <p className="text-sm text-slate-600">
+                  {t.adminOrder.deleteRejectedBody}
+                </p>
+                <button
+                  className="w-full rounded-lg border border-red-600 px-4 py-2 text-red-700 hover:bg-red-50 transition-colors"
+                  disabled={submitting}
+                  onClick={postAdminDelete}
+                >
+                  {t.adminOrder.deleteRejectedAction}
                 </button>
               </div>
             )}
