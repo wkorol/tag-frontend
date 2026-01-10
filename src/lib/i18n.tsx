@@ -537,7 +537,9 @@ const baseEn = {
       deleteRejectedSuccess: 'Order deleted.',
       completionTitle: 'Completion status',
       markCompleted: 'Mark completed',
+      markCompletedConfirm: 'Mark this order as completed?',
       markFailed: 'Mark not completed',
+      markFailedConfirm: 'Mark this order as not completed?',
     },
     pages: {
       gdanskTaxi: {
@@ -1081,8 +1083,10 @@ const translations = {
       deleteRejectedConfirm: 'Czy na pewno usunąć to odrzucone zamówienie?',
       deleteRejectedSuccess: 'Zamówienie usunięte.',
       completionTitle: 'Status realizacji',
-      markCompleted: 'Oznacz jako zrealizowane',
-      markFailed: 'Oznacz jako niezrealizowane',
+      markCompleted: 'Zrealizowane',
+      markCompletedConfirm: 'Oznaczyć to zamówienie jako zrealizowane?',
+      markFailed: 'Niezrealizowane',
+      markFailedConfirm: 'Oznaczyć to zamówienie jako niezrealizowane?',
     },
     pages: {
       gdanskTaxi: {
@@ -1624,7 +1628,9 @@ const translations = {
       deleteRejectedSuccess: 'Order deleted.',
       completionTitle: 'Status der Durchführung',
       markCompleted: 'Als abgeschlossen markieren',
+      markCompletedConfirm: 'Mark this order as completed?',
       markFailed: 'Als nicht abgeschlossen markieren',
+      markFailedConfirm: 'Mark this order as not completed?',
     },
     pages: {
       gdanskTaxi: {
@@ -2166,7 +2172,9 @@ const translations = {
       deleteRejectedSuccess: 'Order deleted.',
       completionTitle: 'Valmiustila',
       markCompleted: 'Merkitse valmiiksi',
+      markCompletedConfirm: 'Mark this order as completed?',
       markFailed: 'Merkitse epäonnistuneeksi',
+      markFailedConfirm: 'Mark this order as not completed?',
     },
     pages: {
       gdanskTaxi: {
@@ -2708,7 +2716,9 @@ const translations = {
       deleteRejectedSuccess: 'Order deleted.',
       completionTitle: 'Fullføringsstatus',
       markCompleted: 'Merk som fullført',
+      markCompletedConfirm: 'Mark this order as completed?',
       markFailed: 'Merk som ikke fullført',
+      markFailedConfirm: 'Mark this order as not completed?',
     },
     pages: {
       gdanskTaxi: {
@@ -3250,7 +3260,9 @@ const translations = {
       deleteRejectedSuccess: 'Order deleted.',
       completionTitle: 'Slutförandestatus',
       markCompleted: 'Markera som slutförd',
+      markCompletedConfirm: 'Mark this order as completed?',
       markFailed: 'Markera som ej slutförd',
+      markFailedConfirm: 'Mark this order as not completed?',
     },
     pages: {
       gdanskTaxi: {
@@ -3792,7 +3804,9 @@ const translations = {
       deleteRejectedSuccess: 'Order deleted.',
       completionTitle: 'Status for gennemførelse',
       markCompleted: 'Markér som afsluttet',
+      markCompletedConfirm: 'Mark this order as completed?',
       markFailed: 'Markér som ikke afsluttet',
+      markFailedConfirm: 'Mark this order as not completed?',
     },
     pages: {
       gdanskTaxi: {

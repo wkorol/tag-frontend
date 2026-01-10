@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
 import { getRouteKeyFromSlug, getRoutePath, getRouteSlug } from '../lib/routes';
 import { requestScrollTo } from '../lib/scroll';
-import favicon from '../../public/favicon.svg';
+import favicon from '/favicon.svg?url';
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

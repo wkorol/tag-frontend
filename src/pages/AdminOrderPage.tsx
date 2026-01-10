@@ -124,7 +124,7 @@ export function AdminOrderPage() {
     return Number.isNaN(dateTime.getTime()) ? null : dateTime;
   }, [order?.date, order?.pickupTime]);
 
-  const canFulfill = order?.status === 'confirmed' && pickupDateTime && pickupDateTime.getTime() < Date.now();
+  const canFulfill = order?.status === 'confirmed';
 
   const fetchOrder = () => {
     if (!id || !token) {
@@ -584,14 +584,24 @@ export function AdminOrderPage() {
                   <button
                     className="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-white hover:bg-emerald-700 transition-colors"
                     disabled={submitting}
-                    onClick={() => postFulfillment('completed')}
+                    onClick={() => {
+                      if (!window.confirm(t.adminOrder.markCompletedConfirm)) {
+                        return;
+                      }
+                      postFulfillment('completed');
+                    }}
                   >
                     {t.adminOrder.markCompleted}
                   </button>
                   <button
                     className="flex items-center justify-center gap-2 rounded-lg bg-orange-500 px-4 py-3 text-white hover:bg-orange-600 transition-colors"
                     disabled={submitting}
-                    onClick={() => postFulfillment('failed')}
+                    onClick={() => {
+                      if (!window.confirm(t.adminOrder.markFailedConfirm)) {
+                        return;
+                      }
+                      postFulfillment('failed');
+                    }}
                   >
                     {t.adminOrder.markFailed}
                   </button>
