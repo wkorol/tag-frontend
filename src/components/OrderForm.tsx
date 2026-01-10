@@ -592,8 +592,8 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
             <p className="text-sm text-gray-500 mb-3">
               {t.orderForm.pickupTypeHint}
             </p>
-            <div className="grid grid-cols-2 gap-4">
-              <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <label className={`flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
                 formData.pickupType === 'airport'
                   ? 'border-blue-500 bg-blue-50'
                   : pickupTypeError ? 'border-red-400 ring-1 ring-red-200' : 'border-gray-200 hover:border-gray-300'
@@ -609,10 +609,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   className="w-4 h-4 text-blue-600"
                 />
                 <Plane className="w-5 h-5 text-gray-700" />
-                <span>{t.orderForm.airportPickup}</span>
+                <span className="text-sm leading-snug">{t.orderForm.airportPickup}</span>
               </label>
               
-              <label className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
+              <label className={`flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
                 formData.pickupType === 'address'
                   ? 'border-blue-500 bg-blue-50'
                   : pickupTypeError ? 'border-red-400 ring-1 ring-red-200' : 'border-gray-200 hover:border-gray-300'
@@ -626,7 +626,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   className="w-4 h-4 text-blue-600"
                 />
                 <MapPin className="w-5 h-5 text-gray-700" />
-                <span>{t.orderForm.addressPickup}</span>
+                <span className="text-sm leading-snug">{t.orderForm.addressPickup}</span>
               </label>
             </div>
           </div>
