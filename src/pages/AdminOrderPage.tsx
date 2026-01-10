@@ -120,11 +120,24 @@ export function AdminOrderPage() {
     if (!order?.date || !order?.pickupTime) {
       return null;
     }
-    const dateTime = new Date(`${order.date}T${order.pickupTime}:00`);
-    return Number.isNaN(dateTime.getTime()) ? null : dateTime;
+    const timeMatch = order.pickupTime.match(/^(\d{1,2}):(\d{2})/);
+    if (!timeMatch) {
+      return null;
+    }
+    const hours = Number(timeMatch[1]);
+    const minutes = Number(timeMatch[2]);
+    if (Number.isNaN(hours) || Number.isNaN(minutes)) {
+      return null;
+    }
+    const dateTime = new Date(`${order.date}T00:00:00`);
+    if (Number.isNaN(dateTime.getTime())) {
+      return null;
+    }
+    dateTime.setHours(hours, minutes, 0, 0);
+    return dateTime;
   }, [order?.date, order?.pickupTime]);
 
-  const canFulfill = order?.status === 'confirmed';
+  const canFulfill = order?.status === 'confirmed' && pickupDateTime && pickupDateTime.getTime() < Date.now();
 
   const fetchOrder = () => {
     if (!id || !token) {
@@ -545,7 +558,7 @@ export function AdminOrderPage() {
               </div>
             )}
 
-            {order.status === 'confirmed' && (
+            {order.status === 'confirmed' && !canFulfill && (
               <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-3">
                 <h3 className="text-lg text-slate-900">{t.adminOrder.cancelConfirmedTitle}</h3>
                 <p className="text-sm text-slate-600">
@@ -580,9 +593,9 @@ export function AdminOrderPage() {
             {canFulfill && (
               <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                 <h3 className="text-lg text-slate-900 mb-3">{t.adminOrder.completionTitle}</h3>
-                <div className="grid gap-3 sm:grid-cols-2">
+                <div className="grid grid-cols-2 gap-3">
                   <button
-                    className="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-white hover:bg-emerald-700 transition-colors"
+                    className="flex w-full items-center justify-center gap-2 rounded-lg bg-green-600 px-4 py-3 text-white hover:bg-green-700 transition-colors"
                     disabled={submitting}
                     onClick={() => {
                       if (!window.confirm(t.adminOrder.markCompletedConfirm)) {
@@ -591,10 +604,11 @@ export function AdminOrderPage() {
                       postFulfillment('completed');
                     }}
                   >
+                    <CheckCircle2 className="h-4 w-4" />
                     {t.adminOrder.markCompleted}
                   </button>
                   <button
-                    className="flex items-center justify-center gap-2 rounded-lg bg-orange-500 px-4 py-3 text-white hover:bg-orange-600 transition-colors"
+                    className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-3 text-white hover:bg-red-700 transition-colors"
                     disabled={submitting}
                     onClick={() => {
                       if (!window.confirm(t.adminOrder.markFailedConfirm)) {
@@ -603,6 +617,7 @@ export function AdminOrderPage() {
                       postFulfillment('failed');
                     }}
                   >
+                    <XCircle className="h-4 w-4" />
                     {t.adminOrder.markFailed}
                   </button>
                 </div>

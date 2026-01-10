@@ -7,6 +7,7 @@ import { getApiBaseUrl } from '../lib/api';
 import { Locale, useI18n } from '../lib/i18n';
 
 const API_BASE_URL = getApiBaseUrl();
+const SIGN_FEE = 20;
 
 interface ManageOrderProps {
   orderId: string;
@@ -37,6 +38,7 @@ type OrderState = {
     type: RouteType;
   };
   pickupType: 'airport' | 'address';
+  signService: 'sign' | 'self';
   signText: string;
   flightNumber: string;
   passengers: string;
@@ -87,8 +89,10 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
   const toastTimeoutRef = useRef<number | null>(null);
   const eurRate = useEurRate();
   const canEdit = order?.status === 'pending' || order?.status === 'confirmed';
+  const isTaximeter = order ? order.price <= 0 : false;
 
   const [formData, setFormData] = useState({
+    signService: 'self',
     signText: '',
     flightNumber: '',
     passengers: '1',
@@ -146,6 +150,11 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
           type: routeType,
         };
         const pickupType = metadata.pickupType === 'airport' ? 'airport' : 'address';
+        const signService = metadata.signService === 'sign' || metadata.signService === 'self'
+          ? metadata.signService
+          : metadata.signText
+            ? 'sign'
+            : 'self';
         const signText = metadata.signText ?? '';
         const passengers = metadata.passengers ?? '1';
         const largeLuggage = metadata.largeLuggage ?? 'no';
@@ -157,6 +166,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
           generatedId: orderData.generatedId ?? orderData.id.slice(0, 4).toUpperCase(),
           route,
           pickupType,
+          signService,
           signText,
           flightNumber: orderData.flightNumber,
           passengers,
@@ -185,6 +195,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
 
         setOrder(nextOrder);
         setFormData({
+          signService,
           signText,
           flightNumber: orderData.flightNumber,
           passengers,
@@ -234,7 +245,9 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
 
     const additionalNotes = buildAdditionalNotes({
       pickupType: order.pickupType,
-      signText: formData.signText,
+      signService: order.pickupType === 'airport' ? formData.signService : 'self',
+      signFee: order.pickupType === 'airport' && formData.signService === 'sign' ? SIGN_FEE : 0,
+      signText: formData.signService === 'sign' ? formData.signText : '',
       passengers: formData.passengers,
       largeLuggage: formData.largeLuggage,
       route: order.route,
@@ -283,7 +296,8 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
 
       setOrder({
         ...order,
-        signText: formData.signText,
+        signService: formData.signService,
+        signText: formData.signService === 'sign' ? formData.signText : '',
         flightNumber: payload.flightNumber,
         passengers: formData.passengers,
         largeLuggage: formData.largeLuggage,
@@ -565,16 +579,34 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-gray-700">
-                    {t.manageOrder.priceLabel} <span className="font-bold text-blue-600">{order.price} PLN</span>
+                    {t.manageOrder.priceLabel}{' '}
+                    {isTaximeter ? (
+                      <span className="font-semibold text-blue-700">{t.manageOrder.taximeterTitle}</span>
+                    ) : (
+                      <span className="font-bold text-blue-600">{order.price} PLN</span>
+                    )}
                   </span>
                 </div>
-                {formatEur(order.price, eurRate) && (
+                {!isTaximeter && formatEur(order.price, eurRate) && (
                   <div className="flex items-center gap-2 text-gray-500">
                     <span className="eur-text">{formatEur(order.price, eurRate)}</span>
                     <span className="live-badge">
                       {t.common.actualBadge}
                     </span>
                   </div>
+                )}
+                {isTaximeter && (
+                  <details className="text-sm text-gray-600">
+                    <summary className="cursor-pointer text-blue-700">
+                      {t.manageOrder.taximeterRates}
+                    </summary>
+                    <div className="mt-2 space-y-1 text-gray-600">
+                      <div>{t.manageOrder.tariff1}</div>
+                      <div>{t.manageOrder.tariff2}</div>
+                      <div>{t.manageOrder.tariff3}</div>
+                      <div>{t.manageOrder.tariff4}</div>
+                    </div>
+                  </details>
                 )}
                 <div className="flex items-center gap-2">
                   <span className={`px-3 py-1 rounded-full text-sm ${
@@ -706,9 +738,62 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
               </div>
 
               {/* Airport Pickup Details */}
-              {(order.pickupType === 'airport'
-                || (effectiveUpdateRequest && updateFields.has('flight'))) && (
+              {order.pickupType === 'airport' && (
                 <>
+                  <div>
+                    <label className="block text-gray-700 mb-2">
+                      {t.manageOrder.signServiceTitle}
+                    </label>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <label className={`flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                        formData.signService === 'sign'
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}>
+                        <input
+                          type="radio"
+                          name="signService"
+                          value="sign"
+                          checked={formData.signService === 'sign'}
+                          onChange={() =>
+                            setFormData((prev) => ({ ...prev, signService: 'sign' }))
+                          }
+                          className="w-4 h-4 text-blue-600"
+                          disabled={!isFieldEditable('signText')}
+                        />
+                        <FileText className="w-5 h-5 text-gray-700" />
+                        <div>
+                          <div className="text-gray-900">{t.manageOrder.signServiceSign}</div>
+                          <div className="text-xs text-gray-500">{t.manageOrder.signServiceFee}</div>
+                        </div>
+                      </label>
+
+                      <label className={`flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                        formData.signService === 'self'
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}>
+                        <input
+                          type="radio"
+                          name="signService"
+                          value="self"
+                          checked={formData.signService === 'self'}
+                          onChange={() =>
+                            setFormData((prev) => ({ ...prev, signService: 'self', signText: '' }))
+                          }
+                          className="w-4 h-4 text-blue-600"
+                          disabled={!isFieldEditable('signText')}
+                        />
+                        <Users className="w-5 h-5 text-gray-700 flex-shrink-0" />
+                        <div>
+                          <div className="text-gray-900">{t.manageOrder.signServiceSelf}</div>
+                          <div className="text-xs text-gray-500">{t.manageOrder.signServiceSelfNote}</div>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+
+                  {formData.signService === 'sign' && (
                   <div>
                     <label htmlFor="signText" className="block text-gray-700 mb-2">
                       <FileText className="w-4 h-4 inline mr-2" />
@@ -724,6 +809,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                       className={inputClass('signText', isFieldEditable('signText'))}
                     />
                   </div>
+                  )}
 
                   <div>
                     <label htmlFor="flightNumber" className="block text-gray-700 mb-2">
@@ -895,6 +981,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                   <button
                     onClick={() => {
                       setFormData({
+                        signService: order.signService,
                         signText: order.signText,
                         flightNumber: order.flightNumber,
                         passengers: order.passengers,
