@@ -490,6 +490,13 @@ export const buildLocalizedUrl = (locale, routeKey) => {
   return `${base}/${routeSlugs[locale][routeKey]}`;
 };
 
+export const buildRootUrl = (routeKey) => {
+    if (!routeKey) return `${site.url}/`;
+    // dla stron typu /gdansk-airport-taxi bez języka nie masz routingu,
+    // więc root obsługuje tylko home:
+    return `${site.url}/`;
+};
+
 const isIndexablePath = (urlPath) => {
   if (urlPath.includes('/admin')) return false;
   const locale = getLocaleFromPath(urlPath) ?? 'en';
@@ -502,19 +509,36 @@ const isIndexablePath = (urlPath) => {
 export const getHtmlLang = (urlPath) => getLocaleFromPath(urlPath) ?? 'en';
 
 export const buildSeoTags = (urlPath) => {
-  const locale = getLocaleFromPath(urlPath) ?? 'en';
-  const pathParts = urlPath.replace(/\/$/, '').split('/').filter(Boolean);
-  const slug = locale ? pathParts[1] ?? '' : '';
-  const routeKey = slug ? getRouteKeyFromSlug(locale, slug) : null;
-  const meta = metaByLocale[locale]?.[routeKey ?? 'home'] ?? metaByLocale.en.home;
-  const canonical = buildLocalizedUrl(locale, routeKey);
-  const alternates = locales
-    .map((lang) => `<link rel="alternate" hreflang="${lang}" href="${buildLocalizedUrl(lang, routeKey)}">`)
-    .join('');
-  const xDefault = `<link rel="alternate" hreflang="x-default" href="${buildLocalizedUrl('en', routeKey)}">`;
-  const robots = isIndexablePath(urlPath) ? 'index,follow' : 'noindex,nofollow';
+    const localeFromPath = getLocaleFromPath(urlPath);
+    const locale = localeFromPath ?? 'en';
 
-  const localBusinessSchema = {
+    const pathParts = urlPath.replace(/\/$/, '').split('/').filter(Boolean);
+
+    // jeśli URL nie ma locale (czyli "/"), slug jest pierwszy element
+    // jeśli ma locale ("/en/..."), slug jest drugim elementem
+    const slug = localeFromPath ? (pathParts[1] ?? '') : (pathParts[0] ?? '');
+
+    const routeKey = slug ? getRouteKeyFromSlug(locale, slug) : null;
+    const meta = metaByLocale[locale]?.[routeKey ?? 'home'] ?? metaByLocale.en.home;
+
+    const isRootHome = !localeFromPath && !slug; // dokładnie "/"
+
+    const canonical = isRootHome ? `${site.url}/` : buildLocalizedUrl(locale, routeKey);
+
+    const alternates = locales
+        .map((lang) => {
+            // dla home (routeKey null) daj /<lang>/, a nie /
+            const href = routeKey
+                ? buildLocalizedUrl(lang, routeKey)
+                : `${site.url}/${lang}/`;
+            return `<link rel="alternate" hreflang="${lang}" href="${href}">`;
+        })
+        .join('');
+
+    const xDefault = `<link rel="alternate" hreflang="x-default" href="${site.url}/">`;
+    const robots = isIndexablePath(urlPath) ? 'index,follow' : 'noindex,nofollow';
+
+    const localBusinessSchema = {
     '@context': 'https://schema.org',
     '@type': ['LocalBusiness', 'TaxiService'],
     name: site.name,
