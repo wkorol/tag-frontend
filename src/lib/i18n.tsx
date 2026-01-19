@@ -116,11 +116,61 @@ const baseEn = {
       customRoutePriceBody: 'Flexible pricing based on your specific route',
       requestQuote: 'Book now',
       pricesNote: 'Prices include VAT. Additional destinations available on request.',
+      tableTitle: 'Price table',
+      tableRoute: 'Route',
+      tableStandardDay: 'Standard day',
+      tableStandardNight: 'Standard night',
+      tableBusDay: 'Bus day',
+      tableBusNight: 'Bus night',
+      tariffsTitle: 'Taximeter tariffs (custom routes)',
+      tariffsName: 'Tariff',
+      tariffsRate: 'Rate',
+      bookingTitle: 'Book a transfer',
+      bookingSubtitle: 'Choose the vehicle type and reserve your ride instantly.',
       routes: {
         airport: 'Airport',
         gdansk: 'Gdańsk City Center',
         gdynia: 'Gdynia City Center',
       },
+    },
+    pricingLanding: {
+      title: 'Gdańsk Airport Taxi Prices',
+      subtitle: 'Fixed rates for airport transfers and transparent taximeter tariffs for custom routes.',
+      description: 'Compare standard and bus prices, then book instantly or request a quote for a custom transfer.',
+      cta: 'Book a transfer',
+      highlights: [
+        {
+          title: 'Fixed prices both ways',
+          body: 'The listed airport routes are priced upfront, with no hidden fees.',
+        },
+        {
+          title: '24/7 availability',
+          body: 'We operate every day with fast confirmation and support.',
+        },
+        {
+          title: 'Bus service for groups',
+          body: 'Spacious 5–8 seat vehicles for families and larger groups.',
+        },
+      ],
+      faqTitle: 'Pricing FAQ',
+      faq: [
+        {
+          question: 'Are these prices fixed?',
+          answer: 'Yes. Airport routes have fixed prices in both directions. Custom routes follow taximeter tariffs.',
+        },
+        {
+          question: 'When does the night rate apply?',
+          answer: 'From 22:00 to 6:00 and on Sundays & public holidays.',
+        },
+        {
+          question: 'Do you monitor flight delays?',
+          answer: 'Yes. We track arrivals and adjust pickup time automatically.',
+        },
+        {
+          question: 'Can I pay by card?',
+          answer: 'Card payments are available on request. Invoices are available for business clients.',
+        },
+      ],
     },
     trust: {
       companyTitle: 'Company details',
@@ -205,6 +255,14 @@ const baseEn = {
     },
     routeLanding: {
       orderNow: 'Book Online Now',
+      quickLinks: 'Quick links',
+      pricingLink: 'View pricing',
+      orderLinks: {
+        airportGdansk: 'Book airport → Gdańsk',
+        airportSopot: 'Book airport → Sopot',
+        airportGdynia: 'Book airport → Gdynia',
+        custom: 'Custom route',
+      },
       seoParagraph: (route: string) =>
         `Taxi Gdansk airport transfers for ${route}. Fixed prices, 24/7 service, meet & greet, and fast confirmation for taxi airport Gdansk rides.`,
       pricingTitle: 'Example prices',
@@ -481,6 +539,21 @@ const baseEn = {
       loading: 'Loading orders...',
       missingToken: 'Missing admin token.',
       errorLoad: 'Failed to load orders.',
+      filters: {
+        all: 'All',
+        active: 'In progress',
+        completed: 'Completed',
+        failed: 'Not completed',
+        rejected: 'Rejected',
+      },
+      statuses: {
+        pending: 'Pending',
+        confirmed: 'Confirmed',
+        price_proposed: 'Price proposed',
+        completed: 'Completed',
+        failed: 'Not completed',
+        rejected: 'Rejected',
+      },
       columns: {
         order: 'Order',
         pickup: 'Pickup',
@@ -674,11 +747,61 @@ const translations = {
       customRoutePriceBody: 'Elastyczna wycena na podstawie Twojej trasy',
       requestQuote: 'Rezerwuj',
       pricesNote: 'Ceny zawierają VAT. Dodatkowe destynacje dostępne na zapytanie.',
+      tableTitle: 'Tabela cen',
+      tableRoute: 'Trasa',
+      tableStandardDay: 'Standard dzienna',
+      tableStandardNight: 'Standard nocna',
+      tableBusDay: 'Bus dzienna',
+      tableBusNight: 'Bus nocna',
+      tariffsTitle: 'Taryfy taksometru (trasy niestandardowe)',
+      tariffsName: 'Taryfa',
+      tariffsRate: 'Stawka',
+      bookingTitle: 'Zarezerwuj przejazd',
+      bookingSubtitle: 'Wybierz typ pojazdu i zarezerwuj przejazd od razu.',
       routes: {
         airport: 'Lotnisko',
         gdansk: 'Centrum Gdańska',
         gdynia: 'Centrum Gdyni',
       },
+    },
+    pricingLanding: {
+      title: 'Cennik Taxi Lotnisko Gdańsk',
+      subtitle: 'Stałe ceny transferów lotniskowych oraz przejrzyste taryfy taksometru dla tras niestandardowych.',
+      description: 'Porównaj ceny standard i bus, a potem zarezerwuj od razu lub poproś o wycenę.',
+      cta: 'Zarezerwuj przejazd',
+      highlights: [
+        {
+          title: 'Stałe ceny w obie strony',
+          body: 'Podane trasy lotniskowe mają z góry ustaloną cenę bez ukrytych opłat.',
+        },
+        {
+          title: 'Dostępność 24/7',
+          body: 'Pracujemy codziennie, szybkie potwierdzenie i wsparcie.',
+        },
+        {
+          title: 'Busy dla grup',
+          body: 'Pojazdy 5–8 miejsc dla rodzin i większych ekip.',
+        },
+      ],
+      faqTitle: 'FAQ cennika',
+      faq: [
+        {
+          question: 'Czy te ceny są stałe?',
+          answer: 'Tak. Trasy lotniskowe mają stałe ceny w obie strony. Trasy niestandardowe są według taryf taksometru.',
+        },
+        {
+          question: 'Kiedy obowiązuje taryfa nocna?',
+          answer: 'Od 22:00 do 6:00 oraz w niedziele i święta.',
+        },
+        {
+          question: 'Czy monitorujecie opóźnienia lotów?',
+          answer: 'Tak, śledzimy przyloty i dostosowujemy czas odbioru.',
+        },
+        {
+          question: 'Czy można zapłacić kartą?',
+          answer: 'Tak, płatność kartą na życzenie. Faktury dla firm.',
+        },
+      ],
     },
     trust: {
       companyTitle: 'Dane firmy',
@@ -763,6 +886,14 @@ const translations = {
     },
     routeLanding: {
       orderNow: 'Rezerwuj online teraz',
+      quickLinks: 'Szybkie linki',
+      pricingLink: 'Zobacz cennik',
+      orderLinks: {
+        airportGdansk: 'Rezerwacja lotnisko → Gdańsk',
+        airportSopot: 'Rezerwacja lotnisko → Sopot',
+        airportGdynia: 'Rezerwacja lotnisko → Gdynia',
+        custom: 'Trasa niestandardowa',
+      },
       seoParagraph: (route: string) =>
         `Taxi lotnisko Gdańsk dla trasy ${route}. Taxi Gdańsk / taxi gdansk: stałe ceny, 24/7, szybkie potwierdzenie i śledzenie lotu.`,
       pricingTitle: 'Przykładowe ceny',
@@ -1039,6 +1170,21 @@ const translations = {
       loading: 'Ładowanie zamówień...',
       missingToken: 'Brak tokenu admina.',
       errorLoad: 'Nie udało się wczytać zamówień.',
+      filters: {
+        all: 'Wszystkie',
+        active: 'W toku',
+        completed: 'Zrealizowane',
+        failed: 'Niezrealizowane',
+        rejected: 'Odrzucone',
+      },
+      statuses: {
+        pending: 'Oczekujące',
+        confirmed: 'Potwierdzone',
+        price_proposed: 'Zaproponowana cena',
+        completed: 'Zrealizowane',
+        failed: 'Niezrealizowane',
+        rejected: 'Odrzucone',
+      },
       columns: {
         order: 'Zamówienie',
         pickup: 'Odbiór',
@@ -1229,11 +1375,61 @@ const translations = {
       customRoutePriceBody: 'Flexible Preise je nach Strecke',
       requestQuote: 'Jetzt reservieren',
       pricesNote: 'Preise inkl. MwSt. Weitere Ziele auf Anfrage.',
+      tableTitle: 'Preistabelle',
+      tableRoute: 'Strecke',
+      tableStandardDay: 'Standard Tag',
+      tableStandardNight: 'Standard Nacht',
+      tableBusDay: 'Bus Tag',
+      tableBusNight: 'Bus Nacht',
+      tariffsTitle: 'Taxameter-Tarife (individuelle Strecken)',
+      tariffsName: 'Tarif',
+      tariffsRate: 'Satz',
+      bookingTitle: 'Transfer buchen',
+      bookingSubtitle: 'Fahrzeugtyp wählen und Fahrt sofort reservieren.',
       routes: {
         airport: 'Flughafen',
         gdansk: 'Gdańsk Zentrum',
         gdynia: 'Gdynia Zentrum',
       },
+    },
+    pricingLanding: {
+      title: 'Preise Taxi Flughafen Gdańsk',
+      subtitle: 'Festpreise für Flughafentransfers und transparente Taxameter-Tarife für individuelle Strecken.',
+      description: 'Vergleichen Sie Standard- und Buspreise und buchen Sie sofort oder fordern Sie ein Angebot an.',
+      cta: 'Transfer buchen',
+      highlights: [
+        {
+          title: 'Festpreise in beide Richtungen',
+          body: 'Die gelisteten Flughafenrouten haben feste Preise ohne versteckte Gebühren.',
+        },
+        {
+          title: '24/7 verfügbar',
+          body: 'Täglich verfügbar mit schneller Bestätigung und Support.',
+        },
+        {
+          title: 'Busservice für Gruppen',
+          body: 'Geräumige 5–8-Sitzer für Familien und größere Gruppen.',
+        },
+      ],
+      faqTitle: 'Preis-FAQ',
+      faq: [
+        {
+          question: 'Sind diese Preise fest?',
+          answer: 'Ja. Flughafenrouten haben feste Preise in beide Richtungen. Individuelle Strecken folgen den Taxameter-Tarifen.',
+        },
+        {
+          question: 'Wann gilt der Nachttarif?',
+          answer: 'Von 22:00 bis 6:00 sowie an Sonn- und Feiertagen.',
+        },
+        {
+          question: 'Überwacht ihr Flugverspätungen?',
+          answer: 'Ja, wir verfolgen Ankünfte und passen die Abholzeit automatisch an.',
+        },
+        {
+          question: 'Kann ich mit Karte zahlen?',
+          answer: 'Kartenzahlung auf Anfrage. Rechnungen für Geschäftskunden verfügbar.',
+        },
+      ],
     },
     trust: {
       companyTitle: 'Unternehmensdaten',
@@ -1318,6 +1514,14 @@ const translations = {
     },
     routeLanding: {
       orderNow: 'Jetzt online reservieren',
+      quickLinks: 'Quick links',
+      pricingLink: 'View pricing',
+      orderLinks: {
+        airportGdansk: 'Book airport → Gdańsk',
+        airportSopot: 'Book airport → Sopot',
+        airportGdynia: 'Book airport → Gdynia',
+        custom: 'Custom route',
+      },
       seoParagraph: (route: string) =>
         `Gdansk airport taxi für die Strecke ${route}. Festpreise, 24/7 Service, Meet & Greet und schnelle Bestätigung.`,
       pricingTitle: 'Beispielpreise',
@@ -1594,6 +1798,21 @@ const translations = {
       loading: 'Bestellungen werden geladen...',
       missingToken: 'Admin-Token fehlt.',
       errorLoad: 'Bestellungen konnten nicht geladen werden.',
+      filters: {
+        all: 'All',
+        active: 'In progress',
+        completed: 'Completed',
+        failed: 'Not completed',
+        rejected: 'Rejected',
+      },
+      statuses: {
+        pending: 'Pending',
+        confirmed: 'Confirmed',
+        price_proposed: 'Price proposed',
+        completed: 'Completed',
+        failed: 'Not completed',
+        rejected: 'Rejected',
+      },
       columns: {
         order: 'Bestellung',
         pickup: 'Abholung',
@@ -1784,11 +2003,61 @@ const translations = {
       customRoutePriceBody: 'Joustava hinnoittelu reitin mukaan',
       requestQuote: 'Varaa nyt',
       pricesNote: 'Hinnat sisältävät ALV:n. Lisäkohteet pyynnöstä.',
+      tableTitle: 'Hintataulukko',
+      tableRoute: 'Reitti',
+      tableStandardDay: 'Standardi päivä',
+      tableStandardNight: 'Standardi yö',
+      tableBusDay: 'Bussi päivä',
+      tableBusNight: 'Bussi yö',
+      tariffsTitle: 'Taksamittaritariffit (mukautetut reitit)',
+      tariffsName: 'Tariffi',
+      tariffsRate: 'Hinta',
+      bookingTitle: 'Varaa kyyti',
+      bookingSubtitle: 'Valitse ajoneuvotyyppi ja varaa kyyti heti.',
       routes: {
         airport: 'Lentokenttä',
         gdansk: 'Gdańskin keskusta',
         gdynia: 'Gdynian keskusta',
       },
+    },
+    pricingLanding: {
+      title: 'Gdańsk-lentokenttätaksin hinnat',
+      subtitle: 'Kiinteät hinnat lentokenttäkuljetuksille ja selkeät taksamittaritariffit mukautetuille reiteille.',
+      description: 'Vertaile perus- ja bussihintoja, varaa heti tai pyydä tarjous.',
+      cta: 'Varaa kyyti',
+      highlights: [
+        {
+          title: 'Kiinteät hinnat molempiin suuntiin',
+          body: 'Listatut kenttäreitit ovat kiinteähintaisia ilman piilokuluja.',
+        },
+        {
+          title: '24/7 saatavilla',
+          body: 'Palvelemme joka päivä, nopea vahvistus ja tuki.',
+        },
+        {
+          title: 'Bussipalvelu ryhmille',
+          body: 'Tilavat 5–8 paikan ajoneuvot perheille ja ryhmille.',
+        },
+      ],
+      faqTitle: 'Hinnoittelun FAQ',
+      faq: [
+        {
+          question: 'Ovatko hinnat kiinteät?',
+          answer: 'Kyllä. Lentokenttäreiteillä on kiinteät hinnat molempiin suuntiin. Mukautetut reitit perustuvat taksamittaritariffeihin.',
+        },
+        {
+          question: 'Milloin yötaksa on voimassa?',
+          answer: '22:00–6:00 sekä sunnuntaisin ja pyhäpäivinä.',
+        },
+        {
+          question: 'Seuraatteko lennon viivästyksiä?',
+          answer: 'Kyllä, seuraamme saapumisia ja säädämme noutoajan.',
+        },
+        {
+          question: 'Voinko maksaa kortilla?',
+          answer: 'Korttimaksu pyynnöstä. Laskut yritysasiakkaille.',
+        },
+      ],
     },
     trust: {
       companyTitle: 'Yritystiedot',
@@ -1873,6 +2142,14 @@ const translations = {
     },
     routeLanding: {
       orderNow: 'Varaa verkossa nyt',
+      quickLinks: 'Quick links',
+      pricingLink: 'View pricing',
+      orderLinks: {
+        airportGdansk: 'Book airport → Gdańsk',
+        airportSopot: 'Book airport → Sopot',
+        airportGdynia: 'Book airport → Gdynia',
+        custom: 'Custom route',
+      },
       seoParagraph: (route: string) =>
         `Gdansk airport taxi reitille ${route}. Kiinteät hinnat, 24/7 palvelu, meet & greet ja nopea vahvistus.`,
       pricingTitle: 'Esimerkkihinnat',
@@ -2149,6 +2426,21 @@ const translations = {
       loading: 'Ladataan tilauksia...',
       missingToken: 'Ylläpitäjän token puuttuu.',
       errorLoad: 'Tilauksia ei voitu ladata.',
+      filters: {
+        all: 'All',
+        active: 'In progress',
+        completed: 'Completed',
+        failed: 'Not completed',
+        rejected: 'Rejected',
+      },
+      statuses: {
+        pending: 'Pending',
+        confirmed: 'Confirmed',
+        price_proposed: 'Price proposed',
+        completed: 'Completed',
+        failed: 'Not completed',
+        rejected: 'Rejected',
+      },
       columns: {
         order: 'Tilaus',
         pickup: 'Nouto',
@@ -2339,11 +2631,61 @@ const translations = {
       customRoutePriceBody: 'Fleksible priser basert på ruten',
       requestQuote: 'Bestill nå',
       pricesNote: 'Prisene inkluderer MVA. Flere destinasjoner på forespørsel.',
+      tableTitle: 'Pristabell',
+      tableRoute: 'Rute',
+      tableStandardDay: 'Standard dag',
+      tableStandardNight: 'Standard natt',
+      tableBusDay: 'Buss dag',
+      tableBusNight: 'Buss natt',
+      tariffsTitle: 'Taksttabell (tilpassede ruter)',
+      tariffsName: 'Takst',
+      tariffsRate: 'Pris',
+      bookingTitle: 'Bestill transfer',
+      bookingSubtitle: 'Velg kjøretøytype og reserver turen med en gang.',
       routes: {
         airport: 'Flyplass',
         gdansk: 'Gdańsk sentrum',
         gdynia: 'Gdynia sentrum',
       },
+    },
+    pricingLanding: {
+      title: 'Priser for Gdańsk flyplasstaxi',
+      subtitle: 'Fastpris på flyplasstransfer og transparente takster for tilpassede ruter.',
+      description: 'Sammenlign standard- og busspriser, og bestill eller be om tilbud.',
+      cta: 'Bestill transfer',
+      highlights: [
+        {
+          title: 'Fastpris begge veier',
+          body: 'De oppførte flyplasstrasene har fastpris uten skjulte gebyrer.',
+        },
+        {
+          title: 'Tilgjengelig 24/7',
+          body: 'Vi er tilgjengelige hver dag med rask bekreftelse og støtte.',
+        },
+        {
+          title: 'Buss for grupper',
+          body: 'Romslige 5–8 seters kjøretøy for familier og større grupper.',
+        },
+      ],
+      faqTitle: 'Pris-FAQ',
+      faq: [
+        {
+          question: 'Er disse prisene faste?',
+          answer: 'Ja. Flyplasstrasene har fastpris begge veier. Tilpassede ruter følger taxametertakstene.',
+        },
+        {
+          question: 'Når gjelder nattpris?',
+          answer: 'Fra 22:00 til 6:00 og på søndager og helligdager.',
+        },
+        {
+          question: 'Overvåker dere flyforsinkelser?',
+          answer: 'Ja, vi følger ankomster og justerer hentetiden.',
+        },
+        {
+          question: 'Kan jeg betale med kort?',
+          answer: 'Kortbetaling på forespørsel. Faktura tilgjengelig for bedrifter.',
+        },
+      ],
     },
     trust: {
       companyTitle: 'Firmadetaljer',
@@ -2428,6 +2770,14 @@ const translations = {
     },
     routeLanding: {
       orderNow: 'Reserver online nå',
+      quickLinks: 'Quick links',
+      pricingLink: 'View pricing',
+      orderLinks: {
+        airportGdansk: 'Book airport → Gdańsk',
+        airportSopot: 'Book airport → Sopot',
+        airportGdynia: 'Book airport → Gdynia',
+        custom: 'Custom route',
+      },
       seoParagraph: (route: string) =>
         `Gdansk airport taxi for ruten ${route}. Faste priser, 24/7 service, meet & greet og rask bekreftelse.`,
       pricingTitle: 'Eksempelpriser',
@@ -2704,6 +3054,21 @@ const translations = {
       loading: 'Laster bestillinger...',
       missingToken: 'Admin-token mangler.',
       errorLoad: 'Kunne ikke laste bestillinger.',
+      filters: {
+        all: 'All',
+        active: 'In progress',
+        completed: 'Completed',
+        failed: 'Not completed',
+        rejected: 'Rejected',
+      },
+      statuses: {
+        pending: 'Pending',
+        confirmed: 'Confirmed',
+        price_proposed: 'Price proposed',
+        completed: 'Completed',
+        failed: 'Not completed',
+        rejected: 'Rejected',
+      },
       columns: {
         order: 'Bestilling',
         pickup: 'Henting',
@@ -2894,11 +3259,61 @@ const translations = {
       customRoutePriceBody: 'Flexibel prissättning baserat på din rutt',
       requestQuote: 'Boka nu',
       pricesNote: 'Priserna inkluderar moms. Fler destinationer på begäran.',
+      tableTitle: 'Pristabell',
+      tableRoute: 'Rutt',
+      tableStandardDay: 'Standard dag',
+      tableStandardNight: 'Standard natt',
+      tableBusDay: 'Buss dag',
+      tableBusNight: 'Buss natt',
+      tariffsTitle: 'Taxameterpriser (anpassade rutter)',
+      tariffsName: 'Taxa',
+      tariffsRate: 'Pris',
+      bookingTitle: 'Boka transfer',
+      bookingSubtitle: 'Välj fordonstyp och boka direkt.',
       routes: {
         airport: 'Flygplats',
         gdansk: 'Gdańsk centrum',
         gdynia: 'Gdynia centrum',
       },
+    },
+    pricingLanding: {
+      title: 'Priser för Gdańsk flygplatstaxi',
+      subtitle: 'Fasta priser för flygplatstransfer och tydliga taxameterpriser för anpassade rutter.',
+      description: 'Jämför standard- och busspriser, boka direkt eller be om offert.',
+      cta: 'Boka transfer',
+      highlights: [
+        {
+          title: 'Fasta priser åt båda håll',
+          body: 'De listade flygplatsrutterna har fast pris utan dolda avgifter.',
+        },
+        {
+          title: 'Tillgängligt 24/7',
+          body: 'Vi är tillgängliga varje dag med snabb bekräftelse och support.',
+        },
+        {
+          title: 'Buss för grupper',
+          body: 'Rymliga 5–8-sitsiga fordon för familjer och större grupper.',
+        },
+      ],
+      faqTitle: 'Pris-FAQ',
+      faq: [
+        {
+          question: 'Är dessa priser fasta?',
+          answer: 'Ja. Flygplatsrutterna har fasta priser åt båda håll. Anpassade rutter följer taxameterpriserna.',
+        },
+        {
+          question: 'När gäller nattaxa?',
+          answer: '22:00–6:00 samt söndagar och helgdagar.',
+        },
+        {
+          question: 'Följer ni flygförseningar?',
+          answer: 'Ja, vi följer ankomster och justerar upphämtningstiden.',
+        },
+        {
+          question: 'Kan jag betala med kort?',
+          answer: 'Kortbetalning på begäran. Faktura finns för företagskunder.',
+        },
+      ],
     },
     trust: {
       companyTitle: 'Företagsuppgifter',
@@ -2983,6 +3398,14 @@ const translations = {
     },
     routeLanding: {
       orderNow: 'Boka online nu',
+      quickLinks: 'Quick links',
+      pricingLink: 'View pricing',
+      orderLinks: {
+        airportGdansk: 'Book airport → Gdańsk',
+        airportSopot: 'Book airport → Sopot',
+        airportGdynia: 'Book airport → Gdynia',
+        custom: 'Custom route',
+      },
       seoParagraph: (route: string) =>
         `Gdansk airport taxi för rutten ${route}. Fasta priser, 24/7 service, meet & greet och snabb bekräftelse.`,
       pricingTitle: 'Exempelpriser',
@@ -3259,6 +3682,21 @@ const translations = {
       loading: 'Laddar beställningar...',
       missingToken: 'Admin-token saknas.',
       errorLoad: 'Det gick inte att ladda beställningar.',
+      filters: {
+        all: 'All',
+        active: 'In progress',
+        completed: 'Completed',
+        failed: 'Not completed',
+        rejected: 'Rejected',
+      },
+      statuses: {
+        pending: 'Pending',
+        confirmed: 'Confirmed',
+        price_proposed: 'Price proposed',
+        completed: 'Completed',
+        failed: 'Not completed',
+        rejected: 'Rejected',
+      },
       columns: {
         order: 'Beställning',
         pickup: 'Upphämtning',
@@ -3449,11 +3887,61 @@ const translations = {
       customRoutePriceBody: 'Fleksible priser baseret på ruten',
       requestQuote: 'Book nu',
       pricesNote: 'Priserne inkluderer moms. Flere destinationer efter aftale.',
+      tableTitle: 'Pristabel',
+      tableRoute: 'Rute',
+      tableStandardDay: 'Standard dag',
+      tableStandardNight: 'Standard nat',
+      tableBusDay: 'Bus dag',
+      tableBusNight: 'Bus nat',
+      tariffsTitle: 'Taxametertakster (tilpassede ruter)',
+      tariffsName: 'Takst',
+      tariffsRate: 'Pris',
+      bookingTitle: 'Book transfer',
+      bookingSubtitle: 'Vælg køretøjstype og book turen med det samme.',
       routes: {
         airport: 'Lufthavn',
         gdansk: 'Gdańsk centrum',
         gdynia: 'Gdynia centrum',
       },
+    },
+    pricingLanding: {
+      title: 'Priser på Gdańsk lufthavnstaxa',
+      subtitle: 'Fastpris på lufthavnstransfer og klare taxametertakster for tilpassede ruter.',
+      description: 'Sammenlign standard- og buspriser, og book med det samme eller få et tilbud.',
+      cta: 'Book transfer',
+      highlights: [
+        {
+          title: 'Fastpris begge veje',
+          body: 'De viste lufthavnsruter har fast pris uden skjulte gebyrer.',
+        },
+        {
+          title: 'Tilgængelig 24/7',
+          body: 'Vi er tilgængelige hver dag med hurtig bekræftelse og support.',
+        },
+        {
+          title: 'Busservice til grupper',
+          body: 'Rummelige 5–8-personers køretøjer til familier og større grupper.',
+        },
+      ],
+      faqTitle: 'Pris-FAQ',
+      faq: [
+        {
+          question: 'Er priserne faste?',
+          answer: 'Ja. Lufthavnsruter har fast pris begge veje. Tilpassede ruter følger taxametertaksterne.',
+        },
+        {
+          question: 'Hvornår gælder natpris?',
+          answer: 'Fra 22:00 til 6:00 samt på søndage og helligdage.',
+        },
+        {
+          question: 'Overvåger I flyforsinkelser?',
+          answer: 'Ja, vi følger ankomster og justerer afhentningstiden.',
+        },
+        {
+          question: 'Kan jeg betale med kort?',
+          answer: 'Kortbetaling efter aftale. Faktura til erhvervskunder.',
+        },
+      ],
     },
     trust: {
       companyTitle: 'Virksomhedsoplysninger',
@@ -3538,6 +4026,14 @@ const translations = {
     },
     routeLanding: {
       orderNow: 'Book online nu',
+      quickLinks: 'Quick links',
+      pricingLink: 'View pricing',
+      orderLinks: {
+        airportGdansk: 'Book airport → Gdańsk',
+        airportSopot: 'Book airport → Sopot',
+        airportGdynia: 'Book airport → Gdynia',
+        custom: 'Custom route',
+      },
       seoParagraph: (route: string) =>
         `Gdansk airport taxi for ruten ${route}. Faste priser, 24/7 service, meet & greet og hurtig bekræftelse.`,
       pricingTitle: 'Eksempelpriser',
@@ -3814,6 +4310,21 @@ const translations = {
       loading: 'Indlæser bestillinger...',
       missingToken: 'Admin-token mangler.',
       errorLoad: 'Kunne ikke indlæse bestillinger.',
+      filters: {
+        all: 'All',
+        active: 'In progress',
+        completed: 'Completed',
+        failed: 'Not completed',
+        rejected: 'Rejected',
+      },
+      statuses: {
+        pending: 'Pending',
+        confirmed: 'Confirmed',
+        price_proposed: 'Price proposed',
+        completed: 'Completed',
+        failed: 'Not completed',
+        rejected: 'Rejected',
+      },
       columns: {
         order: 'Bestilling',
         pickup: 'Afhentning',

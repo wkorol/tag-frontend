@@ -12,6 +12,11 @@ export const routeSlugs = {
     airportTaxi: 'gdansk-airport-taxi',
     airportSopot: 'gdansk-airport-to-sopot',
     airportGdynia: 'gdansk-airport-to-gdynia',
+    orderAirportGdansk: 'book-gdansk-airport-transfer',
+    orderAirportSopot: 'book-gdansk-airport-sopot',
+    orderAirportGdynia: 'book-gdansk-airport-gdynia',
+    orderCustom: 'book-custom-transfer',
+    pricing: 'pricing',
     cookies: 'cookies',
     privacy: 'privacy',
   },
@@ -19,6 +24,11 @@ export const routeSlugs = {
     airportTaxi: 'taxi-lotnisko-gdansk',
     airportSopot: 'lotnisko-gdansk-sopot',
     airportGdynia: 'lotnisko-gdansk-gdynia',
+    orderAirportGdansk: 'rezerwacja-lotnisko-gdansk',
+    orderAirportSopot: 'rezerwacja-lotnisko-gdansk-sopot',
+    orderAirportGdynia: 'rezerwacja-lotnisko-gdansk-gdynia',
+    orderCustom: 'rezerwacja-niestandardowa',
+    pricing: 'cennik',
     cookies: 'polityka-cookies',
     privacy: 'polityka-prywatnosci',
   },
@@ -26,6 +36,11 @@ export const routeSlugs = {
     airportTaxi: 'gdansk-flughafen-taxi',
     airportSopot: 'gdansk-flughafen-sopot',
     airportGdynia: 'gdansk-flughafen-gdynia',
+    orderAirportGdansk: 'buchung-gdansk-flughafen',
+    orderAirportSopot: 'buchung-gdansk-flughafen-sopot',
+    orderAirportGdynia: 'buchung-gdansk-flughafen-gdynia',
+    orderCustom: 'buchung-individuell',
+    pricing: 'preise',
     cookies: 'cookie-richtlinie',
     privacy: 'datenschutz',
   },
@@ -33,6 +48,11 @@ export const routeSlugs = {
     airportTaxi: 'gdansk-lentokentta-taksi',
     airportSopot: 'gdansk-lentokentta-sopot',
     airportGdynia: 'gdansk-lentokentta-gdynia',
+    orderAirportGdansk: 'varaus-gdansk-lentokentta',
+    orderAirportSopot: 'varaus-gdansk-lentokentta-sopot',
+    orderAirportGdynia: 'varaus-gdansk-lentokentta-gdynia',
+    orderCustom: 'varaus-mukautettu',
+    pricing: 'hinnasto',
     cookies: 'evasteet',
     privacy: 'tietosuoja',
   },
@@ -40,6 +60,11 @@ export const routeSlugs = {
     airportTaxi: 'gdansk-flyplass-taxi',
     airportSopot: 'gdansk-flyplass-sopot',
     airportGdynia: 'gdansk-flyplass-gdynia',
+    orderAirportGdansk: 'bestilling-gdansk-flyplass',
+    orderAirportSopot: 'bestilling-gdansk-flyplass-sopot',
+    orderAirportGdynia: 'bestilling-gdansk-flyplass-gdynia',
+    orderCustom: 'bestilling-tilpasset',
+    pricing: 'priser',
     cookies: 'informasjonskapsler',
     privacy: 'personvern',
   },
@@ -47,6 +72,11 @@ export const routeSlugs = {
     airportTaxi: 'gdansk-flygplats-taxi',
     airportSopot: 'gdansk-flygplats-sopot',
     airportGdynia: 'gdansk-flygplats-gdynia',
+    orderAirportGdansk: 'bokning-gdansk-flygplats',
+    orderAirportSopot: 'bokning-gdansk-flygplats-sopot',
+    orderAirportGdynia: 'bokning-gdansk-flygplats-gdynia',
+    orderCustom: 'bokning-anpassad',
+    pricing: 'priser',
     cookies: 'kakor',
     privacy: 'integritetspolicy',
   },
@@ -54,6 +84,11 @@ export const routeSlugs = {
     airportTaxi: 'gdansk-lufthavn-taxa',
     airportSopot: 'gdansk-lufthavn-sopot',
     airportGdynia: 'gdansk-lufthavn-gdynia',
+    orderAirportGdansk: 'booking-gdansk-lufthavn',
+    orderAirportSopot: 'booking-gdansk-lufthavn-sopot',
+    orderAirportGdynia: 'booking-gdansk-lufthavn-gdynia',
+    orderCustom: 'booking-tilpasset',
+    pricing: 'priser',
     cookies: 'cookiepolitik',
     privacy: 'privatlivspolitik',
   },
@@ -82,6 +117,31 @@ const metaByLocale = {
       title: 'Gdansk Airport to Gdynia Taxi | Taxi Airport Gdańsk',
       description:
         'Reliable taxi transfers from Gdansk airport to Gdynia. Fixed price, professional drivers, and fast booking.',
+    },
+    orderAirportGdansk: {
+      title: 'Book Gdansk Airport Taxi | Taxi Airport Gdańsk',
+      description:
+        'Direct booking form for Gdansk Airport to city center transfers. Fixed prices, 24/7 service, fast confirmation.',
+    },
+    orderAirportSopot: {
+      title: 'Book Gdansk Airport to Sopot Taxi | Taxi Airport Gdańsk',
+      description:
+        'Book your airport transfer from Gdansk to Sopot with fixed prices and quick confirmation.',
+    },
+    orderAirportGdynia: {
+      title: 'Book Gdansk Airport to Gdynia Taxi | Taxi Airport Gdańsk',
+      description:
+        'Reserve a taxi from Gdansk Airport to Gdynia. Fixed prices, professional drivers, 24/7.',
+    },
+    orderCustom: {
+      title: 'Book Custom Transfer | Taxi Airport Gdańsk',
+      description:
+        'Request a custom transfer quote in Gdansk, Sopot, or Gdynia. Fast response and flexible pricing.',
+    },
+    pricing: {
+      title: 'Gdansk Airport Taxi Prices | Taxi Airport Gdańsk',
+      description:
+        'See fixed prices for airport transfers to Gdansk, Sopot, and Gdynia, including day/night tariffs and custom route rates.',
     },
     cookies: {
       title: 'Cookie Policy | Taxi Airport Gdańsk',
@@ -115,6 +175,31 @@ const metaByLocale = {
       description:
         'Transfer taxi z lotniska Gdańsk do Gdyni. Stała cena, profesjonalni kierowcy, 24/7.',
     },
+    orderAirportGdansk: {
+      title: 'Rezerwacja Taxi Lotnisko Gdańsk | Taxi Airport Gdańsk',
+      description:
+        'Zarezerwuj transfer z lotniska Gdańsk do centrum. Stałe ceny, 24/7 i szybkie potwierdzenie.',
+    },
+    orderAirportSopot: {
+      title: 'Rezerwacja Taxi Lotnisko Gdańsk – Sopot',
+      description:
+        'Szybka rezerwacja transferu z lotniska Gdańsk do Sopotu. Stała cena i potwierdzenie w 5–10 min.',
+    },
+    orderAirportGdynia: {
+      title: 'Rezerwacja Taxi Lotnisko Gdańsk – Gdynia',
+      description:
+        'Zarezerwuj taxi z lotniska Gdańsk do Gdyni. Stałe ceny i profesjonalni kierowcy.',
+    },
+    orderCustom: {
+      title: 'Rezerwacja Trasy Niestandardowej | Taxi Airport Gdańsk',
+      description:
+        'Poproś o wycenę niestandardowej trasy w Trójmieście. Odpowiedź w 5–10 minut.',
+    },
+    pricing: {
+      title: 'Cennik Taxi Lotnisko Gdańsk | Taxi Airport Gdańsk',
+      description:
+        'Sprawdź stałe ceny transferów lotniskowych do Gdańska, Sopotu i Gdyni, wraz z taryfami dziennymi i nocnymi.',
+    },
     cookies: {
       title: 'Polityka Cookies | Taxi Airport Gdańsk',
       description: 'Dowiedz się, jak Taxi Airport Gdańsk używa cookies, by chronić rezerwacje.',
@@ -146,6 +231,31 @@ const metaByLocale = {
       title: 'Gdańsk Flughafen nach Gdynia Taxi | Taxi Airport Gdańsk',
       description:
         'Zuverlässiger Taxi-Transfer vom Flughafen Gdańsk nach Gdynia mit Festpreis.',
+    },
+    orderAirportGdansk: {
+      title: 'Book Gdansk Airport Taxi | Taxi Airport Gdańsk',
+      description:
+        'Direct booking form for Gdansk Airport to city center transfers. Fixed prices, 24/7 service, fast confirmation.',
+    },
+    orderAirportSopot: {
+      title: 'Book Gdansk Airport to Sopot Taxi | Taxi Airport Gdańsk',
+      description:
+        'Book your airport transfer from Gdansk to Sopot with fixed prices and quick confirmation.',
+    },
+    orderAirportGdynia: {
+      title: 'Book Gdansk Airport to Gdynia Taxi | Taxi Airport Gdańsk',
+      description:
+        'Reserve a taxi from Gdansk Airport to Gdynia. Fixed prices, professional drivers, 24/7.',
+    },
+    orderCustom: {
+      title: 'Book Custom Transfer | Taxi Airport Gdańsk',
+      description:
+        'Request a custom transfer quote in Gdansk, Sopot, or Gdynia. Fast response and flexible pricing.',
+    },
+    pricing: {
+      title: 'Gdansk Airport Taxi Prices | Taxi Airport Gdańsk',
+      description:
+        'See fixed prices for airport transfers to Gdansk, Sopot, and Gdynia, including day/night tariffs and custom route rates.',
     },
     cookies: {
       title: 'Cookie-Richtlinie | Taxi Airport Gdańsk',
@@ -179,6 +289,31 @@ const metaByLocale = {
       description:
         'Kuljetus Gdańskin lentokentältä Gdyniaan kiinteällä hinnalla ja nopealla varauksella.',
     },
+    orderAirportGdansk: {
+      title: 'Book Gdansk Airport Taxi | Taxi Airport Gdańsk',
+      description:
+        'Direct booking form for Gdansk Airport to city center transfers. Fixed prices, 24/7 service, fast confirmation.',
+    },
+    orderAirportSopot: {
+      title: 'Book Gdansk Airport to Sopot Taxi | Taxi Airport Gdańsk',
+      description:
+        'Book your airport transfer from Gdansk to Sopot with fixed prices and quick confirmation.',
+    },
+    orderAirportGdynia: {
+      title: 'Book Gdansk Airport to Gdynia Taxi | Taxi Airport Gdańsk',
+      description:
+        'Reserve a taxi from Gdansk Airport to Gdynia. Fixed prices, professional drivers, 24/7.',
+    },
+    orderCustom: {
+      title: 'Book Custom Transfer | Taxi Airport Gdańsk',
+      description:
+        'Request a custom transfer quote in Gdansk, Sopot, or Gdynia. Fast response and flexible pricing.',
+    },
+    pricing: {
+      title: 'Gdansk Airport Taxi Prices | Taxi Airport Gdańsk',
+      description:
+        'See fixed prices for airport transfers to Gdansk, Sopot, and Gdynia, including day/night tariffs and custom route rates.',
+    },
     cookies: {
       title: 'Evästekäytäntö | Taxi Airport Gdańsk',
       description: 'Tietoa evästeiden käytöstä Taxi Airport Gdańsk -palvelussa.',
@@ -210,6 +345,31 @@ const metaByLocale = {
       title: 'Gdańsk flyplass til Gdynia taxi | Taxi Airport Gdańsk',
       description:
         'Transfer fra Gdańsk flyplass til Gdynia med fast pris og rask bestilling.',
+    },
+    orderAirportGdansk: {
+      title: 'Book Gdansk Airport Taxi | Taxi Airport Gdańsk',
+      description:
+        'Direct booking form for Gdansk Airport to city center transfers. Fixed prices, 24/7 service, fast confirmation.',
+    },
+    orderAirportSopot: {
+      title: 'Book Gdansk Airport to Sopot Taxi | Taxi Airport Gdańsk',
+      description:
+        'Book your airport transfer from Gdansk to Sopot with fixed prices and quick confirmation.',
+    },
+    orderAirportGdynia: {
+      title: 'Book Gdansk Airport to Gdynia Taxi | Taxi Airport Gdańsk',
+      description:
+        'Reserve a taxi from Gdansk Airport to Gdynia. Fixed prices, professional drivers, 24/7.',
+    },
+    orderCustom: {
+      title: 'Book Custom Transfer | Taxi Airport Gdańsk',
+      description:
+        'Request a custom transfer quote in Gdansk, Sopot, or Gdynia. Fast response and flexible pricing.',
+    },
+    pricing: {
+      title: 'Gdansk Airport Taxi Prices | Taxi Airport Gdańsk',
+      description:
+        'See fixed prices for airport transfers to Gdansk, Sopot, and Gdynia, including day/night tariffs and custom route rates.',
     },
     cookies: {
       title: 'Informasjonskapsler | Taxi Airport Gdańsk',
@@ -243,6 +403,31 @@ const metaByLocale = {
       description:
         'Transfer från Gdańsk flygplats till Gdynia med fast pris och snabb bokning.',
     },
+    orderAirportGdansk: {
+      title: 'Book Gdansk Airport Taxi | Taxi Airport Gdańsk',
+      description:
+        'Direct booking form for Gdansk Airport to city center transfers. Fixed prices, 24/7 service, fast confirmation.',
+    },
+    orderAirportSopot: {
+      title: 'Book Gdansk Airport to Sopot Taxi | Taxi Airport Gdańsk',
+      description:
+        'Book your airport transfer from Gdansk to Sopot with fixed prices and quick confirmation.',
+    },
+    orderAirportGdynia: {
+      title: 'Book Gdansk Airport to Gdynia Taxi | Taxi Airport Gdańsk',
+      description:
+        'Reserve a taxi from Gdansk Airport to Gdynia. Fixed prices, professional drivers, 24/7.',
+    },
+    orderCustom: {
+      title: 'Book Custom Transfer | Taxi Airport Gdańsk',
+      description:
+        'Request a custom transfer quote in Gdansk, Sopot, or Gdynia. Fast response and flexible pricing.',
+    },
+    pricing: {
+      title: 'Gdansk Airport Taxi Prices | Taxi Airport Gdańsk',
+      description:
+        'See fixed prices for airport transfers to Gdansk, Sopot, and Gdynia, including day/night tariffs and custom route rates.',
+    },
     cookies: {
       title: 'Cookiepolicy | Taxi Airport Gdańsk',
       description: 'Information om cookies hos Taxi Airport Gdańsk.',
@@ -274,6 +459,31 @@ const metaByLocale = {
       title: 'Gdańsk lufthavn til Gdynia taxa | Taxi Airport Gdańsk',
       description:
         'Transfer fra Gdańsk lufthavn til Gdynia med fast pris og hurtig booking.',
+    },
+    orderAirportGdansk: {
+      title: 'Book Gdansk Airport Taxi | Taxi Airport Gdańsk',
+      description:
+        'Direct booking form for Gdansk Airport to city center transfers. Fixed prices, 24/7 service, fast confirmation.',
+    },
+    orderAirportSopot: {
+      title: 'Book Gdansk Airport to Sopot Taxi | Taxi Airport Gdańsk',
+      description:
+        'Book your airport transfer from Gdansk to Sopot with fixed prices and quick confirmation.',
+    },
+    orderAirportGdynia: {
+      title: 'Book Gdansk Airport to Gdynia Taxi | Taxi Airport Gdańsk',
+      description:
+        'Reserve a taxi from Gdansk Airport to Gdynia. Fixed prices, professional drivers, 24/7.',
+    },
+    orderCustom: {
+      title: 'Book Custom Transfer | Taxi Airport Gdańsk',
+      description:
+        'Request a custom transfer quote in Gdansk, Sopot, or Gdynia. Fast response and flexible pricing.',
+    },
+    pricing: {
+      title: 'Gdansk Airport Taxi Prices | Taxi Airport Gdańsk',
+      description:
+        'See fixed prices for airport transfers to Gdansk, Sopot, and Gdynia, including day/night tariffs and custom route rates.',
     },
     cookies: {
       title: 'Cookiepolitik | Taxi Airport Gdańsk',
@@ -546,7 +756,7 @@ export const buildSeoTags = (urlPath) => {
     areaServed: ['Gdańsk', 'Sopot', 'Gdynia'],
     email: 'booking@taxiairportgdansk.com',
     priceRange: '$$',
-    telephone: '+48537523437',
+    telephone: '+48694347548',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Gdańsk',

@@ -3,6 +3,13 @@
 }
 
 taxiairportgdansk.com {
+    redir /pl /pl/ 301
+    redir /en /en/ 301
+    redir /de /de/ 301
+    redir /fi /fi/ 301
+    redir /no /no/ 301
+    redir /sv /sv/ 301
+    redir /da /da/ 301
     reverse_proxy /api/* host.docker.internal:8000
     reverse_proxy /* frontend:3000
 }

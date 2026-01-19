@@ -1,6 +1,7 @@
 import { Footer } from '../components/Footer';
 import { Navbar } from '../components/Navbar';
 import { localeToPath, useI18n } from '../lib/i18n';
+import { getRouteSlug } from '../lib/routes';
 import { trackCtaClick } from '../lib/tracking';
 import { requestScrollTo } from '../lib/scroll';
 
@@ -18,6 +19,24 @@ interface RouteLandingProps {
 export function RouteLanding({ title, description, route, examples, pricing }: RouteLandingProps) {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
+  const orderLinks = [
+    {
+      href: `${basePath}/${getRouteSlug(locale, 'orderAirportGdansk')}`,
+      label: t.routeLanding.orderLinks.airportGdansk,
+    },
+    {
+      href: `${basePath}/${getRouteSlug(locale, 'orderAirportSopot')}`,
+      label: t.routeLanding.orderLinks.airportSopot,
+    },
+    {
+      href: `${basePath}/${getRouteSlug(locale, 'orderAirportGdynia')}`,
+      label: t.routeLanding.orderLinks.airportGdynia,
+    },
+    {
+      href: `${basePath}/${getRouteSlug(locale, 'orderCustom')}`,
+      label: t.routeLanding.orderLinks.custom,
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -43,6 +62,26 @@ export function RouteLanding({ title, description, route, examples, pricing }: R
               >
                 {t.routeLanding.orderNow}
               </a>
+              <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-600">
+                <span className="text-xs uppercase tracking-wide text-gray-400">
+                  {t.routeLanding.quickLinks}
+                </span>
+                {orderLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="text-blue-600 hover:text-blue-700"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+                <a
+                  href={`${basePath}/${getRouteSlug(locale, 'pricing')}`}
+                  className="text-blue-600 hover:text-blue-700"
+                >
+                  {t.routeLanding.pricingLink}
+                </a>
+              </div>
             </div>
           </div>
         </section>

@@ -90,8 +90,7 @@ export function Navbar() {
               {t.navbar.airportGdynia}
             </a>
             <a
-              href={`${basePath}/`}
-              onClick={(event) => handleNavClick(event, 'vehicle-selection')}
+              href={getRoutePath(locale, 'pricing')}
               className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
             >
               {t.navbar.prices}
@@ -176,8 +175,7 @@ export function Navbar() {
               {t.navbar.airportGdynia}
             </a>
             <a
-              href={`${basePath}/`}
-              onClick={(event) => handleNavClick(event, 'vehicle-selection')}
+              href={getRoutePath(locale, 'pricing')}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
               {t.navbar.prices}

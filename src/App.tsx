@@ -13,6 +13,9 @@ const OrderForm = lazy(() => import('./components/OrderForm').then((mod) => ({ d
 const QuoteForm = lazy(() => import('./components/QuoteForm').then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./components/ManageOrder').then((mod) => ({ default: mod.ManageOrder })));
 const RouteLanding = lazy(() => import('./pages/RouteLanding').then((mod) => ({ default: mod.RouteLanding })));
+const OrderRoutePage = lazy(() => import('./pages/OrderRoutePage').then((mod) => ({ default: mod.OrderRoutePage })));
+const CustomOrderPage = lazy(() => import('./pages/OrderRoutePage').then((mod) => ({ default: mod.CustomOrderPage })));
+const PricingPage = lazy(() => import('./pages/PricingPage').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./pages/AdminOrdersPage').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./pages/AdminOrderPage').then((mod) => ({ default: mod.AdminOrderPage })));
 import { trackContactClick, trackCtaClick, trackFormOpen, trackSectionView } from './lib/tracking';
@@ -316,6 +319,11 @@ export default function App() {
           <Route path="/" element={<AutoRedirect />} />
           <Route path="/en" element={<LocalizedShell locale="en" />}>
             <Route index element={<Landing />} />
+            <Route path={getRouteSlug('en', 'orderAirportGdansk')} element={<OrderRoutePage routeKey="airportTaxi" />} />
+            <Route path={getRouteSlug('en', 'orderAirportSopot')} element={<OrderRoutePage routeKey="airportSopot" />} />
+            <Route path={getRouteSlug('en', 'orderAirportGdynia')} element={<OrderRoutePage routeKey="airportGdynia" />} />
+            <Route path={getRouteSlug('en', 'orderCustom')} element={<CustomOrderPage />} />
+            <Route path={getRouteSlug('en', 'pricing')} element={<PricingPage />} />
             <Route path="admin" element={<AdminOrdersPage />} />
             <Route path="admin/orders/:id" element={<AdminOrderPage />} />
             <Route path={getRouteSlug('en', 'cookies')} element={<CookiesPage />} />
@@ -359,6 +367,11 @@ export default function App() {
           </Route>
           <Route path="/de" element={<LocalizedShell locale="de" />}>
             <Route index element={<Landing />} />
+            <Route path={getRouteSlug('de', 'orderAirportGdansk')} element={<OrderRoutePage routeKey="airportTaxi" />} />
+            <Route path={getRouteSlug('de', 'orderAirportSopot')} element={<OrderRoutePage routeKey="airportSopot" />} />
+            <Route path={getRouteSlug('de', 'orderAirportGdynia')} element={<OrderRoutePage routeKey="airportGdynia" />} />
+            <Route path={getRouteSlug('de', 'orderCustom')} element={<CustomOrderPage />} />
+            <Route path={getRouteSlug('de', 'pricing')} element={<PricingPage />} />
             <Route path="admin" element={<AdminOrdersPage />} />
             <Route path="admin/orders/:id" element={<AdminOrderPage />} />
             <Route path={getRouteSlug('de', 'cookies')} element={<CookiesPage />} />
@@ -402,6 +415,11 @@ export default function App() {
           </Route>
           <Route path="/fi" element={<LocalizedShell locale="fi" />}>
             <Route index element={<Landing />} />
+            <Route path={getRouteSlug('fi', 'orderAirportGdansk')} element={<OrderRoutePage routeKey="airportTaxi" />} />
+            <Route path={getRouteSlug('fi', 'orderAirportSopot')} element={<OrderRoutePage routeKey="airportSopot" />} />
+            <Route path={getRouteSlug('fi', 'orderAirportGdynia')} element={<OrderRoutePage routeKey="airportGdynia" />} />
+            <Route path={getRouteSlug('fi', 'orderCustom')} element={<CustomOrderPage />} />
+            <Route path={getRouteSlug('fi', 'pricing')} element={<PricingPage />} />
             <Route path="admin" element={<AdminOrdersPage />} />
             <Route path="admin/orders/:id" element={<AdminOrderPage />} />
             <Route path={getRouteSlug('fi', 'cookies')} element={<CookiesPage />} />
@@ -445,6 +463,11 @@ export default function App() {
           </Route>
           <Route path="/no" element={<LocalizedShell locale="no" />}>
             <Route index element={<Landing />} />
+            <Route path={getRouteSlug('no', 'orderAirportGdansk')} element={<OrderRoutePage routeKey="airportTaxi" />} />
+            <Route path={getRouteSlug('no', 'orderAirportSopot')} element={<OrderRoutePage routeKey="airportSopot" />} />
+            <Route path={getRouteSlug('no', 'orderAirportGdynia')} element={<OrderRoutePage routeKey="airportGdynia" />} />
+            <Route path={getRouteSlug('no', 'orderCustom')} element={<CustomOrderPage />} />
+            <Route path={getRouteSlug('no', 'pricing')} element={<PricingPage />} />
             <Route path="admin" element={<AdminOrdersPage />} />
             <Route path="admin/orders/:id" element={<AdminOrderPage />} />
             <Route path={getRouteSlug('no', 'cookies')} element={<CookiesPage />} />
@@ -488,6 +511,11 @@ export default function App() {
           </Route>
           <Route path="/sv" element={<LocalizedShell locale="sv" />}>
             <Route index element={<Landing />} />
+            <Route path={getRouteSlug('sv', 'orderAirportGdansk')} element={<OrderRoutePage routeKey="airportTaxi" />} />
+            <Route path={getRouteSlug('sv', 'orderAirportSopot')} element={<OrderRoutePage routeKey="airportSopot" />} />
+            <Route path={getRouteSlug('sv', 'orderAirportGdynia')} element={<OrderRoutePage routeKey="airportGdynia" />} />
+            <Route path={getRouteSlug('sv', 'orderCustom')} element={<CustomOrderPage />} />
+            <Route path={getRouteSlug('sv', 'pricing')} element={<PricingPage />} />
             <Route path="admin" element={<AdminOrdersPage />} />
             <Route path="admin/orders/:id" element={<AdminOrderPage />} />
             <Route path={getRouteSlug('sv', 'cookies')} element={<CookiesPage />} />
@@ -531,6 +559,11 @@ export default function App() {
           </Route>
           <Route path="/da" element={<LocalizedShell locale="da" />}>
             <Route index element={<Landing />} />
+            <Route path={getRouteSlug('da', 'orderAirportGdansk')} element={<OrderRoutePage routeKey="airportTaxi" />} />
+            <Route path={getRouteSlug('da', 'orderAirportSopot')} element={<OrderRoutePage routeKey="airportSopot" />} />
+            <Route path={getRouteSlug('da', 'orderAirportGdynia')} element={<OrderRoutePage routeKey="airportGdynia" />} />
+            <Route path={getRouteSlug('da', 'orderCustom')} element={<CustomOrderPage />} />
+            <Route path={getRouteSlug('da', 'pricing')} element={<PricingPage />} />
             <Route path="admin" element={<AdminOrdersPage />} />
             <Route path="admin/orders/:id" element={<AdminOrderPage />} />
             <Route path={getRouteSlug('da', 'cookies')} element={<CookiesPage />} />
@@ -574,6 +607,11 @@ export default function App() {
           </Route>
           <Route path="/pl" element={<LocalizedShell locale="pl" />}>
             <Route index element={<Landing />} />
+            <Route path={getRouteSlug('pl', 'orderAirportGdansk')} element={<OrderRoutePage routeKey="airportTaxi" />} />
+            <Route path={getRouteSlug('pl', 'orderAirportSopot')} element={<OrderRoutePage routeKey="airportSopot" />} />
+            <Route path={getRouteSlug('pl', 'orderAirportGdynia')} element={<OrderRoutePage routeKey="airportGdynia" />} />
+            <Route path={getRouteSlug('pl', 'orderCustom')} element={<CustomOrderPage />} />
+            <Route path={getRouteSlug('pl', 'pricing')} element={<PricingPage />} />
             <Route path="admin" element={<AdminOrdersPage />} />
             <Route path="admin/orders/:id" element={<AdminOrderPage />} />
             <Route path={getRouteSlug('pl', 'cookies')} element={<CookiesPage />} />
@@ -637,6 +675,7 @@ export default function App() {
           </Route>
           <Route path="/cookies" element={<LegacyRedirectToRoute routeKey="cookies" />} />
           <Route path="/privacy" element={<LegacyRedirectToRoute routeKey="privacy" />} />
+          <Route path="/pricing" element={<LegacyRedirectToRoute routeKey="pricing" />} />
           <Route path="/admin" element={<LegacyRedirect to="admin" />} />
           <Route path="/admin/orders/:id" element={<LegacyAdminOrderRedirect />} />
           <Route path="/gdansk-airport-taxi" element={<LegacyRedirectToRoute routeKey="airportTaxi" />} />
