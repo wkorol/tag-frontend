@@ -94,8 +94,8 @@ export function Pricing({
   const pricingTable = (
     <div className={variant === 'landing' ? 'rounded-3xl border border-amber-200 bg-gradient-to-br from-amber-50 via-white to-slate-50 p-8 shadow-lg' : ''}>
       <h3 className={`text-lg font-semibold text-gray-900 ${variant === 'landing' ? 'text-center' : ''}`}>{t.pricing.tableTitle}</h3>
-      <div className="mt-6 overflow-x-auto">
-        <table className="w-full min-w-[640px] border-collapse text-sm">
+      <div className="mt-6 hidden sm:block">
+        <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="bg-slate-100 text-slate-700">
               <th className="border border-slate-200 px-4 py-3 text-left">{t.pricing.tableRoute}</th>
@@ -124,8 +124,8 @@ export function Pricing({
       <h4 className={`mt-10 text-base font-semibold text-gray-900 ${variant === 'landing' ? 'text-center' : ''}`}>
         {t.pricing.tariffsTitle}
       </h4>
-      <div className="mt-4 overflow-x-auto">
-        <table className="w-full min-w-[520px] border-collapse text-sm">
+      <div className="mt-4 hidden sm:block">
+        <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="bg-slate-100 text-slate-700">
               <th className="border border-slate-200 px-4 py-3 text-left">{t.pricing.tariffsName}</th>
@@ -141,6 +141,42 @@ export function Pricing({
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="mt-6 space-y-4 sm:hidden">
+        {routes.map((route, index) => (
+          <div key={`${route.to}-mobile-${index}`} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="text-sm font-semibold text-gray-900">
+              {route.from} ↔ {route.to}
+            </div>
+            <div className="mt-3 grid grid-cols-2 gap-3 text-xs text-gray-600">
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <div className="text-[10px] uppercase tracking-wide text-slate-500">{t.pricing.tableStandardDay}</div>
+                <div className="mt-1 text-sm font-semibold text-gray-900">{route.priceDay} PLN</div>
+              </div>
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <div className="text-[10px] uppercase tracking-wide text-slate-500">{t.pricing.tableStandardNight}</div>
+                <div className="mt-1 text-sm font-semibold text-gray-900">{route.priceNight} PLN</div>
+              </div>
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <div className="text-[10px] uppercase tracking-wide text-slate-500">{t.pricing.tableBusDay}</div>
+                <div className="mt-1 text-sm font-semibold text-gray-900">{busRoutes[index]?.priceDay} PLN</div>
+              </div>
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <div className="text-[10px] uppercase tracking-wide text-slate-500">{t.pricing.tableBusNight}</div>
+                <div className="mt-1 text-sm font-semibold text-gray-900">{busRoutes[index]?.priceNight} PLN</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 space-y-3 sm:hidden">
+        {tariffRows.map((row) => (
+          <div key={`${row.label}-mobile`} className="rounded-xl border border-slate-200 bg-white p-4">
+            <div className="text-xs uppercase tracking-wide text-slate-500">{row.label}</div>
+            <div className="mt-1 text-sm text-gray-900">{row.value}</div>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -269,7 +305,7 @@ export function Pricing({
 
         {variant === 'landing' ? (
           <>
-            <div className="mt-12">
+            <div id="pricing-table" className="mt-12">
               {pricingTable}
             </div>
             <div className="mt-12 text-center">

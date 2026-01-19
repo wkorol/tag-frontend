@@ -1,5 +1,6 @@
 import { Suspense, useEffect, useState } from 'react';
 import { Footer } from '../components/Footer';
+import { FloatingActions } from '../components/FloatingActions';
 import { Navbar } from '../components/Navbar';
 import { Pricing } from '../components/Pricing';
 import { OrderForm } from '../components/OrderForm';
@@ -56,21 +57,30 @@ export function PricingPage() {
               <h1 className="text-3xl text-gray-900 mb-4">{t.pricingLanding.title}</h1>
               <p className="text-gray-600 mb-4">{t.pricingLanding.subtitle}</p>
               <p className="text-sm text-gray-500 mb-6">{t.pricingLanding.description}</p>
-              <a
-                href={`${basePath}/`}
-                onClick={(event) => {
-                  event.preventDefault();
-                  trackCtaClick('pricing_landing_order');
-                  const scrolled = requestScrollTo('vehicle-selection');
-                  if (!scrolled) {
-                    window.location.href = `${basePath}/`;
-                  }
-                }}
-                className="inline-flex items-center gap-2 bg-orange-700 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-600 transition-colors animate-pulse-glow"
-              >
-                {t.pricingLanding.cta}
-              </a>
-              <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-600">
+              <div className="flex flex-wrap items-center gap-3">
+                <a
+                  href={`${basePath}/`}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    trackCtaClick('pricing_landing_order');
+                    const scrolled = requestScrollTo('vehicle-selection');
+                    if (!scrolled) {
+                      window.location.href = `${basePath}/`;
+                    }
+                  }}
+                  className="inline-flex items-center gap-2 bg-orange-700 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-600 transition-colors animate-pulse-glow"
+                >
+                  {t.pricingLanding.cta}
+                </a>
+                <button
+                  type="button"
+                  onClick={() => requestScrollTo('pricing-table')}
+                  className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-6 py-3 text-gray-700 shadow-sm transition-colors hover:border-gray-400 hover:text-gray-900"
+                >
+                  {t.routeLanding.pricingLink}
+                </button>
+              </div>
+              <div className="mt-4 flex flex-col items-start gap-2 text-sm text-gray-600 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
                 <span className="text-xs uppercase tracking-wide text-gray-400">
                   {t.routeLanding.quickLinks}
                 </span>
@@ -127,6 +137,7 @@ export function PricingPage() {
         </section>
       </main>
       <Footer />
+      <FloatingActions hide={Boolean(selectedRoute || showQuoteForm)} />
 
       {selectedRoute && (
         <Suspense fallback={null}>

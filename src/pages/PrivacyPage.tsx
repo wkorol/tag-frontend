@@ -1,5 +1,6 @@
 import { PrivacyPolicy } from '../components/PrivacyPolicy';
 import { Footer } from '../components/Footer';
+import { FloatingActions } from '../components/FloatingActions';
 import { Navbar } from '../components/Navbar';
 import { localeToPath, useI18n } from '../lib/i18n';
 
@@ -22,6 +23,7 @@ export function PrivacyPage() {
         <PrivacyPolicy />
       </main>
       <Footer />
+      <FloatingActions />
     </div>
   );
 }

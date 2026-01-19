@@ -1,4 +1,5 @@
 import { Footer } from '../components/Footer';
+import { FloatingActions } from '../components/FloatingActions';
 import { Navbar } from '../components/Navbar';
 import { localeToPath, useI18n } from '../lib/i18n';
 import { getRouteSlug } from '../lib/routes';
@@ -152,6 +153,7 @@ export function RouteLanding({ title, description, route, examples, pricing }: R
       </main>
 
       <Footer />
+      <FloatingActions />
     </div>
   );
 }

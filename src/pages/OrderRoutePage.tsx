@@ -1,5 +1,6 @@
 import { Suspense, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FloatingActions } from '../components/FloatingActions';
 import { OrderForm } from '../components/OrderForm';
 import { QuoteForm } from '../components/QuoteForm';
 import { trackFormOpen } from '../lib/tracking';
@@ -49,12 +50,15 @@ export function OrderRoutePage({ routeKey }: OrderRoutePageProps) {
   }, []);
 
   return (
-    <Suspense fallback={null}>
-      <OrderForm
-        route={route}
-        onClose={() => navigate(`${basePath}/`, { replace: true })}
-      />
-    </Suspense>
+    <>
+      <Suspense fallback={null}>
+        <OrderForm
+          route={route}
+          onClose={() => navigate(`${basePath}/`, { replace: true })}
+        />
+      </Suspense>
+      <FloatingActions hide />
+    </>
   );
 }
 
@@ -68,8 +72,11 @@ export function CustomOrderPage() {
   }, []);
 
   return (
-    <Suspense fallback={null}>
-      <QuoteForm onClose={() => navigate(`${basePath}/`, { replace: true })} />
-    </Suspense>
+    <>
+      <Suspense fallback={null}>
+        <QuoteForm onClose={() => navigate(`${basePath}/`, { replace: true })} />
+      </Suspense>
+      <FloatingActions hide />
+    </>
   );
 }
