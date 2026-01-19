@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '../components/Breadcrumbs';
 import { CookiePolicy } from '../components/CookiePolicy';
 import { PrivacyPolicy } from '../components/PrivacyPolicy';
 import { Footer } from '../components/Footer';
@@ -14,12 +15,12 @@ export function CookiesPage() {
       <Navbar />
       <main>
         <div className="max-w-4xl mx-auto px-4 pt-6">
-          <a
-            href={`${basePath}/`}
-            className="flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-6 transition-colors"
-          >
-            {t.common.backToHome}
-          </a>
+          <Breadcrumbs
+            items={[
+              { label: t.common.home, href: `${basePath}/` },
+              { label: t.cookiePolicy.title },
+            ]}
+          />
         </div>
         <CookiePolicy />
         <PrivacyPolicy />

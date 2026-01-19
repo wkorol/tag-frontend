@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '../components/Breadcrumbs';
 import { Footer } from '../components/Footer';
 import { FloatingActions } from '../components/FloatingActions';
 import { Navbar } from '../components/Navbar';
@@ -46,6 +47,12 @@ export function RouteLanding({ title, description, route, examples, pricing }: R
         <section className="bg-white border-b border-gray-200">
           <div className="max-w-5xl mx-auto px-4 py-12">
             <div className="bg-white border border-gray-200 rounded-3xl p-8 shadow-sm">
+              <Breadcrumbs
+                items={[
+                  { label: t.common.home, href: `${basePath}/` },
+                  { label: title },
+                ]}
+              />
               <h1 className="text-3xl text-gray-900 mb-4">{title}</h1>
               <p className="text-gray-600 mb-6">{description}</p>
               <p className="text-sm text-gray-500 mb-6">{t.routeLanding.seoParagraph(route)}</p>
@@ -63,7 +70,7 @@ export function RouteLanding({ title, description, route, examples, pricing }: R
               >
                 {t.routeLanding.orderNow}
               </a>
-              <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-600">
+              <div className="mt-4 flex flex-col items-start gap-2 text-sm text-gray-600 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
                 <span className="text-xs uppercase tracking-wide text-gray-400">
                   {t.routeLanding.quickLinks}
                 </span>

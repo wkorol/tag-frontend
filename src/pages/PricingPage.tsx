@@ -1,4 +1,5 @@
 import { Suspense, useEffect, useState } from 'react';
+import { Breadcrumbs } from '../components/Breadcrumbs';
 import { Footer } from '../components/Footer';
 import { FloatingActions } from '../components/FloatingActions';
 import { Navbar } from '../components/Navbar';
@@ -54,6 +55,12 @@ export function PricingPage() {
         <section className="bg-white border-b border-gray-200">
           <div className="max-w-5xl mx-auto px-4 py-12">
             <div className="bg-white border border-gray-200 rounded-3xl p-8 shadow-sm">
+              <Breadcrumbs
+                items={[
+                  { label: t.common.home, href: `${basePath}/` },
+                  { label: t.pricingLanding.title },
+                ]}
+              />
               <h1 className="text-3xl text-gray-900 mb-4">{t.pricingLanding.title}</h1>
               <p className="text-gray-600 mb-4">{t.pricingLanding.subtitle}</p>
               <p className="text-sm text-gray-500 mb-6">{t.pricingLanding.description}</p>

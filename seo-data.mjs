@@ -94,6 +94,86 @@ export const routeSlugs = {
   },
 };
 
+const navLabels = {
+  en: {
+    home: 'Home',
+    pricing: 'Pricing',
+    airportTaxi: 'Gdansk Airport Taxi',
+    airportSopot: 'Airport ↔ Sopot',
+    airportGdynia: 'Airport ↔ Gdynia',
+    orderAirportGdansk: 'Book Airport Transfer',
+    orderAirportSopot: 'Book Airport to Sopot',
+    orderAirportGdynia: 'Book Airport to Gdynia',
+    orderCustom: 'Book Custom Transfer',
+  },
+  pl: {
+    home: 'Strona główna',
+    pricing: 'Cennik',
+    airportTaxi: 'Taxi Lotnisko Gdańsk',
+    airportSopot: 'Lotnisko ↔ Sopot',
+    airportGdynia: 'Lotnisko ↔ Gdynia',
+    orderAirportGdansk: 'Rezerwacja lotnisko Gdańsk',
+    orderAirportSopot: 'Rezerwacja lotnisko Gdańsk – Sopot',
+    orderAirportGdynia: 'Rezerwacja lotnisko Gdańsk – Gdynia',
+    orderCustom: 'Rezerwacja trasy niestandardowej',
+  },
+  de: {
+    home: 'Startseite',
+    pricing: 'Preise',
+    airportTaxi: 'Gdańsk Flughafen Taxi',
+    airportSopot: 'Flughafen ↔ Sopot',
+    airportGdynia: 'Flughafen ↔ Gdynia',
+    orderAirportGdansk: 'Buchung Flughafen Gdańsk',
+    orderAirportSopot: 'Buchung Flughafen – Sopot',
+    orderAirportGdynia: 'Buchung Flughafen – Gdynia',
+    orderCustom: 'Buchung individuelle Route',
+  },
+  fi: {
+    home: 'Etusivu',
+    pricing: 'Hinnasto',
+    airportTaxi: 'Gdańsk lentokenttä taksi',
+    airportSopot: 'Lentokenttä ↔ Sopot',
+    airportGdynia: 'Lentokenttä ↔ Gdynia',
+    orderAirportGdansk: 'Varaus lentokenttä Gdańsk',
+    orderAirportSopot: 'Varaus lentokenttä – Sopot',
+    orderAirportGdynia: 'Varaus lentokenttä – Gdynia',
+    orderCustom: 'Varaus mukautettu reitti',
+  },
+  no: {
+    home: 'Hjem',
+    pricing: 'Priser',
+    airportTaxi: 'Gdańsk flyplass taxi',
+    airportSopot: 'Flyplass ↔ Sopot',
+    airportGdynia: 'Flyplass ↔ Gdynia',
+    orderAirportGdansk: 'Bestilling flyplass Gdańsk',
+    orderAirportSopot: 'Bestilling flyplass – Sopot',
+    orderAirportGdynia: 'Bestilling flyplass – Gdynia',
+    orderCustom: 'Bestilling tilpasset rute',
+  },
+  sv: {
+    home: 'Hem',
+    pricing: 'Priser',
+    airportTaxi: 'Gdańsk flygplats taxi',
+    airportSopot: 'Flygplats ↔ Sopot',
+    airportGdynia: 'Flygplats ↔ Gdynia',
+    orderAirportGdansk: 'Bokning flygplats Gdańsk',
+    orderAirportSopot: 'Bokning flygplats – Sopot',
+    orderAirportGdynia: 'Bokning flygplats – Gdynia',
+    orderCustom: 'Bokning anpassad rutt',
+  },
+  da: {
+    home: 'Hjem',
+    pricing: 'Priser',
+    airportTaxi: 'Gdańsk lufthavn taxa',
+    airportSopot: 'Lufthavn ↔ Sopot',
+    airportGdynia: 'Lufthavn ↔ Gdynia',
+    orderAirportGdansk: 'Booking lufthavn Gdańsk',
+    orderAirportSopot: 'Booking lufthavn – Sopot',
+    orderAirportGdynia: 'Booking lufthavn – Gdynia',
+    orderCustom: 'Booking tilpasset rute',
+  },
+};
+
 const metaByLocale = {
   en: {
     noscript:
@@ -788,6 +868,57 @@ export const buildSeoTags = (urlPath) => {
         }
       : null;
 
+  const labels = navLabels[locale] ?? navLabels.en;
+  const homeUrl = isRootHome ? `${site.url}/` : buildLocalizedUrl(locale, null);
+  const navigationItems = [
+    { key: 'home', url: homeUrl },
+    { key: 'pricing', url: buildLocalizedUrl(locale, 'pricing') },
+    { key: 'airportTaxi', url: buildLocalizedUrl(locale, 'airportTaxi') },
+    { key: 'airportSopot', url: buildLocalizedUrl(locale, 'airportSopot') },
+    { key: 'airportGdynia', url: buildLocalizedUrl(locale, 'airportGdynia') },
+    { key: 'orderAirportGdansk', url: buildLocalizedUrl(locale, 'orderAirportGdansk') },
+    { key: 'orderCustom', url: buildLocalizedUrl(locale, 'orderCustom') },
+  ];
+
+  const navigationSchema = {
+    '@context': 'https://schema.org',
+    '@graph': navigationItems.map((item) => ({
+      '@type': 'SiteNavigationElement',
+      name: labels[item.key] ?? labels.home,
+      url: item.url,
+    })),
+  };
+
+  const shouldIncludeBreadcrumbs = isIndexablePath(urlPath) && routeKey;
+  const breadcrumbSchema = shouldIncludeBreadcrumbs
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: labels.home,
+            item: homeUrl,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: labels[routeKey] ?? meta.title,
+            item: canonical,
+          },
+        ],
+      }
+    : null;
+
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: site.name,
+    url: homeUrl,
+    inLanguage: locale,
+  };
+
   return [
     `<title>${meta.title}</title>`,
     `<meta name="description" content="${meta.description}">`,
@@ -806,6 +937,9 @@ export const buildSeoTags = (urlPath) => {
     alternates,
     xDefault,
     `<script type="application/ld+json">${JSON.stringify(localBusinessSchema)}</script>`,
+    `<script type="application/ld+json">${JSON.stringify(websiteSchema)}</script>`,
+    `<script type="application/ld+json">${JSON.stringify(navigationSchema)}</script>`,
+    breadcrumbSchema ? `<script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>` : '',
     faqSchema ? `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>` : '',
   ].join('');
 };
