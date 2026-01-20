@@ -2,6 +2,7 @@ import { Moon, Sun, MapPin, Calculator, ChevronLeft } from 'lucide-react';
 import { useEffect } from 'react';
 import { preloadEurRate, useEurRate } from '../lib/useEurRate';
 import { formatEur } from '../lib/currency';
+import { FIXED_PRICES } from '../lib/fixedPricing';
 import { useI18n } from '../lib/i18n';
 
 interface PricingProps {
@@ -28,22 +29,22 @@ export function Pricing({
     {
       from: t.pricing.routes.airport,
       to: t.pricing.routes.gdansk,
-      priceDay: 100,
-      priceNight: 120,
+      priceDay: FIXED_PRICES.standard.gdansk.day,
+      priceNight: FIXED_PRICES.standard.gdansk.night,
       type: 'standard' as const,
     },
     {
       from: t.pricing.routes.airport,
       to: 'Sopot',
-      priceDay: 120,
-      priceNight: 150,
+      priceDay: FIXED_PRICES.standard.sopot.day,
+      priceNight: FIXED_PRICES.standard.sopot.night,
       type: 'standard' as const,
     },
     {
       from: t.pricing.routes.airport,
       to: t.pricing.routes.gdynia,
-      priceDay: 200,
-      priceNight: 250,
+      priceDay: FIXED_PRICES.standard.gdynia.day,
+      priceNight: FIXED_PRICES.standard.gdynia.night,
       type: 'standard' as const,
     },
   ];
@@ -51,22 +52,22 @@ export function Pricing({
     {
       from: t.pricing.routes.airport,
       to: t.pricing.routes.gdansk,
-      priceDay: 150,
-      priceNight: 180,
+      priceDay: FIXED_PRICES.bus.gdansk.day,
+      priceNight: FIXED_PRICES.bus.gdansk.night,
       type: 'bus' as const,
     },
     {
       from: t.pricing.routes.airport,
       to: 'Sopot',
-      priceDay: 170,
-      priceNight: 200,
+      priceDay: FIXED_PRICES.bus.sopot.day,
+      priceNight: FIXED_PRICES.bus.sopot.night,
       type: 'bus' as const,
     },
     {
       from: t.pricing.routes.airport,
       to: t.pricing.routes.gdynia,
-      priceDay: 280,
-      priceNight: 330,
+      priceDay: FIXED_PRICES.bus.gdynia.day,
+      priceNight: FIXED_PRICES.bus.gdynia.night,
       type: 'bus' as const,
     },
   ];

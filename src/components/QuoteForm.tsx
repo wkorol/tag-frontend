@@ -1,10 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import { Calendar, Users, Luggage, MapPin, FileText, Plane, DollarSign, Info, Lock } from 'lucide-react';
+import { centerPolygons } from '../lib/centerPolygons';
+import { distanceKm, isPointInsideGeoJson } from '../lib/geo';
+import { FIXED_PRICES, FixedCityKey } from '../lib/fixedPricing';
+import { formatEur } from '../lib/currency';
+import { preloadEurRate, useEurRate } from '../lib/useEurRate';
 import { buildAdditionalNotes } from '../lib/orderNotes';
 import { hasMarketingConsent } from '../lib/consent';
 import { getApiBaseUrl } from '../lib/api';
 import { trackFormStart } from '../lib/tracking';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
+import { getRouteSlug } from '../lib/routes';
+
+const AIRPORT_COORD = { lat: 54.3776, lon: 18.4662 };
+const AIRPORT_RADIUS_KM = 2.5;
 
 const validatePhoneNumber = (value: string, messages: { phoneLetters: string; phoneLength: string }) => {
   const trimmed = value.trim();
@@ -35,6 +44,31 @@ const getTodayDateString = () => {
   return `${year}-${month}-${day}`;
 };
 
+const isPastDate = (value: string) => {
+  if (!value) return false;
+  return value < getTodayDateString();
+};
+
+const isPolishPublicHoliday = (date: Date, apiHolidayKeys: Set<string> | null) => {
+  if (apiHolidayKeys && apiHolidayKeys.has(date.toISOString().split('T')[0])) {
+    return true;
+  }
+  const month = date.getMonth();
+  const day = date.getDate();
+  const fixedHolidays = [
+    { month: 0, day: 1 },
+    { month: 0, day: 6 },
+    { month: 4, day: 1 },
+    { month: 4, day: 3 },
+    { month: 7, day: 15 },
+    { month: 10, day: 1 },
+    { month: 10, day: 11 },
+    { month: 11, day: 25 },
+    { month: 11, day: 26 },
+  ];
+  return fixedHolidays.some((holiday) => holiday.month === month && holiday.day === day);
+};
+
 interface QuoteFormProps {
   onClose: () => void;
 }
@@ -44,6 +78,8 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   const emailLocale: Locale = locale === 'pl' ? 'pl' : 'en';
   const basePath = localeToPath(locale);
   const priceInputRef = useRef<HTMLInputElement | null>(null);
+  const eurRate = useEurRate();
+  const geocodeCache = useRef(new Map<string, { lat: number; lon: number } | null>());
   const [formData, setFormData] = useState({
     pickupAddress: '',
     destinationAddress: '',
@@ -70,6 +106,18 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   const [emailError, setEmailError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [showPriceInput, setShowPriceInput] = useState(false);
+  const [fixedRoute, setFixedRoute] = useState<{
+    cityKey: FixedCityKey;
+    vehicleType: 'standard' | 'bus';
+    price: number;
+    isNight: boolean;
+    routeLabel: string;
+    href: string;
+    cityLabel: string;
+  } | null>(null);
+  const [fixedRouteChecking, setFixedRouteChecking] = useState(false);
+  const [holidayKeys, setHolidayKeys] = useState<Set<string> | null>(null);
+  const [holidayYear, setHolidayYear] = useState<number | null>(null);
   const formStartedRef = useRef(false);
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const signFee = formData.pickupType === 'airport' && formData.signService === 'sign' ? 20 : 0;
@@ -82,7 +130,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   const destinationError = showValidation && !formData.destinationAddress.trim();
   const signTextError = showValidation && formData.pickupType === 'airport' && formData.signService === 'sign' && !formData.signText.trim();
   const flightNumberError = showValidation && formData.pickupType === 'airport' && !formData.flightNumber.trim();
-  const dateError = showValidation && !formData.date;
+  const dateError = showValidation && (!formData.date || isPastDate(formData.date));
   const timeError = showValidation && !formData.time;
   const passengersError = showValidation && !formData.passengers;
   const luggageError = showValidation && !formData.largeLuggage;
@@ -94,6 +142,8 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   const signServiceSign = t.quoteForm.signServiceSign ?? 'Meet with a name sign';
   const signServiceFee = t.quoteForm.signServiceFee ?? '+20 PLN added to final price';
   const signServiceSelf = t.quoteForm.signServiceSelf ?? 'Find the driver myself at the parking';
+  const fixedTotalPrice = fixedRoute ? fixedRoute.price + signFee : null;
+  const eurText = fixedTotalPrice ? formatEur(fixedTotalPrice, eurRate) : null;
   const fieldClass = (base: string, invalid: boolean) =>
     `${base}${invalid ? ' border-red-400 bg-red-50 focus:ring-red-200 focus:border-red-500' : ''}`;
 
@@ -132,6 +182,23 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
     });
   };
 
+  const getIsNightRate = () => {
+    let isNight = false;
+    if (formData.time) {
+      const [hours, minutes] = formData.time.split(':').map(Number);
+      const totalMinutes = hours * 60 + minutes + 30;
+      const adjustedHours = Math.floor(totalMinutes / 60) % 24;
+      isNight = adjustedHours >= 22 || adjustedHours < 6;
+    }
+    if (formData.date) {
+      const date = new Date(`${formData.date}T00:00:00`);
+      if (!Number.isNaN(date.getTime()) && isPolishPublicHoliday(date, holidayKeys)) {
+        isNight = true;
+      }
+    }
+    return isNight;
+  };
+
   // Auto-fill airport address when airport pickup is selected
   useEffect(() => {
     if (formData.pickupType === 'airport' && !formData.pickupAddress) {
@@ -142,6 +209,200 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
     }
   }, [formData.pickupType, formData.pickupAddress]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const resolvedYear = formData.date
+      ? new Date(`${formData.date}T00:00:00`).getFullYear()
+      : new Date().getFullYear();
+
+    if (!Number.isFinite(resolvedYear) || holidayYear === resolvedYear) {
+      return;
+    }
+
+    setHolidayYear(resolvedYear);
+
+    const cacheKey = `pl-holidays-${resolvedYear}`;
+    const cached = window.localStorage.getItem(cacheKey);
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed)) {
+          setHolidayKeys(new Set(parsed));
+          return;
+        }
+      } catch {
+        // ignore cache parse errors
+      }
+    }
+
+    fetch(`https://date.nager.at/api/v3/PublicHolidays/${resolvedYear}/PL`)
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data: Array<{ date?: string }>) => {
+        const keys = Array.isArray(data)
+          ? data.map((entry) => entry.date).filter((date): date is string => Boolean(date))
+          : [];
+        setHolidayKeys(new Set(keys));
+        window.localStorage.setItem(cacheKey, JSON.stringify(keys));
+      })
+      .catch(() => {
+        setHolidayKeys(null);
+      });
+  }, [formData.date, holidayYear]);
+
+  useEffect(() => {
+    preloadEurRate();
+  }, []);
+
+  useEffect(() => {
+    if (fixedRoute) {
+      setShowPriceInput(false);
+    }
+  }, [fixedRoute]);
+
+  useEffect(() => {
+    const addressForLookup =
+      formData.pickupType === 'airport'
+        ? formData.destinationAddress
+        : `${formData.pickupAddress} ${formData.destinationAddress}`;
+
+    if (!formData.pickupType || addressForLookup.trim().length < 6) {
+      setFixedRoute(null);
+      setFixedRouteChecking(false);
+      return;
+    }
+
+    let active = true;
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      setFixedRouteChecking(true);
+
+      const normalize = (value: string) => value.trim().toLowerCase();
+      const geocodeAddress = async (value: string) => {
+        const key = normalize(value);
+        if (!key) return null;
+        if (geocodeCache.current.has(key)) {
+          return geocodeCache.current.get(key) ?? null;
+        }
+        const url = new URL('https://nominatim.openstreetmap.org/search');
+        url.searchParams.set('format', 'jsonv2');
+        url.searchParams.set('limit', '1');
+        url.searchParams.set('q', value);
+        const response = await fetch(url.toString(), { signal: controller.signal });
+        if (!response.ok) {
+          geocodeCache.current.set(key, null);
+          return null;
+        }
+        const data = await response.json();
+        if (!Array.isArray(data) || !data[0]?.lat || !data[0]?.lon) {
+          geocodeCache.current.set(key, null);
+          return null;
+        }
+        const point = { lat: Number(data[0].lat), lon: Number(data[0].lon) };
+        if (!Number.isFinite(point.lat) || !Number.isFinite(point.lon)) {
+          geocodeCache.current.set(key, null);
+          return null;
+        }
+        geocodeCache.current.set(key, point);
+        return point;
+      };
+
+      const isAirportPoint = (point: { lat: number; lon: number }) =>
+        distanceKm(point, AIRPORT_COORD) <= AIRPORT_RADIUS_KM;
+
+      const getCenterKey = (point: { lat: number; lon: number }) => {
+        const entries = Object.entries(centerPolygons) as Array<[FixedCityKey, typeof centerPolygons.gdansk]>;
+        for (const [key, shape] of entries) {
+          if (isPointInsideGeoJson(point, shape)) {
+            return key;
+          }
+        }
+        return null;
+      };
+
+      try {
+        let cityKey: FixedCityKey | null = null;
+        if (formData.pickupType === 'airport') {
+          const destination = await geocodeAddress(formData.destinationAddress);
+          if (destination) {
+            cityKey = getCenterKey(destination);
+          }
+        } else {
+          const pickup = await geocodeAddress(formData.pickupAddress);
+          const destination = await geocodeAddress(formData.destinationAddress);
+          if (pickup && destination) {
+            if (isAirportPoint(pickup)) {
+              cityKey = getCenterKey(destination);
+            } else if (isAirportPoint(destination)) {
+              cityKey = getCenterKey(pickup);
+            }
+          }
+        }
+
+        if (!active) return;
+
+        if (!cityKey) {
+          setFixedRoute(null);
+          setFixedRouteChecking(false);
+          return;
+        }
+
+        const passengersNumber = Number(formData.passengers);
+        const vehicleType = passengersNumber >= 5 ? 'bus' : 'standard';
+        const isNight = getIsNightRate();
+        const price = isNight
+          ? FIXED_PRICES[vehicleType][cityKey].night
+          : FIXED_PRICES[vehicleType][cityKey].day;
+        const cityLabel =
+          cityKey === 'gdansk'
+            ? t.pricing.routes.gdansk
+            : cityKey === 'gdynia'
+              ? t.pricing.routes.gdynia
+              : 'Sopot';
+        const routeLabel = `${t.pricing.routes.airport} ↔ ${cityLabel}`;
+        const routeKey =
+          cityKey === 'gdansk'
+            ? 'orderAirportGdansk'
+            : cityKey === 'gdynia'
+              ? 'orderAirportGdynia'
+              : 'orderAirportSopot';
+        const href = `${basePath}/${getRouteSlug(locale, routeKey)}`;
+
+        setFixedRoute({
+          cityKey,
+          vehicleType,
+          price,
+          isNight,
+          routeLabel,
+          href,
+          cityLabel,
+        });
+        setFixedRouteChecking(false);
+      } catch {
+        if (!active) return;
+        setFixedRoute(null);
+        setFixedRouteChecking(false);
+      }
+    }, 700);
+
+    return () => {
+      active = false;
+      controller.abort();
+      window.clearTimeout(timer);
+    };
+  }, [
+    formData.pickupType,
+    formData.pickupAddress,
+    formData.destinationAddress,
+    formData.passengers,
+    formData.date,
+    formData.time,
+    basePath,
+    locale,
+    t,
+  ]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -169,6 +430,11 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
     }
     if (!formData.date) {
       missingFieldIds.push('date');
+    }
+    if (formData.date && isPastDate(formData.date)) {
+      setError(t.quoteForm.validation.datePast);
+      scrollToField('date');
+      return;
     }
     if (!formData.time) {
       missingFieldIds.push('time');
@@ -212,6 +478,16 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
     const apiBaseUrl = getApiBaseUrl();
     const passengersNumber = Number(formData.passengers);
     const carType = passengersNumber >= 5 ? 1 : 2;
+    const routeFrom = fixedRoute
+      ? formData.pickupType === 'airport'
+        ? t.pricing.routes.airport
+        : fixedRoute.cityLabel
+      : formData.pickupAddress;
+    const routeTo = fixedRoute
+      ? formData.pickupType === 'airport'
+        ? fixedRoute.cityLabel
+        : t.pricing.routes.airport
+      : formData.destinationAddress;
     const additionalNotes = buildAdditionalNotes({
       pickupType: formData.pickupType as 'airport' | 'address',
       signService: formData.pickupType === 'airport' ? formData.signService : 'self',
@@ -220,17 +496,17 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
       passengers: formData.passengers,
       largeLuggage: formData.largeLuggage,
       route: {
-        from: formData.pickupAddress,
-        to: formData.destinationAddress,
-        type: carType === 1 ? 'bus' : 'standard',
+        from: routeFrom,
+        to: routeTo,
+        type: fixedRoute ? fixedRoute.vehicleType : carType === 1 ? 'bus' : 'standard',
       },
       notes: formData.description.trim(),
     });
 
     const payload = {
-      carType,
+      carType: fixedRoute ? (fixedRoute.vehicleType === 'bus' ? 1 : 2) : carType,
       pickupAddress: formData.pickupAddress,
-      proposedPrice: formData.proposedPrice,
+      proposedPrice: fixedRoute && fixedTotalPrice ? String(fixedTotalPrice) : formData.proposedPrice,
       date: formData.date,
       pickupTime: formData.time,
       flightNumber: formData.pickupType === 'airport' ? formData.flightNumber : 'N/A',
@@ -512,83 +788,112 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                 />
               </div>
 
+              {fixedRouteChecking && (
+                <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-700">
+                  {t.quoteForm.fixedRouteChecking}
+                </div>
+              )}
+
+              {fixedRoute && (
+                <div className="rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 via-white to-amber-100 px-6 pt-20 pb-20 mt-4">
+                  <div className="text-xs uppercase tracking-wide text-amber-700 mb-2">{t.quoteForm.fixedRouteTitle}</div>
+                  <div className="mt-2 text-sm text-gray-700">{fixedRoute.routeLabel}</div>
+                  <div className="mt-2 flex flex-col items-start gap-1">
+                    <span className="text-base font-semibold text-amber-900">
+                      {t.quoteForm.fixedRouteComputed(fixedTotalPrice ?? fixedRoute.price)}
+                    </span>
+                    {eurText && (
+                      <span className="inline-flex items-center gap-2 text-[11px] text-amber-700">
+                        <span>{eurText}</span>
+                        <span className="live-badge">{t.common.actualBadge}</span>
+                      </span>
+                    )}
+                  </div>
+                  <div className="mt-2 text-xs text-gray-600">
+                    {fixedRoute.isNight ? t.quoteForm.fixedRouteNight : t.quoteForm.fixedRouteDay}
+                  </div>
+                </div>
+              )}
+
               {/* Proposed Price */}
-              <div>
-                <label htmlFor="proposedPrice" className="block text-gray-700 mb-2">
-                  <DollarSign className="w-4 h-4 inline mr-2" />
-                  {t.quoteForm.price}
-                </label>
-                {!showPriceInput ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!formStartedRef.current) {
-                        formStartedRef.current = true;
-                        trackFormStart('quote');
-                      }
-                      setShowPriceInput(true);
-                      setFormData(prev => ({ ...prev, proposedPrice: '' }));
-                    }}
-                    className="w-full rounded-xl border-2 border-slate-200 bg-white px-4 py-4 text-left text-slate-800 shadow-sm hover:border-blue-500 hover:bg-blue-50/40 transition-colors"
-                  >
-                    <span className="block text-sm font-semibold text-slate-900">
-                      {t.quoteForm.taximeterTitle}
-                    </span>
-                    <span className="mt-2 block text-xs text-slate-600">
-                      {t.quoteForm.tariff1}
-                    </span>
-                    <span className="block text-xs text-slate-600">
-                      {t.quoteForm.tariff2}
-                    </span>
-                    <span className="block text-xs text-slate-600">
-                      {t.quoteForm.tariff3}
-                    </span>
-                    <span className="block text-xs text-slate-600">
-                      {t.quoteForm.tariff4}
-                    </span>
-                    <span className="mt-3 block text-xs font-semibold text-blue-700">
-                      {t.quoteForm.fixedPriceHint}
-                    </span>
-                  </button>
-                ) : (
-                  <>
-                    <input
-                      type="number"
-                      id="proposedPrice"
-                      name="proposedPrice"
-                      value={formData.proposedPrice}
-                      ref={priceInputRef}
-                      onChange={(e) => {
-                        handleChange(e);
-                        handlePhoneChange(e.target.value);
-                      }}
-                      onBlur={(event) => {
-                        if (event.currentTarget.value.trim() === '') {
-                          setShowPriceInput(false);
-                          setFormData(prev => ({ ...prev, proposedPrice: 'taximeter' }));
+              {!fixedRoute && (
+                <div>
+                  <label htmlFor="proposedPrice" className="block text-gray-700 mb-2">
+                    <DollarSign className="w-4 h-4 inline mr-2" />
+                    {t.quoteForm.price}
+                  </label>
+                  {!showPriceInput ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!formStartedRef.current) {
+                          formStartedRef.current = true;
+                          trackFormStart('quote');
                         }
+                        setShowPriceInput(true);
+                        setFormData(prev => ({ ...prev, proposedPrice: '' }));
                       }}
-                      onKeyDown={(event) => {
-                        if (event.key === 'Escape' && formData.proposedPrice.trim() === '') {
-                          setShowPriceInput(false);
-                          setFormData(prev => ({ ...prev, proposedPrice: 'taximeter' }));
-                        }
-                      }}
-                      placeholder={t.quoteForm.pricePlaceholder}
-                      min="0"
-                      step="10"
-                      className={fieldClass(
-                        'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                        priceError,
-                      )}
-                      required
-                    />
-                    <p className="text-sm text-gray-500 mt-1">
-                      {t.quoteForm.priceHelp}
-                    </p>
-                  </>
-                )}
-              </div>
+                      className="w-full rounded-xl border-2 border-slate-200 bg-white px-4 py-4 text-left text-slate-800 shadow-sm hover:border-blue-500 hover:bg-blue-50/40 transition-colors"
+                    >
+                      <span className="block text-sm font-semibold text-slate-900">
+                        {t.quoteForm.taximeterTitle}
+                      </span>
+                      <span className="mt-2 block text-xs text-slate-600">
+                        {t.quoteForm.tariff1}
+                      </span>
+                      <span className="block text-xs text-slate-600">
+                        {t.quoteForm.tariff2}
+                      </span>
+                      <span className="block text-xs text-slate-600">
+                        {t.quoteForm.tariff3}
+                      </span>
+                      <span className="block text-xs text-slate-600">
+                        {t.quoteForm.tariff4}
+                      </span>
+                      <span className="mt-3 block text-xs font-semibold text-blue-700">
+                        {t.quoteForm.fixedPriceHint}
+                      </span>
+                    </button>
+                  ) : (
+                    <>
+                      <input
+                        type="number"
+                        id="proposedPrice"
+                        name="proposedPrice"
+                        value={formData.proposedPrice}
+                        ref={priceInputRef}
+                        onChange={(e) => {
+                          handleChange(e);
+                          handlePhoneChange(e.target.value);
+                        }}
+                        onBlur={(event) => {
+                          if (event.currentTarget.value.trim() === '') {
+                            setShowPriceInput(false);
+                            setFormData(prev => ({ ...prev, proposedPrice: 'taximeter' }));
+                          }
+                        }}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Escape' && formData.proposedPrice.trim() === '') {
+                            setShowPriceInput(false);
+                            setFormData(prev => ({ ...prev, proposedPrice: 'taximeter' }));
+                          }
+                        }}
+                        placeholder={t.quoteForm.pricePlaceholder}
+                        min="0"
+                        step="10"
+                        className={fieldClass(
+                          'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                          priceError,
+                        )}
+                        required
+                      />
+                      <p className="text-sm text-gray-500 mt-1">
+                        {t.quoteForm.priceHelp}
+                      </p>
+                    </>
+                  )}
+                </div>
+              )}
 
               {/* Date and Time */}
               <div className="grid sm:grid-cols-2 gap-4">
@@ -603,6 +908,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                     name="date"
                     value={formData.date}
                     onChange={handleChange}
+                    min={getTodayDateString()}
                     className={fieldClass(
                       'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
                       dateError,
@@ -893,7 +1199,21 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                 }`}
                 disabled={submitting}
               >
-                {submitting ? t.quoteForm.submitting : t.quoteForm.submit}
+                {submitting ? (
+                  t.quoteForm.submitting
+                ) : fixedRoute && fixedTotalPrice ? (
+                  <span className="flex flex-col items-center gap-1">
+                    <span>{t.orderForm.confirmOrder(fixedTotalPrice)}</span>
+                    {eurText && (
+                      <span className="inline-flex items-center gap-2 text-[11px] text-blue-100">
+                        <span>{eurText}</span>
+                        <span className="live-badge">{t.common.actualBadge}</span>
+                      </span>
+                    )}
+                  </span>
+                ) : (
+                  t.quoteForm.submit
+                )}
               </button>
             </>
           )}

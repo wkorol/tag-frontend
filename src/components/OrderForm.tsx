@@ -39,6 +39,11 @@ const getTodayDateString = () => {
   return `${year}-${month}-${day}`;
 };
 
+const isPastDate = (value: string) => {
+  if (!value) return false;
+  return value < getTodayDateString();
+};
+
 const validatePhoneNumber = (value: string, messages: { phoneLetters: string; phoneLength: string }) => {
   const trimmed = value.trim();
   if (/[A-Za-z]/.test(trimmed)) {
@@ -204,7 +209,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const pickupAddressError = showValidation && formData.pickupType === 'address' && !formData.address.trim();
   const signTextError = showValidation && formData.pickupType === 'airport' && formData.signService === 'sign' && !formData.signText.trim();
   const flightNumberError = showValidation && formData.pickupType === 'airport' && !formData.flightNumber.trim();
-  const dateError = showValidation && !formData.date;
+  const dateError = showValidation && (!formData.date || isPastDate(formData.date));
   const timeError = showValidation && !formData.time;
   const passengersError = showValidation && !formData.passengers;
   const luggageError = showValidation && !formData.largeLuggage;
@@ -350,6 +355,11 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     const missingFieldIds: string[] = [];
     if (!formData.date) {
       missingFieldIds.push('date');
+    }
+    if (formData.date && isPastDate(formData.date)) {
+      setError(t.orderForm.validation.datePast);
+      scrollToField('date');
+      return;
     }
     if (!formData.time) {
       missingFieldIds.push('time');
@@ -665,6 +675,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                     name="date"
                     value={formData.date}
                     onChange={handleChange}
+                    min={getTodayDateString()}
                     className={fieldClass(
                       'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
                       dateError,
