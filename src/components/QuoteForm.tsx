@@ -14,6 +14,7 @@ import { Locale, localeToPath, useI18n } from '../lib/i18n';
 
 const AIRPORT_COORD = { lat: 54.3776, lon: 18.4662 };
 const AIRPORT_RADIUS_KM = 2.5;
+const SHORT_ROUTE_STRAIGHT_KM = 5;
 const POMORSKIE_VIEWBOX = '16.3,53.2,19.6,54.9';
 const TAXIMETER_RATES = {
   gdansk: { day: 3.9, night: 5.85 },
@@ -613,7 +614,10 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
         const busMultiplier = vehicleType === 'bus' ? 1.5 : 1;
         const isNight = getIsNightRate();
         const routedDistance = await getRouteDistanceKm(pickup, destination);
-        const distance = routedDistance ?? distanceKm(pickup, destination);
+        const straightDistance = distanceKm(pickup, destination);
+        const distance = straightDistance <= SHORT_ROUTE_STRAIGHT_KM
+          ? straightDistance
+          : (routedDistance ?? straightDistance);
         const pickupInGdansk = isPointInsideGeoJson(pickup, cityPolygons.gdansk);
         const destinationInGdansk = isPointInsideGeoJson(destination, cityPolygons.gdansk);
         const gdanskCenterPickup = getCenterKey(pickup) === 'gdansk';
