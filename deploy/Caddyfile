@@ -2,7 +2,7 @@
     email {$ACME_EMAIL}
 }
 
-taxiairportgdansk.com {
+taxiairportgdansk.com, www.taxiairportgdansk.com {
     redir /pl /pl/ 301
     redir /en /en/ 301
     redir /de /de/ 301
