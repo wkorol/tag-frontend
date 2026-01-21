@@ -19,7 +19,7 @@ const CustomOrderPage = lazy(() => import('./pages/OrderRoutePage').then((mod) =
 const PricingPage = lazy(() => import('./pages/PricingPage').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./pages/AdminOrdersPage').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./pages/AdminOrderPage').then((mod) => ({ default: mod.AdminOrderPage })));
-import { trackFormOpen, trackSectionView } from './lib/tracking';
+import { trackFormOpen, trackPageView, trackSectionView, trackVehicleSelect } from './lib/tracking';
 import { consumeScrollTarget, scrollToId } from './lib/scroll';
 import { getRouteSlug, PublicRouteKey } from './lib/routes';
 import { Locale, localeToPath, useI18n } from './lib/i18n';
@@ -45,6 +45,7 @@ function Landing() {
   }
 
   const handleVehicleSelect = (type: 'standard' | 'bus') => {
+    trackVehicleSelect(type);
     setVehicleType(type);
     setStep('pricing');
     window.requestAnimationFrame(() => {
@@ -165,6 +166,11 @@ function Landing() {
 
 export default function App() {
   const { t } = useI18n();
+  const location = useLocation();
+
+  useEffect(() => {
+    trackPageView(`${location.pathname}${location.search}`);
+  }, [location.pathname, location.search]);
 
   return (
     <>

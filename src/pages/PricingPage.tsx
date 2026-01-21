@@ -8,7 +8,7 @@ import { OrderForm } from '../components/OrderForm';
 import { QuoteForm } from '../components/QuoteForm';
 import { getRouteSlug } from '../lib/routes';
 import { localeToPath, useI18n } from '../lib/i18n';
-import { trackCtaClick, trackFormOpen } from '../lib/tracking';
+import { trackCtaClick, trackFormOpen, trackNavClick } from '../lib/tracking';
 import { requestScrollTo } from '../lib/scroll';
 
 export function PricingPage() {
@@ -81,7 +81,10 @@ export function PricingPage() {
                 </a>
                 <button
                   type="button"
-                  onClick={() => requestScrollTo('pricing-table')}
+                  onClick={() => {
+                    trackNavClick('pricing_table');
+                    requestScrollTo('pricing-table');
+                  }}
                   className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-6 py-3 text-gray-700 shadow-sm transition-colors hover:border-gray-400 hover:text-gray-900"
                 >
                   {t.routeLanding.pricingLink}
@@ -95,6 +98,7 @@ export function PricingPage() {
                   <a
                     key={link.href}
                     href={link.href}
+                    onClick={() => trackNavClick('pricing_landing_order_link')}
                     className="text-blue-600 hover:text-blue-700"
                   >
                     {link.label}

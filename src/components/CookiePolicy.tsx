@@ -1,4 +1,5 @@
 import { useI18n } from '../lib/i18n';
+import { trackContactClick } from '../lib/tracking';
 
 export function CookiePolicy() {
   const { t } = useI18n();
@@ -33,6 +34,7 @@ export function CookiePolicy() {
           {t.cookiePolicy.contactBody}{' '}
           <a
             href="mailto:booking@taxiairportgdansk.com"
+            onClick={() => trackContactClick('email')}
             className="text-blue-600 hover:text-blue-700 underline"
           >
             booking@taxiairportgdansk.com

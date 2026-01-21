@@ -5,7 +5,7 @@ import { formatEur } from '../lib/currency';
 import { buildAdditionalNotes } from '../lib/orderNotes';
 import { hasMarketingConsent } from '../lib/consent';
 import { getApiBaseUrl } from '../lib/api';
-import { trackFormStart } from '../lib/tracking';
+import { trackFormClose, trackFormStart, trackFormSubmit, trackFormValidation } from '../lib/tracking';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
 
 interface OrderFormProps {
@@ -364,6 +364,8 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       missingFieldIds.push('date');
     }
     if (formData.date && isPastDate(formData.date)) {
+      trackFormValidation('order', 1, 'date');
+      trackFormSubmit('order', 'validation_error');
       setError(t.orderForm.validation.datePast);
       scrollToField('date');
       return;
@@ -401,17 +403,23 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       missingFieldIds.push('email');
     }
     if (missingFieldIds.length > 0) {
+      trackFormValidation('order', missingFieldIds.length, missingFieldIds[0]);
+      trackFormSubmit('order', 'validation_error');
       scrollToField(missingFieldIds[0]);
       return;
     }
     const phoneError = validatePhoneNumber(formData.phone, t.orderForm.validation);
     if (phoneError) {
+      trackFormValidation('order', 1, 'phone');
+      trackFormSubmit('order', 'validation_error');
       setPhoneError(phoneError);
       setError(phoneError);
       return;
     }
     const emailError = validateEmail(formData.email, t.orderForm.validation.email);
     if (emailError) {
+      trackFormValidation('order', 1, 'email');
+      trackFormSubmit('order', 'validation_error');
       setEmailError(emailError);
       setError(emailError);
       return;
@@ -460,6 +468,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
 
       const data = await response.json().catch(() => null);
       if (!response.ok) {
+        trackFormSubmit('order', 'error', 'api');
         setError(data?.error ?? t.orderForm.submitError);
         return;
       }
@@ -467,8 +476,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       setOrderId(data?.id ?? null);
       setGeneratedId(data?.generatedId ?? null);
       setSubmitted(true);
+      trackFormSubmit('order', 'success');
       trackConversion();
     } catch (submitError) {
+      trackFormSubmit('order', 'error', 'network');
       setError(t.orderForm.submitNetworkError);
     } finally {
       setSubmitting(false);
@@ -588,7 +599,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
               </div>
             )}
             <button
-              onClick={onClose}
+              onClick={() => {
+                trackFormClose('order');
+                onClose();
+              }}
               className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
             >
               {t.common.close}
@@ -608,7 +622,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
             <p className="text-gray-600 text-sm mt-1">{displayRoute.from} ↔ {displayRoute.to}</p>
           </div>
           <button 
-            onClick={onClose}
+            onClick={() => {
+              trackFormClose('order');
+              onClose();
+            }}
             className="text-gray-400 hover:text-gray-600 flex-shrink-0 ml-4"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

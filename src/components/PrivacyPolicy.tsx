@@ -1,4 +1,5 @@
 import { useI18n } from '../lib/i18n';
+import { trackContactClick } from '../lib/tracking';
 
 export function PrivacyPolicy() {
   const { t } = useI18n();
@@ -24,7 +25,13 @@ export function PrivacyPolicy() {
             {controllerLines[1]}
             <br />
             {controllerLines[2]}{' '}
-            <a href="mailto:booking@taxiairportgdansk.com" className="text-blue-600 hover:text-blue-700 underline">booking@taxiairportgdansk.com</a>
+            <a
+              href="mailto:booking@taxiairportgdansk.com"
+              onClick={() => trackContactClick('email')}
+              className="text-blue-600 hover:text-blue-700 underline"
+            >
+              booking@taxiairportgdansk.com
+            </a>
           </p>
         </div>
 
@@ -82,7 +89,11 @@ export function PrivacyPolicy() {
           <h3 className="text-lg text-gray-900 mb-2">{t.privacyPolicy.contactTitle}</h3>
           <p>
             {t.privacyPolicy.contactBody}{' '}
-            <a href="mailto:booking@taxiairportgdansk.com" className="text-blue-600 hover:text-blue-700 underline">
+            <a
+              href="mailto:booking@taxiairportgdansk.com"
+              onClick={() => trackContactClick('email')}
+              className="text-blue-600 hover:text-blue-700 underline"
+            >
               booking@taxiairportgdansk.com
             </a>
             .

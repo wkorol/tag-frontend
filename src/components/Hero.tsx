@@ -74,6 +74,7 @@ export function Hero() {
             </a>
             <a
                 href="mailto:booking@taxiairportgdansk.com"
+                onClick={() => trackContactClick('email')}
                 className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-6 py-3 rounded-lg hover:bg-white/20 transition-colors"
             >
               <Mail className="w-5 h-5" />

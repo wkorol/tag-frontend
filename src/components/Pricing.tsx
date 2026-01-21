@@ -4,6 +4,7 @@ import { preloadEurRate, useEurRate } from '../lib/useEurRate';
 import { formatEur } from '../lib/currency';
 import { FIXED_PRICES } from '../lib/fixedPricing';
 import { useI18n } from '../lib/i18n';
+import { trackPricingAction, trackPricingRouteSelect, trackVehicleSelect } from '../lib/tracking';
 
 interface PricingProps {
   vehicleType: 'standard' | 'bus';
@@ -27,6 +28,7 @@ export function Pricing({
   const { t } = useI18n();
   const routes = [
     {
+      key: 'airport_gdansk',
       from: t.pricing.routes.airport,
       to: t.pricing.routes.gdansk,
       priceDay: FIXED_PRICES.standard.gdansk.day,
@@ -34,6 +36,7 @@ export function Pricing({
       type: 'standard' as const,
     },
     {
+      key: 'airport_sopot',
       from: t.pricing.routes.airport,
       to: 'Sopot',
       priceDay: FIXED_PRICES.standard.sopot.day,
@@ -41,6 +44,7 @@ export function Pricing({
       type: 'standard' as const,
     },
     {
+      key: 'airport_gdynia',
       from: t.pricing.routes.airport,
       to: t.pricing.routes.gdynia,
       priceDay: FIXED_PRICES.standard.gdynia.day,
@@ -50,6 +54,7 @@ export function Pricing({
   ];
   const busRoutes = [
     {
+      key: 'airport_gdansk',
       from: t.pricing.routes.airport,
       to: t.pricing.routes.gdansk,
       priceDay: FIXED_PRICES.bus.gdansk.day,
@@ -57,6 +62,7 @@ export function Pricing({
       type: 'bus' as const,
     },
     {
+      key: 'airport_sopot',
       from: t.pricing.routes.airport,
       to: 'Sopot',
       priceDay: FIXED_PRICES.bus.sopot.day,
@@ -64,6 +70,7 @@ export function Pricing({
       type: 'bus' as const,
     },
     {
+      key: 'airport_gdynia',
       from: t.pricing.routes.airport,
       to: t.pricing.routes.gdynia,
       priceDay: FIXED_PRICES.bus.gdynia.day,
@@ -204,7 +211,10 @@ export function Pricing({
           </div>
 
           <button
-            onClick={() => onOrderRoute(route)}
+            onClick={() => {
+              trackPricingRouteSelect(route.key, vehicleType);
+              onOrderRoute(route);
+            }}
             className="pricing-cta w-full mt-4 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors text-sm"
           >
             {t.common.orderNow}
@@ -233,7 +243,10 @@ export function Pricing({
           </div>
 
           <button
-            onClick={onRequestQuote}
+            onClick={() => {
+              trackPricingAction('request_quote', vehicleType);
+              onRequestQuote();
+            }}
             className="pricing-cta mt-auto block w-full text-center bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors text-sm"
           >
             {t.pricing.requestQuote}
@@ -248,7 +261,10 @@ export function Pricing({
       <div className="max-w-6xl mx-auto px-4">
         {showBack && (
           <button
-            onClick={onBack}
+            onClick={() => {
+              trackPricingAction('back', vehicleType);
+              onBack();
+            }}
             className="flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-6 transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -277,7 +293,10 @@ export function Pricing({
                 <div className="mt-8 inline-flex flex-wrap items-center gap-4 bg-white border border-gray-200 rounded-full px-4 py-3 shadow-sm">
                   <button
                     type="button"
-                    onClick={() => onVehicleTypeChange('standard')}
+                    onClick={() => {
+                      trackVehicleSelect('standard');
+                      onVehicleTypeChange('standard');
+                    }}
                     className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
                       vehicleType === 'standard'
                         ? 'bg-blue-600 text-white'
@@ -288,7 +307,10 @@ export function Pricing({
                   </button>
                   <button
                     type="button"
-                    onClick={() => onVehicleTypeChange('bus')}
+                    onClick={() => {
+                      trackVehicleSelect('bus');
+                      onVehicleTypeChange('bus');
+                    }}
                     className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
                       vehicleType === 'bus'
                         ? 'bg-blue-600 text-white'

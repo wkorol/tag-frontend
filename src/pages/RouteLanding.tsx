@@ -4,7 +4,7 @@ import { FloatingActions } from '../components/FloatingActions';
 import { Navbar } from '../components/Navbar';
 import { localeToPath, useI18n } from '../lib/i18n';
 import { getRouteSlug } from '../lib/routes';
-import { trackCtaClick } from '../lib/tracking';
+import { trackCtaClick, trackNavClick } from '../lib/tracking';
 import { requestScrollTo } from '../lib/scroll';
 
 interface RouteLandingProps {
@@ -78,6 +78,7 @@ export function RouteLanding({ title, description, route, examples, pricing }: R
                   <a
                     key={link.href}
                     href={link.href}
+                    onClick={() => trackNavClick('route_landing_order_link')}
                     className="text-blue-600 hover:text-blue-700"
                   >
                     {link.label}
@@ -85,6 +86,7 @@ export function RouteLanding({ title, description, route, examples, pricing }: R
                 ))}
                 <a
                   href={`${basePath}/${getRouteSlug(locale, 'pricing')}`}
+                  onClick={() => trackNavClick('route_landing_pricing')}
                   className="text-blue-600 hover:text-blue-700"
                 >
                   {t.routeLanding.pricingLink}

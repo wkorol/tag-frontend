@@ -9,7 +9,7 @@ import { preloadEurRate, useEurRate } from '../lib/useEurRate';
 import { buildAdditionalNotes } from '../lib/orderNotes';
 import { hasMarketingConsent } from '../lib/consent';
 import { getApiBaseUrl } from '../lib/api';
-import { trackFormStart } from '../lib/tracking';
+import { trackFormClose, trackFormStart, trackFormSubmit, trackFormValidation } from '../lib/tracking';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
 
 const AIRPORT_COORD = { lat: 54.3776, lon: 18.4662 };
@@ -810,6 +810,8 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
       missingFieldIds.push('date');
     }
     if (formData.date && isPastDate(formData.date)) {
+      trackFormValidation('quote', 1, 'date');
+      trackFormSubmit('quote', 'validation_error');
       setError(t.quoteForm.validation.datePast);
       scrollToField('date');
       return;
@@ -836,17 +838,23 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
       missingFieldIds.push('proposedPrice');
     }
     if (missingFieldIds.length > 0) {
+      trackFormValidation('quote', missingFieldIds.length, missingFieldIds[0]);
+      trackFormSubmit('quote', 'validation_error');
       scrollToField(missingFieldIds[0]);
       return;
     }
     const phoneError = validatePhoneNumber(formData.phone, t.quoteForm.validation);
     if (phoneError) {
+      trackFormValidation('quote', 1, 'phone');
+      trackFormSubmit('quote', 'validation_error');
       setPhoneError(phoneError);
       setError(phoneError);
       return;
     }
     const emailError = validateEmail(formData.email, t.quoteForm.validation.email);
     if (emailError) {
+      trackFormValidation('quote', 1, 'email');
+      trackFormSubmit('quote', 'validation_error');
       setEmailError(emailError);
       setError(emailError);
       return;
@@ -899,6 +907,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
 
       const data = await response.json().catch(() => null);
       if (!response.ok) {
+        trackFormSubmit('quote', 'error', 'api');
         setError(data?.error ?? t.quoteForm.submitError);
         return;
       }
@@ -906,8 +915,10 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
       setOrderId(data?.id ?? null);
       setGeneratedId(data?.generatedId ?? null);
       setSubmitted(true);
+      trackFormSubmit('quote', 'success');
       trackConversion();
     } catch {
+      trackFormSubmit('quote', 'error', 'network');
       setError(t.quoteForm.submitNetworkError);
     } finally {
       setSubmitting(false);
@@ -1030,7 +1041,10 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
               </div>
             )}
             <button
-              onClick={onClose}
+              onClick={() => {
+                trackFormClose('quote');
+                onClose();
+              }}
               className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
             >
               {t.common.close}
@@ -1050,7 +1064,10 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
             <p className="text-gray-600 text-sm mt-1">{t.quoteForm.subtitle}</p>
           </div>
           <button 
-            onClick={onClose}
+            onClick={() => {
+              trackFormClose('quote');
+              onClose();
+            }}
             className="text-gray-400 hover:text-gray-600 flex-shrink-0 ml-4"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

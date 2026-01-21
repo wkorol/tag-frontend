@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
 import { getRouteKeyFromSlug, getRoutePath, getRouteSlug } from '../lib/routes';
 import { requestScrollTo } from '../lib/scroll';
+import { trackLocaleChange, trackNavClick } from '../lib/tracking';
 import favicon from '/favicon.svg?url';
 
 export function Navbar() {
@@ -14,6 +15,7 @@ export function Navbar() {
   const basePath = localeToPath(locale);
 
   const handleLocaleChange = (nextLocale: Locale) => {
+    trackLocaleChange(locale, nextLocale);
     setLocale(nextLocale);
     const nextBasePath = localeToPath(nextLocale);
     const strippedPath = location.pathname.replace(/^\/(en|pl|de|fi|no|sv|da)/, '');
@@ -30,8 +32,9 @@ export function Navbar() {
     setIsMenuOpen(false);
   };
 
-  const handleNavClick = (event: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+  const handleNavClick = (event: React.MouseEvent<HTMLAnchorElement>, sectionId: string, label: string) => {
     event.preventDefault();
+    trackNavClick(label);
     const scrolled = requestScrollTo(sectionId);
     if (!scrolled) {
       navigate(basePath);
@@ -46,7 +49,7 @@ export function Navbar() {
           {/* Logo */}
           <a
             href={`${basePath}/`}
-            onClick={(event) => handleNavClick(event, 'hero')}
+            onClick={(event) => handleNavClick(event, 'hero', 'logo')}
             className="flex items-center gap-3"
           >
             <img src={favicon} alt="" aria-hidden="true" className="h-8 w-8 rounded-md" />
@@ -60,37 +63,42 @@ export function Navbar() {
           <div className="hidden md:flex flex-1 flex-nowrap items-center justify-center gap-4 lg:gap-6 text-[11px] lg:text-[13px] xl:text-sm min-w-0 tracking-tight">
             <a
               href={`${basePath}/`}
+              onClick={() => trackNavClick('home')}
               className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
             >
               {t.navbar.home}
             </a>
             <a
               href={`${basePath}/`}
-              onClick={(event) => handleNavClick(event, 'fleet')}
+              onClick={(event) => handleNavClick(event, 'fleet', 'fleet')}
               className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
             >
               {t.navbar.fleet}
             </a>
             <a
               href={getRoutePath(locale, 'airportTaxi')}
+              onClick={() => trackNavClick('airport_taxi')}
               className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
             >
               {t.navbar.airportTaxi}
             </a>
             <a
               href={getRoutePath(locale, 'airportSopot')}
+              onClick={() => trackNavClick('airport_sopot')}
               className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
             >
               {t.navbar.airportSopot}
             </a>
             <a
               href={getRoutePath(locale, 'airportGdynia')}
+              onClick={() => trackNavClick('airport_gdynia')}
               className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
             >
               {t.navbar.airportGdynia}
             </a>
             <a
               href={getRoutePath(locale, 'pricing')}
+              onClick={() => trackNavClick('pricing')}
               className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
             >
               {t.navbar.prices}
@@ -117,7 +125,7 @@ export function Navbar() {
             </div>
             <a
               href={`${basePath}/`}
-              onClick={(event) => handleNavClick(event, 'vehicle-selection')}
+              onClick={(event) => handleNavClick(event, 'vehicle-selection', 'order_now')}
               className="bg-blue-600 text-white px-3 py-2 lg:px-5 lg:py-3 rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap"
             >
               {t.navbar.orderNow}
@@ -126,7 +134,10 @@ export function Navbar() {
 
           {/* Mobile Menu Button */}
           <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={() => {
+              setIsMenuOpen(!isMenuOpen);
+              trackNavClick(isMenuOpen ? 'menu_close' : 'menu_open');
+            }}
             aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-nav"
@@ -145,37 +156,42 @@ export function Navbar() {
           <div id="mobile-nav" className="md:hidden pb-4 space-y-3 text-sm">
             <a
               href={`${basePath}/`}
+              onClick={() => trackNavClick('mobile_home')}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
               {t.navbar.home}
             </a>
             <a
               href={`${basePath}/`}
-              onClick={(event) => handleNavClick(event, 'fleet')}
+              onClick={(event) => handleNavClick(event, 'fleet', 'mobile_fleet')}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
               {t.navbar.fleet}
             </a>
             <a
               href={getRoutePath(locale, 'airportTaxi')}
+              onClick={() => trackNavClick('mobile_airport_taxi')}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
               {t.navbar.airportTaxi}
             </a>
             <a
               href={getRoutePath(locale, 'airportSopot')}
+              onClick={() => trackNavClick('mobile_airport_sopot')}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
               {t.navbar.airportSopot}
             </a>
             <a
               href={getRoutePath(locale, 'airportGdynia')}
+              onClick={() => trackNavClick('mobile_airport_gdynia')}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
               {t.navbar.airportGdynia}
             </a>
             <a
               href={getRoutePath(locale, 'pricing')}
+              onClick={() => trackNavClick('mobile_pricing')}
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
               {t.navbar.prices}
@@ -202,7 +218,7 @@ export function Navbar() {
             </div>
             <a
               href={`${basePath}/`}
-              onClick={(event) => handleNavClick(event, 'vehicle-selection')}
+              onClick={(event) => handleNavClick(event, 'vehicle-selection', 'mobile_order_now')}
               className="block w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
             >
               {t.navbar.orderNow}

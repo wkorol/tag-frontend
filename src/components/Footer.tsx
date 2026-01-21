@@ -1,6 +1,7 @@
 import { Mail, MapPin } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
 import { getRoutePath } from '../lib/routes';
+import { trackContactClick, trackNavClick } from '../lib/tracking';
 
 export function Footer() {
   const { t, locale } = useI18n();
@@ -21,7 +22,11 @@ export function Footer() {
             <div className="space-y-3 text-sm">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
-                <a href="mailto:booking@taxiairportgdansk.com" className="hover:text-white transition-colors">
+                <a
+                  href="mailto:booking@taxiairportgdansk.com"
+                  onClick={() => trackContactClick('email')}
+                  className="hover:text-white transition-colors"
+                >
                   booking@taxiairportgdansk.com
                 </a>
               </div>
@@ -46,13 +51,25 @@ export function Footer() {
           <div>
             <h4 className="text-white mb-4">{t.footer.routesTitle}</h4>
             <div className="space-y-2 text-sm">
-              <a href={getRoutePath(locale, 'airportTaxi')} className="block hover:text-white transition-colors">
+              <a
+                href={getRoutePath(locale, 'airportTaxi')}
+                onClick={() => trackNavClick('footer_airport_taxi')}
+                className="block hover:text-white transition-colors"
+              >
                 {t.navbar.airportTaxi}
               </a>
-              <a href={getRoutePath(locale, 'airportSopot')} className="block hover:text-white transition-colors">
+              <a
+                href={getRoutePath(locale, 'airportSopot')}
+                onClick={() => trackNavClick('footer_airport_sopot')}
+                className="block hover:text-white transition-colors"
+              >
                 {t.navbar.airportSopot}
               </a>
-              <a href={getRoutePath(locale, 'airportGdynia')} className="block hover:text-white transition-colors">
+              <a
+                href={getRoutePath(locale, 'airportGdynia')}
+                onClick={() => trackNavClick('footer_airport_gdynia')}
+                className="block hover:text-white transition-colors"
+              >
                 {t.navbar.airportGdynia}
               </a>
             </div>
@@ -63,13 +80,21 @@ export function Footer() {
           <p>
             &copy; {new Date().getFullYear()} Taxi Airport Gdańsk. {t.footer.rights}
             {' '}
-            <a href={getRoutePath(locale, 'cookies')} className="text-gray-300 hover:text-white underline">
+            <a
+              href={getRoutePath(locale, 'cookies')}
+              onClick={() => trackNavClick('footer_cookies')}
+              className="text-gray-300 hover:text-white underline"
+            >
               {t.footer.cookiePolicy}
             </a>
             {' '}
             <span className="text-gray-500">|</span>
             {' '}
-            <a href={getRoutePath(locale, 'privacy')} className="text-gray-300 hover:text-white underline">
+            <a
+              href={getRoutePath(locale, 'privacy')}
+              onClick={() => trackNavClick('footer_privacy')}
+              className="text-gray-300 hover:text-white underline"
+            >
               {t.footer.privacyPolicy}
             </a>
           </p>
