@@ -10,6 +10,22 @@ taxiairportgdansk.com {
     redir /no /no/ 301
     redir /sv /sv/ 301
     redir /da /da/ 301
+    redir /gdansk-airport-taxi /en/gdansk-airport-taxi 301
+    redir /gdansk-airport-to-sopot /en/gdansk-airport-to-sopot 301
+    redir /gdansk-airport-to-gdynia /en/gdansk-airport-to-gdynia 301
+    redir /pricing /en/pricing 301
+    redir /cookies /en/cookies 301
+    redir /privacy /en/privacy 301
+    redir /taxi-lotnisko-gdansk /pl/taxi-lotnisko-gdansk 301
+    redir /lotnisko-gdansk-sopot /pl/lotnisko-gdansk-sopot 301
+    redir /lotnisko-gdansk-gdynia /pl/lotnisko-gdansk-gdynia 301
+    redir /polityka-cookies /pl/polityka-cookies 301
+    redir /polityka-prywatnosci /pl/polityka-prywatnosci 301
+    redir /pl/gdansk-airport-taxi /pl/taxi-lotnisko-gdansk 301
+    redir /pl/gdansk-airport-to-sopot /pl/lotnisko-gdansk-sopot 301
+    redir /pl/gdansk-airport-to-gdynia /pl/lotnisko-gdansk-gdynia 301
+    redir /pl/cookies /pl/polityka-cookies 301
+    redir /pl/privacy /pl/polityka-prywatnosci 301
     reverse_proxy /api/* host.docker.internal:8000
     reverse_proxy /* frontend:3000
 }

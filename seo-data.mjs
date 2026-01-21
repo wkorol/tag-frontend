@@ -2,6 +2,8 @@ export const site = {
   name: 'Taxi Airport Gdańsk',
   url: 'https://taxiairportgdansk.com',
   ogImage: 'https://taxiairportgdansk.com/og-image.png',
+  logo: 'https://taxiairportgdansk.com/og-image.png',
+  image: 'https://taxiairportgdansk.com/og-image.png',
   sameAs: [],
 };
 
@@ -761,6 +763,140 @@ const faqByLocale = {
   ],
 };
 
+const pricingFaqByLocale = {
+  en: [
+    {
+      question: 'Are these prices fixed?',
+      answer:
+        'Yes. Airport routes have fixed prices in both directions. Custom routes are priced individually.',
+    },
+    {
+      question: 'When does the night rate apply?',
+      answer: 'From 22:00 to 6:00 and on Sundays & public holidays.',
+    },
+    {
+      question: 'Do you monitor flight delays?',
+      answer: 'Yes. We track arrivals and adjust pickup time automatically.',
+    },
+    {
+      question: 'Can I pay by card?',
+      answer: 'Card payments are available on request. Invoices are available for business clients.',
+    },
+  ],
+  pl: [
+    {
+      question: 'Czy te ceny są stałe?',
+      answer:
+        'Tak. Trasy lotniskowe mają stałe ceny w obie strony. Trasy niestandardowe są wyceniane indywidualnie.',
+    },
+    {
+      question: 'Kiedy obowiązuje taryfa nocna?',
+      answer: 'Od 22:00 do 6:00 oraz w niedziele i święta.',
+    },
+    {
+      question: 'Czy monitorujecie opóźnienia lotów?',
+      answer: 'Tak, śledzimy przyloty i dostosowujemy czas odbioru.',
+    },
+    {
+      question: 'Czy można zapłacić kartą?',
+      answer: 'Tak, płatność kartą na życzenie. Faktury dla firm.',
+    },
+  ],
+  de: [
+    {
+      question: 'Sind diese Preise fest?',
+      answer:
+        'Ja. Flughafenrouten haben feste Preise in beide Richtungen. Individuelle Strecken werden individuell bepreist.',
+    },
+    {
+      question: 'Wann gilt der Nachttarif?',
+      answer: 'Von 22:00 bis 6:00 sowie an Sonn- und Feiertagen.',
+    },
+    {
+      question: 'Überwacht ihr Flugverspätungen?',
+      answer: 'Ja, wir verfolgen Ankünfte und passen die Abholzeit automatisch an.',
+    },
+    {
+      question: 'Kann ich mit Karte zahlen?',
+      answer: 'Kartenzahlung auf Anfrage. Rechnungen für Geschäftskunden verfügbar.',
+    },
+  ],
+  fi: [
+    {
+      question: 'Ovatko hinnat kiinteät?',
+      answer:
+        'Kyllä. Lentokenttäreiteillä on kiinteät hinnat molempiin suuntiin. Mukautetut reitit hinnoitellaan yksilöllisesti.',
+    },
+    {
+      question: 'Milloin yötaksa on voimassa?',
+      answer: '22:00–6:00 sekä sunnuntaisin ja pyhäpäivinä.',
+    },
+    {
+      question: 'Seuraatteko lennon viivästyksiä?',
+      answer: 'Kyllä, seuraamme saapumisia ja säädämme noutoajan.',
+    },
+    {
+      question: 'Voinko maksaa kortilla?',
+      answer: 'Korttimaksu pyynnöstä. Laskut yritysasiakkaille.',
+    },
+  ],
+  no: [
+    {
+      question: 'Er disse prisene faste?',
+      answer: 'Ja. Flyplasstrasene har fastpris begge veier. Tilpassede ruter prises individuelt.',
+    },
+    {
+      question: 'Når gjelder nattpris?',
+      answer: 'Fra 22:00 til 6:00 og på søndager og helligdager.',
+    },
+    {
+      question: 'Overvåker dere flyforsinkelser?',
+      answer: 'Ja, vi følger ankomster og justerer hentetiden.',
+    },
+    {
+      question: 'Kan jeg betale med kort?',
+      answer: 'Kortbetaling på forespørsel. Faktura tilgjengelig for bedrifter.',
+    },
+  ],
+  sv: [
+    {
+      question: 'Är dessa priser fasta?',
+      answer:
+        'Ja. Flygplatsrutterna har fasta priser åt båda håll. Anpassade rutter prissätts individuellt.',
+    },
+    {
+      question: 'När gäller nattaxa?',
+      answer: '22:00–6:00 samt söndagar och helgdagar.',
+    },
+    {
+      question: 'Följer ni flygförseningar?',
+      answer: 'Ja, vi följer ankomster och justerar upphämtningstiden.',
+    },
+    {
+      question: 'Kan jag betala med kort?',
+      answer: 'Kortbetalning på begäran. Faktura finns för företagskunder.',
+    },
+  ],
+  da: [
+    {
+      question: 'Er priserne faste?',
+      answer: 'Ja. Lufthavnsruter har fast pris begge veje. Tilpassede ruter prissættes individuelt.',
+    },
+    {
+      question: 'Hvornår gælder natpris?',
+      answer: 'Fra 22:00 til 6:00 samt på søndage og helligdage.',
+    },
+    {
+      question: 'Overvåger I flyforsinkelser?',
+      answer: 'Ja, vi følger ankomster og justerer afhentningstiden.',
+    },
+    {
+      question: 'Kan jeg betale med kort?',
+      answer: 'Kortbetaling efter aftale. Faktura til erhvervskunder.',
+    },
+  ],
+};
+
 export const getLocaleFromPath = (urlPath) => {
   const [, first] = urlPath.split('/');
   return locales.includes(first) ? first : null;
@@ -830,21 +966,41 @@ export const buildSeoTags = (urlPath) => {
     const xDefault = `<link rel="alternate" hreflang="x-default" href="${site.url}/">`;
     const robots = isIndexablePath(urlPath) ? 'index,follow' : 'noindex,nofollow';
 
-    const localBusinessSchema = {
+  const localBusinessSchema = {
     '@context': 'https://schema.org',
     '@type': ['LocalBusiness', 'TaxiService'],
+    '@id': `${site.url}/#localbusiness`,
     name: site.name,
     url: `${site.url}/`,
+    logo: site.logo,
+    image: site.image,
     areaServed: ['Gdańsk', 'Sopot', 'Gdynia'],
     email: 'booking@taxiairportgdansk.com',
     priceRange: '$$',
     telephone: '+48694347548',
+    paymentAccepted: ['Cash', 'Card', 'Apple Pay', 'Google Pay', 'Revolut'],
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Gdańsk',
       addressCountry: 'PL',
     },
     openingHours: 'Mo-Su 00:00-23:59',
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: [
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+          'Sunday',
+        ],
+        opens: '00:00',
+        closes: '23:59',
+      },
+    ],
     geo: {
       '@type': 'GeoCoordinates',
       latitude: '54.3520',
@@ -860,6 +1016,23 @@ export const buildSeoTags = (urlPath) => {
           '@context': 'https://schema.org',
           '@type': 'FAQPage',
           mainEntity: faq.map((entry) => ({
+            '@type': 'Question',
+            name: entry.question,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: entry.answer,
+            },
+          })),
+        }
+      : null;
+
+  const pricingFaq = pricingFaqByLocale[locale] ?? pricingFaqByLocale.en;
+  const pricingFaqSchema =
+    routeKey === 'pricing'
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: pricingFaq.map((entry) => ({
             '@type': 'Question',
             name: entry.question,
             acceptedAnswer: {
@@ -916,6 +1089,7 @@ export const buildSeoTags = (urlPath) => {
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': `${site.url}/#website`,
     name: site.name,
     url: homeUrl,
     inLanguage: locale,
@@ -943,6 +1117,7 @@ export const buildSeoTags = (urlPath) => {
     `<script type="application/ld+json">${JSON.stringify(navigationSchema)}</script>`,
     breadcrumbSchema ? `<script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>` : '',
     faqSchema ? `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>` : '',
+    pricingFaqSchema ? `<script type="application/ld+json">${JSON.stringify(pricingFaqSchema)}</script>` : '',
   ].join('');
 };
 

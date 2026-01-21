@@ -2,7 +2,7 @@ import { createServer } from 'node:http';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { buildNoscript, buildSeoTags, getHtmlLang } from './seo-data.mjs';
+import { buildNoscript, buildSeoTags, getHtmlLang, locales, routeSlugs } from './seo-data.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -63,6 +63,43 @@ const applyNoscript = (html, urlPath) =>
 const applyHtmlLang = (html, urlPath) =>
   html.replace(/<html lang="[^"]*">/, `<html lang="${getHtmlLang(urlPath)}">`);
 
+const localeRoots = new Set(locales.map((locale) => `/${locale}`));
+const localeRootsWithSlash = new Set(locales.map((locale) => `/${locale}/`));
+const localizedRouteSet = new Set(
+  locales.flatMap((locale) =>
+    Object.values(routeSlugs[locale]).map((slug) => `/${locale}/${slug}`)
+  )
+);
+
+const buildPath = (locale, routeKey) => `/${locale}/${routeSlugs[locale][routeKey]}`;
+
+const legacyRedirects = new Map([
+  ['/gdansk-airport-taxi', buildPath('en', 'airportTaxi')],
+  ['/gdansk-airport-to-sopot', buildPath('en', 'airportSopot')],
+  ['/gdansk-airport-to-gdynia', buildPath('en', 'airportGdynia')],
+  ['/pricing', buildPath('en', 'pricing')],
+  ['/cookies', buildPath('en', 'cookies')],
+  ['/privacy', buildPath('en', 'privacy')],
+  ['/taxi-lotnisko-gdansk', buildPath('pl', 'airportTaxi')],
+  ['/lotnisko-gdansk-sopot', buildPath('pl', 'airportSopot')],
+  ['/lotnisko-gdansk-gdynia', buildPath('pl', 'airportGdynia')],
+  ['/polityka-cookies', buildPath('pl', 'cookies')],
+  ['/polityka-prywatnosci', buildPath('pl', 'privacy')],
+  [`/pl/${routeSlugs.en.airportTaxi}`, buildPath('pl', 'airportTaxi')],
+  [`/pl/${routeSlugs.en.airportSopot}`, buildPath('pl', 'airportSopot')],
+  [`/pl/${routeSlugs.en.airportGdynia}`, buildPath('pl', 'airportGdynia')],
+  ['/pl/cookies', buildPath('pl', 'cookies')],
+  ['/pl/privacy', buildPath('pl', 'privacy')],
+]);
+
+const isAdminPath = (urlPath) => /^\/(?:[a-z]{2}\/)?admin(?:\/orders\/[^/]+)?$/.test(urlPath);
+
+const isKnownPath = (urlPath) =>
+  urlPath === '/' ||
+  localeRootsWithSlash.has(urlPath) ||
+  localizedRouteSet.has(urlPath) ||
+  isAdminPath(urlPath);
+
 const serveFile = async (res, filePath, cacheControl) => {
   try {
     const data = await fs.readFile(filePath);
@@ -98,6 +135,31 @@ const server = createServer(async (req, res) => {
       ? 'public, max-age=31536000, immutable'
       : 'public, max-age=3600';
     await serveFile(res, filePath, cacheControl);
+    return;
+  }
+
+  if (localeRoots.has(urlPath)) {
+    res.writeHead(301, { Location: `${urlPath}/${requestUrl.search}` });
+    res.end();
+    return;
+  }
+
+  if (urlPath.length > 1 && urlPath.endsWith('/') && !localeRootsWithSlash.has(urlPath)) {
+    res.writeHead(301, { Location: `${urlPath.slice(0, -1)}${requestUrl.search}` });
+    res.end();
+    return;
+  }
+
+  const legacyTarget = legacyRedirects.get(urlPath);
+  if (legacyTarget) {
+    res.writeHead(301, { Location: `${legacyTarget}${requestUrl.search}` });
+    res.end();
+    return;
+  }
+
+  if (!isKnownPath(urlPath)) {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not found');
     return;
   }
 
