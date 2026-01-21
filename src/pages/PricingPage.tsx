@@ -113,7 +113,7 @@ export function PricingPage() {
                       window.location.href = `${basePath}/${getRouteSlug(locale, 'pricing')}#pricing-calculator`;
                     }
                   }}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-blue-600 bg-white px-6 py-3 text-blue-700 shadow-sm transition-colors hover:bg-blue-50 sm:w-auto"
+                  className="gemini-cta inline-flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3 text-blue-800 shadow-sm transition-colors hover:bg-blue-50 sm:w-auto"
                 >
                   <Calculator className="h-4 w-4" />
                   {t.pricingLanding.calculatorCta}

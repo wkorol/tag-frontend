@@ -1745,6 +1745,30 @@ html {
   animation: 2s ease-in-out infinite pulseGlow;
 }
 
+@keyframes geminiGlow {
+  0% {
+    background-position: 0% 50%;
+    box-shadow: 0 0 0 rgba(59, 130, 246, 0.25);
+  }
+  50% {
+    background-position: 100% 50%;
+    box-shadow: 0 0 18px rgba(59, 130, 246, 0.35);
+  }
+  100% {
+    background-position: 0% 50%;
+    box-shadow: 0 0 0 rgba(59, 130, 246, 0.25);
+  }
+}
+
+.gemini-cta {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--cta-bg, #ffffff), var(--cta-bg, #ffffff)) padding-box,
+    linear-gradient(120deg, #2563eb, #22d3ee, #fb923c, #2563eb) border-box;
+  background-size: 200% 200%;
+  animation: 4.5s ease-in-out infinite geminiGlow;
+}
+
 @property --tw-space-y-reverse {
   syntax: "*";
   inherits: false;

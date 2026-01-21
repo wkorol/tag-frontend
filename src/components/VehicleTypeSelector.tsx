@@ -43,7 +43,7 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
           <div className="mt-6 flex justify-center">
             <a
               href={pricingPath}
-              className="inline-flex w-full items-center justify-center gap-3 rounded-full border border-blue-600 bg-white px-12 py-4 text-base font-semibold text-blue-700 shadow-sm transition-colors hover:bg-blue-50 sm:w-auto"
+              className="gemini-cta inline-flex w-full items-center justify-center gap-3 rounded-full px-12 py-4 text-base font-semibold text-blue-800 shadow-sm transition-colors hover:bg-blue-50 sm:w-auto"
             >
               <Calculator className="h-4 w-4" />
               {t.pricingCalculator.title}
@@ -76,7 +76,10 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
             </div>
 
 
-            <div className="vehicle-card__cta bg-blue-600 text-white py-3 px-6 rounded-lg text-center group-hover:bg-blue-700 transition-colors text-sm mt-auto">
+            <div
+              className="gemini-cta py-3 px-6 rounded-lg text-center text-sm font-semibold text-blue-800 transition-colors mt-auto"
+              style={{ ['--cta-bg' as string]: '#ffffff' }}
+            >
               {t.vehicle.selectStandard}
             </div>
           </button>
@@ -105,7 +108,10 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
             </div>
 
 
-            <div className="vehicle-card__cta bg-blue-600 text-white py-3 px-6 rounded-lg text-center group-hover:bg-blue-700 transition-colors text-sm mt-auto">
+            <div
+              className="gemini-cta py-3 px-6 rounded-lg text-center text-sm font-semibold text-blue-800 transition-colors mt-auto"
+              style={{ ['--cta-bg' as string]: '#ffffff' }}
+            >
               {t.vehicle.selectBus}
             </div>
           </button>

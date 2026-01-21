@@ -13,6 +13,7 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
   const basePath = localeToPath(locale);
   const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
   const [cookieBannerOffset, setCookieBannerOffset] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -57,7 +58,25 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
     };
   }, []);
 
-  if (hide) {
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    const updateVisibility = () => {
+      const topVisible = window.scrollY <= 120;
+      const bottomVisible = window.innerHeight + window.scrollY >= document.body.scrollHeight - 120;
+      setIsVisible(!topVisible && !bottomVisible);
+    };
+    updateVisibility();
+    window.addEventListener('scroll', updateVisibility, { passive: true });
+    window.addEventListener('resize', updateVisibility);
+    return () => {
+      window.removeEventListener('scroll', updateVisibility);
+      window.removeEventListener('resize', updateVisibility);
+    };
+  }, []);
+
+  if (hide || !isVisible) {
     return null;
   }
 
@@ -70,8 +89,8 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
         <a
           href={whatsappLink}
           onClick={() => trackContactClick('whatsapp')}
-          className="rounded-full px-5 py-3 text-white shadow-lg flex items-center justify-center gap-2"
-          style={{ backgroundColor: '#25D366' }}
+          className="gemini-cta rounded-full px-5 py-3 text-white shadow-lg flex items-center justify-center gap-2"
+          style={{ ['--cta-bg' as string]: '#25D366' }}
         >
           {t.common.whatsapp}
         </a>
@@ -85,8 +104,8 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
               window.location.href = `${basePath}/`;
             }
           }}
-          className="rounded-full px-5 py-3 text-white shadow-lg text-center"
-          style={{ backgroundColor: '#c2410c' }}
+          className="gemini-cta rounded-full px-5 py-3 text-white shadow-lg text-center"
+          style={{ ['--cta-bg' as string]: '#c2410c' }}
         >
           {t.common.orderOnlineNow}
         </a>
@@ -100,8 +119,8 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
           <a
             href={whatsappLink}
             onClick={() => trackContactClick('whatsapp')}
-            className="flex-1 rounded-full px-4 py-3 text-center text-white shadow-sm flex items-center justify-center gap-2"
-            style={{ backgroundColor: '#25D366' }}
+            className="gemini-cta flex-1 rounded-full px-4 py-3 text-center text-white shadow-sm flex items-center justify-center gap-2"
+            style={{ ['--cta-bg' as string]: '#25D366' }}
           >
             <svg viewBox="0 0 32 32" aria-hidden="true" className="h-5 w-5 fill-current">
               <path d="M19.11 17.72c-.26-.13-1.52-.75-1.75-.84-.24-.09-.41-.13-.58.13-.17.26-.67.84-.82 1.02-.15.17-.3.2-.56.07-.26-.13-1.1-.4-2.09-1.28-.77-.69-1.29-1.54-1.44-1.8-.15-.26-.02-.4.11-.53.12-.12.26-.3.39-.45.13-.15.17-.26.26-.43.09-.17.04-.32-.02-.45-.06-.13-.58-1.4-.79-1.92-.21-.5-.43-.43-.58-.44-.15-.01-.32-.01-.49-.01-.17 0-.45.06-.68.32-.24.26-.9.88-.9 2.15s.92 2.49 1.05 2.66c.13.17 1.81 2.76 4.4 3.87.62.27 1.1.43 1.48.55.62.2 1.18.17 1.63.1.5-.07 1.52-.62 1.74-1.22.21-.6.21-1.12.15-1.22-.06-.1-.24-.17-.5-.3z" />
@@ -119,8 +138,8 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
                 window.location.href = `${basePath}/`;
               }
             }}
-            className="flex-1 rounded-full px-4 py-3 text-center text-white shadow-sm"
-            style={{ backgroundColor: '#c2410c' }}
+            className="gemini-cta flex-1 rounded-full px-4 py-3 text-center text-white shadow-sm"
+            style={{ ['--cta-bg' as string]: '#c2410c' }}
           >
             {t.common.orderOnlineNow}
           </a>
