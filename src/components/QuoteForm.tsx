@@ -47,7 +47,8 @@ const estimateInsideRatio = (
 };
 
 const getGdanskCityPrice = (distance: number) => {
-  if (distance <= 5) return 50;
+  if (distance <= 6) return 50;
+  if (distance <= 10) return 80;
   if (distance <= 15) return 100;
   if (distance <= 20) return 120;
   if (distance <= 25) return 150;
@@ -643,6 +644,25 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
               routeLabel,
               routeFrom,
               routeTo,
+            });
+            setLongRouteInfo(null);
+            setFixedRouteChecking(false);
+            return;
+          }
+        }
+
+        if (isAirportRoute && otherPoint && isPointInsideGeoJson(otherPoint, cityPolygons.gdansk) && getCenterKey(otherPoint) !== 'gdansk') {
+          const gdanskAirportPrice = getGdanskCityPrice(distance);
+          if (gdanskAirportPrice) {
+            const routeLabel = t.quoteForm.fixedRouteDistance(formatDistance(distance));
+            setFixedRoute({
+              vehicleType,
+              price: Math.round(gdanskAirportPrice * busMultiplier),
+              isNight: false,
+              rateLabel: t.quoteForm.fixedRouteAllDay,
+              routeLabel,
+              routeFrom: pickupIsAirport ? t.pricing.routes.airport : formData.pickupAddress,
+              routeTo: pickupIsAirport ? formData.destinationAddress : t.pricing.routes.airport,
             });
             setLongRouteInfo(null);
             setFixedRouteChecking(false);
