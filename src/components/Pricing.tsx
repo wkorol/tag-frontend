@@ -286,7 +286,7 @@ export function Pricing({
             <div id="pricing-table" className="mt-12">
               {pricingTable}
             </div>
-            <div className="mt-12 text-center">
+            <div id="pricing-booking" className="mt-12 text-center">
               <h3 className="text-2xl text-gray-900">{t.pricing.bookingTitle}</h3>
               <p className="text-gray-600 mt-2">{t.pricing.bookingSubtitle}</p>
               {onVehicleTypeChange && (

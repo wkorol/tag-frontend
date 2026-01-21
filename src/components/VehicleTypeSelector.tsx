@@ -1,18 +1,20 @@
-import { Car, Users } from 'lucide-react';
+import { Calculator, Car, Users } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { preloadEurRate, useEurRate } from '../lib/useEurRate';
 import { formatEur } from '../lib/currency';
-import { useI18n } from '../lib/i18n';
+import { localeToPath, useI18n } from '../lib/i18n';
+import { getRouteSlug } from '../lib/routes';
 
 interface VehicleTypeSelectorProps {
   onSelectType: (type: 'standard' | 'bus') => void;
 }
 
 export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const eurRate = useEurRate();
   const eurText = (pln: number) => formatEur(pln, eurRate);
   const sectionRef = useRef<HTMLElement | null>(null);
+  const pricingPath = `${localeToPath(locale)}/${getRouteSlug(locale, 'pricing')}#pricing-calculator`;
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -43,6 +45,15 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
           <p className="text-gray-600 max-w-2xl mx-auto">
             {t.vehicle.subtitle}
           </p>
+          <div className="mt-6 flex justify-center">
+            <a
+              href={pricingPath}
+              className="inline-flex w-full items-center justify-center gap-3 rounded-full border border-blue-600 bg-white px-12 py-4 text-base font-semibold text-blue-700 shadow-sm transition-colors hover:bg-blue-50 sm:w-auto"
+            >
+              <Calculator className="h-4 w-4" />
+              {t.pricingCalculator.title}
+            </a>
+          </div>
         </div>
 
         <div className="vehicle-grid-mobile grid grid-cols-1 md:grid-cols-2 gap-8">

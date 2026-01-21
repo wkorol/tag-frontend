@@ -22,7 +22,7 @@ const AdminOrderPage = lazy(() => import('./pages/AdminOrderPage').then((mod) =>
 import { trackFormOpen, trackPageView, trackSectionView, trackVehicleSelect } from './lib/tracking';
 import { consumeScrollTarget, scrollToId } from './lib/scroll';
 import { getRouteSlug, PublicRouteKey } from './lib/routes';
-import { Locale, localeToPath, useI18n } from './lib/i18n';
+import { Locale, localeToPath, localeToRootPath, useI18n } from './lib/i18n';
 
 function Landing() {
   const { t } = useI18n();
@@ -566,7 +566,7 @@ function LocalizedShell({ locale }: { locale: Locale }) {
 function AutoRedirect() {
   const { locale } = useI18n();
   const location = useLocation();
-  const target = `${localeToPath(locale)}${location.search}${location.hash}`;
+  const target = `${localeToRootPath(locale)}${location.search}${location.hash}`;
 
   return <Navigate to={target} replace />;
 }

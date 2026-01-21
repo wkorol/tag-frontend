@@ -1,7 +1,7 @@
 import { Menu, X, Globe } from 'lucide-react';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Locale, localeToPath, useI18n } from '../lib/i18n';
+import { Locale, localeToPath, localeToRootPath, useI18n } from '../lib/i18n';
 import { getRouteKeyFromSlug, getRoutePath, getRouteSlug } from '../lib/routes';
 import { requestScrollTo } from '../lib/scroll';
 import { trackLocaleChange, trackNavClick } from '../lib/tracking';
@@ -27,17 +27,33 @@ export function Navbar() {
       nextSlug !== ''
         ? `/${[nextSlug, ...restSegments].filter(Boolean).join('/')}`
         : strippedPath;
-    const targetPath = `${nextBasePath}${nextPath || ''}${location.search}${location.hash}`;
-    navigate(targetPath || nextBasePath);
+    const searchHash = `${location.search}${location.hash}`;
+    const targetPath =
+      nextPath && nextPath !== '/'
+        ? `${nextBasePath}${nextPath}${searchHash}`
+        : `${localeToRootPath(nextLocale)}${searchHash}`;
+    navigate(targetPath);
     setIsMenuOpen(false);
   };
 
   const handleNavClick = (event: React.MouseEvent<HTMLAnchorElement>, sectionId: string, label: string) => {
     event.preventDefault();
     trackNavClick(label);
-    const scrolled = requestScrollTo(sectionId);
+    const strippedPath = location.pathname.replace(/^\/(en|pl|de|fi|no|sv|da)/, '');
+    const pathWithoutLeading = strippedPath.replace(/^\//, '');
+    const [firstSegment] = pathWithoutLeading.split('/').filter(Boolean);
+    const currentRouteKey = firstSegment ? getRouteKeyFromSlug(locale, firstSegment) : null;
+    const targetId =
+      sectionId === 'vehicle-selection' && currentRouteKey === 'pricing'
+        ? 'pricing-booking'
+        : sectionId;
+    const scrolled = requestScrollTo(targetId);
     if (!scrolled) {
-      navigate(basePath);
+      if (targetId === 'pricing-booking') {
+        setIsMenuOpen(false);
+        return;
+      }
+      navigate(`${basePath}/`);
     }
     setIsMenuOpen(false);
   };

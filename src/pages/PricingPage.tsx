@@ -4,12 +4,14 @@ import { Footer } from '../components/Footer';
 import { FloatingActions } from '../components/FloatingActions';
 import { Navbar } from '../components/Navbar';
 import { Pricing } from '../components/Pricing';
+import { PricingCalculator } from '../components/PricingCalculator';
 import { OrderForm } from '../components/OrderForm';
 import { QuoteForm } from '../components/QuoteForm';
 import { getRouteSlug } from '../lib/routes';
 import { localeToPath, useI18n } from '../lib/i18n';
+import { Calculator } from 'lucide-react';
 import { trackCtaClick, trackFormOpen, trackNavClick } from '../lib/tracking';
-import { requestScrollTo } from '../lib/scroll';
+import { requestScrollTo, scrollToId } from '../lib/scroll';
 
 export function PricingPage() {
   const { t, locale } = useI18n();
@@ -48,6 +50,29 @@ export function PricingPage() {
     }
   }, [showQuoteForm]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    const hash = window.location.hash;
+    if (!hash) {
+      return;
+    }
+    const targetId = hash.replace('#', '');
+    if (!targetId) {
+      return;
+    }
+    let attempts = 0;
+    const tryScroll = () => {
+      attempts += 1;
+      if (scrollToId(targetId) || attempts > 10) {
+        return;
+      }
+      window.setTimeout(tryScroll, 120);
+    };
+    tryScroll();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 pb-32 sm:pb-0">
       <Navbar />
@@ -64,28 +89,42 @@ export function PricingPage() {
               <h1 className="text-3xl text-gray-900 mb-4">{t.pricingLanding.title}</h1>
               <p className="text-gray-600 mb-4">{t.pricingLanding.subtitle}</p>
               <p className="text-sm text-gray-500 mb-6">{t.pricingLanding.description}</p>
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
                 <a
-                  href={`${basePath}/`}
+                  href={`${basePath}/${getRouteSlug(locale, 'pricing')}#pricing-booking`}
                   onClick={(event) => {
                     event.preventDefault();
                     trackCtaClick('pricing_landing_order');
-                    const scrolled = requestScrollTo('vehicle-selection');
+                    const scrolled = requestScrollTo('pricing-booking');
                     if (!scrolled) {
-                      window.location.href = `${basePath}/`;
+                      window.location.href = `${basePath}/${getRouteSlug(locale, 'pricing')}#pricing-booking`;
                     }
                   }}
-                  className="inline-flex items-center gap-2 bg-orange-700 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-600 transition-colors animate-pulse-glow"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-orange-700 px-6 py-3 text-white shadow-lg transition-colors hover:bg-orange-600 sm:w-auto animate-pulse-glow"
                 >
                   {t.pricingLanding.cta}
                 </a>
                 <button
                   type="button"
                   onClick={() => {
+                    trackCtaClick('pricing_landing_calculator');
+                    const scrolled = requestScrollTo('pricing-calculator');
+                    if (!scrolled) {
+                      window.location.href = `${basePath}/${getRouteSlug(locale, 'pricing')}#pricing-calculator`;
+                    }
+                  }}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-blue-600 bg-white px-6 py-3 text-blue-700 shadow-sm transition-colors hover:bg-blue-50 sm:w-auto"
+                >
+                  <Calculator className="h-4 w-4" />
+                  {t.pricingLanding.calculatorCta}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
                     trackNavClick('pricing_table');
                     requestScrollTo('pricing-table');
                   }}
-                  className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-6 py-3 text-gray-700 shadow-sm transition-colors hover:border-gray-400 hover:text-gray-900"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-6 py-3 text-gray-700 shadow-sm transition-colors hover:border-gray-400 hover:text-gray-900 sm:w-auto"
                 >
                   {t.routeLanding.pricingLink}
                 </button>
@@ -108,6 +147,8 @@ export function PricingPage() {
             </div>
           </div>
         </section>
+
+        <PricingCalculator />
 
         <section className="py-12">
           <div className="max-w-5xl mx-auto px-4 grid gap-6 md:grid-cols-3">
@@ -148,7 +189,7 @@ export function PricingPage() {
         </section>
       </main>
       <Footer />
-      <FloatingActions hide={Boolean(selectedRoute || showQuoteForm)} />
+      <FloatingActions orderTargetId="pricing-booking" hide={Boolean(selectedRoute || showQuoteForm)} />
 
       {selectedRoute && (
         <Suspense fallback={null}>

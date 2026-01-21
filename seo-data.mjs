@@ -789,10 +789,12 @@ export const buildRootUrl = (routeKey) => {
 
 const isIndexablePath = (urlPath) => {
   if (urlPath.includes('/admin')) return false;
-  const locale = getLocaleFromPath(urlPath) ?? 'en';
   const pathParts = urlPath.replace(/\/$/, '').split('/').filter(Boolean);
-  const slug = locale ? pathParts[1] ?? '' : '';
+  const localeFromPath = getLocaleFromPath(urlPath);
+  const locale = localeFromPath ?? 'en';
+  const slug = localeFromPath ? (pathParts[1] ?? '') : (pathParts[0] ?? '');
   if (!slug) return true;
+  if (!localeFromPath) return false;
   return Boolean(getRouteKeyFromSlug(locale, slug));
 };
 
