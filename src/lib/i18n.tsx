@@ -29,7 +29,7 @@ export const localeToRootPath = (locale: Locale) => `${localeToPath(locale)}/`;
 const baseEn = {
     common: {
       whatsapp: 'WhatsApp',
-      orderOnlineNow: 'Book Online Now',
+      orderOnlineNow: 'Check price and book TAXI',
       orderNow: 'Book Now',
       close: 'Close',
       noPrepayment: 'No prepayment',
@@ -1390,7 +1390,7 @@ const translations = {
   de: {
     common: {
       whatsapp: 'WhatsApp',
-      orderOnlineNow: 'Jetzt online reservieren',
+      orderOnlineNow: 'Preis prüfen und TAXI buchen',
       orderNow: 'Jetzt reservieren',
       close: 'Schließen',
       noPrepayment: 'Keine Vorauszahlung',
@@ -2069,7 +2069,7 @@ const translations = {
   fi: {
     common: {
       whatsapp: 'WhatsApp',
-      orderOnlineNow: 'Varaa verkossa nyt',
+      orderOnlineNow: 'Tarkista hinta ja varaa TAKSI',
       orderNow: 'Varaa nyt',
       close: 'Sulje',
       noPrepayment: 'Ei ennakkomaksua',
@@ -2748,7 +2748,7 @@ const translations = {
   no: {
     common: {
       whatsapp: 'WhatsApp',
-      orderOnlineNow: 'Reserver online nå',
+      orderOnlineNow: 'Sjekk pris og bestill TAXI',
       orderNow: 'Reserver nå',
       close: 'Lukk',
       noPrepayment: 'Ingen forhåndsbetaling',
@@ -3426,7 +3426,7 @@ const translations = {
   sv: {
     common: {
       whatsapp: 'WhatsApp',
-      orderOnlineNow: 'Boka online nu',
+      orderOnlineNow: 'Kolla pris och boka TAXI',
       orderNow: 'Boka nu',
       close: 'Stäng',
       noPrepayment: 'Ingen förskottsbetalning',
@@ -4105,7 +4105,7 @@ const translations = {
   da: {
     common: {
       whatsapp: 'WhatsApp',
-      orderOnlineNow: 'Reserver online nu',
+      orderOnlineNow: 'Tjek pris og book TAXI',
       orderNow: 'Book nu',
       close: 'Luk',
       noPrepayment: 'Ingen forudbetaling',

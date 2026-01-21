@@ -1,7 +1,5 @@
 import { Calculator, Car, Users } from 'lucide-react';
 import { useEffect, useRef } from 'react';
-import { preloadEurRate, useEurRate } from '../lib/useEurRate';
-import { formatEur } from '../lib/currency';
 import { localeToPath, useI18n } from '../lib/i18n';
 import { getRouteSlug } from '../lib/routes';
 
@@ -11,8 +9,6 @@ interface VehicleTypeSelectorProps {
 
 export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) {
   const { t, locale } = useI18n();
-  const eurRate = useEurRate();
-  const eurText = (pln: number) => formatEur(pln, eurRate);
   const sectionRef = useRef<HTMLElement | null>(null);
   const pricingPath = `${localeToPath(locale)}/${getRouteSlug(locale, 'pricing')}#pricing-calculator`;
 
@@ -27,7 +23,6 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries.some((entry) => entry.isIntersecting)) {
-          preloadEurRate();
           observer.disconnect();
         }
       },
@@ -80,53 +75,6 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
               </p>
             </div>
 
-            <div className="vehicle-card__prices bg-white rounded-lg p-4 mb-4">
-              <p className="vehicle-card__prices-label text-gray-600 mb-2 text-sm">{t.vehicle.examplePrices}</p>
-              <div className="vehicle-card__prices-list divide-y divide-gray-200/70 text-sm">
-                <div className="vehicle-price-row flex justify-between items-start gap-2 py-2">
-                  <span className="vehicle-price-label text-gray-700">{t.vehicle.airportGdansk}</span>
-                  <div className="vehicle-price-value text-right">
-                    <span className="text-blue-900">{t.common.priceFrom} 100 PLN</span>
-                    {eurText(100) && (
-                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs whitespace-nowrap">
-                        <span className="eur-text">{eurText(100)}</span>
-                        <span className="live-badge">
-                          {t.common.actualBadge}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="vehicle-price-row flex justify-between items-start gap-2 py-2">
-                  <span className="vehicle-price-label text-gray-700">{t.vehicle.airportSopot}</span>
-                  <div className="vehicle-price-value text-right">
-                    <span className="text-blue-900">{t.common.priceFrom} 120 PLN</span>
-                    {eurText(120) && (
-                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs whitespace-nowrap">
-                        <span className="eur-text">{eurText(120)}</span>
-                        <span className="live-badge">
-                          {t.common.actualBadge}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="vehicle-price-row flex justify-between items-start gap-2 py-2">
-                  <span className="vehicle-price-label text-gray-700">{t.vehicle.airportGdynia}</span>
-                  <div className="vehicle-price-value text-right">
-                    <span className="text-blue-900">{t.common.priceFrom} 200 PLN</span>
-                    {eurText(200) && (
-                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs whitespace-nowrap">
-                        <span className="eur-text">{eurText(200)}</span>
-                        <span className="live-badge">
-                          {t.common.actualBadge}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
 
             <div className="vehicle-card__cta bg-blue-600 text-white py-3 px-6 rounded-lg text-center group-hover:bg-blue-700 transition-colors text-sm mt-auto">
               {t.vehicle.selectStandard}
@@ -156,53 +104,6 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
               </p>
             </div>
 
-            <div className="vehicle-card__prices bg-white rounded-lg p-4 mb-4">
-              <p className="vehicle-card__prices-label text-gray-600 mb-2 text-sm">{t.vehicle.examplePrices}</p>
-              <div className="vehicle-card__prices-list divide-y divide-gray-200/70 text-sm">
-                <div className="vehicle-price-row flex justify-between items-start gap-2 py-2">
-                  <span className="vehicle-price-label text-gray-700">{t.vehicle.airportGdansk}</span>
-                  <div className="vehicle-price-value text-right">
-                    <span className="text-blue-900">{t.common.priceFrom} 150 PLN</span>
-                    {eurText(150) && (
-                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs whitespace-nowrap">
-                        <span className="eur-text">{eurText(150)}</span>
-                        <span className="live-badge">
-                          {t.common.actualBadge}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="vehicle-price-row flex justify-between items-start gap-2 py-2">
-                  <span className="vehicle-price-label text-gray-700">{t.vehicle.airportSopot}</span>
-                  <div className="vehicle-price-value text-right">
-                    <span className="text-blue-900">{t.common.priceFrom} 170 PLN</span>
-                    {eurText(170) && (
-                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs whitespace-nowrap">
-                        <span className="eur-text">{eurText(170)}</span>
-                        <span className="live-badge">
-                          {t.common.actualBadge}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="vehicle-price-row flex justify-between items-start gap-2 py-2">
-                  <span className="vehicle-price-label text-gray-700">{t.vehicle.airportGdynia}</span>
-                  <div className="vehicle-price-value text-right">
-                    <span className="text-blue-900">{t.common.priceFrom} 280 PLN</span>
-                    {eurText(280) && (
-                      <div className="vehicle-eur-row flex items-center justify-end gap-2 text-gray-500 text-xs whitespace-nowrap">
-                        <span className="eur-text">{eurText(280)}</span>
-                        <span className="live-badge">
-                          {t.common.actualBadge}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
 
             <div className="vehicle-card__cta bg-blue-600 text-white py-3 px-6 rounded-lg text-center group-hover:bg-blue-700 transition-colors text-sm mt-auto">
               {t.vehicle.selectBus}
