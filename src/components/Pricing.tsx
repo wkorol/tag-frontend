@@ -75,19 +75,6 @@ export function Pricing({
   const title = vehicleType === 'bus' ? t.pricing.titleBus : t.pricing.titleStandard;
   const eurRate = useEurRate();
   const eurText = (pln: number) => formatEur(pln, eurRate);
-  const tariffRows = [
-    t.quoteForm.tariff1,
-    t.quoteForm.tariff2,
-    t.quoteForm.tariff3,
-    t.quoteForm.tariff4,
-  ].map((row) => {
-    const parts = row.split(':');
-    return {
-      label: parts[0]?.trim() || row,
-      value: parts.slice(1).join(':').trim(),
-    };
-  });
-
   useEffect(() => {
     preloadEurRate();
   }, []);
@@ -122,27 +109,6 @@ export function Pricing({
         </table>
       </div>
 
-      <h4 className={`mt-10 text-base font-semibold text-gray-900 ${variant === 'landing' ? 'text-center' : ''}`}>
-        {t.pricing.tariffsTitle}
-      </h4>
-      <div className="mt-4 hidden sm:block">
-        <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr className="bg-slate-100 text-slate-700">
-              <th className="border border-slate-200 px-4 py-3 text-left">{t.pricing.tariffsName}</th>
-              <th className="border border-slate-200 px-4 py-3 text-left">{t.pricing.tariffsRate}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tariffRows.map((row) => (
-              <tr key={row.label} className="odd:bg-white even:bg-slate-50">
-                <td className="border border-slate-200 px-4 py-3">{row.label}</td>
-                <td className="border border-slate-200 px-4 py-3">{row.value}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
       <div className="mt-6 space-y-4 sm:hidden">
         {routes.map((route, index) => (
           <div key={`${route.to}-mobile-${index}`} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
@@ -171,14 +137,6 @@ export function Pricing({
         ))}
       </div>
 
-      <div className="mt-6 space-y-3 sm:hidden">
-        {tariffRows.map((row) => (
-          <div key={`${row.label}-mobile`} className="rounded-xl border border-slate-200 bg-white p-4">
-            <div className="text-xs uppercase tracking-wide text-slate-500">{row.label}</div>
-            <div className="mt-1 text-sm text-gray-900">{row.value}</div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 
@@ -268,6 +226,9 @@ export function Pricing({
             <div className="pricing-custom-price text-gray-700 text-sm mb-2">{t.pricing.customRoutePrice}</div>
             <div className="pricing-custom-note text-gray-600 text-xs">
               {t.pricing.customRoutePriceBody}
+            </div>
+            <div className="pricing-custom-note text-gray-600 text-xs mt-2">
+              {t.pricing.customRouteAutoNote}
             </div>
           </div>
 

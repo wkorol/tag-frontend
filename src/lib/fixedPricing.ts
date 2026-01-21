@@ -6,8 +6,8 @@ export const FIXED_PRICES = {
   },
   bus: {
     gdansk: { day: 150, night: 180 },
-    sopot: { day: 170, night: 200 },
-    gdynia: { day: 280, night: 330 },
+    sopot: { day: 180, night: 225 },
+    gdynia: { day: 300, night: 375 },
   },
 } as const;
 

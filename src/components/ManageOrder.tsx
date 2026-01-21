@@ -8,6 +8,20 @@ import { Locale, useI18n } from '../lib/i18n';
 
 const API_BASE_URL = getApiBaseUrl();
 const SIGN_FEE = 20;
+const getTodayDateString = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+const getCurrentTimeString = () => {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
+};
 
 interface ManageOrderProps {
   orderId: string;
@@ -230,9 +244,36 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
   }, [order, effectiveUpdateRequest, canEdit]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    const today = getTodayDateString();
+    const nowTime = getCurrentTimeString();
+    if (name === 'date' && value < today) {
+      setFormData({
+        ...formData,
+        [name]: today,
+      });
+      return;
+    }
+    if (name === 'date') {
+      const nextDate = value < today ? today : value;
+      const nextTime = nextDate === today && formData.time && formData.time < nowTime ? nowTime : formData.time;
+      setFormData({
+        ...formData,
+        date: nextDate,
+        time: nextTime,
+      });
+      return;
+    }
+    if (name === 'time' && formData.date === today && value < nowTime) {
+      setFormData({
+        ...formData,
+        time: nowTime,
+      });
+      return;
+    }
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
@@ -580,33 +621,20 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                 <div className="flex items-center gap-2">
                   <span className="text-gray-700">
                     {t.manageOrder.priceLabel}{' '}
-                    {isTaximeter ? (
-                      <span className="font-semibold text-blue-700">{t.manageOrder.taximeterTitle}</span>
-                    ) : (
+                    {order.price > 0 ? (
                       <span className="font-bold text-blue-600">{order.price} PLN</span>
+                    ) : (
+                      <span className="font-semibold text-blue-700">{t.manageOrder.pricePending}</span>
                     )}
                   </span>
                 </div>
-                {!isTaximeter && formatEur(order.price, eurRate) && (
+                {order.price > 0 && formatEur(order.price, eurRate) && (
                   <div className="flex items-center gap-2 text-gray-500">
                     <span className="eur-text">{formatEur(order.price, eurRate)}</span>
                     <span className="live-badge">
                       {t.common.actualBadge}
                     </span>
                   </div>
-                )}
-                {isTaximeter && (
-                  <details className="text-sm text-gray-600">
-                    <summary className="cursor-pointer text-blue-700">
-                      {t.manageOrder.taximeterRates}
-                    </summary>
-                    <div className="mt-2 space-y-1 text-gray-600">
-                      <div>{t.manageOrder.tariff1}</div>
-                      <div>{t.manageOrder.tariff2}</div>
-                      <div>{t.manageOrder.tariff3}</div>
-                      <div>{t.manageOrder.tariff4}</div>
-                    </div>
-                  </details>
                 )}
                 <div className="flex items-center gap-2">
                   <span className={`px-3 py-1 rounded-full text-sm ${
@@ -716,6 +744,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                     name="date"
                     value={formData.date}
                     onChange={handleChange}
+                    min={getTodayDateString()}
                     disabled={!isFieldEditable('date')}
                     className={inputClass('date', isFieldEditable('date'))}
                   />
@@ -731,6 +760,7 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                     name="time"
                     value={formData.time}
                     onChange={handleChange}
+                    min={formData.date === getTodayDateString() ? getCurrentTimeString() : undefined}
                     disabled={!isFieldEditable('time')}
                     className={inputClass('time', isFieldEditable('time'))}
                   />

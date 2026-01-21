@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Calendar, Users, Luggage, MapPin, FileText, Plane, DollarSign, Info, Lock } from 'lucide-react';
 import { centerPolygons } from '../lib/centerPolygons';
+import { cityPolygons } from '../lib/cityPolygons';
 import { distanceKm, isPointInsideGeoJson } from '../lib/geo';
 import { FIXED_PRICES, FixedCityKey } from '../lib/fixedPricing';
 import { formatEur } from '../lib/currency';
@@ -10,10 +11,59 @@ import { hasMarketingConsent } from '../lib/consent';
 import { getApiBaseUrl } from '../lib/api';
 import { trackFormStart } from '../lib/tracking';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
-import { getRouteSlug } from '../lib/routes';
 
 const AIRPORT_COORD = { lat: 54.3776, lon: 18.4662 };
 const AIRPORT_RADIUS_KM = 2.5;
+const POMORSKIE_VIEWBOX = '16.3,53.2,19.6,54.9';
+const TAXIMETER_RATES = {
+  gdansk: { day: 3.9, night: 5.85 },
+  outside: { day: 7.8, night: 11.7 },
+} as const;
+
+const roundPrice = (value: number, step = 10) => Math.round(value / step) * step;
+const formatDistance = (value: number) => Math.round(value * 10) / 10;
+const normalizeSuggestionQuery = (value: string) => value.trim().replace(/hitlon/gi, 'hilton');
+const estimateInsideRatio = (
+  start: { lat: number; lon: number },
+  end: { lat: number; lon: number },
+  isInside: (point: { lat: number; lon: number }) => boolean,
+  steps = 30,
+) => {
+  if (steps <= 0) {
+    return isInside(start) ? 1 : 0;
+  }
+  let insideCount = 0;
+  for (let i = 0; i <= steps; i += 1) {
+    const t = i / steps;
+    const point = {
+      lat: start.lat + (end.lat - start.lat) * t,
+      lon: start.lon + (end.lon - start.lon) * t,
+    };
+    if (isInside(point)) {
+      insideCount += 1;
+    }
+  }
+  return insideCount / (steps + 1);
+};
+
+const getGdanskCityPrice = (distance: number) => {
+  if (distance <= 5) return 50;
+  if (distance <= 15) return 100;
+  if (distance <= 20) return 120;
+  if (distance <= 25) return 150;
+  return null;
+};
+
+const getAirportOutsidePrice = (distance: number, isNight: boolean) => {
+  if (distance <= 20) return isNight ? 150 : 120;
+  if (distance <= 30) return isNight ? 250 : 200;
+  if (distance <= 40) return isNight ? 350 : 300;
+  if (distance <= 50) return isNight ? 600 : 400;
+  if (distance <= 60) return isNight ? 700 : 500;
+  if (distance <= 80) return isNight ? 800 : 600;
+  if (distance <= 100) return isNight ? 900 : 700;
+  return null;
+};
 
 const validatePhoneNumber = (value: string, messages: { phoneLetters: string; phoneLength: string }) => {
   const trimmed = value.trim();
@@ -42,6 +92,13 @@ const getTodayDateString = () => {
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const day = String(now.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+};
+
+const getCurrentTimeString = () => {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
 };
 
 const isPastDate = (value: string) => {
@@ -80,6 +137,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   const priceInputRef = useRef<HTMLInputElement | null>(null);
   const eurRate = useEurRate();
   const geocodeCache = useRef(new Map<string, { lat: number; lon: number } | null>());
+  const routeDistanceCache = useRef(new Map<string, number | null>());
   const [formData, setFormData] = useState({
     pickupAddress: '',
     destinationAddress: '',
@@ -107,19 +165,32 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   const [submitting, setSubmitting] = useState(false);
   const [showPriceInput, setShowPriceInput] = useState(false);
   const [fixedRoute, setFixedRoute] = useState<{
-    cityKey: FixedCityKey;
     vehicleType: 'standard' | 'bus';
     price: number;
     isNight: boolean;
+    rateLabel?: string;
     routeLabel: string;
-    href: string;
-    cityLabel: string;
+    routeFrom: string;
+    routeTo: string;
+  } | null>(null);
+  const [longRouteInfo, setLongRouteInfo] = useState<{
+    distanceKm: number;
+    taximeterRate: number;
+    taximeterPrice: number;
+    proposedPrice: number;
+    savingsPercent: number;
   } | null>(null);
   const [fixedRouteChecking, setFixedRouteChecking] = useState(false);
   const [holidayKeys, setHolidayKeys] = useState<Set<string> | null>(null);
   const [holidayYear, setHolidayYear] = useState<number | null>(null);
   const formStartedRef = useRef(false);
   const [submitAttempted, setSubmitAttempted] = useState(false);
+  const lastSuggestedPriceRef = useRef<number | null>(null);
+  const suggestedContextRef = useRef<string>('');
+  const proposedPriceDirtyRef = useRef(false);
+  const [pickupSuggestions, setPickupSuggestions] = useState<Array<{ label: string }>>([]);
+  const [destinationSuggestions, setDestinationSuggestions] = useState<Array<{ label: string }>>([]);
+  const [activeSuggestionField, setActiveSuggestionField] = useState<'pickup' | 'destination' | null>(null);
   const signFee = formData.pickupType === 'airport' && formData.signService === 'sign' ? 20 : 0;
   const isPhoneValid = !validatePhoneNumber(formData.phone, t.quoteForm.validation);
   const isEmailValid = !validateEmail(formData.email, t.quoteForm.validation.email);
@@ -263,13 +334,179 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
   }, [fixedRoute]);
 
   useEffect(() => {
-    const addressForLookup =
-      formData.pickupType === 'airport'
-        ? formData.destinationAddress
-        : `${formData.pickupAddress} ${formData.destinationAddress}`;
+    if (formData.pickupType === 'airport') {
+      setPickupSuggestions([]);
+      return;
+    }
+    const query = normalizeSuggestionQuery(formData.pickupAddress);
+    if (query.length < 3) {
+      setPickupSuggestions([]);
+      return;
+    }
 
-    if (!formData.pickupType || addressForLookup.trim().length < 6) {
+    let active = true;
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      try {
+        const buildUrl = (bounded: boolean) => {
+          const url = new URL('https://nominatim.openstreetmap.org/search');
+          url.searchParams.set('format', 'jsonv2');
+          url.searchParams.set('limit', '5');
+          url.searchParams.set('q', query);
+          url.searchParams.set('addressdetails', '1');
+          url.searchParams.set('countrycodes', 'pl');
+          url.searchParams.set('accept-language', locale === 'pl' ? 'pl' : 'en');
+          if (bounded) {
+            url.searchParams.set('viewbox', POMORSKIE_VIEWBOX);
+            url.searchParams.set('bounded', '1');
+          }
+          return url;
+        };
+        const response = await fetch(buildUrl(true).toString(), { signal: controller.signal });
+        let data = response.ok ? await response.json() : [];
+        if (!active) return;
+        const results = Array.isArray(data)
+          ? data.map((item) => ({
+              label: String(item.display_name ?? ''),
+              state: String(item.address?.state ?? ''),
+              countryCode: String(item.address?.country_code ?? ''),
+            })).filter((item) => item.label)
+          : [];
+        const isPomorskie = (item: { state: string; label: string; countryCode: string }) =>
+          item.countryCode.toLowerCase() === 'pl'
+          && (item.state.toLowerCase().includes('pomorsk')
+            || item.label.toLowerCase().includes('pomorsk'));
+        let pomorskie = results.filter(isPomorskie);
+        if (pomorskie.length === 0 && query.length >= 10) {
+          const fallbackResponse = await fetch(buildUrl(false).toString(), { signal: controller.signal });
+          data = fallbackResponse.ok ? await fallbackResponse.json() : [];
+          const fallback = Array.isArray(data)
+            ? data.map((item) => ({
+                label: String(item.display_name ?? ''),
+                state: String(item.address?.state ?? ''),
+                countryCode: String(item.address?.country_code ?? ''),
+              })).filter((item) => item.label)
+            : [];
+          pomorskie = fallback.filter(isPomorskie);
+          const others = fallback.filter((item) => !isPomorskie(item));
+          setPickupSuggestions([...pomorskie, ...others]);
+        } else {
+          setPickupSuggestions(pomorskie);
+        }
+      } catch {
+        if (!active) return;
+        setPickupSuggestions([]);
+      }
+    }, 350);
+
+    return () => {
+      active = false;
+      controller.abort();
+      window.clearTimeout(timer);
+    };
+  }, [formData.pickupAddress, formData.pickupType, locale]);
+
+  useEffect(() => {
+    const query = normalizeSuggestionQuery(formData.destinationAddress);
+    if (query.length < 3) {
+      setDestinationSuggestions([]);
+      return;
+    }
+
+    let active = true;
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      try {
+        const buildUrl = (bounded: boolean) => {
+          const url = new URL('https://nominatim.openstreetmap.org/search');
+          url.searchParams.set('format', 'jsonv2');
+          url.searchParams.set('limit', '5');
+          url.searchParams.set('q', query);
+          url.searchParams.set('addressdetails', '1');
+          url.searchParams.set('countrycodes', 'pl');
+          url.searchParams.set('accept-language', locale === 'pl' ? 'pl' : 'en');
+          if (bounded) {
+            url.searchParams.set('viewbox', POMORSKIE_VIEWBOX);
+            url.searchParams.set('bounded', '1');
+          }
+          return url;
+        };
+        const response = await fetch(buildUrl(true).toString(), { signal: controller.signal });
+        let data = response.ok ? await response.json() : [];
+        if (!active) return;
+        const results = Array.isArray(data)
+          ? data.map((item) => ({
+              label: String(item.display_name ?? ''),
+              state: String(item.address?.state ?? ''),
+              countryCode: String(item.address?.country_code ?? ''),
+            })).filter((item) => item.label)
+          : [];
+        const isPomorskie = (item: { state: string; label: string; countryCode: string }) =>
+          item.countryCode.toLowerCase() === 'pl'
+          && (item.state.toLowerCase().includes('pomorsk')
+            || item.label.toLowerCase().includes('pomorsk'));
+        let pomorskie = results.filter(isPomorskie);
+        if (pomorskie.length === 0 && query.length >= 10) {
+          const fallbackResponse = await fetch(buildUrl(false).toString(), { signal: controller.signal });
+          data = fallbackResponse.ok ? await fallbackResponse.json() : [];
+          const fallback = Array.isArray(data)
+            ? data.map((item) => ({
+                label: String(item.display_name ?? ''),
+                state: String(item.address?.state ?? ''),
+                countryCode: String(item.address?.country_code ?? ''),
+              })).filter((item) => item.label)
+            : [];
+          pomorskie = fallback.filter(isPomorskie);
+          const others = fallback.filter((item) => !isPomorskie(item));
+          setDestinationSuggestions([...pomorskie, ...others]);
+        } else {
+          setDestinationSuggestions(pomorskie);
+        }
+      } catch {
+        if (!active) return;
+        setDestinationSuggestions([]);
+      }
+    }, 350);
+
+    return () => {
+      active = false;
+      controller.abort();
+      window.clearTimeout(timer);
+    };
+  }, [formData.destinationAddress, locale]);
+
+  useEffect(() => {
+    if (!longRouteInfo) {
+      lastSuggestedPriceRef.current = null;
+      suggestedContextRef.current = '';
+      proposedPriceDirtyRef.current = false;
+      return;
+    }
+
+    const nextContext = `${formData.pickupType}|${formData.pickupAddress}|${formData.destinationAddress}|${formData.passengers}`;
+    if (suggestedContextRef.current !== nextContext) {
+      proposedPriceDirtyRef.current = false;
+      suggestedContextRef.current = nextContext;
+    }
+
+    setShowPriceInput(true);
+    if (!proposedPriceDirtyRef.current) {
+      setFormData((prev) => ({
+        ...prev,
+        proposedPrice: String(longRouteInfo.proposedPrice),
+      }));
+    }
+    lastSuggestedPriceRef.current = longRouteInfo.proposedPrice;
+  }, [longRouteInfo]);
+
+  useEffect(() => {
+    const pickupReady =
+      formData.pickupType === 'airport' || formData.pickupAddress.trim().length >= 3;
+    const destinationReady = formData.destinationAddress.trim().length >= 3;
+
+    if (!formData.pickupType || !pickupReady || !destinationReady) {
       setFixedRoute(null);
+      setLongRouteInfo(null);
       setFixedRouteChecking(false);
       return;
     }
@@ -309,6 +546,35 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
         return point;
       };
 
+      const getRouteDistanceKm = async (
+        from: { lat: number; lon: number },
+        to: { lat: number; lon: number },
+      ) => {
+        const key = `${from.lat.toFixed(5)},${from.lon.toFixed(5)}|${to.lat.toFixed(5)},${to.lon.toFixed(5)}`;
+        if (routeDistanceCache.current.has(key)) {
+          return routeDistanceCache.current.get(key);
+        }
+        const url = new URL('https://router.project-osrm.org/route/v1/driving');
+        url.pathname += `/${from.lon},${from.lat};${to.lon},${to.lat}`;
+        url.searchParams.set('overview', 'false');
+        url.searchParams.set('alternatives', 'false');
+        url.searchParams.set('steps', 'false');
+        const response = await fetch(url.toString(), { signal: controller.signal });
+        if (!response.ok) {
+          routeDistanceCache.current.set(key, null);
+          return null;
+        }
+        const data = await response.json().catch(() => null);
+        const meters = data?.routes?.[0]?.distance;
+        if (typeof meters !== 'number' || !Number.isFinite(meters)) {
+          routeDistanceCache.current.set(key, null);
+          return null;
+        }
+        const km = meters / 1000;
+        routeDistanceCache.current.set(key, km);
+        return km;
+      };
+
       const isAirportPoint = (point: { lat: number; lon: number }) =>
         distanceKm(point, AIRPORT_COORD) <= AIRPORT_RADIUS_KM;
 
@@ -323,66 +589,149 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
       };
 
       try {
-        let cityKey: FixedCityKey | null = null;
-        if (formData.pickupType === 'airport') {
-          const destination = await geocodeAddress(formData.destinationAddress);
-          if (destination) {
-            cityKey = getCenterKey(destination);
-          }
-        } else {
-          const pickup = await geocodeAddress(formData.pickupAddress);
-          const destination = await geocodeAddress(formData.destinationAddress);
-          if (pickup && destination) {
-            if (isAirportPoint(pickup)) {
-              cityKey = getCenterKey(destination);
-            } else if (isAirportPoint(destination)) {
-              cityKey = getCenterKey(pickup);
-            }
-          }
-        }
+        const pickup =
+          formData.pickupType === 'airport'
+            ? AIRPORT_COORD
+            : await geocodeAddress(formData.pickupAddress);
+        const destination = await geocodeAddress(formData.destinationAddress);
 
-        if (!active) return;
-
-        if (!cityKey) {
+        if (!pickup || !destination) {
+          if (!active) return;
           setFixedRoute(null);
+          setLongRouteInfo(null);
           setFixedRouteChecking(false);
           return;
         }
 
+        const pickupIsAirport = isAirportPoint(pickup);
+        const destinationIsAirport = isAirportPoint(destination);
+        const isAirportRoute = pickupIsAirport || destinationIsAirport;
+        const otherPoint = pickupIsAirport ? destination : destinationIsAirport ? pickup : null;
         const passengersNumber = Number(formData.passengers);
         const vehicleType = passengersNumber >= 5 ? 'bus' : 'standard';
+        const busMultiplier = vehicleType === 'bus' ? 1.5 : 1;
         const isNight = getIsNightRate();
-        const price = isNight
-          ? FIXED_PRICES[vehicleType][cityKey].night
-          : FIXED_PRICES[vehicleType][cityKey].day;
-        const cityLabel =
-          cityKey === 'gdansk'
-            ? t.pricing.routes.gdansk
-            : cityKey === 'gdynia'
-              ? t.pricing.routes.gdynia
-              : 'Sopot';
-        const routeLabel = `${t.pricing.routes.airport} ↔ ${cityLabel}`;
-        const routeKey =
-          cityKey === 'gdansk'
-            ? 'orderAirportGdansk'
-            : cityKey === 'gdynia'
-              ? 'orderAirportGdynia'
-              : 'orderAirportSopot';
-        const href = `${basePath}/${getRouteSlug(locale, routeKey)}`;
+        const routedDistance = await getRouteDistanceKm(pickup, destination);
+        const distance = routedDistance ?? distanceKm(pickup, destination);
+        const pickupInGdansk = isPointInsideGeoJson(pickup, cityPolygons.gdansk);
+        const destinationInGdansk = isPointInsideGeoJson(destination, cityPolygons.gdansk);
+        const gdanskCenterPickup = getCenterKey(pickup) === 'gdansk';
+        const gdanskCenterDestination = getCenterKey(destination) === 'gdansk';
 
-        setFixedRoute({
-          cityKey,
-          vehicleType,
-          price,
-          isNight,
-          routeLabel,
-          href,
-          cityLabel,
-        });
+        if (!active) return;
+
+        if (isAirportRoute && otherPoint) {
+          const cityKey = getCenterKey(otherPoint);
+          if (cityKey) {
+            const price = isNight
+              ? FIXED_PRICES[vehicleType][cityKey].night
+              : FIXED_PRICES[vehicleType][cityKey].day;
+            const cityLabel =
+              cityKey === 'gdansk'
+                ? t.pricing.routes.gdansk
+                : cityKey === 'gdynia'
+                  ? t.pricing.routes.gdynia
+                  : 'Sopot';
+            const routeLabel = `${t.pricing.routes.airport} ↔ ${cityLabel}`;
+            const routeFrom = pickupIsAirport ? t.pricing.routes.airport : cityLabel;
+            const routeTo = pickupIsAirport ? cityLabel : t.pricing.routes.airport;
+
+            setFixedRoute({
+              vehicleType,
+              price,
+              isNight,
+              routeLabel,
+              routeFrom,
+              routeTo,
+            });
+            setLongRouteInfo(null);
+            setFixedRouteChecking(false);
+            return;
+          }
+        }
+
+        const gdanskFixedPrice =
+          !isAirportRoute &&
+          pickupInGdansk &&
+          destinationInGdansk &&
+          !gdanskCenterPickup &&
+          !gdanskCenterDestination
+            ? getGdanskCityPrice(distance)
+            : null;
+
+        if (gdanskFixedPrice) {
+          const routeLabel = t.quoteForm.fixedRouteDistance(formatDistance(distance));
+          setFixedRoute({
+            vehicleType,
+            price: Math.round(gdanskFixedPrice * busMultiplier),
+            isNight: false,
+            rateLabel: t.quoteForm.fixedRouteAllDay,
+            routeLabel,
+            routeFrom: formData.pickupAddress,
+            routeTo: formData.destinationAddress,
+          });
+          setLongRouteInfo(null);
+          setFixedRouteChecking(false);
+          return;
+        }
+
+        if (isAirportRoute && otherPoint && !isPointInsideGeoJson(otherPoint, cityPolygons.gdansk)) {
+          const airportOutsidePrice = getAirportOutsidePrice(distance, isNight);
+          if (airportOutsidePrice) {
+            const routeLabel = t.quoteForm.fixedRouteDistance(formatDistance(distance));
+            setFixedRoute({
+              vehicleType,
+              price: Math.round(airportOutsidePrice * busMultiplier),
+              isNight,
+              routeLabel,
+              routeFrom: pickupIsAirport ? t.pricing.routes.airport : formData.pickupAddress,
+              routeTo: pickupIsAirport ? formData.destinationAddress : t.pricing.routes.airport,
+            });
+            setLongRouteInfo(null);
+            setFixedRouteChecking(false);
+            return;
+          }
+        }
+
+        if (distance > 100) {
+          const gdanskRate = isNight ? TAXIMETER_RATES.gdansk.night : TAXIMETER_RATES.gdansk.day;
+          const outsideRate = isNight ? TAXIMETER_RATES.outside.night : TAXIMETER_RATES.outside.day;
+          const insideRatio = estimateInsideRatio(
+            pickup,
+            destination,
+            (point) => isPointInsideGeoJson(point, cityPolygons.gdansk),
+          );
+          const gdanskDistance = distance * insideRatio;
+          const outsideDistance = Math.max(0, distance - gdanskDistance);
+          const taximeterPrice = roundPrice(
+            ((gdanskDistance * gdanskRate) + (outsideDistance * outsideRate)) * busMultiplier,
+            10,
+          );
+          const taximeterRate = distance > 0 ? Math.round((taximeterPrice / distance) * 100) / 100 : gdanskRate;
+          const proposedPrice = roundPrice(distance * 2 * 3 * busMultiplier, 10);
+          const savingsPercent = taximeterPrice > 0
+            ? Math.max(0, Math.round((1 - proposedPrice / taximeterPrice) * 100))
+            : 0;
+
+          setFixedRoute(null);
+          setLongRouteInfo({
+            distanceKm: formatDistance(distance),
+            taximeterRate,
+            taximeterPrice,
+            proposedPrice,
+            savingsPercent,
+          });
+          setFixedRouteChecking(false);
+          return;
+        }
+
+        setFixedRoute(null);
+        setLongRouteInfo(null);
         setFixedRouteChecking(false);
       } catch {
         if (!active) return;
         setFixedRoute(null);
+        setLongRouteInfo(null);
         setFixedRouteChecking(false);
       }
     }, 700);
@@ -399,8 +748,6 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
     formData.passengers,
     formData.date,
     formData.time,
-    basePath,
-    locale,
     t,
   ]);
 
@@ -478,16 +825,8 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
     const apiBaseUrl = getApiBaseUrl();
     const passengersNumber = Number(formData.passengers);
     const carType = passengersNumber >= 5 ? 1 : 2;
-    const routeFrom = fixedRoute
-      ? formData.pickupType === 'airport'
-        ? t.pricing.routes.airport
-        : fixedRoute.cityLabel
-      : formData.pickupAddress;
-    const routeTo = fixedRoute
-      ? formData.pickupType === 'airport'
-        ? fixedRoute.cityLabel
-        : t.pricing.routes.airport
-      : formData.destinationAddress;
+    const routeFrom = fixedRoute ? fixedRoute.routeFrom : formData.pickupAddress;
+    const routeTo = fixedRoute ? fixedRoute.routeTo : formData.destinationAddress;
     const additionalNotes = buildAdditionalNotes({
       pickupType: formData.pickupType as 'airport' | 'address',
       signService: formData.pickupType === 'airport' ? formData.signService : 'self',
@@ -550,19 +889,42 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
       trackFormStart('quote');
     }
     const { name, value } = e.target;
-    
-    // Auto-fill airport address when Airport Pickup is selected
-    if (name === 'pickupType' && value === 'airport') {
+    const today = getTodayDateString();
+    const nowTime = getCurrentTimeString();
+    if (name === 'date') {
+      const nextDate = value < today ? today : value;
+      const nextTime = nextDate === today && formData.time && formData.time < nowTime ? nowTime : formData.time;
       setFormData({
         ...formData,
-        [name]: value,
+        date: nextDate,
+        time: nextTime,
+      });
+      return;
+    }
+    if (name === 'time' && formData.date === today && value < nowTime) {
+      setFormData({
+        ...formData,
+        time: nowTime,
+      });
+      return;
+    }
+    const nextValue = value;
+    if (name === 'proposedPrice') {
+      proposedPriceDirtyRef.current = true;
+    }
+    
+    // Auto-fill airport address when Airport Pickup is selected
+    if (name === 'pickupType' && nextValue === 'airport') {
+      setFormData({
+        ...formData,
+        [name]: nextValue,
         pickupAddress: 'Gdańsk Airport, ul. Słowackiego 200, 80-298 Gdańsk',
       });
-    } else if (name === 'pickupType' && value === 'address') {
+    } else if (name === 'pickupType' && nextValue === 'address') {
       // Clear pickup address when switching to Address Pickup
       setFormData({
         ...formData,
-        [name]: value,
+        [name]: nextValue,
         pickupAddress: '',
         signService: 'self',
         signText: '',
@@ -570,7 +932,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
     } else {
       setFormData({
         ...formData,
-        [name]: value,
+        [name]: nextValue,
       });
     }
   };
@@ -750,6 +1112,8 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                   name="pickupAddress"
                   value={formData.pickupAddress}
                   onChange={handleChange}
+                  onFocus={() => setActiveSuggestionField('pickup')}
+                  onBlur={() => setActiveSuggestionField(null)}
                   placeholder={t.quoteForm.pickupPlaceholder}
                   rows={2}
                   className={fieldClass(
@@ -759,6 +1123,26 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                   disabled={formData.pickupType === 'airport'}
                   required
                 />
+                {activeSuggestionField === 'pickup' && pickupSuggestions.length > 0 && formData.pickupType !== 'airport' && (
+                  <ul className="mt-2 max-h-56 overflow-auto rounded-lg border border-slate-200 bg-white shadow-lg text-sm">
+                    {pickupSuggestions.map((item, index) => (
+                      <li key={`${item.label}-${index}`}>
+                        <button
+                          type="button"
+                          className="w-full px-3 py-2 text-left text-slate-700 hover:bg-blue-50"
+                          onMouseDown={(event) => {
+                            event.preventDefault();
+                            setFormData(prev => ({ ...prev, pickupAddress: item.label }));
+                            setPickupSuggestions([]);
+                            setActiveSuggestionField(null);
+                          }}
+                        >
+                          {item.label}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
                 {formData.pickupType === 'airport' && (
                   <p className="text-sm text-blue-600 mt-1 flex items-center gap-1">
                     <Plane className="w-3 h-3" />
@@ -778,6 +1162,8 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                   name="destinationAddress"
                   value={formData.destinationAddress}
                   onChange={handleChange}
+                  onFocus={() => setActiveSuggestionField('destination')}
+                  onBlur={() => setActiveSuggestionField(null)}
                   placeholder={t.quoteForm.destinationPlaceholder}
                   rows={2}
                   className={fieldClass(
@@ -786,11 +1172,36 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                   )}
                   required
                 />
+                {activeSuggestionField === 'destination' && destinationSuggestions.length > 0 && (
+                  <ul className="mt-2 max-h-56 overflow-auto rounded-lg border border-slate-200 bg-white shadow-lg text-sm">
+                    {destinationSuggestions.map((item, index) => (
+                      <li key={`${item.label}-${index}`}>
+                        <button
+                          type="button"
+                          className="w-full px-3 py-2 text-left text-slate-700 hover:bg-blue-50"
+                          onMouseDown={(event) => {
+                            event.preventDefault();
+                            setFormData(prev => ({ ...prev, destinationAddress: item.label }));
+                            setDestinationSuggestions([]);
+                            setActiveSuggestionField(null);
+                          }}
+                        >
+                          {item.label}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <p className="text-sm text-slate-600 mt-2 flex items-center gap-2">
+                  <Info className="w-4 h-4 text-slate-400" />
+                  {t.quoteForm.autoPriceNote}
+                </p>
               </div>
 
               {fixedRouteChecking && (
-                <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-700">
-                  {t.quoteForm.fixedRouteChecking}
+                <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-4 text-sm text-blue-700 flex items-center gap-3">
+                  <span className="h-5 w-5 animate-spin rounded-full border-2 border-blue-300 border-t-blue-700" />
+                  <span className="font-medium">{t.quoteForm.fixedRouteChecking}</span>
                 </div>
               )}
 
@@ -810,8 +1221,31 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                     )}
                   </div>
                   <div className="mt-2 text-xs text-gray-600">
-                    {fixedRoute.isNight ? t.quoteForm.fixedRouteNight : t.quoteForm.fixedRouteDay}
+                    {fixedRoute.rateLabel ?? (fixedRoute.isNight ? t.quoteForm.fixedRouteNight : t.quoteForm.fixedRouteDay)}
                   </div>
+                </div>
+              )}
+
+              {!fixedRoute && longRouteInfo && (
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 px-6 py-6 mt-4">
+                  <div className="text-xs uppercase tracking-wide text-slate-600 mb-2">
+                    {t.quoteForm.longRouteTitle}
+                  </div>
+                  <div className="text-sm text-slate-700">
+                    {t.quoteForm.longRouteDistance(longRouteInfo.distanceKm)}
+                  </div>
+                  <div className="mt-3 space-y-1 text-sm text-slate-700">
+                    <div>
+                      {t.quoteForm.longRouteTaximeter(longRouteInfo.taximeterPrice, longRouteInfo.taximeterRate)}
+                    </div>
+                    <div>
+                      {t.quoteForm.longRouteProposed(longRouteInfo.proposedPrice)}
+                    </div>
+                    <div>
+                      {t.quoteForm.longRouteSavings(longRouteInfo.savingsPercent)}
+                    </div>
+                  </div>
+                  <div className="mt-2 text-xs text-slate-600">{t.quoteForm.longRouteNote}</div>
                 </div>
               )}
 
@@ -837,18 +1271,6 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                     >
                       <span className="block text-sm font-semibold text-slate-900">
                         {t.quoteForm.taximeterTitle}
-                      </span>
-                      <span className="mt-2 block text-xs text-slate-600">
-                        {t.quoteForm.tariff1}
-                      </span>
-                      <span className="block text-xs text-slate-600">
-                        {t.quoteForm.tariff2}
-                      </span>
-                      <span className="block text-xs text-slate-600">
-                        {t.quoteForm.tariff3}
-                      </span>
-                      <span className="block text-xs text-slate-600">
-                        {t.quoteForm.tariff4}
                       </span>
                       <span className="mt-3 block text-xs font-semibold text-blue-700">
                         {t.quoteForm.fixedPriceHint}
@@ -927,6 +1349,7 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                     name="time"
                     value={formData.time}
                     onChange={handleChange}
+                    min={formData.date === getTodayDateString() ? getCurrentTimeString() : undefined}
                     className={fieldClass(
                       'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
                       timeError,
@@ -1207,6 +1630,16 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                     {eurText && (
                       <span className="inline-flex items-center gap-2 text-[11px] text-blue-100">
                         <span>{eurText}</span>
+                        <span className="live-badge">{t.common.actualBadge}</span>
+                      </span>
+                    )}
+                  </span>
+                ) : longRouteInfo ? (
+                  <span className="flex flex-col items-center gap-1">
+                    <span>{t.orderForm.confirmOrder(longRouteInfo.proposedPrice)}</span>
+                    {formatEur(longRouteInfo.proposedPrice, eurRate) && (
+                      <span className="inline-flex items-center gap-2 text-[11px] text-blue-100">
+                        <span>{formatEur(longRouteInfo.proposedPrice, eurRate)}</span>
                         <span className="live-badge">{t.common.actualBadge}</span>
                       </span>
                     )}

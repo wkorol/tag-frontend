@@ -39,6 +39,13 @@ const getTodayDateString = () => {
   return `${year}-${month}-${day}`;
 };
 
+const getCurrentTimeString = () => {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
+};
+
 const isPastDate = (value: string) => {
   if (!value) return false;
   return value < getTodayDateString();
@@ -489,9 +496,36 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       formStartedRef.current = true;
       trackFormStart('order');
     }
+    const { name, value } = e.target;
+    const today = getTodayDateString();
+    const nowTime = getCurrentTimeString();
+    if (name === 'date' && value < today) {
+      setFormData({
+        ...formData,
+        [name]: today,
+      });
+      return;
+    }
+    if (name === 'date') {
+      const nextDate = value < today ? today : value;
+      const nextTime = nextDate === today && formData.time && formData.time < nowTime ? nowTime : formData.time;
+      setFormData({
+        ...formData,
+        date: nextDate,
+        time: nextTime,
+      });
+      return;
+    }
+    if (name === 'time' && formData.date === today && value < nowTime) {
+      setFormData({
+        ...formData,
+        time: nowTime,
+      });
+      return;
+    }
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
@@ -694,6 +728,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                     name="time"
                     value={formData.time}
                     onChange={handleChange}
+                    min={formData.date === getTodayDateString() ? getCurrentTimeString() : undefined}
                     className={fieldClass(
                       'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
                       timeError,
