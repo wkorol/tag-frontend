@@ -67,8 +67,7 @@ export function Hero() {
             <a
                 href={whatsappLink}
                 onClick={() => trackContactClick('whatsapp')}
-                className="gemini-cta inline-flex items-center gap-2 text-white px-6 py-3 rounded-lg transition-colors"
-                style={{ ['--cta-bg' as string]: '#22c55e' }}
+                className="inline-flex items-center gap-2 bg-white text-blue-900 px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors"
             >
               <MessageCircle className="w-5 h-5"/>
               {t.common.whatsapp}
@@ -88,8 +87,7 @@ export function Hero() {
                   trackCtaClick('hero_order_online');
                   requestScrollTo('vehicle-selection');
                 }}
-                className="gemini-cta inline-flex items-center gap-2 text-white px-6 py-3 rounded-lg shadow-lg transition-colors"
-                style={{ ['--cta-bg' as string]: '#c2410c' }}
+                className="inline-flex items-center gap-2 bg-orange-700 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-600 transition-colors animate-pulse-glow"
             >
               {t.common.orderOnlineNow}
             </a>
