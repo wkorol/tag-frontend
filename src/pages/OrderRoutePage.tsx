@@ -74,7 +74,7 @@ export function CustomOrderPage() {
   return (
     <>
       <Suspense fallback={null}>
-        <QuoteForm onClose={() => navigate(`${basePath}/`, { replace: true })} />
+        <QuoteForm onClose={() => navigate(`${basePath}/`, { replace: true })} initialVehicleType="standard" />
       </Suspense>
       <FloatingActions hide />
     </>

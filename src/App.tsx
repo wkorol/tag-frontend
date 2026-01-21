@@ -154,6 +154,7 @@ function Landing() {
             onClose={() => {
               setShowQuoteForm(false);
             }}
+            initialVehicleType={vehicleType}
           />
         </Suspense>
       )}

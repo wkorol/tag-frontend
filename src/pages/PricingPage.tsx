@@ -154,7 +154,7 @@ export function PricingPage() {
 
       {showQuoteForm && (
         <Suspense fallback={null}>
-          <QuoteForm onClose={() => setShowQuoteForm(false)} />
+          <QuoteForm onClose={() => setShowQuoteForm(false)} initialVehicleType={vehicleType} />
         </Suspense>
       )}
     </div>

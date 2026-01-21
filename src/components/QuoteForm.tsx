@@ -130,9 +130,10 @@ const isPolishPublicHoliday = (date: Date, apiHolidayKeys: Set<string> | null) =
 
 interface QuoteFormProps {
   onClose: () => void;
+  initialVehicleType?: 'standard' | 'bus';
 }
 
-export function QuoteForm({ onClose }: QuoteFormProps) {
+export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFormProps) {
   const { t, locale } = useI18n();
   const emailLocale: Locale = locale === 'pl' ? 'pl' : 'en';
   const basePath = localeToPath(locale);
@@ -334,6 +335,12 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
       setShowPriceInput(false);
     }
   }, [fixedRoute]);
+
+  useEffect(() => {
+    if (initialVehicleType === 'bus' && Number(formData.passengers) < 5) {
+      setFormData((prev) => ({ ...prev, passengers: '5' }));
+    }
+  }, [formData.passengers, initialVehicleType]);
 
   useEffect(() => {
     if (formData.pickupType === 'airport') {
@@ -1511,8 +1518,13 @@ export function QuoteForm({ onClose }: QuoteFormProps) {
                     )}
                     required
                   >
-                    {t.quoteForm.passengersOptions.map((label, index) => (
-                      <option key={label} value={index + 1}>{label}</option>
+                    {(initialVehicleType === 'bus'
+                      ? t.orderForm.passengersBus
+                      : t.quoteForm.passengersOptions
+                    ).map((label, index) => (
+                      <option key={label} value={initialVehicleType === 'bus' ? index + 5 : index + 1}>
+                        {label}
+                      </option>
                     ))}
                   </select>
                 </div>
