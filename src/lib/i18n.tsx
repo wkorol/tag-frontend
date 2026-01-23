@@ -201,7 +201,7 @@ const baseEn = {
       proposedLabel: 'Proposed price',
       savingsLabel: 'Savings',
       orderNow: 'Book now',
-      note: 'Prices are estimates and may vary.',
+      note: 'Prices are fixed. You can propose a different price in the custom route order form.',
     },
     trust: {
       companyTitle: 'Company details',
@@ -883,7 +883,7 @@ const translations = {
       proposedLabel: 'Sugerowana cena',
       savingsLabel: 'Oszczędzasz',
       orderNow: 'Zamów teraz',
-      note: 'Ceny są orientacyjne i mogą się różnić.',
+      note: 'Ceny są stałe, możesz zaproponować inną cenę w formularzu do zamawiania innej trasy.',
     },
     trust: {
       companyTitle: 'Dane firmy',
@@ -1562,7 +1562,7 @@ const translations = {
       proposedLabel: 'Vorgeschlagener Preis',
       savingsLabel: 'Ersparnis',
       orderNow: 'Jetzt buchen',
-      note: 'Preise sind Schätzungen und können abweichen.',
+      note: 'Preise sind fest. Sie können im Formular für eine andere Strecke einen anderen Preis vorschlagen.',
     },
     trust: {
       companyTitle: 'Unternehmensdaten',
@@ -2241,7 +2241,7 @@ const translations = {
       proposedLabel: 'Ehdotettu hinta',
       savingsLabel: 'Säästö',
       orderNow: 'Varaa nyt',
-      note: 'Hinnat ovat arvioita ja voivat muuttua.',
+      note: 'Hinnat ovat kiinteät. Voit ehdottaa toista hintaa toisen reitin tilauslomakkeessa.',
     },
     trust: {
       companyTitle: 'Yritystiedot',
@@ -2920,7 +2920,7 @@ const translations = {
       proposedLabel: 'Foreslått pris',
       savingsLabel: 'Besparelse',
       orderNow: 'Bestill nå',
-      note: 'Prisene er estimater og kan variere.',
+      note: 'Prisene er faste. Du kan foreslå en annen pris i bestillingsskjemaet for en annen rute.',
     },
     trust: {
       companyTitle: 'Firmadetaljer',
@@ -3598,7 +3598,7 @@ const translations = {
       proposedLabel: 'Föreslaget pris',
       savingsLabel: 'Besparing',
       orderNow: 'Boka nu',
-      note: 'Priserna är uppskattningar och kan variera.',
+      note: 'Priserna är fasta. Du kan föreslå ett annat pris i beställningsformuläret för en annan rutt.',
     },
     trust: {
       companyTitle: 'Företagsuppgifter',
@@ -4277,7 +4277,7 @@ const translations = {
       proposedLabel: 'Foreslået pris',
       savingsLabel: 'Besparelse',
       orderNow: 'Book nu',
-      note: 'Priserne er estimater og kan variere.',
+      note: 'Priserne er faste. Du kan foreslå en anden pris i bestillingsformularen for en anden rute.',
     },
     trust: {
       companyTitle: 'Virksomhedsoplysninger',

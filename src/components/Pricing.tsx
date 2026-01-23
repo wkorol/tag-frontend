@@ -322,7 +322,7 @@ export function Pricing({
                 </div>
               )}
             </div>
-            <div className="mt-10">
+            <div className="mt-14" style={{ marginTop: '3.5rem' }}>
               {pricingCards}
             </div>
           </>
