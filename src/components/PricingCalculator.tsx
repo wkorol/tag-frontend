@@ -761,21 +761,30 @@ export function PricingCalculator() {
     <div className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
       <div className="text-xs uppercase tracking-wide text-slate-500">{label}</div>
       <div className="mt-4 space-y-4">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
-            <div className="text-sm text-gray-600">{t.pricingCalculator.taximeterLabel}</div>
-            <div className="text-xs text-gray-400">
-              {taximeterDayLabel}: {day.taximeterRate} PLN/km
-            </div>
-            <div className="text-xs text-gray-400">
-              {t.pricingCalculator.nightRate}: {night.taximeterRate} PLN/km
-            </div>
-          </div>
-          <div className="min-w-[140px] text-right">
-            <div className="text-sm text-gray-600">{taximeterDayLabel}</div>
-            {renderPriceSmall(day.taximeterPrice)}
-            <div className="mt-2 text-sm text-gray-600">{t.pricingCalculator.nightRate}</div>
-            {renderPriceSmall(night.taximeterPrice)}
+        <div>
+          <div className="text-sm text-gray-600 mb-2">{t.pricingCalculator.taximeterLabel}</div>
+          <div className="overflow-hidden rounded-lg border border-slate-200">
+            <table className="w-full text-xs">
+              <thead className="bg-slate-50 text-slate-500">
+                <tr>
+                  <th className="px-3 py-2 text-left font-medium">Taryfa</th>
+                  <th className="px-3 py-2 text-right font-medium">Stawka</th>
+                  <th className="px-3 py-2 text-right font-medium">Cena</th>
+                </tr>
+              </thead>
+              <tbody className="text-slate-700">
+                <tr className="border-t border-slate-200">
+                  <td className="px-3 py-2">{taximeterDayLabel}</td>
+                  <td className="px-3 py-2 text-right">{day.taximeterRate} PLN/km</td>
+                  <td className="px-3 py-2 text-right">{renderPriceSmall(day.taximeterPrice)}</td>
+                </tr>
+                <tr className="border-t border-slate-200">
+                  <td className="px-3 py-2">{t.pricingCalculator.nightRate}</td>
+                  <td className="px-3 py-2 text-right">{night.taximeterRate} PLN/km</td>
+                  <td className="px-3 py-2 text-right">{renderPriceSmall(night.taximeterPrice)}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
         <div
