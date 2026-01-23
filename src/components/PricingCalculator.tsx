@@ -119,8 +119,9 @@ type DebugInfo = {
 export function PricingCalculator() {
   const { t, locale } = useI18n();
   const eurRate = useEurRate();
-  const taximeterDayLabel = 'Stawka dzienna';
-  const guaranteedDayLabel = (distanceKm: number) => (distanceKm > 100 ? 'Całodobowa stawka' : 'Stawka dzienna');
+  const taximeterDayLabel = t.pricingCalculator.dayRateLabel;
+  const guaranteedDayLabel = (distanceKm: number) =>
+    distanceKm > 100 ? t.pricingCalculator.allDayRateLabel : t.pricingCalculator.dayRateLabel;
   const airportAddress = t.pricingCalculator.airportAddress;
   const pricingBookingHref = `${localeToPath(locale)}/${getRouteSlug(locale, 'pricing')}#pricing-booking`;
   const [pickupAddress, setPickupAddress] = useState('');
@@ -777,23 +778,33 @@ export function PricingCalculator() {
             {renderPriceSmall(night.taximeterPrice)}
           </div>
         </div>
-        <div className="rounded-xl px-4 py-3 shadow-sm" style={{ border: '1px solid #bfdbfe', backgroundColor: '#eff6ff' }}>
+        <div
+          className="rounded-xl px-4 py-3 shadow-sm"
+          style={{ border: '1px solid #bfdbfe', backgroundColor: '#eff6ff' }}
+        >
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <div
-                  className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide shadow-sm"
-                  style={{ backgroundColor: '#bbf7d0', color: '#065f46' }}
+                  className="inline-flex items-center gap-2 rounded-full font-semibold uppercase tracking-wide shadow-sm"
+                  style={{
+                    backgroundColor: '#bbf7d0',
+                    color: '#065f46',
+                    padding: 'clamp(4px, 1.5vw, 6px) clamp(10px, 2.5vw, 12px)',
+                    fontSize: 'clamp(10px, 2.6vw, 11px)',
+                  }}
                 >
-                  Gwarantowana cena
+                  {t.pricingCalculator.guaranteedPriceLabel}
                 </div>
               </div>
-              <div className="mt-2 text-xs text-emerald-700">
+              <div className="mt-2 text-emerald-700" style={{ fontSize: 'clamp(11px, 2.8vw, 12px)' }}>
                 {t.pricingCalculator.savingsLabel}: {day.savingsPercent}% / {night.savingsPercent}%
               </div>
             </div>
             <div className="min-w-[140px] text-right">
-              <div className="text-xs text-emerald-700">{guaranteedDayLabel(distanceKm)}</div>
+              <div className="text-emerald-700" style={{ fontSize: 'clamp(11px, 2.8vw, 12px)' }}>
+                {guaranteedDayLabel(distanceKm)}
+              </div>
               {renderPrice(day.proposedPrice)}
             </div>
           </div>
