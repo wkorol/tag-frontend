@@ -14,8 +14,10 @@ import { Locale, localeToPath, useI18n } from '../lib/i18n';
 
 const AIRPORT_COORD = { lat: 54.3776, lon: 18.4662 };
 const AIRPORT_RADIUS_KM = 2.5;
-const SHORT_ROUTE_STRAIGHT_KM = 5;
-const POMORSKIE_VIEWBOX = '16.3,53.2,19.6,54.9';
+const GOOGLE_MAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY as string | undefined;
+const GDANSK_BIAS = { lat: 54.3520, lon: 18.6466 };
+const GDANSK_RADIUS_METERS = 60000;
+const AIRPORT_GEOCODE_QUERY = 'Terminal pasazerski odloty, Port Lotniczy Gdansk im. Lecha Walesy';
 const TAXIMETER_RATES = {
   gdansk: { day: 3.9, night: 5.85 },
   outside: { day: 7.8, night: 11.7 },
@@ -48,7 +50,7 @@ const estimateInsideRatio = (
 };
 
 const getGdanskCityPrice = (distance: number) => {
-  if (distance <= 6) return 50;
+  if (distance <= 5) return 50;
   if (distance <= 10) return 80;
   if (distance <= 15) return 100;
   if (distance <= 20) return 120;
@@ -59,9 +61,9 @@ const getGdanskCityPrice = (distance: number) => {
 const getAirportOutsidePrice = (distance: number, isNight: boolean) => {
   if (distance <= 20) return isNight ? 150 : 120;
   if (distance <= 30) return isNight ? 250 : 200;
-  if (distance <= 40) return isNight ? 350 : 300;
+  if (distance <= 45) return isNight ? 350 : 300;
   if (distance <= 50) return isNight ? 600 : 400;
-  if (distance <= 60) return isNight ? 700 : 500;
+  if (distance <= 55) return isNight ? 700 : 500;
   if (distance <= 80) return isNight ? 800 : 600;
   if (distance <= 100) return isNight ? 900 : 700;
   return null;
@@ -191,9 +193,18 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
   const lastSuggestedPriceRef = useRef<number | null>(null);
   const suggestedContextRef = useRef<string>('');
   const proposedPriceDirtyRef = useRef(false);
-  const [pickupSuggestions, setPickupSuggestions] = useState<Array<{ label: string }>>([]);
-  const [destinationSuggestions, setDestinationSuggestions] = useState<Array<{ label: string }>>([]);
+  const [pickupSuggestions, setPickupSuggestions] = useState<Array<{ label: string; placeId: string }>>([]);
+  const [destinationSuggestions, setDestinationSuggestions] = useState<Array<{ label: string; placeId: string }>>([]);
   const [activeSuggestionField, setActiveSuggestionField] = useState<'pickup' | 'destination' | null>(null);
+  const [pickupPlaceId, setPickupPlaceId] = useState<string | null>(null);
+  const [destinationPlaceId, setDestinationPlaceId] = useState<string | null>(null);
+  const [googleReady, setGoogleReady] = useState(false);
+  const googleServicesRef = useRef<{
+    autocomplete: any;
+    places: any;
+    directions: any;
+  } | null>(null);
+  const sessionTokenRef = useRef<any>(null);
   const signFee = formData.pickupType === 'airport' && formData.signService === 'sign' ? 20 : 0;
   const isPhoneValid = !validatePhoneNumber(formData.phone, t.quoteForm.validation);
   const isEmailValid = !validateEmail(formData.email, t.quoteForm.validation.email);
@@ -220,6 +231,81 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
   const eurText = fixedTotalPrice ? formatEur(fixedTotalPrice, eurRate) : null;
   const fieldClass = (base: string, invalid: boolean) =>
     `${base}${invalid ? ' border-red-400 bg-red-50 focus:ring-red-200 focus:border-red-500' : ''}`;
+
+  useEffect(() => {
+    if (!GOOGLE_MAPS_KEY) {
+      return;
+    }
+    if (typeof window === 'undefined') {
+      return;
+    }
+    if ((window as any).google?.maps?.places) {
+      setGoogleReady(true);
+      return;
+    }
+    const existing = document.querySelector('script[data-google-maps="true"]');
+    if (existing) {
+      existing.addEventListener('load', () => setGoogleReady(true), { once: true });
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(GOOGLE_MAPS_KEY)}&libraries=places`;
+    script.async = true;
+    script.defer = true;
+    script.dataset.googleMaps = 'true';
+    script.addEventListener('load', () => setGoogleReady(true));
+    document.head.appendChild(script);
+  }, []);
+
+  const ensureGoogleServices = () => {
+    if (!googleReady) {
+      return null;
+    }
+    if (googleServicesRef.current) {
+      return googleServicesRef.current;
+    }
+    const google = (window as any).google;
+    if (!google?.maps?.places) {
+      return null;
+    }
+    const autocomplete = new google.maps.places.AutocompleteService();
+    const dummyDiv = document.createElement('div');
+    const places = new google.maps.places.PlacesService(dummyDiv);
+    const directions = new google.maps.DirectionsService();
+    sessionTokenRef.current = new google.maps.places.AutocompleteSessionToken();
+    googleServicesRef.current = { autocomplete, places, directions };
+    return googleServicesRef.current;
+  };
+
+  const retrievePlacePoint = async (placeId: string) => {
+    const services = ensureGoogleServices();
+    if (!services) {
+      return null;
+    }
+    return new Promise<{ lat: number; lon: number } | null>((resolve) => {
+      services.places.getDetails(
+        {
+          placeId,
+          fields: ['geometry'],
+          sessionToken: sessionTokenRef.current ?? undefined,
+        },
+        (place: any, status: any) => {
+          if (status !== (window as any).google?.maps?.places?.PlacesServiceStatus?.OK) {
+            resolve(null);
+            return;
+          }
+          const location = place?.geometry?.location;
+          const lat = typeof location?.lat === 'function' ? location.lat() : Number(location?.lat);
+          const lon = typeof location?.lng === 'function' ? location.lng() : Number(location?.lng);
+          if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+            resolve(null);
+            return;
+          }
+          resolve({ lat, lon });
+        },
+      );
+    });
+  };
 
   const scrollToField = (fieldId: string) => {
     if (typeof window === 'undefined') {
@@ -357,51 +443,43 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
     const controller = new AbortController();
     const timer = window.setTimeout(async () => {
       try {
-        const buildUrl = (bounded: boolean) => {
-          const url = new URL('https://nominatim.openstreetmap.org/search');
-          url.searchParams.set('format', 'jsonv2');
-          url.searchParams.set('limit', '5');
-          url.searchParams.set('q', query);
-          url.searchParams.set('addressdetails', '1');
-          url.searchParams.set('countrycodes', 'pl');
-          url.searchParams.set('accept-language', locale === 'pl' ? 'pl' : 'en');
-          if (bounded) {
-            url.searchParams.set('viewbox', POMORSKIE_VIEWBOX);
-            url.searchParams.set('bounded', '1');
-          }
-          return url;
-        };
-        const response = await fetch(buildUrl(true).toString(), { signal: controller.signal });
-        let data = response.ok ? await response.json() : [];
-        if (!active) return;
-        const results = Array.isArray(data)
-          ? data.map((item) => ({
-              label: String(item.display_name ?? ''),
-              state: String(item.address?.state ?? ''),
-              countryCode: String(item.address?.country_code ?? ''),
-            })).filter((item) => item.label)
-          : [];
-        const isPomorskie = (item: { state: string; label: string; countryCode: string }) =>
-          item.countryCode.toLowerCase() === 'pl'
-          && (item.state.toLowerCase().includes('pomorsk')
-            || item.label.toLowerCase().includes('pomorsk'));
-        let pomorskie = results.filter(isPomorskie);
-        if (pomorskie.length === 0 && query.length >= 10) {
-          const fallbackResponse = await fetch(buildUrl(false).toString(), { signal: controller.signal });
-          data = fallbackResponse.ok ? await fallbackResponse.json() : [];
-          const fallback = Array.isArray(data)
-            ? data.map((item) => ({
-                label: String(item.display_name ?? ''),
-                state: String(item.address?.state ?? ''),
-                countryCode: String(item.address?.country_code ?? ''),
-              })).filter((item) => item.label)
-            : [];
-          pomorskie = fallback.filter(isPomorskie);
-          const others = fallback.filter((item) => !isPomorskie(item));
-          setPickupSuggestions([...pomorskie, ...others]);
-        } else {
-          setPickupSuggestions(pomorskie);
+        if (!GOOGLE_MAPS_KEY) {
+          setPickupSuggestions([]);
+          return;
         }
+        const services = ensureGoogleServices();
+        if (!services) {
+          setPickupSuggestions([]);
+          return;
+        }
+        const google = (window as any).google;
+        const request: any = {
+          input: query,
+          region: 'pl',
+          location: new google.maps.LatLng(GDANSK_BIAS.lat, GDANSK_BIAS.lon),
+          radius: GDANSK_RADIUS_METERS,
+          sessionToken: sessionTokenRef.current ?? undefined,
+        };
+        const predictions = await new Promise<any[]>((resolve) => {
+          services.autocomplete.getPlacePredictions(request, (items: any[], status: any) => {
+            if (status !== google.maps.places.PlacesServiceStatus.OK || !Array.isArray(items)) {
+              resolve([]);
+              return;
+            }
+            resolve(items);
+          });
+        });
+        const results = predictions.map((item: any) => {
+          const main = item.structured_formatting?.main_text ?? item.description ?? '';
+          const secondary = item.structured_formatting?.secondary_text ?? '';
+          const label = secondary ? `${main}, ${secondary}` : String(main);
+          return {
+            label,
+            placeId: String(item.place_id ?? ''),
+          };
+        }).filter((item: any) => item.label && item.placeId);
+        if (!active) return;
+        setPickupSuggestions(results);
       } catch {
         if (!active) return;
         setPickupSuggestions([]);
@@ -413,7 +491,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
       controller.abort();
       window.clearTimeout(timer);
     };
-  }, [formData.pickupAddress, formData.pickupType, locale]);
+  }, [formData.pickupAddress, formData.pickupType, locale, googleReady]);
 
   useEffect(() => {
     const query = normalizeSuggestionQuery(formData.destinationAddress);
@@ -426,51 +504,43 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
     const controller = new AbortController();
     const timer = window.setTimeout(async () => {
       try {
-        const buildUrl = (bounded: boolean) => {
-          const url = new URL('https://nominatim.openstreetmap.org/search');
-          url.searchParams.set('format', 'jsonv2');
-          url.searchParams.set('limit', '5');
-          url.searchParams.set('q', query);
-          url.searchParams.set('addressdetails', '1');
-          url.searchParams.set('countrycodes', 'pl');
-          url.searchParams.set('accept-language', locale === 'pl' ? 'pl' : 'en');
-          if (bounded) {
-            url.searchParams.set('viewbox', POMORSKIE_VIEWBOX);
-            url.searchParams.set('bounded', '1');
-          }
-          return url;
-        };
-        const response = await fetch(buildUrl(true).toString(), { signal: controller.signal });
-        let data = response.ok ? await response.json() : [];
-        if (!active) return;
-        const results = Array.isArray(data)
-          ? data.map((item) => ({
-              label: String(item.display_name ?? ''),
-              state: String(item.address?.state ?? ''),
-              countryCode: String(item.address?.country_code ?? ''),
-            })).filter((item) => item.label)
-          : [];
-        const isPomorskie = (item: { state: string; label: string; countryCode: string }) =>
-          item.countryCode.toLowerCase() === 'pl'
-          && (item.state.toLowerCase().includes('pomorsk')
-            || item.label.toLowerCase().includes('pomorsk'));
-        let pomorskie = results.filter(isPomorskie);
-        if (pomorskie.length === 0 && query.length >= 10) {
-          const fallbackResponse = await fetch(buildUrl(false).toString(), { signal: controller.signal });
-          data = fallbackResponse.ok ? await fallbackResponse.json() : [];
-          const fallback = Array.isArray(data)
-            ? data.map((item) => ({
-                label: String(item.display_name ?? ''),
-                state: String(item.address?.state ?? ''),
-                countryCode: String(item.address?.country_code ?? ''),
-              })).filter((item) => item.label)
-            : [];
-          pomorskie = fallback.filter(isPomorskie);
-          const others = fallback.filter((item) => !isPomorskie(item));
-          setDestinationSuggestions([...pomorskie, ...others]);
-        } else {
-          setDestinationSuggestions(pomorskie);
+        if (!GOOGLE_MAPS_KEY) {
+          setDestinationSuggestions([]);
+          return;
         }
+        const services = ensureGoogleServices();
+        if (!services) {
+          setDestinationSuggestions([]);
+          return;
+        }
+        const google = (window as any).google;
+        const request: any = {
+          input: query,
+          region: 'pl',
+          location: new google.maps.LatLng(GDANSK_BIAS.lat, GDANSK_BIAS.lon),
+          radius: GDANSK_RADIUS_METERS,
+          sessionToken: sessionTokenRef.current ?? undefined,
+        };
+        const predictions = await new Promise<any[]>((resolve) => {
+          services.autocomplete.getPlacePredictions(request, (items: any[], status: any) => {
+            if (status !== google.maps.places.PlacesServiceStatus.OK || !Array.isArray(items)) {
+              resolve([]);
+              return;
+            }
+            resolve(items);
+          });
+        });
+        const results = predictions.map((item: any) => {
+          const main = item.structured_formatting?.main_text ?? item.description ?? '';
+          const secondary = item.structured_formatting?.secondary_text ?? '';
+          const label = secondary ? `${main}, ${secondary}` : String(main);
+          return {
+            label,
+            placeId: String(item.place_id ?? ''),
+          };
+        }).filter((item: any) => item.label && item.placeId);
+        if (!active) return;
+        setDestinationSuggestions(results);
       } catch {
         if (!active) return;
         setDestinationSuggestions([]);
@@ -482,7 +552,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
       controller.abort();
       window.clearTimeout(timer);
     };
-  }, [formData.destinationAddress, locale]);
+  }, [formData.destinationAddress, locale, googleReady]);
 
   useEffect(() => {
     if (!longRouteInfo) {
@@ -532,22 +602,34 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
         if (geocodeCache.current.has(key)) {
           return geocodeCache.current.get(key) ?? null;
         }
-        const url = new URL('https://nominatim.openstreetmap.org/search');
-        url.searchParams.set('format', 'jsonv2');
-        url.searchParams.set('limit', '1');
-        url.searchParams.set('q', value);
-        const response = await fetch(url.toString(), { signal: controller.signal });
-        if (!response.ok) {
+        const services = ensureGoogleServices();
+        if (!services) {
           geocodeCache.current.set(key, null);
           return null;
         }
-        const data = await response.json();
-        if (!Array.isArray(data) || !data[0]?.lat || !data[0]?.lon) {
+        const google = (window as any).google;
+        const request: any = {
+          input: value,
+          region: 'pl',
+          location: new google.maps.LatLng(GDANSK_BIAS.lat, GDANSK_BIAS.lon),
+          radius: GDANSK_RADIUS_METERS,
+          sessionToken: sessionTokenRef.current ?? undefined,
+        };
+        const prediction = await new Promise<any | null>((resolve) => {
+          services.autocomplete.getPlacePredictions(request, (items: any[], status: any) => {
+            if (status !== google.maps.places.PlacesServiceStatus.OK || !Array.isArray(items) || items.length === 0) {
+              resolve(null);
+              return;
+            }
+            resolve(items[0]);
+          });
+        });
+        if (!prediction?.place_id) {
           geocodeCache.current.set(key, null);
           return null;
         }
-        const point = { lat: Number(data[0].lat), lon: Number(data[0].lon) };
-        if (!Number.isFinite(point.lat) || !Number.isFinite(point.lon)) {
+        const point = await retrievePlacePoint(prediction.place_id);
+        if (!point) {
           geocodeCache.current.set(key, null);
           return null;
         }
@@ -563,19 +645,37 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
         if (routeDistanceCache.current.has(key)) {
           return routeDistanceCache.current.get(key);
         }
-        const url = new URL('https://router.project-osrm.org/route/v1/driving');
-        url.pathname += `/${from.lon},${from.lat};${to.lon},${to.lat}`;
-        url.searchParams.set('overview', 'false');
-        url.searchParams.set('alternatives', 'false');
-        url.searchParams.set('steps', 'false');
-        const response = await fetch(url.toString(), { signal: controller.signal });
-        if (!response.ok) {
+        const services = ensureGoogleServices();
+        if (!services) {
           routeDistanceCache.current.set(key, null);
           return null;
         }
-        const data = await response.json().catch(() => null);
-        const meters = data?.routes?.[0]?.distance;
-        if (typeof meters !== 'number' || !Number.isFinite(meters)) {
+        const google = (window as any).google;
+        const origin = new google.maps.LatLng(from.lat, from.lon);
+        const destination = new google.maps.LatLng(to.lat, to.lon);
+        const meters = await new Promise<number | null>((resolve) => {
+          services.directions.route(
+            {
+              origin,
+              destination,
+              travelMode: google.maps.TravelMode.DRIVING,
+              provideRouteAlternatives: false,
+            },
+            (result: any, status: any) => {
+              if (status !== google.maps.DirectionsStatus.OK) {
+                resolve(null);
+                return;
+              }
+              const value = result?.routes?.[0]?.legs?.[0]?.distance?.value;
+              if (typeof value !== 'number' || !Number.isFinite(value)) {
+                resolve(null);
+                return;
+              }
+              resolve(value);
+            },
+          );
+        });
+        if (meters === null) {
           routeDistanceCache.current.set(key, null);
           return null;
         }
@@ -598,11 +698,13 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
       };
 
       try {
+        const pickupFromPlace = pickupPlaceId ? await retrievePlacePoint(pickupPlaceId) : null;
+        const destinationFromPlace = destinationPlaceId ? await retrievePlacePoint(destinationPlaceId) : null;
         const pickup =
           formData.pickupType === 'airport'
-            ? AIRPORT_COORD
-            : await geocodeAddress(formData.pickupAddress);
-        const destination = await geocodeAddress(formData.destinationAddress);
+            ? (await geocodeAddress(AIRPORT_GEOCODE_QUERY) ?? AIRPORT_COORD)
+            : (pickupFromPlace ?? await geocodeAddress(formData.pickupAddress));
+        const destination = destinationFromPlace ?? await geocodeAddress(formData.destinationAddress);
 
         if (!pickup || !destination) {
           if (!active) return;
@@ -622,9 +724,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
         const isNight = getIsNightRate();
         const routedDistance = await getRouteDistanceKm(pickup, destination);
         const straightDistance = distanceKm(pickup, destination);
-        const distance = straightDistance <= SHORT_ROUTE_STRAIGHT_KM
-          ? straightDistance
-          : (routedDistance ?? straightDistance);
+        const distance = routedDistance ?? straightDistance;
         const pickupInGdansk = isPointInsideGeoJson(pickup, cityPolygons.gdansk);
         const destinationInGdansk = isPointInsideGeoJson(destination, cityPolygons.gdansk);
         const gdanskCenterPickup = getCenterKey(pickup) === 'gdansk';
@@ -634,7 +734,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
 
         if (isAirportRoute && otherPoint) {
           const cityKey = getCenterKey(otherPoint);
-          if (cityKey) {
+          if (cityKey && cityKey === 'gdansk') {
             const price = isNight
               ? FIXED_PRICES[vehicleType][cityKey].night
               : FIXED_PRICES[vehicleType][cityKey].day;
@@ -776,9 +876,12 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
     formData.pickupType,
     formData.pickupAddress,
     formData.destinationAddress,
+    pickupPlaceId,
+    destinationPlaceId,
     formData.passengers,
     formData.date,
     formData.time,
+    googleReady,
     t,
   ]);
 
@@ -954,6 +1057,12 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
     if (name === 'proposedPrice') {
       proposedPriceDirtyRef.current = true;
     }
+    if (name === 'pickupAddress') {
+      setPickupPlaceId(null);
+    }
+    if (name === 'destinationAddress') {
+      setDestinationPlaceId(null);
+    }
     
     // Auto-fill airport address when Airport Pickup is selected
     if (name === 'pickupType' && nextValue === 'airport') {
@@ -962,6 +1071,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
         [name]: nextValue,
         pickupAddress: 'Gdańsk Airport, ul. Słowackiego 200, 80-298 Gdańsk',
       });
+      setPickupPlaceId(null);
     } else if (name === 'pickupType' && nextValue === 'address') {
       // Clear pickup address when switching to Address Pickup
       setFormData({
@@ -971,6 +1081,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
         signService: 'self',
         signText: '',
       });
+      setPickupPlaceId(null);
     } else {
       setFormData({
         ...formData,
@@ -1174,13 +1285,14 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
                 {activeSuggestionField === 'pickup' && pickupSuggestions.length > 0 && formData.pickupType !== 'airport' && (
                   <ul className="mt-2 max-h-56 overflow-auto rounded-lg border border-slate-200 bg-white shadow-lg text-sm">
                     {pickupSuggestions.map((item, index) => (
-                      <li key={`${item.label}-${index}`}>
+                      <li key={`${item.placeId}-${index}`}>
                         <button
                           type="button"
                           className="w-full px-3 py-2 text-left text-slate-700 hover:bg-blue-50"
                           onMouseDown={(event) => {
                             event.preventDefault();
                             setFormData(prev => ({ ...prev, pickupAddress: item.label }));
+                            setPickupPlaceId(item.placeId);
                             setPickupSuggestions([]);
                             setActiveSuggestionField(null);
                           }}
@@ -1223,13 +1335,14 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
                 {activeSuggestionField === 'destination' && destinationSuggestions.length > 0 && (
                   <ul className="mt-2 max-h-56 overflow-auto rounded-lg border border-slate-200 bg-white shadow-lg text-sm">
                     {destinationSuggestions.map((item, index) => (
-                      <li key={`${item.label}-${index}`}>
+                      <li key={`${item.placeId}-${index}`}>
                         <button
                           type="button"
                           className="w-full px-3 py-2 text-left text-slate-700 hover:bg-blue-50"
                           onMouseDown={(event) => {
                             event.preventDefault();
                             setFormData(prev => ({ ...prev, destinationAddress: item.label }));
+                            setDestinationPlaceId(item.placeId);
                             setDestinationSuggestions([]);
                             setActiveSuggestionField(null);
                           }}

@@ -48,7 +48,7 @@ const estimateInsideRatio = (
 };
 
 const getGdanskCityPrice = (distance: number) => {
-  if (distance <= 6) return 50;
+  if (distance <= 5) return 50;
   if (distance <= 10) return 80;
   if (distance <= 15) return 100;
   if (distance <= 20) return 120;
@@ -57,10 +57,13 @@ const getGdanskCityPrice = (distance: number) => {
 };
 
 const getAirportOutsidePrice = (distance: number, isNight: boolean) => {
+  if (distance <= 20) return isNight ? 150 : 120;
+  if (distance <= 30) return isNight ? 250 : 200;
   if (distance <= 45) return isNight ? 350 : 300;
   if (distance <= 50) return isNight ? 600 : 400;
   if (distance <= 55) return isNight ? 700 : 500;
   if (distance <= 80) return isNight ? 800 : 600;
+  if (distance <= 100) return isNight ? 900 : 700;
   return null;
 };
 
@@ -537,7 +540,7 @@ export function PricingCalculator() {
 
         if (isAirportRoute && otherPoint) {
           const cityKey = getCenterKey(otherPoint);
-          if (cityKey) {
+          if (cityKey && cityKey === 'gdansk') {
             const price = isNight
               ? FIXED_PRICES[vehicleType][cityKey].night
               : FIXED_PRICES[vehicleType][cityKey].day;
