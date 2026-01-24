@@ -14,6 +14,14 @@ import { Locale, localeToPath, useI18n } from '../lib/i18n';
 
 const AIRPORT_COORD = { lat: 54.3776, lon: 18.4662 };
 const AIRPORT_RADIUS_KM = 2.5;
+const BANINO_COORD = { lat: 54.3723, lon: 18.3837 };
+const BANINO_RADIUS_KM = 3;
+const ZUKOWO_COORD = { lat: 54.3426, lon: 18.364 };
+const ZUKOWO_RADIUS_KM = 4;
+const GDYNIA_CENTER_COORD = { lat: 54.5189, lon: 18.5305 };
+const GDYNIA_CENTER_RADIUS_KM = 4;
+const SOPOT_CENTER_COORD = { lat: 54.4416, lon: 18.5601 };
+const SOPOT_CENTER_RADIUS_KM = 3;
 const GOOGLE_MAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY as string | undefined;
 const GDANSK_BIAS = { lat: 54.3520, lon: 18.6466 };
 const GDANSK_RADIUS_METERS = 60000;
@@ -26,6 +34,16 @@ const TAXIMETER_RATES = {
 const roundPrice = (value: number, step = 10) => Math.round(value / step) * step;
 const formatDistance = (value: number) => Math.round(value * 10) / 10;
 const normalizeSuggestionQuery = (value: string) => value.trim().replace(/hitlon/gi, 'hilton');
+const getLocationBounds = (center: { lat: number; lon: number }, radiusMeters: number) => {
+  const latDelta = radiusMeters / 111320;
+  const lonDelta = radiusMeters / (111320 * Math.cos((center.lat * Math.PI) / 180));
+  return {
+    north: center.lat + latDelta,
+    south: center.lat - latDelta,
+    east: center.lon + lonDelta,
+    west: center.lon - lonDelta,
+  };
+};
 const estimateInsideRatio = (
   start: { lat: number; lon: number },
   end: { lat: number; lon: number },
@@ -67,6 +85,50 @@ const getAirportOutsidePrice = (distance: number, isNight: boolean) => {
   if (distance <= 80) return isNight ? 800 : 600;
   if (distance <= 100) return isNight ? 900 : 700;
   return null;
+};
+
+const getOutsideShortMinPrice = (distance: number, isNight: boolean) => {
+  if (distance <= 20) return isNight ? 150 : 120;
+  if (distance <= 30) return isNight ? 200 : 150;
+  if (distance <= 40) return isNight ? 250 : 200;
+  return null;
+};
+
+const getPathInsideStats = (
+  path: Array<{ lat: number; lon: number }>,
+  isInside: (point: { lat: number; lon: number }) => boolean,
+) => {
+  if (path.length < 2) {
+    return { totalKm: 0, insideKm: 0, outsideKm: 0, insideRatio: 0 };
+  }
+  const stepKm = 0.25;
+  const maxSubsegments = 50;
+  let totalKm = 0;
+  let insideKm = 0;
+  for (let i = 1; i < path.length; i += 1) {
+    const a = path[i - 1];
+    const b = path[i];
+    const segmentKm = distanceKm(a, b);
+    if (!Number.isFinite(segmentKm) || segmentKm <= 0) {
+      continue;
+    }
+    totalKm += segmentKm;
+    const subsegments = Math.min(maxSubsegments, Math.max(1, Math.ceil(segmentKm / stepKm)));
+    const segmentPart = segmentKm / subsegments;
+    for (let s = 0; s < subsegments; s += 1) {
+      const t0 = s / subsegments;
+      const t1 = (s + 1) / subsegments;
+      const midpoint = {
+        lat: a.lat + (b.lat - a.lat) * ((t0 + t1) / 2),
+        lon: a.lon + (b.lon - a.lon) * ((t0 + t1) / 2),
+      };
+      if (isInside(midpoint)) {
+        insideKm += segmentPart;
+      }
+    }
+  }
+  const insideRatio = totalKm > 0 ? insideKm / totalKm : 0;
+  return { totalKm, insideKm, outsideKm: Math.max(0, totalKm - insideKm), insideRatio };
 };
 
 const validatePhoneNumber = (value: string, messages: { phoneLetters: string; phoneLength: string }) => {
@@ -142,7 +204,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
   const priceInputRef = useRef<HTMLInputElement | null>(null);
   const eurRate = useEurRate();
   const geocodeCache = useRef(new Map<string, { lat: number; lon: number } | null>());
-  const routeDistanceCache = useRef(new Map<string, number | null>());
+  const routeDistanceCache = useRef(new Map<string, { km: number; path?: Array<{ lat: number; lon: number }> } | null>());
   const [formData, setFormData] = useState({
     pickupAddress: '',
     destinationAddress: '',
@@ -199,10 +261,11 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
   const [pickupPlaceId, setPickupPlaceId] = useState<string | null>(null);
   const [destinationPlaceId, setDestinationPlaceId] = useState<string | null>(null);
   const [googleReady, setGoogleReady] = useState(false);
-  const googleServicesRef = useRef<{
-    autocomplete: any;
-    places: any;
-    directions: any;
+  const directionsServiceRef = useRef<any>(null);
+  const placesLibRef = useRef<{
+    AutocompleteSuggestion: any;
+    AutocompleteSessionToken: any;
+    Place: any;
   } | null>(null);
   const sessionTokenRef = useRef<any>(null);
   const signFee = formData.pickupType === 'airport' && formData.signService === 'sign' ? 20 : 0;
@@ -239,7 +302,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
     if (typeof window === 'undefined') {
       return;
     }
-    if ((window as any).google?.maps?.places) {
+    if ((window as any).google?.maps) {
       setGoogleReady(true);
       return;
     }
@@ -249,7 +312,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
       return;
     }
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(GOOGLE_MAPS_KEY)}&libraries=places`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(GOOGLE_MAPS_KEY)}&loading=async&v=weekly`;
     script.async = true;
     script.defer = true;
     script.dataset.googleMaps = 'true';
@@ -257,54 +320,71 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
     document.head.appendChild(script);
   }, []);
 
-  const ensureGoogleServices = () => {
+  const ensureDirectionsService = () => {
     if (!googleReady) {
       return null;
     }
-    if (googleServicesRef.current) {
-      return googleServicesRef.current;
+    if (directionsServiceRef.current) {
+      return directionsServiceRef.current;
     }
     const google = (window as any).google;
-    if (!google?.maps?.places) {
+    if (!google?.maps) {
       return null;
     }
-    const autocomplete = new google.maps.places.AutocompleteService();
-    const dummyDiv = document.createElement('div');
-    const places = new google.maps.places.PlacesService(dummyDiv);
-    const directions = new google.maps.DirectionsService();
-    sessionTokenRef.current = new google.maps.places.AutocompleteSessionToken();
-    googleServicesRef.current = { autocomplete, places, directions };
-    return googleServicesRef.current;
+    directionsServiceRef.current = new google.maps.DirectionsService();
+    return directionsServiceRef.current;
+  };
+
+  const ensurePlacesLibrary = async () => {
+    if (!googleReady) {
+      return null;
+    }
+    const google = (window as any).google;
+    if (!google?.maps?.importLibrary) {
+      return null;
+    }
+    if (placesLibRef.current) {
+      return placesLibRef.current;
+    }
+    const lib = await google.maps.importLibrary('places');
+    placesLibRef.current = lib;
+    return lib;
+  };
+
+  const getSessionToken = async () => {
+    const lib = await ensurePlacesLibrary();
+    if (!lib) {
+      return null;
+    }
+    if (!sessionTokenRef.current) {
+      sessionTokenRef.current = new lib.AutocompleteSessionToken();
+    }
+    return sessionTokenRef.current;
+  };
+
+  const resetSessionToken = () => {
+    sessionTokenRef.current = null;
   };
 
   const retrievePlacePoint = async (placeId: string) => {
-    const services = ensureGoogleServices();
-    if (!services) {
+    const lib = await ensurePlacesLibrary();
+    if (!lib) {
       return null;
     }
-    return new Promise<{ lat: number; lon: number } | null>((resolve) => {
-      services.places.getDetails(
-        {
-          placeId,
-          fields: ['geometry'],
-          sessionToken: sessionTokenRef.current ?? undefined,
-        },
-        (place: any, status: any) => {
-          if (status !== (window as any).google?.maps?.places?.PlacesServiceStatus?.OK) {
-            resolve(null);
-            return;
-          }
-          const location = place?.geometry?.location;
-          const lat = typeof location?.lat === 'function' ? location.lat() : Number(location?.lat);
-          const lon = typeof location?.lng === 'function' ? location.lng() : Number(location?.lng);
-          if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
-            resolve(null);
-            return;
-          }
-          resolve({ lat, lon });
-        },
-      );
-    });
+    try {
+      const place = new lib.Place({ id: placeId });
+      await place.fetchFields({ fields: ['location'] });
+      const location = place.location;
+      const lat = typeof location?.lat === 'function' ? location.lat() : Number(location?.lat);
+      const lon = typeof location?.lng === 'function' ? location.lng() : Number(location?.lng);
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+        return null;
+      }
+      resetSessionToken();
+      return { lat, lon };
+    } catch {
+      return null;
+    }
   };
 
   const scrollToField = (fieldId: string) => {
@@ -447,37 +527,33 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
           setPickupSuggestions([]);
           return;
         }
-        const services = ensureGoogleServices();
-        if (!services) {
+        const lib = await ensurePlacesLibrary();
+        if (!lib) {
           setPickupSuggestions([]);
           return;
         }
-        const google = (window as any).google;
+        const sessionToken = await getSessionToken();
         const request: any = {
           input: query,
           region: 'pl',
-          location: new google.maps.LatLng(GDANSK_BIAS.lat, GDANSK_BIAS.lon),
-          radius: GDANSK_RADIUS_METERS,
-          sessionToken: sessionTokenRef.current ?? undefined,
+          language: locale,
+          locationBias: getLocationBounds(GDANSK_BIAS, GDANSK_RADIUS_METERS),
+          sessionToken: sessionToken ?? undefined,
         };
-        const predictions = await new Promise<any[]>((resolve) => {
-          services.autocomplete.getPlacePredictions(request, (items: any[], status: any) => {
-            if (status !== google.maps.places.PlacesServiceStatus.OK || !Array.isArray(items)) {
-              resolve([]);
-              return;
-            }
-            resolve(items);
-          });
-        });
-        const results = predictions.map((item: any) => {
-          const main = item.structured_formatting?.main_text ?? item.description ?? '';
-          const secondary = item.structured_formatting?.secondary_text ?? '';
-          const label = secondary ? `${main}, ${secondary}` : String(main);
-          return {
-            label,
-            placeId: String(item.place_id ?? ''),
-          };
-        }).filter((item: any) => item.label && item.placeId);
+        const { suggestions } = await lib.AutocompleteSuggestion.fetchAutocompleteSuggestions(request);
+        const results = (Array.isArray(suggestions) ? suggestions : [])
+          .map((suggestion: any) => suggestion.placePrediction)
+          .filter((prediction: any) => prediction?.placeId)
+          .map((prediction: any) => {
+            const label = typeof prediction?.text?.text === 'string'
+              ? prediction.text.text
+              : prediction?.text?.toString?.() ?? '';
+            return {
+              label,
+              placeId: String(prediction.placeId ?? ''),
+            };
+          })
+          .filter((item: any) => item.label && item.placeId);
         if (!active) return;
         setPickupSuggestions(results);
       } catch {
@@ -508,37 +584,33 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
           setDestinationSuggestions([]);
           return;
         }
-        const services = ensureGoogleServices();
-        if (!services) {
+        const lib = await ensurePlacesLibrary();
+        if (!lib) {
           setDestinationSuggestions([]);
           return;
         }
-        const google = (window as any).google;
+        const sessionToken = await getSessionToken();
         const request: any = {
           input: query,
           region: 'pl',
-          location: new google.maps.LatLng(GDANSK_BIAS.lat, GDANSK_BIAS.lon),
-          radius: GDANSK_RADIUS_METERS,
-          sessionToken: sessionTokenRef.current ?? undefined,
+          language: locale,
+          locationBias: getLocationBounds(GDANSK_BIAS, GDANSK_RADIUS_METERS),
+          sessionToken: sessionToken ?? undefined,
         };
-        const predictions = await new Promise<any[]>((resolve) => {
-          services.autocomplete.getPlacePredictions(request, (items: any[], status: any) => {
-            if (status !== google.maps.places.PlacesServiceStatus.OK || !Array.isArray(items)) {
-              resolve([]);
-              return;
-            }
-            resolve(items);
-          });
-        });
-        const results = predictions.map((item: any) => {
-          const main = item.structured_formatting?.main_text ?? item.description ?? '';
-          const secondary = item.structured_formatting?.secondary_text ?? '';
-          const label = secondary ? `${main}, ${secondary}` : String(main);
-          return {
-            label,
-            placeId: String(item.place_id ?? ''),
-          };
-        }).filter((item: any) => item.label && item.placeId);
+        const { suggestions } = await lib.AutocompleteSuggestion.fetchAutocompleteSuggestions(request);
+        const results = (Array.isArray(suggestions) ? suggestions : [])
+          .map((suggestion: any) => suggestion.placePrediction)
+          .filter((prediction: any) => prediction?.placeId)
+          .map((prediction: any) => {
+            const label = typeof prediction?.text?.text === 'string'
+              ? prediction.text.text
+              : prediction?.text?.toString?.() ?? '';
+            return {
+              label,
+              placeId: String(prediction.placeId ?? ''),
+            };
+          })
+          .filter((item: any) => item.label && item.placeId);
         if (!active) return;
         setDestinationSuggestions(results);
       } catch {
@@ -602,42 +674,43 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
         if (geocodeCache.current.has(key)) {
           return geocodeCache.current.get(key) ?? null;
         }
-        const services = ensureGoogleServices();
-        if (!services) {
+        const lib = await ensurePlacesLibrary();
+        if (!lib) {
           geocodeCache.current.set(key, null);
           return null;
         }
-        const google = (window as any).google;
+        const sessionToken = await getSessionToken();
         const request: any = {
           input: value,
           region: 'pl',
-          location: new google.maps.LatLng(GDANSK_BIAS.lat, GDANSK_BIAS.lon),
-          radius: GDANSK_RADIUS_METERS,
-          sessionToken: sessionTokenRef.current ?? undefined,
+          language: locale,
+          locationBias: getLocationBounds(GDANSK_BIAS, GDANSK_RADIUS_METERS),
+          sessionToken: sessionToken ?? undefined,
         };
-        const prediction = await new Promise<any | null>((resolve) => {
-          services.autocomplete.getPlacePredictions(request, (items: any[], status: any) => {
-            if (status !== google.maps.places.PlacesServiceStatus.OK || !Array.isArray(items) || items.length === 0) {
-              resolve(null);
-              return;
-            }
-            resolve(items[0]);
-          });
-        });
-        if (!prediction?.place_id) {
+        const { suggestions } = await lib.AutocompleteSuggestion.fetchAutocompleteSuggestions(request);
+        const prediction = Array.isArray(suggestions)
+          ? suggestions[0]?.placePrediction
+          : null;
+        if (!prediction?.placeId) {
           geocodeCache.current.set(key, null);
           return null;
         }
-        const point = await retrievePlacePoint(prediction.place_id);
+        const place = prediction.toPlace ? prediction.toPlace() : new lib.Place({ id: prediction.placeId });
+        await place.fetchFields({ fields: ['location'] });
+        const location = place.location;
+        const lat = typeof location?.lat === 'function' ? location.lat() : Number(location?.lat);
+        const lon = typeof location?.lng === 'function' ? location.lng() : Number(location?.lng);
+        const point = Number.isFinite(lat) && Number.isFinite(lon) ? { lat, lon } : null;
         if (!point) {
           geocodeCache.current.set(key, null);
           return null;
         }
+        resetSessionToken();
         geocodeCache.current.set(key, point);
         return point;
       };
 
-      const getRouteDistanceKm = async (
+      const getRouteInfo = async (
         from: { lat: number; lon: number },
         to: { lat: number; lon: number },
       ) => {
@@ -645,16 +718,16 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
         if (routeDistanceCache.current.has(key)) {
           return routeDistanceCache.current.get(key);
         }
-        const services = ensureGoogleServices();
-        if (!services) {
+        const directions = ensureDirectionsService();
+        if (!directions) {
           routeDistanceCache.current.set(key, null);
           return null;
         }
         const google = (window as any).google;
         const origin = new google.maps.LatLng(from.lat, from.lon);
         const destination = new google.maps.LatLng(to.lat, to.lon);
-        const meters = await new Promise<number | null>((resolve) => {
-          services.directions.route(
+        const resultInfo = await new Promise<{ distance: number | null; path?: Array<{ lat: number; lon: number }> }>((resolve) => {
+          directions.route(
             {
               origin,
               destination,
@@ -663,29 +736,43 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
             },
             (result: any, status: any) => {
               if (status !== google.maps.DirectionsStatus.OK) {
-                resolve(null);
+                resolve({ distance: null });
                 return;
               }
               const value = result?.routes?.[0]?.legs?.[0]?.distance?.value;
               if (typeof value !== 'number' || !Number.isFinite(value)) {
-                resolve(null);
+                resolve({ distance: null });
                 return;
               }
-              resolve(value);
+              const overviewPath = result?.routes?.[0]?.overview_path;
+              const path = Array.isArray(overviewPath)
+                ? overviewPath
+                  .map((point: any) => ({
+                    lat: typeof point?.lat === 'function' ? point.lat() : Number(point?.lat),
+                    lon: typeof point?.lng === 'function' ? point.lng() : Number(point?.lng),
+                  }))
+                  .filter((point: any) => Number.isFinite(point.lat) && Number.isFinite(point.lon))
+                : undefined;
+              resolve({ distance: value, path: path && path.length > 1 ? path : undefined });
             },
           );
         });
-        if (meters === null) {
+        if (resultInfo.distance === null) {
           routeDistanceCache.current.set(key, null);
           return null;
         }
-        const km = meters / 1000;
-        routeDistanceCache.current.set(key, km);
-        return km;
+        const km = resultInfo.distance / 1000;
+        const info = { km, path: resultInfo.path };
+        routeDistanceCache.current.set(key, info);
+        return info;
       };
 
       const isAirportPoint = (point: { lat: number; lon: number }) =>
         distanceKm(point, AIRPORT_COORD) <= AIRPORT_RADIUS_KM;
+      const isBaninoPoint = (point: { lat: number; lon: number }) =>
+        distanceKm(point, BANINO_COORD) <= BANINO_RADIUS_KM;
+      const isZukowoPoint = (point: { lat: number; lon: number }) =>
+        distanceKm(point, ZUKOWO_COORD) <= ZUKOWO_RADIUS_KM;
 
       const getCenterKey = (point: { lat: number; lon: number }) => {
         const entries = Object.entries(centerPolygons) as Array<[FixedCityKey, typeof centerPolygons.gdansk]>;
@@ -722,9 +809,17 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
         const vehicleType = passengersNumber >= 5 ? 'bus' : 'standard';
         const busMultiplier = vehicleType === 'bus' ? 1.5 : 1;
         const isNight = getIsNightRate();
-        const routedDistance = await getRouteDistanceKm(pickup, destination);
+        let routedInfo: { km: number; path?: Array<{ lat: number; lon: number }> } | null = null;
+        try {
+          routedInfo = await getRouteInfo(pickup, destination);
+        } catch (err) {
+          if (import.meta.env.DEV) {
+            console.error('QuoteForm: route distance failed', err);
+          }
+          routedInfo = null;
+        }
         const straightDistance = distanceKm(pickup, destination);
-        const distance = routedDistance ?? straightDistance;
+        const distance = routedInfo?.km ?? straightDistance;
         const pickupInGdansk = isPointInsideGeoJson(pickup, cityPolygons.gdansk);
         const destinationInGdansk = isPointInsideGeoJson(destination, cityPolygons.gdansk);
         const gdanskCenterPickup = getCenterKey(pickup) === 'gdansk';
@@ -733,8 +828,15 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
         if (!active) return;
 
         if (isAirportRoute && otherPoint) {
-          const cityKey = getCenterKey(otherPoint);
-          if (cityKey && cityKey === 'gdansk') {
+          let cityKey = getCenterKey(otherPoint);
+          if (!cityKey) {
+            if (distanceKm(otherPoint, GDYNIA_CENTER_COORD) <= GDYNIA_CENTER_RADIUS_KM) {
+              cityKey = 'gdynia';
+            } else if (distanceKm(otherPoint, SOPOT_CENTER_COORD) <= SOPOT_CENTER_RADIUS_KM) {
+              cityKey = 'sopot';
+            }
+          }
+          if (cityKey) {
             const price = isNight
               ? FIXED_PRICES[vehicleType][cityKey].night
               : FIXED_PRICES[vehicleType][cityKey].day;
@@ -760,6 +862,38 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
             setFixedRouteChecking(false);
             return;
           }
+        }
+
+        if (isAirportRoute && otherPoint && isBaninoPoint(otherPoint)) {
+          const routeLabel = t.quoteForm.fixedRouteDistance(formatDistance(distance));
+          setFixedRoute({
+            vehicleType,
+            price: Math.round(120 * busMultiplier),
+            isNight: false,
+            rateLabel: t.quoteForm.fixedRouteAllDay,
+            routeLabel,
+            routeFrom: pickupIsAirport ? t.pricing.routes.airport : formData.pickupAddress,
+            routeTo: pickupIsAirport ? formData.destinationAddress : t.pricing.routes.airport,
+          });
+          setLongRouteInfo(null);
+          setFixedRouteChecking(false);
+          return;
+        }
+
+        if (isAirportRoute && otherPoint && isZukowoPoint(otherPoint)) {
+          const routeLabel = t.quoteForm.fixedRouteDistance(formatDistance(distance));
+          setFixedRoute({
+            vehicleType,
+            price: Math.round(150 * busMultiplier),
+            isNight: false,
+            rateLabel: t.quoteForm.fixedRouteAllDay,
+            routeLabel,
+            routeFrom: pickupIsAirport ? t.pricing.routes.airport : formData.pickupAddress,
+            routeTo: pickupIsAirport ? formData.destinationAddress : t.pricing.routes.airport,
+          });
+          setLongRouteInfo(null);
+          setFixedRouteChecking(false);
+          return;
         }
 
         if (isAirportRoute && otherPoint && isPointInsideGeoJson(otherPoint, cityPolygons.gdansk) && getCenterKey(otherPoint) !== 'gdansk') {
@@ -806,61 +940,60 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
           return;
         }
 
-        if (isAirportRoute && otherPoint && !isPointInsideGeoJson(otherPoint, cityPolygons.gdansk)) {
-          const airportOutsidePrice = getAirportOutsidePrice(distance, isNight);
-          if (airportOutsidePrice) {
-            const routeLabel = t.quoteForm.fixedRouteDistance(formatDistance(distance));
-            setFixedRoute({
-              vehicleType,
-              price: Math.round(airportOutsidePrice * busMultiplier),
-              isNight,
-              routeLabel,
-              routeFrom: pickupIsAirport ? t.pricing.routes.airport : formData.pickupAddress,
-              routeTo: pickupIsAirport ? formData.destinationAddress : t.pricing.routes.airport,
-            });
-            setLongRouteInfo(null);
-            setFixedRouteChecking(false);
-            return;
-          }
-        }
-
-        if (distance > 100) {
-          const gdanskRate = isNight ? TAXIMETER_RATES.gdansk.night : TAXIMETER_RATES.gdansk.day;
-          const outsideRate = isNight ? TAXIMETER_RATES.outside.night : TAXIMETER_RATES.outside.day;
-          const insideRatio = estimateInsideRatio(
+        const gdanskRate = isNight ? TAXIMETER_RATES.gdansk.night : TAXIMETER_RATES.gdansk.day;
+        const outsideRate = isNight ? TAXIMETER_RATES.outside.night : TAXIMETER_RATES.outside.day;
+        const pathStats = routedInfo?.path
+          ? getPathInsideStats(routedInfo.path, (point) => isPointInsideGeoJson(point, cityPolygons.gdansk))
+          : null;
+        const insideRatio = pathStats
+          ? pathStats.insideRatio
+          : estimateInsideRatio(
             pickup,
             destination,
             (point) => isPointInsideGeoJson(point, cityPolygons.gdansk),
           );
-          const gdanskDistance = distance * insideRatio;
-          const outsideDistance = Math.max(0, distance - gdanskDistance);
-          const taximeterPrice = roundPrice(
-            ((gdanskDistance * gdanskRate) + (outsideDistance * outsideRate)) * busMultiplier,
-            10,
-          );
-          const taximeterRate = distance > 0 ? Math.round((taximeterPrice / distance) * 100) / 100 : gdanskRate;
-          const proposedPrice = roundPrice(distance * 2 * 3 * busMultiplier, 10);
-          const savingsPercent = taximeterPrice > 0
-            ? Math.max(0, Math.round((1 - proposedPrice / taximeterPrice) * 100))
-            : 0;
-
-          setFixedRoute(null);
-          setLongRouteInfo({
-            distanceKm: formatDistance(distance),
-            taximeterRate,
-            taximeterPrice,
-            proposedPrice,
-            savingsPercent,
-          });
-          setFixedRouteChecking(false);
-          return;
-        }
+        const gdanskDistance = pathStats ? pathStats.insideKm : distance * insideRatio;
+        const outsideDistance = pathStats ? pathStats.outsideKm : Math.max(0, distance - gdanskDistance);
+        const taximeterPrice = roundPrice(
+          ((gdanskDistance * gdanskRate) + (outsideDistance * outsideRate)) * busMultiplier,
+          10,
+        );
+        const taximeterRate = distance > 0 ? Math.round((taximeterPrice / distance) * 100) / 100 : gdanskRate;
+        const proposedBase = distance > 100
+          ? distance * 2 * (isNight ? 4 : 3) * busMultiplier
+          : taximeterPrice * 0.9;
+        const touchesGdynia = centerPolygons.gdynia
+          ? (
+            isPointInsideGeoJson(pickup, centerPolygons.gdynia)
+            || isPointInsideGeoJson(destination, centerPolygons.gdynia)
+          )
+          : false;
+        const baseMinPrice = 120 * busMultiplier;
+        const nightMinPrice = touchesGdynia ? 150 * busMultiplier : baseMinPrice;
+        const outsideGdanskRoute = !(pickupInGdansk && destinationInGdansk);
+        const outsideMinBase = outsideGdanskRoute ? getOutsideShortMinPrice(distance, isNight) : null;
+        const outsideMinPrice = outsideMinBase ? outsideMinBase * busMultiplier : 0;
+        const minPrice = Math.max(isNight ? nightMinPrice : baseMinPrice, outsideMinPrice);
+        const proposedPrice = roundPrice(Math.max(proposedBase, minPrice), 10);
+        const savingsPercent = taximeterPrice > 0
+          ? Math.max(0, Math.round((1 - proposedPrice / taximeterPrice) * 100))
+          : 0;
 
         setFixedRoute(null);
-        setLongRouteInfo(null);
+        setLongRouteInfo({
+          distanceKm: formatDistance(distance),
+          taximeterRate,
+          taximeterPrice,
+          proposedPrice,
+          savingsPercent,
+        });
         setFixedRouteChecking(false);
-      } catch {
+        return;
+      } catch (err) {
         if (!active) return;
+        if (import.meta.env.DEV) {
+          console.error('QuoteForm: calculation failed', err);
+        }
         setFixedRoute(null);
         setLongRouteInfo(null);
         setFixedRouteChecking(false);
@@ -1396,9 +1529,11 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
                     {t.quoteForm.longRouteDistance(longRouteInfo.distanceKm)}
                   </div>
                   <div className="mt-3 space-y-1 text-sm text-slate-700">
-                    <div>
-                      {t.quoteForm.longRouteTaximeter(longRouteInfo.taximeterPrice, longRouteInfo.taximeterRate)}
-                    </div>
+                    {longRouteInfo.proposedPrice <= longRouteInfo.taximeterPrice && (
+                      <div>
+                        {t.quoteForm.longRouteTaximeter(longRouteInfo.taximeterPrice, longRouteInfo.taximeterRate)}
+                      </div>
+                    )}
                     <div>
                       {t.quoteForm.longRouteProposed(longRouteInfo.proposedPrice)}
                     </div>
