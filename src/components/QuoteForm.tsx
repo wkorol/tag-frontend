@@ -1533,9 +1533,11 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
                     <div>
                       {t.quoteForm.longRouteProposed(longRouteInfo.proposedPrice)}
                     </div>
-                    <div>
-                      {t.quoteForm.longRouteSavings(longRouteInfo.savingsPercent)}
-                    </div>
+                    {longRouteInfo.savingsPercent > 0 && (
+                      <div>
+                        {t.quoteForm.longRouteSavings(longRouteInfo.savingsPercent)}
+                      </div>
+                    )}
                   </div>
                   <div className="mt-2 text-xs text-slate-600">{t.quoteForm.longRouteNote}</div>
                 </div>

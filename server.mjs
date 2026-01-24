@@ -2,7 +2,7 @@ import { createServer } from 'node:http';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { buildNoscript, buildSeoTags, getHtmlLang, locales, routeSlugs } from './seo-data.mjs';
+import { buildNoscript, buildSeoTags, getHtmlLang, locales, routeSlugs, countryAirportSlugsByLocale, cityRouteSlugsByLocale } from './seo-data.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,6 +32,26 @@ const contentTypes = {
 
 const templatePath = path.join(clientDir, 'index.html');
 let template = await fs.readFile(templatePath, 'utf-8');
+
+const applyAsyncStyles = (html) =>
+  html.replace(/<link\s+([^>]*?)rel=["']stylesheet["']([^>]*)>/gi, (match, pre, post) => {
+    const attrs = `${pre} ${post}`.trim().replace(/\s+/g, ' ');
+    const hrefMatch = attrs.match(/href=["']([^"']+)["']/i);
+    if (!hrefMatch) {
+      return match;
+    }
+    const href = hrefMatch[1];
+    const cleaned = attrs
+      .replace(/\s*rel=["']stylesheet["']\s*/i, ' ')
+      .replace(/\s*href=["'][^"']+["']\s*/i, ' ')
+      .trim();
+    const extra = cleaned ? ` ${cleaned}` : '';
+    const preload = `<link rel="preload" as="style" href="${href}"${extra} onload="this.onload=null;this.rel='stylesheet'">`;
+    const noscript = `<noscript><link rel="stylesheet" href="${href}"${extra}></noscript>`;
+    return `${preload}\n${noscript}`;
+  });
+
+template = applyAsyncStyles(template);
 let render;
 for (const candidate of ssrEntryCandidates) {
   try {
@@ -66,9 +86,12 @@ const applyHtmlLang = (html, urlPath) =>
 const localeRoots = new Set(locales.map((locale) => `/${locale}`));
 const localeRootsWithSlash = new Set(locales.map((locale) => `/${locale}/`));
 const localizedRouteSet = new Set(
-  locales.flatMap((locale) =>
-    Object.values(routeSlugs[locale]).map((slug) => `/${locale}/${slug}`)
-  )
+  locales.flatMap((locale) => {
+    const baseSlugs = Object.values(routeSlugs[locale]).map((slug) => `/${locale}/${slug}`);
+    const airportSlugs = (countryAirportSlugsByLocale[locale] ?? []).map((slug) => `/${locale}/${slug}`);
+    const cityRouteSlugs = (cityRouteSlugsByLocale[locale] ?? []).map((slug) => `/${locale}/${slug}`);
+    return [...baseSlugs, ...airportSlugs, ...cityRouteSlugs];
+  })
 );
 
 const buildPath = (locale, routeKey) => `/${locale}/${routeSlugs[locale][routeKey]}`;
@@ -157,11 +180,7 @@ const server = createServer(async (req, res) => {
     return;
   }
 
-  if (!isKnownPath(urlPath)) {
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
-    res.end('Not found');
-    return;
-  }
+  const isNotFound = !isKnownPath(urlPath);
 
   try {
     const appHtml = render(urlPath);
@@ -170,7 +189,7 @@ const server = createServer(async (req, res) => {
       `<div id="root">${appHtml}</div>`
     );
     const finalHtml = applyHtmlLang(applyNoscript(applySeo(html, urlPath), urlPath), urlPath);
-    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.writeHead(isNotFound ? 404 : 200, { 'Content-Type': 'text/html' });
     res.end(finalHtml);
   } catch {
     res.writeHead(500);

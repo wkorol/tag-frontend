@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Calculator, MapPin, Navigation, X } from 'lucide-react';
 import { centerPolygons } from '../lib/centerPolygons';
 import { cityPolygons } from '../lib/cityPolygons';
@@ -183,6 +184,7 @@ type DebugInfo = {
 
 export function PricingCalculator() {
   const { t, locale } = useI18n();
+  const location = useLocation();
   const eurRate = useEurRate();
   const taximeterDayLabel = t.pricingCalculator.dayRateLabel;
   const guaranteedDayLabel = () => t.pricingCalculator.dayRateLabel;
@@ -208,6 +210,35 @@ export function PricingCalculator() {
     Place: any;
   } | null>(null);
   const sessionTokenRef = useRef<any>(null);
+  const prefillSearchRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!location.search) {
+      return;
+    }
+    if (prefillSearchRef.current === location.search) {
+      return;
+    }
+    prefillSearchRef.current = location.search;
+    const params = new URLSearchParams(location.search);
+    const to = params.get('to');
+    const from = params.get('from');
+    if (from === 'airport') {
+      setPickupMode('airport');
+      setPickupAddress(airportAddress);
+      setPickupPoint(null);
+      setPickupSuggestions([]);
+    }
+    if (from === 'custom') {
+      setPickupMode('custom');
+    }
+    if (to) {
+      setDestinationMode('custom');
+      setDestinationAddress(to);
+      setDestinationPoint(null);
+      setDestinationSuggestions([]);
+    }
+  }, [location.search, airportAddress]);
 
   useEffect(() => {
     if (!GOOGLE_MAPS_KEY) {
@@ -458,6 +489,11 @@ export function PricingCalculator() {
       setIsChecking(false);
       return;
     }
+    if (GOOGLE_MAPS_KEY && !googleReady) {
+      setIsChecking(false);
+      setError(null);
+      return;
+    }
 
     let active = true;
     const controller = new AbortController();
@@ -473,12 +509,10 @@ export function PricingCalculator() {
           return geocodeCache.current.get(key) ?? null;
         }
         if (!GOOGLE_MAPS_KEY) {
-          geocodeCache.current.set(key, null);
           return null;
         }
         const lib = await ensurePlacesLibrary();
         if (!lib) {
-          geocodeCache.current.set(key, null);
           return null;
         }
         const sessionToken = await getSessionToken();
@@ -825,7 +859,7 @@ export function PricingCalculator() {
       controller.abort();
       window.clearTimeout(timer);
     };
-  }, [pickupAddress, destinationAddress, pickupPoint, destinationPoint, locale, t]);
+  }, [pickupAddress, destinationAddress, pickupPoint, destinationPoint, locale, t, googleReady]);
 
   const renderPrice = (value: number) => {
     const eur = formatEur(value, eurRate);

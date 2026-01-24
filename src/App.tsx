@@ -9,6 +9,11 @@ import { CookieBanner } from './components/CookieBanner';
 import { FloatingActions } from './components/FloatingActions';
 import { CookiesPage } from './pages/CookiesPage';
 import { PrivacyPage } from './pages/PrivacyPage';
+import { NotFoundPage } from './pages/NotFoundPage';
+import { CountryLanding } from './pages/CountryLanding';
+import { CountryAirportLanding } from './pages/CountryAirportLanding';
+import { CityRouteLanding } from './pages/CityRouteLanding';
+import { TaxiGdanskPage } from './pages/TaxiGdanskPage';
 import { TrustSection } from './components/TrustSection';
 const OrderForm = lazy(() => import('./components/OrderForm').then((mod) => ({ default: mod.OrderForm })));
 const QuoteForm = lazy(() => import('./components/QuoteForm').then((mod) => ({ default: mod.QuoteForm })));
@@ -23,6 +28,18 @@ import { trackFormOpen, trackPageView, trackSectionView, trackVehicleSelect } fr
 import { consumeScrollTarget, scrollToId } from './lib/scroll';
 import { getRouteSlug, PublicRouteKey } from './lib/routes';
 import { Locale, localeToPath, localeToRootPath, useI18n } from './lib/i18n';
+import { getCountryAirports } from './lib/countryAirports';
+import { getCityRoutes } from './lib/cityRoutes';
+
+const renderCountryAirportRoutes = (locale: Locale) =>
+  getCountryAirports(locale).map((airport) => (
+    <Route key={airport.slug} path={airport.slug} element={<CountryAirportLanding />} />
+  ));
+
+const renderCityRouteRoutes = (locale: Locale) =>
+  getCityRoutes(locale).map((route) => (
+    <Route key={route.slug} path={route.slug} element={<CityRouteLanding />} />
+  ));
 
 function Landing() {
   const { t } = useI18n();
@@ -188,6 +205,9 @@ export default function App() {
             <Route path="admin/orders/:id" element={<AdminOrderPage />} />
             <Route path={getRouteSlug('en', 'cookies')} element={<CookiesPage />} />
             <Route path={getRouteSlug('en', 'privacy')} element={<PrivacyPage />} />
+            <Route path={getRouteSlug('en', 'countryLanding')} element={<CountryLanding />} />
+            <Route path={getRouteSlug('en', 'taxiGdanskCity')} element={<TaxiGdanskPage />} />
+            {renderCountryAirportRoutes('en')}
             <Route
               path={getRouteSlug('en', 'airportTaxi')}
               element={
@@ -224,6 +244,7 @@ export default function App() {
                 />
               }
             />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
           <Route path="/de" element={<LocalizedShell locale="de" />}>
             <Route index element={<Landing />} />
@@ -236,6 +257,9 @@ export default function App() {
             <Route path="admin/orders/:id" element={<AdminOrderPage />} />
             <Route path={getRouteSlug('de', 'cookies')} element={<CookiesPage />} />
             <Route path={getRouteSlug('de', 'privacy')} element={<PrivacyPage />} />
+            <Route path={getRouteSlug('de', 'countryLanding')} element={<CountryLanding />} />
+            <Route path={getRouteSlug('de', 'taxiGdanskCity')} element={<TaxiGdanskPage />} />
+            {renderCountryAirportRoutes('de')}
             <Route
               path={getRouteSlug('de', 'airportTaxi')}
               element={
@@ -272,6 +296,7 @@ export default function App() {
                 />
               }
             />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
           <Route path="/fi" element={<LocalizedShell locale="fi" />}>
             <Route index element={<Landing />} />
@@ -284,6 +309,9 @@ export default function App() {
             <Route path="admin/orders/:id" element={<AdminOrderPage />} />
             <Route path={getRouteSlug('fi', 'cookies')} element={<CookiesPage />} />
             <Route path={getRouteSlug('fi', 'privacy')} element={<PrivacyPage />} />
+            <Route path={getRouteSlug('fi', 'countryLanding')} element={<CountryLanding />} />
+            <Route path={getRouteSlug('fi', 'taxiGdanskCity')} element={<TaxiGdanskPage />} />
+            {renderCountryAirportRoutes('fi')}
             <Route
               path={getRouteSlug('fi', 'airportTaxi')}
               element={
@@ -320,6 +348,7 @@ export default function App() {
                 />
               }
             />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
           <Route path="/no" element={<LocalizedShell locale="no" />}>
             <Route index element={<Landing />} />
@@ -332,6 +361,9 @@ export default function App() {
             <Route path="admin/orders/:id" element={<AdminOrderPage />} />
             <Route path={getRouteSlug('no', 'cookies')} element={<CookiesPage />} />
             <Route path={getRouteSlug('no', 'privacy')} element={<PrivacyPage />} />
+            <Route path={getRouteSlug('no', 'countryLanding')} element={<CountryLanding />} />
+            <Route path={getRouteSlug('no', 'taxiGdanskCity')} element={<TaxiGdanskPage />} />
+            {renderCountryAirportRoutes('no')}
             <Route
               path={getRouteSlug('no', 'airportTaxi')}
               element={
@@ -368,6 +400,7 @@ export default function App() {
                 />
               }
             />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
           <Route path="/sv" element={<LocalizedShell locale="sv" />}>
             <Route index element={<Landing />} />
@@ -380,6 +413,9 @@ export default function App() {
             <Route path="admin/orders/:id" element={<AdminOrderPage />} />
             <Route path={getRouteSlug('sv', 'cookies')} element={<CookiesPage />} />
             <Route path={getRouteSlug('sv', 'privacy')} element={<PrivacyPage />} />
+            <Route path={getRouteSlug('sv', 'countryLanding')} element={<CountryLanding />} />
+            <Route path={getRouteSlug('sv', 'taxiGdanskCity')} element={<TaxiGdanskPage />} />
+            {renderCountryAirportRoutes('sv')}
             <Route
               path={getRouteSlug('sv', 'airportTaxi')}
               element={
@@ -416,6 +452,7 @@ export default function App() {
                 />
               }
             />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
           <Route path="/da" element={<LocalizedShell locale="da" />}>
             <Route index element={<Landing />} />
@@ -428,6 +465,9 @@ export default function App() {
             <Route path="admin/orders/:id" element={<AdminOrderPage />} />
             <Route path={getRouteSlug('da', 'cookies')} element={<CookiesPage />} />
             <Route path={getRouteSlug('da', 'privacy')} element={<PrivacyPage />} />
+            <Route path={getRouteSlug('da', 'countryLanding')} element={<CountryLanding />} />
+            <Route path={getRouteSlug('da', 'taxiGdanskCity')} element={<TaxiGdanskPage />} />
+            {renderCountryAirportRoutes('da')}
             <Route
               path={getRouteSlug('da', 'airportTaxi')}
               element={
@@ -464,6 +504,7 @@ export default function App() {
                 />
               }
             />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
           <Route path="/pl" element={<LocalizedShell locale="pl" />}>
             <Route index element={<Landing />} />
@@ -476,6 +517,10 @@ export default function App() {
             <Route path="admin/orders/:id" element={<AdminOrderPage />} />
             <Route path={getRouteSlug('pl', 'cookies')} element={<CookiesPage />} />
             <Route path={getRouteSlug('pl', 'privacy')} element={<PrivacyPage />} />
+            <Route path={getRouteSlug('pl', 'countryLanding')} element={<CountryLanding />} />
+            <Route path={getRouteSlug('pl', 'taxiGdanskCity')} element={<TaxiGdanskPage />} />
+            {renderCountryAirportRoutes('pl')}
+            {renderCityRouteRoutes('pl')}
             <Route
               path={getRouteSlug('pl', 'airportTaxi')}
               element={
@@ -532,6 +577,7 @@ export default function App() {
               path="privacy"
               element={<LegacyRedirectToRoute routeKey="privacy" />}
             />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
           <Route path="/cookies" element={<LegacyRedirectToRoute routeKey="cookies" />} />
           <Route path="/privacy" element={<LegacyRedirectToRoute routeKey="privacy" />} />
@@ -546,6 +592,7 @@ export default function App() {
           <Route path="/lotnisko-gdansk-gdynia" element={<LegacyRedirectToRoute routeKey="airportGdynia" />} />
           <Route path="/polityka-cookies" element={<LegacyRedirectToRoute routeKey="cookies" />} />
           <Route path="/polityka-prywatnosci" element={<LegacyRedirectToRoute routeKey="privacy" />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
       <CookieBanner />

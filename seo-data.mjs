@@ -9,11 +9,23 @@ export const site = {
 
 export const locales = ['en', 'pl', 'de', 'fi', 'no', 'sv', 'da'];
 
+const localeHreflangMap = {
+  en: ['en', 'en-GB'],
+  pl: ['pl', 'pl-PL'],
+  de: ['de', 'de-DE'],
+  fi: ['fi', 'fi-FI'],
+  no: ['no', 'nb-NO'],
+  sv: ['sv', 'sv-SE'],
+  da: ['da', 'da-DK'],
+};
+
 export const routeSlugs = {
   en: {
     airportTaxi: 'gdansk-airport-taxi',
     airportSopot: 'gdansk-airport-to-sopot',
     airportGdynia: 'gdansk-airport-to-gdynia',
+    countryLanding: 'gdansk-airport-transfer-uk',
+    taxiGdanskCity: 'taxi-gdansk',
     orderAirportGdansk: 'book-gdansk-airport-transfer',
     orderAirportSopot: 'book-gdansk-airport-sopot',
     orderAirportGdynia: 'book-gdansk-airport-gdynia',
@@ -26,6 +38,8 @@ export const routeSlugs = {
     airportTaxi: 'taxi-lotnisko-gdansk',
     airportSopot: 'lotnisko-gdansk-sopot',
     airportGdynia: 'lotnisko-gdansk-gdynia',
+    countryLanding: 'transfer-lotnisko-gdansk',
+    taxiGdanskCity: 'taxi-gdansk',
     orderAirportGdansk: 'rezerwacja-lotnisko-gdansk',
     orderAirportSopot: 'rezerwacja-lotnisko-gdansk-sopot',
     orderAirportGdynia: 'rezerwacja-lotnisko-gdansk-gdynia',
@@ -38,6 +52,8 @@ export const routeSlugs = {
     airportTaxi: 'gdansk-flughafen-taxi',
     airportSopot: 'gdansk-flughafen-sopot',
     airportGdynia: 'gdansk-flughafen-gdynia',
+    countryLanding: 'gdansk-airport-transfer-deutschland',
+    taxiGdanskCity: 'taxi-gdansk',
     orderAirportGdansk: 'buchung-gdansk-flughafen',
     orderAirportSopot: 'buchung-gdansk-flughafen-sopot',
     orderAirportGdynia: 'buchung-gdansk-flughafen-gdynia',
@@ -50,6 +66,8 @@ export const routeSlugs = {
     airportTaxi: 'gdansk-lentokentta-taksi',
     airportSopot: 'gdansk-lentokentta-sopot',
     airportGdynia: 'gdansk-lentokentta-gdynia',
+    countryLanding: 'gdansk-lentokenttakuljetus-suomi',
+    taxiGdanskCity: 'taxi-gdansk',
     orderAirportGdansk: 'varaus-gdansk-lentokentta',
     orderAirportSopot: 'varaus-gdansk-lentokentta-sopot',
     orderAirportGdynia: 'varaus-gdansk-lentokentta-gdynia',
@@ -62,6 +80,8 @@ export const routeSlugs = {
     airportTaxi: 'gdansk-flyplass-taxi',
     airportSopot: 'gdansk-flyplass-sopot',
     airportGdynia: 'gdansk-flyplass-gdynia',
+    countryLanding: 'gdansk-flyplasstransport-norge',
+    taxiGdanskCity: 'taxi-gdansk',
     orderAirportGdansk: 'bestilling-gdansk-flyplass',
     orderAirportSopot: 'bestilling-gdansk-flyplass-sopot',
     orderAirportGdynia: 'bestilling-gdansk-flyplass-gdynia',
@@ -74,6 +94,8 @@ export const routeSlugs = {
     airportTaxi: 'gdansk-flygplats-taxi',
     airportSopot: 'gdansk-flygplats-sopot',
     airportGdynia: 'gdansk-flygplats-gdynia',
+    countryLanding: 'gdansk-flygplatstransfer-sverige',
+    taxiGdanskCity: 'taxi-gdansk',
     orderAirportGdansk: 'bokning-gdansk-flygplats',
     orderAirportSopot: 'bokning-gdansk-flygplats-sopot',
     orderAirportGdynia: 'bokning-gdansk-flygplats-gdynia',
@@ -86,6 +108,8 @@ export const routeSlugs = {
     airportTaxi: 'gdansk-lufthavn-taxa',
     airportSopot: 'gdansk-lufthavn-sopot',
     airportGdynia: 'gdansk-lufthavn-gdynia',
+    countryLanding: 'gdansk-lufthavn-transfer-danmark',
+    taxiGdanskCity: 'taxi-gdansk',
     orderAirportGdansk: 'booking-gdansk-lufthavn',
     orderAirportSopot: 'booking-gdansk-lufthavn-sopot',
     orderAirportGdynia: 'booking-gdansk-lufthavn-gdynia',
@@ -96,6 +120,81 @@ export const routeSlugs = {
   },
 };
 
+const countryAirportRoutes = {
+  en: [
+    { slug: 'gdansk-airport-transfer-aberdeen', city: 'Aberdeen', airport: 'Aberdeen (ABZ)', country: 'United Kingdom' },
+    { slug: 'gdansk-airport-transfer-belfast', city: 'Belfast', airport: 'Belfast (BFS)', country: 'United Kingdom' },
+    { slug: 'gdansk-airport-transfer-bristol', city: 'Bristol', airport: 'Bristol (BRS)', country: 'United Kingdom' },
+    { slug: 'gdansk-airport-transfer-birmingham', city: 'Birmingham', airport: 'Birmingham (BHX)', country: 'United Kingdom' },
+    { slug: 'gdansk-airport-transfer-edinburgh', city: 'Edinburgh', airport: 'Edinburgh (EDI)', country: 'United Kingdom' },
+    { slug: 'gdansk-airport-transfer-leeds-bradford', city: 'Leeds', airport: 'Leeds Bradford (LBA)', country: 'United Kingdom' },
+    { slug: 'gdansk-airport-transfer-liverpool', city: 'Liverpool', airport: 'Liverpool (LPL)', country: 'United Kingdom' },
+    { slug: 'gdansk-airport-transfer-london-luton', city: 'London', airport: 'London Luton (LTN)', country: 'United Kingdom' },
+    { slug: 'gdansk-airport-transfer-london-stansted', city: 'London', airport: 'London Stansted (STN)', country: 'United Kingdom' },
+    { slug: 'gdansk-airport-transfer-manchester', city: 'Manchester', airport: 'Manchester (MAN)', country: 'United Kingdom' },
+  ],
+  de: [
+    { slug: 'gdansk-flughafentransfer-dortmund', city: 'Dortmund', airport: 'Dortmund (DTM)', country: 'Deutschland' },
+    { slug: 'gdansk-flughafentransfer-frankfurt', city: 'Frankfurt', airport: 'Frankfurt (FRA)', country: 'Deutschland' },
+    { slug: 'gdansk-flughafentransfer-hamburg', city: 'Hamburg', airport: 'Hamburg (HAM)', country: 'Deutschland' },
+    { slug: 'gdansk-flughafentransfer-munchen', city: 'München', airport: 'München (MUC)', country: 'Deutschland' },
+  ],
+  no: [
+    { slug: 'gdansk-flyplasstransport-alesund', city: 'Ålesund', airport: 'Ålesund (AES)', country: 'Norge' },
+    { slug: 'gdansk-flyplasstransport-bergen', city: 'Bergen', airport: 'Bergen (BGO)', country: 'Norge' },
+    { slug: 'gdansk-flyplasstransport-haugesund', city: 'Haugesund', airport: 'Haugesund (HAU)', country: 'Norge' },
+    { slug: 'gdansk-flyplasstransport-oslo-gardermoen', city: 'Oslo', airport: 'Oslo Gardermoen (OSL)', country: 'Norge' },
+    { slug: 'gdansk-flyplasstransport-oslo-torp', city: 'Oslo', airport: 'Oslo Torp (TRF)', country: 'Norge' },
+    { slug: 'gdansk-flyplasstransport-stavanger', city: 'Stavanger', airport: 'Stavanger (SVG)', country: 'Norge' },
+    { slug: 'gdansk-flyplasstransport-tromso', city: 'Tromsø', airport: 'Tromsø (TOS)', country: 'Norge' },
+    { slug: 'gdansk-flyplasstransport-trondheim', city: 'Trondheim', airport: 'Trondheim (TRD)', country: 'Norge' },
+  ],
+  sv: [
+    { slug: 'gdansk-flygplatstransfer-goteborg', city: 'Göteborg', airport: 'Göteborg (GOT)', country: 'Sverige' },
+    { slug: 'gdansk-flygplatstransfer-malmo', city: 'Malmö', airport: 'Malmö (MMX)', country: 'Sverige' },
+    { slug: 'gdansk-flygplatstransfer-skelleftea', city: 'Skellefteå', airport: 'Skellefteå (SFT)', country: 'Sverige' },
+    { slug: 'gdansk-flygplatstransfer-stockholm-arlanda', city: 'Stockholm', airport: 'Stockholm Arlanda (ARN)', country: 'Sverige' },
+  ],
+  da: [
+    { slug: 'gdansk-lufthavn-transfer-aarhus', city: 'Aarhus', airport: 'Aarhus (AAR)', country: 'Danmark' },
+    { slug: 'gdansk-lufthavn-transfer-billund', city: 'Billund', airport: 'Billund (BLL)', country: 'Danmark' },
+    { slug: 'gdansk-lufthavn-transfer-copenhagen', city: 'København', airport: 'København (CPH)', country: 'Danmark' },
+  ],
+  fi: [
+    { slug: 'gdansk-lentokenttakuljetus-helsinki', city: 'Helsinki', airport: 'Helsinki (HEL)', country: 'Suomi' },
+    { slug: 'gdansk-lentokenttakuljetus-turku', city: 'Turku', airport: 'Turku (TKU)', country: 'Suomi' },
+  ],
+};
+
+export const countryAirportSlugsByLocale = Object.fromEntries(
+  Object.entries(countryAirportRoutes).map(([locale, entries]) => [locale, entries.map((entry) => entry.slug)])
+);
+
+const cityRouteRoutes = {
+  pl: [
+    { slug: 'taxi-lotnisko-gdansk-slupsk', destination: 'Słupsk' },
+    { slug: 'taxi-lotnisko-gdansk-malbork', destination: 'Malbork' },
+    { slug: 'taxi-lotnisko-gdansk-olsztyn', destination: 'Olsztyn' },
+    { slug: 'taxi-lotnisko-gdansk-starogard-gdanski', destination: 'Starogard Gdański' },
+    { slug: 'taxi-lotnisko-gdansk-wladyslawowo', destination: 'Władysławowo' },
+    { slug: 'taxi-lotnisko-gdansk-hel', destination: 'Hel' },
+    { slug: 'taxi-lotnisko-gdansk-ostroda', destination: 'Ostróda' },
+    { slug: 'taxi-lotnisko-gdansk-wejherowo', destination: 'Wejherowo' },
+    { slug: 'taxi-lotnisko-gdansk-rumia', destination: 'Rumia' },
+    { slug: 'taxi-lotnisko-gdansk-reda', destination: 'Reda' },
+  ],
+};
+
+export const cityRouteSlugsByLocale = Object.fromEntries(
+  Object.entries(cityRouteRoutes).map(([locale, entries]) => [locale, entries.map((entry) => entry.slug)])
+);
+
+const getCountryAirportRoute = (locale, slug) =>
+  (countryAirportRoutes[locale] ?? []).find((entry) => entry.slug === slug) ?? null;
+
+const getCityRoute = (locale, slug) =>
+  (cityRouteRoutes[locale] ?? []).find((entry) => entry.slug === slug) ?? null;
+
 const navLabels = {
   en: {
     home: 'Home',
@@ -103,6 +202,8 @@ const navLabels = {
     airportTaxi: 'Gdansk Airport Taxi',
     airportSopot: 'Airport ↔ Sopot',
     airportGdynia: 'Airport ↔ Gdynia',
+    countryLanding: 'Gdansk Airport Transfer for UK',
+    taxiGdanskCity: 'Taxi Gdansk',
     orderAirportGdansk: 'Book Airport Transfer',
     orderAirportSopot: 'Book Airport to Sopot',
     orderAirportGdynia: 'Book Airport to Gdynia',
@@ -114,6 +215,8 @@ const navLabels = {
     airportTaxi: 'Taxi Lotnisko Gdańsk',
     airportSopot: 'Lotnisko ↔ Sopot',
     airportGdynia: 'Lotnisko ↔ Gdynia',
+    countryLanding: 'Transfer lotniskowy Gdańsk',
+    taxiGdanskCity: 'Taxi Gdańsk',
     orderAirportGdansk: 'Rezerwacja lotnisko Gdańsk',
     orderAirportSopot: 'Rezerwacja lotnisko Gdańsk – Sopot',
     orderAirportGdynia: 'Rezerwacja lotnisko Gdańsk – Gdynia',
@@ -125,6 +228,8 @@ const navLabels = {
     airportTaxi: 'Gdańsk Flughafen Taxi',
     airportSopot: 'Flughafen ↔ Sopot',
     airportGdynia: 'Flughafen ↔ Gdynia',
+    countryLanding: 'Flughafentransfer Gdańsk (DE)',
+    taxiGdanskCity: 'Taxi Gdańsk',
     orderAirportGdansk: 'Buchung Flughafen Gdańsk',
     orderAirportSopot: 'Buchung Flughafen – Sopot',
     orderAirportGdynia: 'Buchung Flughafen – Gdynia',
@@ -136,6 +241,8 @@ const navLabels = {
     airportTaxi: 'Gdańsk lentokenttä taksi',
     airportSopot: 'Lentokenttä ↔ Sopot',
     airportGdynia: 'Lentokenttä ↔ Gdynia',
+    countryLanding: 'Gdańsk lentokenttäkuljetus',
+    taxiGdanskCity: 'Taxi Gdańsk',
     orderAirportGdansk: 'Varaus lentokenttä Gdańsk',
     orderAirportSopot: 'Varaus lentokenttä – Sopot',
     orderAirportGdynia: 'Varaus lentokenttä – Gdynia',
@@ -147,6 +254,8 @@ const navLabels = {
     airportTaxi: 'Gdańsk flyplass taxi',
     airportSopot: 'Flyplass ↔ Sopot',
     airportGdynia: 'Flyplass ↔ Gdynia',
+    countryLanding: 'Flyplasstransport Gdańsk',
+    taxiGdanskCity: 'Taxi Gdańsk',
     orderAirportGdansk: 'Bestilling flyplass Gdańsk',
     orderAirportSopot: 'Bestilling flyplass – Sopot',
     orderAirportGdynia: 'Bestilling flyplass – Gdynia',
@@ -158,6 +267,8 @@ const navLabels = {
     airportTaxi: 'Gdańsk flygplats taxi',
     airportSopot: 'Flygplats ↔ Sopot',
     airportGdynia: 'Flygplats ↔ Gdynia',
+    countryLanding: 'Flygplatstransfer Gdańsk',
+    taxiGdanskCity: 'Taxi Gdańsk',
     orderAirportGdansk: 'Bokning flygplats Gdańsk',
     orderAirportSopot: 'Bokning flygplats – Sopot',
     orderAirportGdynia: 'Bokning flygplats – Gdynia',
@@ -169,6 +280,8 @@ const navLabels = {
     airportTaxi: 'Gdańsk lufthavn taxa',
     airportSopot: 'Lufthavn ↔ Sopot',
     airportGdynia: 'Lufthavn ↔ Gdynia',
+    countryLanding: 'Lufthavnstransfer Gdańsk',
+    taxiGdanskCity: 'Taxi Gdańsk',
     orderAirportGdansk: 'Booking lufthavn Gdańsk',
     orderAirportSopot: 'Booking lufthavn – Sopot',
     orderAirportGdynia: 'Booking lufthavn – Gdynia',
@@ -199,6 +312,16 @@ const metaByLocale = {
       title: 'Gdansk Airport to Gdynia Taxi | Taxi Airport Gdańsk',
       description:
         'Reliable taxi transfers from Gdansk airport to Gdynia. Fixed price, professional drivers, and fast booking.',
+    },
+    taxiGdanskCity: {
+      title: 'Taxi Gdańsk | Taxi Airport Gdańsk',
+      description:
+        'Taxi Gdańsk with fixed prices, 24/7 availability, and fast confirmation. Book airport and city transfers in Gdańsk.',
+    },
+    countryLanding: {
+      title: 'Gdansk Airport Transfer for UK Travelers | Taxi Airport Gdańsk',
+      description:
+        'Private airport transfer in Gdansk for UK travelers. Fixed prices, 24/7 pickup, flight tracking, and fast confirmation.',
     },
     orderAirportGdansk: {
       title: 'Book Gdansk Airport Taxi | Taxi Airport Gdańsk',
@@ -257,6 +380,16 @@ const metaByLocale = {
       description:
         'Transfer taxi z lotniska Gdańsk do Gdyni. Stała cena, profesjonalni kierowcy, 24/7.',
     },
+    taxiGdanskCity: {
+      title: 'Taxi Gdańsk | Taxi Airport Gdańsk',
+      description:
+        'Taxi Gdańsk: stałe ceny, dostępność 24/7 i szybkie potwierdzenie. Transfery lotniskowe i miejskie w Gdańsku.',
+    },
+    countryLanding: {
+      title: 'Transfer lotniskowy Gdańsk dla podróżnych z zagranicy | Taxi Airport Gdańsk',
+      description:
+        'Transfer z lotniska Gdańsk dla podróżnych z zagranicy. Stałe ceny, odbiór 24/7 i szybkie potwierdzenie.',
+    },
     orderAirportGdansk: {
       title: 'Rezerwacja Taxi Lotnisko Gdańsk | Taxi Airport Gdańsk',
       description:
@@ -313,6 +446,16 @@ const metaByLocale = {
       title: 'Gdańsk Flughafen nach Gdynia Taxi | Taxi Airport Gdańsk',
       description:
         'Zuverlässiger Taxi-Transfer vom Flughafen Gdańsk nach Gdynia mit Festpreis.',
+    },
+    taxiGdanskCity: {
+      title: 'Taxi Gdańsk | Taxi Airport Gdańsk',
+      description:
+        'Taxi Gdańsk mit Festpreisen, 24/7 Verfügbarkeit und schneller Bestätigung. Flughafentransfers und Stadtfahrten.',
+    },
+    countryLanding: {
+      title: 'Flughafentransfer Gdańsk für Deutschland | Taxi Airport Gdańsk',
+      description:
+        'Privater Flughafentransfer Gdańsk für Reisende aus Deutschland. Festpreise, 24/7 Abholung und schnelle Bestätigung.',
     },
     orderAirportGdansk: {
       title: 'Book Gdansk Airport Taxi | Taxi Airport Gdańsk',
@@ -371,6 +514,16 @@ const metaByLocale = {
       description:
         'Kuljetus Gdańskin lentokentältä Gdyniaan kiinteällä hinnalla ja nopealla varauksella.',
     },
+    taxiGdanskCity: {
+      title: 'Taxi Gdańsk | Taxi Airport Gdańsk',
+      description:
+        'Taxi Gdańsk kiinteillä hinnoilla, 24/7 ja nopealla vahvistuksella. Lentokenttä- ja kaupunkikuljetukset.',
+    },
+    countryLanding: {
+      title: 'Gdańskin lentokenttäkuljetus Suomesta | Taxi Airport Gdańsk',
+      description:
+        'Yksityinen lentokenttäkuljetus Gdańskissa suomalaisille. Kiinteät hinnat, 24/7 nouto ja nopea vahvistus.',
+    },
     orderAirportGdansk: {
       title: 'Book Gdansk Airport Taxi | Taxi Airport Gdańsk',
       description:
@@ -427,6 +580,16 @@ const metaByLocale = {
       title: 'Gdańsk flyplass til Gdynia taxi | Taxi Airport Gdańsk',
       description:
         'Transfer fra Gdańsk flyplass til Gdynia med fast pris og rask bestilling.',
+    },
+    taxiGdanskCity: {
+      title: 'Taxi Gdańsk | Taxi Airport Gdańsk',
+      description:
+        'Taxi Gdańsk med faste priser, 24/7 tilgjengelighet og rask bekreftelse. Flyplass- og bytransport.',
+    },
+    countryLanding: {
+      title: 'Flyplasstransport Gdańsk for Norge | Taxi Airport Gdańsk',
+      description:
+        'Privat flyplasstransport i Gdańsk for reisende fra Norge. Faste priser, døgnåpen henting og rask bekreftelse.',
     },
     orderAirportGdansk: {
       title: 'Book Gdansk Airport Taxi | Taxi Airport Gdańsk',
@@ -485,6 +648,16 @@ const metaByLocale = {
       description:
         'Transfer från Gdańsk flygplats till Gdynia med fast pris och snabb bokning.',
     },
+    taxiGdanskCity: {
+      title: 'Taxi Gdańsk | Taxi Airport Gdańsk',
+      description:
+        'Taxi Gdańsk med fasta priser, 24/7 tillgänglighet och snabb bekräftelse. Flygplats- och stadstransfer.',
+    },
+    countryLanding: {
+      title: 'Flygplatstransfer Gdańsk för Sverige | Taxi Airport Gdańsk',
+      description:
+        'Privat flygplatstransfer i Gdańsk för resenärer från Sverige. Fasta priser, 24/7 upphämtning och snabb bekräftelse.',
+    },
     orderAirportGdansk: {
       title: 'Book Gdansk Airport Taxi | Taxi Airport Gdańsk',
       description:
@@ -542,6 +715,16 @@ const metaByLocale = {
       description:
         'Transfer fra Gdańsk lufthavn til Gdynia med fast pris og hurtig booking.',
     },
+    taxiGdanskCity: {
+      title: 'Taxi Gdańsk | Taxi Airport Gdańsk',
+      description:
+        'Taxi Gdańsk med faste priser, 24/7 tilgængelighed og hurtig bekræftelse. Lufthavns- og bytransfer.',
+    },
+    countryLanding: {
+      title: 'Lufthavnstransfer Gdańsk for Danmark | Taxi Airport Gdańsk',
+      description:
+        'Privat lufthavnstransfer i Gdańsk for rejsende fra Danmark. Faste priser, 24/7 afhentning og hurtig bekræftelse.',
+    },
     orderAirportGdansk: {
       title: 'Book Gdansk Airport Taxi | Taxi Airport Gdańsk',
       description:
@@ -576,6 +759,44 @@ const metaByLocale = {
       description: 'Privatlivsoplysninger for Taxi Airport Gdańsk.',
     },
   },
+};
+
+const airportMetaByLocale = {
+  en: ({ city, airport }) => ({
+    title: `${city} → Gdansk Airport Transfer (${airport}) | Taxi Airport Gdańsk`,
+    description: `Private transfer from ${airport} to Gdańsk, Sopot, and Gdynia. Fixed prices, 24/7 pickup, fast confirmation.`,
+  }),
+  de: ({ city, airport }) => ({
+    title: `${city} → Gdańsk Flughafentransfer (${airport}) | Taxi Airport Gdańsk`,
+    description: `Privater Transfer von ${airport} nach Gdańsk, Sopot und Gdynia. Festpreise, 24/7 Abholung, schnelle Bestätigung.`,
+  }),
+  fi: ({ city, airport }) => ({
+    title: `${city} → Gdańskin lentokenttäkuljetus (${airport}) | Taxi Airport Gdańsk`,
+    description: `Yksityinen kuljetus ${airport}-lentoasemalta Gdańskiin, Sopotiin ja Gdyniaan. Kiinteät hinnat, 24/7 nouto, nopea vahvistus.`,
+  }),
+  no: ({ city, airport }) => ({
+    title: `${city} → Flyplasstransport Gdańsk (${airport}) | Taxi Airport Gdańsk`,
+    description: `Privat transport fra ${airport} til Gdańsk, Sopot og Gdynia. Faste priser, døgnåpen henting, rask bekreftelse.`,
+  }),
+  sv: ({ city, airport }) => ({
+    title: `${city} → Flygplatstransfer Gdańsk (${airport}) | Taxi Airport Gdańsk`,
+    description: `Privat transfer från ${airport} till Gdańsk, Sopot och Gdynia. Fasta priser, 24/7 upphämtning, snabb bekräftelse.`,
+  }),
+  da: ({ city, airport }) => ({
+    title: `${city} → Lufthavnstransfer Gdańsk (${airport}) | Taxi Airport Gdańsk`,
+    description: `Privat transfer fra ${airport} til Gdańsk, Sopot og Gdynia. Faste priser, afhentning 24/7, hurtig bekræftelse.`,
+  }),
+  pl: ({ city, airport }) => ({
+    title: `${city} → Transfer lotniskowy Gdańsk (${airport}) | Taxi Airport Gdańsk`,
+    description: `Prywatny transfer z ${airport} do Gdańska, Sopotu i Gdyni. Stałe ceny, odbiór 24/7, szybkie potwierdzenie.`,
+  }),
+};
+
+const cityRouteMetaByLocale = {
+  pl: ({ destination }) => ({
+    title: `Cena taxi z lotniska Gdańsk do ${destination} | Taxi Airport Gdańsk`,
+    description: `Sprawdź cenę przejazdu z lotniska Gdańsk do ${destination}. Kalkulator pokaże aktualną cenę w kilka sekund.`,
+  }),
 };
 
 const faqByLocale = {
@@ -931,6 +1152,8 @@ const isIndexablePath = (urlPath) => {
   const slug = localeFromPath ? (pathParts[1] ?? '') : (pathParts[0] ?? '');
   if (!slug) return true;
   if (!localeFromPath) return false;
+  if (getCountryAirportRoute(locale, slug)) return true;
+  if (getCityRoute(locale, slug)) return true;
   return Boolean(getRouteKeyFromSlug(locale, slug));
 };
 
@@ -947,24 +1170,59 @@ export const buildSeoTags = (urlPath) => {
     const slug = localeFromPath ? (pathParts[1] ?? '') : (pathParts[0] ?? '');
 
     const routeKey = slug ? getRouteKeyFromSlug(locale, slug) : null;
-    const meta = metaByLocale[locale]?.[routeKey ?? 'home'] ?? metaByLocale.en.home;
+    const countryAirport = slug ? getCountryAirportRoute(locale, slug) : null;
+    const cityRoute = slug ? getCityRoute(locale, slug) : null;
+    const airportMetaBuilder = airportMetaByLocale[locale] ?? airportMetaByLocale.en;
+    const cityRouteMetaBuilder = cityRouteMetaByLocale[locale] ?? cityRouteMetaByLocale.pl;
+    const meta = cityRoute
+        ? cityRouteMetaBuilder(cityRoute)
+        : countryAirport
+            ? airportMetaBuilder(countryAirport)
+            : metaByLocale[locale]?.[routeKey ?? 'home'] ?? metaByLocale.en.home;
 
     const isRootHome = !localeFromPath && !slug; // dokładnie "/"
 
-    const canonical = isRootHome ? `${site.url}/` : buildLocalizedUrl(locale, routeKey);
+    const canonical = isRootHome
+        ? `${site.url}/`
+        : cityRoute
+            ? `${site.url}/${locale}/${cityRoute.slug}`
+            : countryAirport
+                ? `${site.url}/${locale}/${countryAirport.slug}`
+                : buildLocalizedUrl(locale, routeKey);
 
-    const alternates = locales
-        .map((lang) => {
-            // dla home (routeKey null) daj /<lang>/, a nie /
-            const href = routeKey
-                ? buildLocalizedUrl(lang, routeKey)
-                : `${site.url}/${lang}/`;
-            return `<link rel="alternate" hreflang="${lang}" href="${href}">`;
-        })
-        .join('');
+    const alternates = cityRoute
+        ? (localeHreflangMap[locale] ?? [locale])
+            .map((hreflang) => `<link rel="alternate" hreflang="${hreflang}" href="${canonical}">`)
+            .join('')
+        : countryAirport
+            ? (localeHreflangMap[locale] ?? [locale])
+                .map((hreflang) => `<link rel="alternate" hreflang="${hreflang}" href="${canonical}">`)
+                .join('')
+            : locales
+                .flatMap((lang) => {
+                    const href = routeKey
+                        ? buildLocalizedUrl(lang, routeKey)
+                        : `${site.url}/${lang}/`;
+                    const hreflangs = localeHreflangMap[lang] ?? [lang];
+                    return hreflangs.map(
+                        (hreflang) => `<link rel="alternate" hreflang="${hreflang}" href="${href}">`
+                    );
+                })
+                .join('');
 
     const xDefault = `<link rel="alternate" hreflang="x-default" href="${site.url}/">`;
     const robots = isIndexablePath(urlPath) ? 'index,follow' : 'noindex,nofollow';
+
+  const ogLocale = (localeHreflangMap[locale] ?? [locale])[0] ?? locale;
+  const ogLocaleValue = ogLocale.replace('-', '_');
+  const ogAlternateValues = Array.from(
+    new Set(
+      locales
+        .flatMap((lang) => localeHreflangMap[lang] ?? [lang])
+        .map((lang) => lang.replace('-', '_'))
+        .filter((value) => value !== ogLocaleValue)
+    )
+  );
 
   const localBusinessSchema = {
     '@context': 'https://schema.org',
@@ -1051,6 +1309,8 @@ export const buildSeoTags = (urlPath) => {
     { key: 'airportTaxi', url: buildLocalizedUrl(locale, 'airportTaxi') },
     { key: 'airportSopot', url: buildLocalizedUrl(locale, 'airportSopot') },
     { key: 'airportGdynia', url: buildLocalizedUrl(locale, 'airportGdynia') },
+    { key: 'countryLanding', url: buildLocalizedUrl(locale, 'countryLanding') },
+    { key: 'taxiGdanskCity', url: buildLocalizedUrl(locale, 'taxiGdanskCity') },
     { key: 'orderAirportGdansk', url: buildLocalizedUrl(locale, 'orderAirportGdansk') },
     { key: 'orderCustom', url: buildLocalizedUrl(locale, 'orderCustom') },
   ];
@@ -1064,7 +1324,8 @@ export const buildSeoTags = (urlPath) => {
     })),
   };
 
-  const shouldIncludeBreadcrumbs = isIndexablePath(urlPath) && routeKey;
+  const shouldIncludeBreadcrumbs = isIndexablePath(urlPath) && (routeKey || cityRoute);
+  const cityRouteLabel = cityRoute ? `Taxi Gdańsk → ${cityRoute.destination}` : null;
   const breadcrumbSchema = shouldIncludeBreadcrumbs
     ? {
         '@context': 'https://schema.org',
@@ -1079,7 +1340,7 @@ export const buildSeoTags = (urlPath) => {
           {
             '@type': 'ListItem',
             position: 2,
-            name: labels[routeKey] ?? meta.title,
+            name: routeKey ? labels[routeKey] ?? meta.title : cityRouteLabel ?? meta.title,
             item: canonical,
           },
         ],
@@ -1101,6 +1362,10 @@ export const buildSeoTags = (urlPath) => {
     `<meta name="robots" content="${robots}">`,
     `<meta property="og:title" content="${meta.title}">`,
     `<meta property="og:description" content="${meta.description}">`,
+    `<meta property="og:locale" content="${ogLocaleValue}">`,
+    ...ogAlternateValues.map(
+      (value) => `<meta property="og:locale:alternate" content="${value}">`
+    ),
     `<meta property="og:type" content="website">`,
     `<meta property="og:image" content="${site.ogImage}">`,
     `<meta property="og:url" content="${canonical}">`,

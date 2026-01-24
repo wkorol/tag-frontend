@@ -52,6 +52,20 @@ export function Footer() {
             <h4 className="text-white mb-4">{t.footer.routesTitle}</h4>
             <div className="space-y-2 text-sm">
               <a
+                href={getRoutePath(locale, 'countryLanding')}
+                onClick={() => trackNavClick('footer_country_landing')}
+                className="block hover:text-white transition-colors"
+              >
+                {t.countryLanding?.title ?? t.navbar.airportTaxi}
+              </a>
+              <a
+                href={getRoutePath(locale, 'taxiGdanskCity')}
+                onClick={() => trackNavClick('footer_taxi_gdansk')}
+                className="block hover:text-white transition-colors"
+              >
+                {t.cityTaxi?.title ?? 'Taxi Gdańsk'}
+              </a>
+              <a
                 href={getRoutePath(locale, 'airportTaxi')}
                 onClick={() => trackNavClick('footer_airport_taxi')}
                 className="block hover:text-white transition-colors"

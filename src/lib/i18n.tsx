@@ -34,6 +34,12 @@ const baseEn = {
       close: 'Close',
       noPrepayment: 'No prepayment',
       backToHome: '← Back to home',
+      notFoundTitle: 'Page not found',
+      notFoundBody: 'The page you are looking for does not exist or has moved.',
+      notFoundCta: 'Go to homepage',
+      notFoundSupport: 'If you think this is a mistake, contact us at',
+      notFoundRequested: 'Requested URL',
+      notFoundPopular: 'Popular pages',
       actualBadge: 'ACTUAL',
       priceFrom: 'from',
       perNight: 'at night',
@@ -339,6 +345,137 @@ const baseEn = {
         {
           question: 'Where do I meet the driver?',
           answer: 'You will receive clear pickup instructions and contact details in the confirmation email.',
+        },
+      ],
+    },
+    countryLanding: {
+      title: 'Gdansk Airport Transfer for UK Travelers',
+      description: 'Private airport transfer in Gdansk with fixed prices, 24/7 pickups, and English-speaking drivers.',
+      intro: 'Ideal for flights from the UK to Gdańsk Airport (GDN). Book online in minutes and get fast email confirmation.',
+      ctaPrimary: 'Book transfer',
+      ctaSecondary: 'See prices',
+      highlightsTitle: 'Why UK travelers choose us',
+      highlights: [
+        'Fixed prices in PLN with no hidden fees.',
+        'Meet & greet at arrivals with clear pickup instructions.',
+        'Flight tracking and flexible pickup time.',
+        'Pay by card, Apple Pay, Google Pay, Revolut, or cash on request.',
+      ],
+      airportsTitle: 'Common departure airports (UK)',
+      airports: [
+        'London Stansted (STN)',
+        'London Luton (LTN)',
+        'Manchester (MAN)',
+        'Edinburgh (EDI)',
+        'Birmingham (BHX)',
+        'Liverpool (LPL)',
+      ],
+      faqTitle: 'FAQ for UK travelers',
+      faq: [
+        {
+          question: 'Can I pay in GBP?',
+          answer: 'Prices are in PLN. Card payments are automatically converted by your bank.',
+        },
+        {
+          question: 'Do you provide receipts or invoices?',
+          answer: 'Yes, tell us in the booking notes and we will send a receipt or invoice by email.',
+        },
+        {
+          question: 'Is confirmation quick?',
+          answer: 'Most bookings are confirmed within 5–10 minutes by email.',
+        },
+        {
+          question: 'Do you track flights?',
+          answer: 'Yes, we monitor arrivals and adjust pickup time accordingly.',
+        },
+      ],
+    },
+    airportLanding: {
+      title: (city: string, airport: string) => `${city} → Gdańsk Airport Transfer (${airport})`,
+      description: (city: string, airport: string) =>
+        `Private transfer from ${airport} to Gdańsk, Sopot, and Gdynia with fixed prices and 24/7 pickup.`,
+      intro: (city: string, airport: string) =>
+        `Direct flights from ${airport} to Gdańsk operate seasonally. Book your transfer in advance for a smooth arrival.`,
+      ctaPrimary: 'Book transfer',
+      ctaSecondary: 'See prices',
+      highlightsTitle: 'Why book in advance',
+      highlights: [
+        'Meet & greet at arrivals with clear pickup instructions.',
+        'Flight tracking and flexible pickup time.',
+        'Fixed prices in PLN with no hidden fees.',
+        'Pay by card, Apple Pay, Google Pay, Revolut, or cash on request.',
+      ],
+      routeTitle: (airport: string) => `From ${airport} to Gdańsk`,
+      routeBody: (airport: string) =>
+        `We serve arrivals from ${airport} and provide door-to-door transfers to Gdańsk, Sopot, and Gdynia.`,
+      destinationsTitle: 'Popular destinations in the Tri-City',
+      faqTitle: 'FAQ',
+      faq: [
+        {
+          question: 'Are there direct flights from {city} to Gdańsk?',
+          answer: 'Direct flights operate seasonally. Check the current schedule before booking.',
+        },
+        {
+          question: 'How do I meet the driver?',
+          answer: 'You will receive pickup instructions and contact details in the confirmation email.',
+        },
+        {
+          question: 'Is flight tracking included?',
+          answer: 'Yes, we monitor arrivals and adjust pickup time if needed.',
+        },
+        {
+          question: 'Can I pay by card?',
+          answer: 'Yes, card payments are accepted. Cash is also available on request.',
+        },
+      ],
+    },
+    cityTaxi: {
+      title: 'Taxi Gdańsk',
+      subtitle: 'Fixed-price taxi rides in Gdańsk with 24/7 availability.',
+      intro: 'Book a reliable taxi in Gdańsk for airport transfers and city rides. Professional drivers, fast confirmation, and clear pricing.',
+      ctaPrimary: 'Book taxi',
+      ctaSecondary: 'See prices',
+      highlightsTitle: 'Why book a taxi with us',
+      highlights: [
+        'Fixed prices and no hidden fees.',
+        '24/7 availability for airport and city rides.',
+        'Flight tracking and flexible pickup time.',
+        'Card, Apple Pay, Google Pay, Revolut, or cash on request.',
+      ],
+      serviceAreaTitle: 'Service area',
+      serviceArea: [
+        'Gdańsk Old Town and City Center',
+        'Gdańsk Wrzeszcz and Oliwa',
+        'Gdańsk Airport (GDN)',
+        'Sopot and Gdynia',
+      ],
+      routesTitle: 'Popular taxi routes',
+      routes: [
+        'Gdańsk Airport → Old Town',
+        'Gdańsk Airport → Sopot',
+        'Gdańsk Airport → Gdynia',
+        'Old Town → Gdańsk Airport',
+      ],
+      cityRoutesTitle: 'Gdańsk Airport taxi price by city',
+      cityRoutesDescription: 'Check the current taxi price from Gdańsk Airport to these destinations.',
+      cityRoutesItem: (destination: string) => `Taxi price from Gdańsk Airport to ${destination}`,
+      faqTitle: 'FAQ',
+      faq: [
+        {
+          question: 'How fast is confirmation?',
+          answer: 'Most bookings are confirmed within 5–10 minutes by email.',
+        },
+        {
+          question: 'Do you offer fixed prices?',
+          answer: 'Yes, airport routes have fixed prices both ways.',
+        },
+        {
+          question: 'Can I pay by card?',
+          answer: 'Yes, card payments are accepted. Cash is also available on request.',
+        },
+        {
+          question: 'Do you track flights?',
+          answer: 'Yes, we monitor arrivals and adjust pickup time.',
         },
       ],
     },
@@ -719,6 +856,12 @@ const translations = {
       close: 'Zamknij',
       noPrepayment: 'Bez przedpłaty',
       backToHome: '← Wróć na stronę główną',
+      notFoundTitle: 'Nie znaleziono strony',
+      notFoundBody: 'Szukana strona nie istnieje lub została przeniesiona.',
+      notFoundCta: 'Przejdź na stronę główną',
+      notFoundSupport: 'Jeśli to błąd, skontaktuj się z nami:',
+      notFoundRequested: 'Żądany adres URL',
+      notFoundPopular: 'Popularne strony',
       actualBadge: 'AKTUALNY',
       priceFrom: 'od',
       perNight: 'nocą',
@@ -1024,6 +1167,137 @@ const translations = {
         {
           question: 'Gdzie spotkam kierowcę?',
           answer: 'Otrzymasz jasne instrukcje odbioru i kontakt do kierowcy w e-mailu potwierdzającym.',
+        },
+      ],
+    },
+    countryLanding: {
+      title: 'Transfer lotniskowy Gdańsk dla podróżnych z zagranicy',
+      description: 'Prywatny transfer z lotniska Gdańsk ze stałymi cenami, odbiór 24/7 i szybkie potwierdzenie.',
+      intro: 'Idealne rozwiązanie dla osób przylatujących do Gdańska (GDN). Rezerwuj online w kilka minut.',
+      ctaPrimary: 'Zarezerwuj transfer',
+      ctaSecondary: 'Zobacz ceny',
+      highlightsTitle: 'Dlaczego warto z nami',
+      highlights: [
+        'Stałe ceny bez ukrytych opłat.',
+        'Meet & greet i jasne instrukcje odbioru.',
+        'Śledzenie lotów i elastyczny czas odbioru.',
+        'Płatność kartą, Apple Pay, Google Pay, Revolut lub gotówką na życzenie.',
+      ],
+      airportsTitle: 'Popularne lotniska w Europie',
+      airports: [
+        'Londyn Stansted (STN)',
+        'Frankfurt (FRA)',
+        'Oslo Gardermoen (OSL)',
+        'Sztokholm Arlanda (ARN)',
+        'Kopenhaga (CPH)',
+        'Helsinki (HEL)',
+      ],
+      faqTitle: 'FAQ',
+      faq: [
+        {
+          question: 'W jakiej walucie płacę?',
+          answer: 'Ceny są w PLN. Płatność kartą zostanie automatycznie przeliczona przez bank.',
+        },
+        {
+          question: 'Czy wystawiacie paragon lub fakturę?',
+          answer: 'Tak, wpisz to w uwagach do rezerwacji — wyślemy dokument e-mailem.',
+        },
+        {
+          question: 'Czy śledzicie loty?',
+          answer: 'Tak, monitorujemy przyloty i dostosowujemy czas odbioru.',
+        },
+        {
+          question: 'Jak szybko dostanę potwierdzenie?',
+          answer: 'Zwykle w 5–10 minut e-mailem.',
+        },
+      ],
+    },
+    airportLanding: {
+      title: (city: string, airport: string) => `${city} → Transfer lotniskowy Gdańsk (${airport})`,
+      description: (city: string, airport: string) =>
+        `Prywatny transfer z ${airport} do Gdańska, Sopotu i Gdyni. Stałe ceny i odbiór 24/7.`,
+      intro: (city: string, airport: string) =>
+        `Bezpośrednie loty z ${airport} do Gdańska są sezonowe. Zarezerwuj transfer wcześniej.`,
+      ctaPrimary: 'Zarezerwuj transfer',
+      ctaSecondary: 'Zobacz ceny',
+      highlightsTitle: 'Dlaczego warto zarezerwować wcześniej',
+      highlights: [
+        'Meet & greet i jasne instrukcje odbioru.',
+        'Śledzenie lotów i elastyczny czas odbioru.',
+        'Stałe ceny bez ukrytych opłat.',
+        'Płatność kartą, Apple Pay, Google Pay, Revolut lub gotówką na życzenie.',
+      ],
+      routeTitle: (airport: string) => `Z ${airport} do Gdańska`,
+      routeBody: (airport: string) =>
+        `Obsługujemy przyloty z ${airport} i dowozimy pod wskazany adres w Gdańsku, Sopocie i Gdyni.`,
+      destinationsTitle: 'Popularne kierunki w Trójmieście',
+      faqTitle: 'FAQ',
+      faq: [
+        {
+          question: 'Czy są loty bezpośrednie z {city} do Gdańska?',
+          answer: 'Loty bezpośrednie są sezonowe. Sprawdź aktualny rozkład przed podróżą.',
+        },
+        {
+          question: 'Jak spotkam kierowcę?',
+          answer: 'Otrzymasz instrukcje odbioru i kontakt do kierowcy w e-mailu potwierdzającym.',
+        },
+        {
+          question: 'Czy śledzicie loty?',
+          answer: 'Tak, monitorujemy przyloty i dostosowujemy czas odbioru.',
+        },
+        {
+          question: 'Czy mogę zapłacić kartą?',
+          answer: 'Tak, płatność kartą jest akceptowana. Gotówka na życzenie.',
+        },
+      ],
+    },
+    cityTaxi: {
+      title: 'Taxi Gdańsk',
+      subtitle: 'Stałe ceny i dostępność 24/7.',
+      intro: 'Taxi Gdańsk na transfery lotniskowe i przejazdy miejskie. Profesjonalni kierowcy, szybkie potwierdzenie i przejrzyste ceny.',
+      ctaPrimary: 'Zarezerwuj taxi',
+      ctaSecondary: 'Zobacz ceny',
+      highlightsTitle: 'Dlaczego warto jechać z nami',
+      highlights: [
+        'Stałe ceny bez ukrytych opłat.',
+        'Dostępność 24/7 na lotnisko i miasto.',
+        'Śledzenie lotów i elastyczny czas odbioru.',
+        'Płatność kartą, Apple Pay, Google Pay, Revolut lub gotówką na życzenie.',
+      ],
+      serviceAreaTitle: 'Obsługiwane obszary',
+      serviceArea: [
+        'Gdańsk Stare Miasto i Centrum',
+        'Gdańsk Wrzeszcz i Oliwa',
+        'Lotnisko Gdańsk (GDN)',
+        'Sopot i Gdynia',
+      ],
+      routesTitle: 'Popularne trasy taxi',
+      routes: [
+        'Lotnisko Gdańsk → Stare Miasto',
+        'Lotnisko Gdańsk → Sopot',
+        'Lotnisko Gdańsk → Gdynia',
+        'Stare Miasto → Lotnisko Gdańsk',
+      ],
+      cityRoutesTitle: 'Ceny taxi z lotniska Gdańsk',
+      cityRoutesDescription: 'Sprawdź cenę przejazdu z lotniska Gdańsk do wybranych miast.',
+      cityRoutesItem: (destination: string) => `Cena taxi z lotniska Gdańsk do ${destination}`,
+      faqTitle: 'FAQ',
+      faq: [
+        {
+          question: 'Jak szybko dostanę potwierdzenie?',
+          answer: 'Większość rezerwacji potwierdzamy w 5–10 minut e-mailem.',
+        },
+        {
+          question: 'Czy ceny są stałe?',
+          answer: 'Tak, trasy lotniskowe mają stałe ceny w obie strony.',
+        },
+        {
+          question: 'Czy mogę zapłacić kartą?',
+          answer: 'Tak, płatność kartą jest akceptowana. Gotówka na życzenie.',
+        },
+        {
+          question: 'Czy śledzicie loty?',
+          answer: 'Tak, monitorujemy przyloty i dostosowujemy czas odbioru.',
         },
       ],
     },
@@ -1401,6 +1675,12 @@ const translations = {
       close: 'Schließen',
       noPrepayment: 'Keine Vorauszahlung',
       backToHome: '← Zurück zur Startseite',
+      notFoundTitle: 'Seite nicht gefunden',
+      notFoundBody: 'Die gesuchte Seite existiert nicht oder wurde verschoben.',
+      notFoundCta: 'Zur Startseite',
+      notFoundSupport: 'Wenn das ein Fehler ist, kontaktieren Sie uns:',
+      notFoundRequested: 'Angeforderte URL',
+      notFoundPopular: 'Beliebte Seiten',
       actualBadge: 'AKTUELL',
       priceFrom: 'ab',
       perNight: 'nachts',
@@ -1657,7 +1937,7 @@ const translations = {
     routeLanding: {
       orderNow: 'Jetzt online reservieren',
       quickLinks: 'Quick links',
-      pricingLink: 'View pricing',
+      pricingLink: 'Preise ansehen',
       orderLinks: {
         airportGdansk: 'Book airport → Gdańsk',
         airportSopot: 'Book airport → Sopot',
@@ -1706,6 +1986,135 @@ const translations = {
         {
           question: 'Wo treffe ich den Fahrer?',
           answer: 'Sie erhalten klare Abholhinweise und Kontaktdaten in der Bestätigungs-E-Mail.',
+        },
+      ],
+    },
+    countryLanding: {
+      title: 'Flughafentransfer Gdańsk für Reisende aus Deutschland',
+      description: 'Privater Transfer ab Flughafen Gdańsk mit Festpreisen, 24/7 Abholung und englischsprachigen Fahrern.',
+      intro: 'Ideal für Flüge aus Deutschland zum Flughafen Gdańsk (GDN). Online buchen und schnelle Bestätigung per E-Mail.',
+      ctaPrimary: 'Transfer buchen',
+      ctaSecondary: 'Preise ansehen',
+      highlightsTitle: 'Warum Reisende aus Deutschland uns wählen',
+      highlights: [
+        'Festpreise in PLN ohne versteckte Gebühren.',
+        'Meet & greet am Terminal mit klaren Abholhinweisen.',
+        'Flugverfolgung und flexible Abholzeit.',
+        'Zahlung per Karte, Apple Pay, Google Pay, Revolut oder auf Wunsch bar.',
+      ],
+      airportsTitle: 'Häufige Abflugorte (Deutschland)',
+      airports: [
+        'Dortmund (DTM)',
+        'Frankfurt (FRA)',
+        'Hamburg (HAM)',
+        'München (MUC)',
+      ],
+      faqTitle: 'FAQ für Reisende aus Deutschland',
+      faq: [
+        {
+          question: 'Kann ich in EUR bezahlen?',
+          answer: 'Die Preise sind in PLN. Kartenzahlungen werden automatisch von Ihrer Bank umgerechnet.',
+        },
+        {
+          question: 'Stellen Sie Belege oder Rechnungen aus?',
+          answer: 'Ja, geben Sie dies bei der Buchung an und wir senden den Beleg per E-Mail.',
+        },
+        {
+          question: 'Wie schnell ist die Bestätigung?',
+          answer: 'Die meisten Buchungen werden innerhalb von 5–10 Minuten per E-Mail bestätigt.',
+        },
+        {
+          question: 'Verfolgen Sie Flüge?',
+          answer: 'Ja, wir überwachen Ankünfte und passen die Abholzeit an.',
+        },
+      ],
+    },
+    airportLanding: {
+      title: (city: string, airport: string) => `${city} → Gdańsk Flughafentransfer (${airport})`,
+      description: (city: string, airport: string) =>
+        `Privater Transfer von ${airport} nach Gdańsk, Sopot und Gdynia mit Festpreisen und 24/7 Abholung.`,
+      intro: (city: string, airport: string) =>
+        `Direktflüge von ${airport} nach Gdańsk sind saisonal. Buchen Sie den Transfer im Voraus.`,
+      ctaPrimary: 'Transfer buchen',
+      ctaSecondary: 'Preise ansehen',
+      highlightsTitle: 'Warum im Voraus buchen',
+      highlights: [
+        'Meet & greet am Terminal mit klaren Abholhinweisen.',
+        'Flugverfolgung und flexible Abholzeit.',
+        'Festpreise in PLN ohne versteckte Gebühren.',
+        'Zahlung per Karte, Apple Pay, Google Pay, Revolut oder auf Wunsch bar.',
+      ],
+      routeTitle: (airport: string) => `Von ${airport} nach Gdańsk`,
+      routeBody: (airport: string) =>
+        `Wir holen Ankünfte von ${airport} ab und fahren Sie nach Gdańsk, Sopot und Gdynia.`,
+      destinationsTitle: 'Beliebte Ziele in der Dreistadt',
+      faqTitle: 'FAQ',
+      faq: [
+        {
+          question: 'Gibt es Direktflüge von {city} nach Gdańsk?',
+          answer: 'Direktflüge sind saisonal. Bitte prüfen Sie den aktuellen Flugplan vor der Reise.',
+        },
+        {
+          question: 'Wie treffe ich den Fahrer?',
+          answer: 'Sie erhalten Abholhinweise und Kontaktdaten in der Bestätigungs-E-Mail.',
+        },
+        {
+          question: 'Ist Flugverfolgung inklusive?',
+          answer: 'Ja, wir überwachen Ankünfte und passen die Abholzeit an.',
+        },
+        {
+          question: 'Kann ich mit Karte zahlen?',
+          answer: 'Ja, Kartenzahlung ist möglich. Barzahlung auf Wunsch.',
+        },
+      ],
+    },
+    cityTaxi: {
+      title: 'Taxi Gdańsk',
+      subtitle: 'Festpreise und 24/7 Verfügbarkeit.',
+      intro: 'Taxi Gdańsk für Flughafentransfers und Stadtfahrten. Professionelle Fahrer, schnelle Bestätigung und klare Preise.',
+      ctaPrimary: 'Taxi buchen',
+      ctaSecondary: 'Preise ansehen',
+      highlightsTitle: 'Warum mit uns fahren',
+      highlights: [
+        'Festpreise ohne versteckte Gebühren.',
+        '24/7 Verfügbarkeit für Flughafen- und Stadtfahrten.',
+        'Flugverfolgung und flexible Abholzeit.',
+        'Zahlung per Karte, Apple Pay, Google Pay, Revolut oder bar auf Wunsch.',
+      ],
+      serviceAreaTitle: 'Servicegebiet',
+      serviceArea: [
+        'Gdańsk Altstadt und Zentrum',
+        'Gdańsk Wrzeszcz und Oliwa',
+        'Flughafen Gdańsk (GDN)',
+        'Sopot und Gdynia',
+      ],
+      routesTitle: 'Beliebte Taxi-Strecken',
+      routes: [
+        'Flughafen Gdańsk → Altstadt',
+        'Flughafen Gdańsk → Sopot',
+        'Flughafen Gdańsk → Gdynia',
+        'Altstadt → Flughafen Gdańsk',
+      ],
+      cityRoutesTitle: 'Taxipreise ab Flughafen Gdańsk',
+      cityRoutesDescription: 'Prüfe den aktuellen Preis vom Flughafen Gdańsk zu diesen Orten.',
+      cityRoutesItem: (destination: string) => `Taxi-Preis vom Flughafen Gdańsk nach ${destination}`,
+      faqTitle: 'FAQ',
+      faq: [
+        {
+          question: 'Wie schnell ist die Bestätigung?',
+          answer: 'Die meisten Buchungen werden innerhalb von 5–10 Minuten per E-Mail bestätigt.',
+        },
+        {
+          question: 'Bieten Sie Festpreise an?',
+          answer: 'Ja, Flughafentransfers haben feste Preise in beide Richtungen.',
+        },
+        {
+          question: 'Kann ich mit Karte zahlen?',
+          answer: 'Ja, Kartenzahlung ist möglich. Barzahlung auf Wunsch.',
+        },
+        {
+          question: 'Verfolgen Sie Flüge?',
+          answer: 'Ja, wir überwachen Ankünfte und passen die Abholzeit an.',
         },
       ],
     },
@@ -2083,6 +2492,12 @@ const translations = {
       close: 'Sulje',
       noPrepayment: 'Ei ennakkomaksua',
       backToHome: '← Takaisin etusivulle',
+      notFoundTitle: 'Sivua ei löytynyt',
+      notFoundBody: 'Etsimäsi sivu ei ole olemassa tai se on siirretty.',
+      notFoundCta: 'Siirry etusivulle',
+      notFoundSupport: 'Jos tämä on virhe, ota yhteyttä:',
+      notFoundRequested: 'Pyydetty URL-osoite',
+      notFoundPopular: 'Suositut sivut',
       actualBadge: 'VOIMASSA',
       priceFrom: 'alkaen',
       perNight: 'yöllä',
@@ -2339,7 +2754,7 @@ const translations = {
     routeLanding: {
       orderNow: 'Varaa verkossa nyt',
       quickLinks: 'Quick links',
-      pricingLink: 'View pricing',
+      pricingLink: 'Katso hinnat',
       orderLinks: {
         airportGdansk: 'Book airport → Gdańsk',
         airportSopot: 'Book airport → Sopot',
@@ -2388,6 +2803,133 @@ const translations = {
         {
           question: 'Missä tapaan kuljettajan?',
           answer: 'Saat selkeät nouto-ohjeet ja yhteystiedot vahvistusviestissä.',
+        },
+      ],
+    },
+    countryLanding: {
+      title: 'Gdańskin lentokenttäkuljetus Suomesta',
+      description: 'Yksityinen lentokenttäkuljetus Gdańskissa kiinteillä hinnoilla, 24/7 nouto ja nopea vahvistus.',
+      intro: 'Sopii lennoille Suomesta Gdańskin lentoasemalle (GDN). Varaa verkossa ja saat vahvistuksen nopeasti.',
+      ctaPrimary: 'Varaa kuljetus',
+      ctaSecondary: 'Katso hinnat',
+      highlightsTitle: 'Miksi varata etukäteen',
+      highlights: [
+        'Meet & greet ja selkeät nouto-ohjeet.',
+        'Lentojen seuranta ja joustava noutoaika.',
+        'Kiinteät hinnat ilman piilokuluja.',
+        'Maksu kortilla, Apple Paylla, Google Paylla, Revolutilla tai pyynnöstä käteisellä.',
+      ],
+      airportsTitle: 'Lähtölentoasemia (Suomi)',
+      airports: [
+        'Helsinki (HEL)',
+        'Turku (TKU)',
+      ],
+      faqTitle: 'FAQ suomalaisille',
+      faq: [
+        {
+          question: 'Voinko maksaa euroilla?',
+          answer: 'Hinnat ovat PLN-valuutassa. Korttimaksu muunnetaan automaattisesti pankkisi toimesta.',
+        },
+        {
+          question: 'Saisinko kuitin tai laskun?',
+          answer: 'Kyllä, kerro tästä varauksen yhteydessä ja lähetämme kuitin sähköpostilla.',
+        },
+        {
+          question: 'Seuraatteko lentoja?',
+          answer: 'Kyllä, seuraamme saapumisia ja säädämme noutoajan.',
+        },
+        {
+          question: 'Kuinka nopeasti saan vahvistuksen?',
+          answer: 'Useimmat varaukset vahvistetaan 5–10 minuutissa sähköpostitse.',
+        },
+      ],
+    },
+    airportLanding: {
+      title: (city: string, airport: string) => `${city} → Gdańskin lentokenttäkuljetus (${airport})`,
+      description: (city: string, airport: string) =>
+        `Yksityinen kuljetus ${airport}-lentoasemalta Gdańskiin, Sopotiin ja Gdyniaan. Kiinteät hinnat ja 24/7 nouto.`,
+      intro: (city: string, airport: string) =>
+        `Suorat lennot ${airport}-lentoasemalta Gdańskiin ovat kausiluonteisia. Varaa kuljetus etukäteen.`,
+      ctaPrimary: 'Varaa kuljetus',
+      ctaSecondary: 'Katso hinnat',
+      highlightsTitle: 'Miksi varata etukäteen',
+      highlights: [
+        'Meet & greet ja selkeät nouto-ohjeet.',
+        'Lentojen seuranta ja joustava noutoaika.',
+        'Kiinteät hinnat ilman piilokuluja.',
+        'Maksu kortilla, Apple Paylla, Google Paylla, Revolutilla tai pyynnöstä käteisellä.',
+      ],
+      routeTitle: (airport: string) => `Matka ${airport}-lentoasemalta Gdańskiin`,
+      routeBody: (airport: string) =>
+        `Noudamme saapuvia lentoja ${airport}-lentoasemalta ja viemme perille Gdańskiin, Sopotiin ja Gdyniaan.`,
+      destinationsTitle: 'Suositut kohteet Tri-Cityssä',
+      faqTitle: 'FAQ',
+      faq: [
+        {
+          question: 'Onko suoria lentoja {city}stä Gdańskiin?',
+          answer: 'Suorat lennot ovat kausiluonteisia. Tarkista ajantasainen aikataulu ennen matkaa.',
+        },
+        {
+          question: 'Miten tapaan kuljettajan?',
+          answer: 'Saat nouto-ohjeet ja yhteystiedot vahvistussähköpostissa.',
+        },
+        {
+          question: 'Seuraatteko lentoja?',
+          answer: 'Kyllä, seuraamme saapumisia ja säädämme noutoajan.',
+        },
+        {
+          question: 'Voinko maksaa kortilla?',
+          answer: 'Kyllä, korttimaksu on mahdollinen. Käteinen pyynnöstä.',
+        },
+      ],
+    },
+    cityTaxi: {
+      title: 'Taxi Gdańsk',
+      subtitle: 'Kiinteät hinnat ja 24/7 saatavuus.',
+      intro: 'Taxi Gdańsk lentokenttäkuljetuksiin ja kaupunkiajoihin. Ammattikuljettajat, nopea vahvistus ja selkeä hinnoittelu.',
+      ctaPrimary: 'Varaa taxi',
+      ctaSecondary: 'Katso hinnat',
+      highlightsTitle: 'Miksi varata meiltä',
+      highlights: [
+        'Kiinteät hinnat ilman piilokuluja.',
+        'Saatavuus 24/7 lentokenttä- ja kaupunkiajoihin.',
+        'Lentojen seuranta ja joustava noutoaika.',
+        'Maksu kortilla, Apple Paylla, Google Paylla, Revolutilla tai pyynnöstä käteisellä.',
+      ],
+      serviceAreaTitle: 'Palvelualue',
+      serviceArea: [
+        'Gdańsk vanhakaupunki ja keskusta',
+        'Gdańsk Wrzeszcz ja Oliwa',
+        'Gdańsk lentokenttä (GDN)',
+        'Sopot ja Gdynia',
+      ],
+      routesTitle: 'Suositut taksireitit',
+      routes: [
+        'Gdańsk lentokenttä → vanhakaupunki',
+        'Gdańsk lentokenttä → Sopot',
+        'Gdańsk lentokenttä → Gdynia',
+        'Vanhakaupunki → Gdańsk lentokenttä',
+      ],
+      cityRoutesTitle: 'Hinnat: Gdańskin lentoasema taksi',
+      cityRoutesDescription: 'Katso ajantasainen hinta Gdańskin lentoasemalta näihin kohteisiin.',
+      cityRoutesItem: (destination: string) => `Taksihinta Gdańskin lentoasemalta kohteeseen ${destination}`,
+      faqTitle: 'FAQ',
+      faq: [
+        {
+          question: 'Kuinka nopeasti vahvistus tulee?',
+          answer: 'Useimmat varaukset vahvistetaan 5–10 minuutissa sähköpostitse.',
+        },
+        {
+          question: 'Onko hinnat kiinteitä?',
+          answer: 'Kyllä, lentokenttäreiteillä on kiinteät hinnat molempiin suuntiin.',
+        },
+        {
+          question: 'Voinko maksaa kortilla?',
+          answer: 'Kyllä, korttimaksu on mahdollinen. Käteinen pyynnöstä.',
+        },
+        {
+          question: 'Seuraatteko lentoja?',
+          answer: 'Kyllä, seuraamme saapumisia ja säädämme noutoajan.',
         },
       ],
     },
@@ -2765,6 +3307,12 @@ const translations = {
       close: 'Lukk',
       noPrepayment: 'Ingen forhåndsbetaling',
       backToHome: '← Tilbake til forsiden',
+      notFoundTitle: 'Siden ble ikke funnet',
+      notFoundBody: 'Siden du leter etter finnes ikke eller er flyttet.',
+      notFoundCta: 'Gå til forsiden',
+      notFoundSupport: 'Hvis dette er en feil, kontakt oss:',
+      notFoundRequested: 'Forespurt URL',
+      notFoundPopular: 'Populære sider',
       actualBadge: 'AKTUELL',
       priceFrom: 'fra',
       perNight: 'om natten',
@@ -3021,7 +3569,7 @@ const translations = {
     routeLanding: {
       orderNow: 'Reserver online nå',
       quickLinks: 'Quick links',
-      pricingLink: 'View pricing',
+      pricingLink: 'Se priser',
       orderLinks: {
         airportGdansk: 'Book airport → Gdańsk',
         airportSopot: 'Book airport → Sopot',
@@ -3070,6 +3618,136 @@ const translations = {
         {
           question: 'Hvor møter jeg sjåføren?',
           answer: 'Du får tydelige hentebeskrivelser og kontaktinfo i bekreftelses-e-posten.',
+        },
+      ],
+    },
+    countryLanding: {
+      title: 'Flyplasstransport Gdańsk for reisende fra Norge',
+      description: 'Privat flyplasstransport i Gdańsk med faste priser, døgnåpen henting og rask bekreftelse.',
+      intro: 'Passer for fly fra Norge til Gdańsk lufthavn (GDN). Bestill online og få rask bekreftelse.',
+      ctaPrimary: 'Bestill transport',
+      ctaSecondary: 'Se priser',
+      highlightsTitle: 'Hvorfor bestille på forhånd',
+      highlights: [
+        'Meet & greet med tydelige henteinstruksjoner.',
+        'Flysporing og fleksibel hentetid.',
+        'Faste priser i PLN uten skjulte gebyrer.',
+        'Betaling med kort, Apple Pay, Google Pay, Revolut eller kontant på forespørsel.',
+      ],
+      airportsTitle: 'Vanlige avreiseflyplasser (Norge)',
+      airports: [
+        'Oslo Gardermoen (OSL)',
+        'Bergen (BGO)',
+        'Stavanger (SVG)',
+        'Trondheim (TRD)',
+        'Tromsø (TOS)',
+      ],
+      faqTitle: 'FAQ for reisende fra Norge',
+      faq: [
+        {
+          question: 'Kan jeg betale i NOK?',
+          answer: 'Prisene er i PLN. Kortbetaling blir automatisk konvertert av banken din.',
+        },
+        {
+          question: 'Får jeg kvittering eller faktura?',
+          answer: 'Ja, legg det til i bestillingen, så sender vi dokumentet på e-post.',
+        },
+        {
+          question: 'Sporer dere fly?',
+          answer: 'Ja, vi følger ankomster og justerer hentetid.',
+        },
+        {
+          question: 'Hvor raskt får jeg bekreftelse?',
+          answer: 'De fleste bestillinger bekreftes innen 5–10 minutter på e-post.',
+        },
+      ],
+    },
+    airportLanding: {
+      title: (city: string, airport: string) => `${city} → Flyplasstransport Gdańsk (${airport})`,
+      description: (city: string, airport: string) =>
+        `Privat transport fra ${airport} til Gdańsk, Sopot og Gdynia. Faste priser og henting 24/7.`,
+      intro: (city: string, airport: string) =>
+        `Direktefly fra ${airport} til Gdańsk er sesongbaserte. Bestill transport på forhånd.`,
+      ctaPrimary: 'Bestill transport',
+      ctaSecondary: 'Se priser',
+      highlightsTitle: 'Hvorfor bestille på forhånd',
+      highlights: [
+        'Meet & greet med tydelige henteinstruksjoner.',
+        'Flysporing og fleksibel hentetid.',
+        'Faste priser i PLN uten skjulte gebyrer.',
+        'Betaling med kort, Apple Pay, Google Pay, Revolut eller kontant på forespørsel.',
+      ],
+      routeTitle: (airport: string) => `Fra ${airport} til Gdańsk`,
+      routeBody: (airport: string) =>
+        `Vi henter ankomster fra ${airport} og kjører deg til Gdańsk, Sopot og Gdynia.`,
+      destinationsTitle: 'Populære destinasjoner i Tri-City',
+      faqTitle: 'FAQ',
+      faq: [
+        {
+          question: 'Finnes det direktefly fra {city} til Gdańsk?',
+          answer: 'Direktefly er sesongbaserte. Sjekk gjeldende rutetider før du reiser.',
+        },
+        {
+          question: 'Hvordan møter jeg sjåføren?',
+          answer: 'Du får henteinstruksjoner og kontaktinfo i bekreftelses-e-posten.',
+        },
+        {
+          question: 'Sporer dere fly?',
+          answer: 'Ja, vi følger ankomster og justerer hentetid.',
+        },
+        {
+          question: 'Kan jeg betale med kort?',
+          answer: 'Ja, kortbetaling er mulig. Kontant på forespørsel.',
+        },
+      ],
+    },
+    cityTaxi: {
+      title: 'Taxi Gdańsk',
+      subtitle: 'Faste priser og tilgjengelighet 24/7.',
+      intro: 'Taxi Gdańsk for flyplasstransport og bykjøring. Profesjonelle sjåfører, rask bekreftelse og klare priser.',
+      ctaPrimary: 'Bestill taxi',
+      ctaSecondary: 'Se priser',
+      highlightsTitle: 'Hvorfor velge oss',
+      highlights: [
+        'Faste priser uten skjulte gebyrer.',
+        'Tilgjengelig 24/7 for flyplass og bykjøring.',
+        'Flysporing og fleksibel hentetid.',
+        'Betaling med kort, Apple Pay, Google Pay, Revolut eller kontant på forespørsel.',
+      ],
+      serviceAreaTitle: 'Serviceområde',
+      serviceArea: [
+        'Gdańsk gamleby og sentrum',
+        'Gdańsk Wrzeszcz og Oliwa',
+        'Gdańsk flyplass (GDN)',
+        'Sopot og Gdynia',
+      ],
+      routesTitle: 'Populære taxi-ruter',
+      routes: [
+        'Gdańsk flyplass → gamlebyen',
+        'Gdańsk flyplass → Sopot',
+        'Gdańsk flyplass → Gdynia',
+        'Gamlebyen → Gdańsk flyplass',
+      ],
+      cityRoutesTitle: 'Taxipriser fra Gdańsk lufthavn',
+      cityRoutesDescription: 'Sjekk aktuell pris fra Gdańsk lufthavn til disse stedene.',
+      cityRoutesItem: (destination: string) => `Taxipris fra Gdańsk lufthavn til ${destination}`,
+      faqTitle: 'FAQ',
+      faq: [
+        {
+          question: 'Hvor raskt er bekreftelsen?',
+          answer: 'De fleste bestillinger bekreftes innen 5–10 minutter via e-post.',
+        },
+        {
+          question: 'Har dere faste priser?',
+          answer: 'Ja, flyplassruter har faste priser begge veier.',
+        },
+        {
+          question: 'Kan jeg betale med kort?',
+          answer: 'Ja, kortbetaling er mulig. Kontant på forespørsel.',
+        },
+        {
+          question: 'Sporer dere fly?',
+          answer: 'Ja, vi følger ankomster og justerer hentetid.',
         },
       ],
     },
@@ -3446,6 +4124,12 @@ const translations = {
       close: 'Stäng',
       noPrepayment: 'Ingen förskottsbetalning',
       backToHome: '← Tillbaka till startsidan',
+      notFoundTitle: 'Sidan hittades inte',
+      notFoundBody: 'Sidan du söker finns inte eller har flyttats.',
+      notFoundCta: 'Gå till startsidan',
+      notFoundSupport: 'Om detta är ett fel, kontakta oss:',
+      notFoundRequested: 'Begärd URL',
+      notFoundPopular: 'Populära sidor',
       actualBadge: 'AKTUELL',
       priceFrom: 'från',
       perNight: 'nattetid',
@@ -3702,7 +4386,7 @@ const translations = {
     routeLanding: {
       orderNow: 'Boka online nu',
       quickLinks: 'Quick links',
-      pricingLink: 'View pricing',
+      pricingLink: 'Se priser',
       orderLinks: {
         airportGdansk: 'Book airport → Gdańsk',
         airportSopot: 'Book airport → Sopot',
@@ -3751,6 +4435,135 @@ const translations = {
         {
           question: 'Var möter jag chauffören?',
           answer: 'Du får tydliga upphämtningsinstruktioner och kontaktinfo i bekräftelsemejlet.',
+        },
+      ],
+    },
+    countryLanding: {
+      title: 'Flygplatstransfer Gdańsk för resenärer från Sverige',
+      description: 'Privat flygplatstransfer i Gdańsk med fasta priser, upphämtning dygnet runt och snabb bekräftelse.',
+      intro: 'För flyg från Sverige till Gdańsk flygplats (GDN). Boka online och få snabb bekräftelse.',
+      ctaPrimary: 'Boka transfer',
+      ctaSecondary: 'Se priser',
+      highlightsTitle: 'Varför boka i förväg',
+      highlights: [
+        'Meet & greet med tydliga upphämtningsinstruktioner.',
+        'Flygspårning och flexibel upphämtningstid.',
+        'Fasta priser i PLN utan dolda avgifter.',
+        'Betalning med kort, Apple Pay, Google Pay, Revolut eller kontant på begäran.',
+      ],
+      airportsTitle: 'Vanliga avgångsflygplatser (Sverige)',
+      airports: [
+        'Stockholm Arlanda (ARN)',
+        'Göteborg (GOT)',
+        'Skellefteå (SFT)',
+        'Malmö (MMX)',
+      ],
+      faqTitle: 'FAQ för resenärer från Sverige',
+      faq: [
+        {
+          question: 'Kan jag betala i SEK?',
+          answer: 'Priserna är i PLN. Kortbetalningar omräknas automatiskt av din bank.',
+        },
+        {
+          question: 'Får jag kvitto eller faktura?',
+          answer: 'Ja, skriv det i bokningen så skickar vi dokumentet via e-post.',
+        },
+        {
+          question: 'Spårar ni flyg?',
+          answer: 'Ja, vi övervakar ankomster och justerar upphämtningstiden.',
+        },
+        {
+          question: 'Hur snabbt får jag bekräftelse?',
+          answer: 'De flesta bokningar bekräftas inom 5–10 minuter via e-post.',
+        },
+      ],
+    },
+    airportLanding: {
+      title: (city: string, airport: string) => `${city} → Flygplatstransfer Gdańsk (${airport})`,
+      description: (city: string, airport: string) =>
+        `Privat transfer från ${airport} till Gdańsk, Sopot och Gdynia. Fasta priser och upphämtning 24/7.`,
+      intro: (city: string, airport: string) =>
+        `Direktflyg från ${airport} till Gdańsk är säsongsbaserade. Boka transfer i förväg.`,
+      ctaPrimary: 'Boka transfer',
+      ctaSecondary: 'Se priser',
+      highlightsTitle: 'Varför boka i förväg',
+      highlights: [
+        'Meet & greet med tydliga upphämtningsinstruktioner.',
+        'Flygspårning och flexibel upphämtningstid.',
+        'Fasta priser i PLN utan dolda avgifter.',
+        'Betalning med kort, Apple Pay, Google Pay, Revolut eller kontant på begäran.',
+      ],
+      routeTitle: (airport: string) => `Från ${airport} till Gdańsk`,
+      routeBody: (airport: string) =>
+        `Vi hämtar ankomster från ${airport} och kör till Gdańsk, Sopot och Gdynia.`,
+      destinationsTitle: 'Populära destinationer i Tri-City',
+      faqTitle: 'FAQ',
+      faq: [
+        {
+          question: 'Finns det direktflyg från {city} till Gdańsk?',
+          answer: 'Direktflyg är säsongsbaserade. Kontrollera aktuell tidtabell före resan.',
+        },
+        {
+          question: 'Hur möter jag chauffören?',
+          answer: 'Du får upphämtningsinstruktioner och kontaktinfo i bekräftelsemejlet.',
+        },
+        {
+          question: 'Spårar ni flyg?',
+          answer: 'Ja, vi övervakar ankomster och justerar upphämtningstiden.',
+        },
+        {
+          question: 'Kan jag betala med kort?',
+          answer: 'Ja, kortbetalning är möjlig. Kontant på begäran.',
+        },
+      ],
+    },
+    cityTaxi: {
+      title: 'Taxi Gdańsk',
+      subtitle: 'Fasta priser och tillgänglighet 24/7.',
+      intro: 'Taxi Gdańsk för flygplatstransfer och stadskörningar. Professionella förare, snabb bekräftelse och tydliga priser.',
+      ctaPrimary: 'Boka taxi',
+      ctaSecondary: 'Se priser',
+      highlightsTitle: 'Varför välja oss',
+      highlights: [
+        'Fasta priser utan dolda avgifter.',
+        'Tillgänglig 24/7 för flygplats och stadskörning.',
+        'Flygspårning och flexibel upphämtningstid.',
+        'Betalning med kort, Apple Pay, Google Pay, Revolut eller kontant på begäran.',
+      ],
+      serviceAreaTitle: 'Serviceområde',
+      serviceArea: [
+        'Gdańsk gamla stan och centrum',
+        'Gdańsk Wrzeszcz och Oliwa',
+        'Gdańsk flygplats (GDN)',
+        'Sopot och Gdynia',
+      ],
+      routesTitle: 'Populära taxirutter',
+      routes: [
+        'Gdańsk flygplats → gamla stan',
+        'Gdańsk flygplats → Sopot',
+        'Gdańsk flygplats → Gdynia',
+        'Gamla stan → Gdańsk flygplats',
+      ],
+      cityRoutesTitle: 'Taxipriser från Gdańsk flygplats',
+      cityRoutesDescription: 'Se aktuellt pris från Gdańsk flygplats till dessa orter.',
+      cityRoutesItem: (destination: string) => `Taxipris från Gdańsk flygplats till ${destination}`,
+      faqTitle: 'FAQ',
+      faq: [
+        {
+          question: 'Hur snabbt är bekräftelsen?',
+          answer: 'De flesta bokningar bekräftas inom 5–10 minuter via e-post.',
+        },
+        {
+          question: 'Har ni fasta priser?',
+          answer: 'Ja, flygplatsrutter har fasta priser i båda riktningar.',
+        },
+        {
+          question: 'Kan jag betala med kort?',
+          answer: 'Ja, kortbetalning är möjlig. Kontant på begäran.',
+        },
+        {
+          question: 'Spårar ni flyg?',
+          answer: 'Ja, vi övervakar ankomster och justerar upphämtningstiden.',
         },
       ],
     },
@@ -4128,6 +4941,12 @@ const translations = {
       close: 'Luk',
       noPrepayment: 'Ingen forudbetaling',
       backToHome: '← Tilbage til forsiden',
+      notFoundTitle: 'Siden blev ikke fundet',
+      notFoundBody: 'Siden du leder efter findes ikke eller er flyttet.',
+      notFoundCta: 'Gå til forsiden',
+      notFoundSupport: 'Hvis dette er en fejl, kontakt os:',
+      notFoundRequested: 'Anmodet URL',
+      notFoundPopular: 'Populære sider',
       actualBadge: 'AKTUEL',
       priceFrom: 'fra',
       perNight: 'om natten',
@@ -4384,7 +5203,7 @@ const translations = {
     routeLanding: {
       orderNow: 'Book online nu',
       quickLinks: 'Quick links',
-      pricingLink: 'View pricing',
+      pricingLink: 'Se priser',
       orderLinks: {
         airportGdansk: 'Book airport → Gdańsk',
         airportSopot: 'Book airport → Sopot',
@@ -4433,6 +5252,134 @@ const translations = {
         {
           question: 'Hvor møder jeg chaufføren?',
           answer: 'Du får klare afhentningsinstruktioner og kontaktinfo i bekræftelses-e-mailen.',
+        },
+      ],
+    },
+    countryLanding: {
+      title: 'Lufthavnstransfer Gdańsk for rejsende fra Danmark',
+      description: 'Privat lufthavnstransfer i Gdańsk med faste priser, afhentning 24/7 og hurtig bekræftelse.',
+      intro: 'Til fly fra Danmark til Gdańsk lufthavn (GDN). Book online og få hurtig bekræftelse.',
+      ctaPrimary: 'Book transfer',
+      ctaSecondary: 'Se priser',
+      highlightsTitle: 'Hvorfor booke på forhånd',
+      highlights: [
+        'Meet & greet med klare afhentningsinstruktioner.',
+        'Flysporing og fleksibel afhentningstid.',
+        'Faste priser i PLN uden skjulte gebyrer.',
+        'Betaling med kort, Apple Pay, Google Pay, Revolut eller kontant efter aftale.',
+      ],
+      airportsTitle: 'Typiske afgangslufthavne (Danmark)',
+      airports: [
+        'København (CPH)',
+        'Billund (BLL)',
+        'Aarhus (AAR)',
+      ],
+      faqTitle: 'FAQ for rejsende fra Danmark',
+      faq: [
+        {
+          question: 'Kan jeg betale i DKK?',
+          answer: 'Priserne er i PLN. Kortbetalinger omregnes automatisk af din bank.',
+        },
+        {
+          question: 'Kan jeg få kvittering eller faktura?',
+          answer: 'Ja, skriv det i bookingen, så sender vi dokumentet på e-mail.',
+        },
+        {
+          question: 'Sporer I fly?',
+          answer: 'Ja, vi overvåger ankomster og justerer afhentningstiden.',
+        },
+        {
+          question: 'Hvor hurtigt får jeg bekræftelse?',
+          answer: 'De fleste bookinger bekræftes inden for 5–10 minutter via e-mail.',
+        },
+      ],
+    },
+    airportLanding: {
+      title: (city: string, airport: string) => `${city} → Lufthavnstransfer Gdańsk (${airport})`,
+      description: (city: string, airport: string) =>
+        `Privat transfer fra ${airport} til Gdańsk, Sopot og Gdynia. Faste priser og afhentning 24/7.`,
+      intro: (city: string, airport: string) =>
+        `Direkte fly fra ${airport} til Gdańsk er sæsonbaserede. Book transfer på forhånd.`,
+      ctaPrimary: 'Book transfer',
+      ctaSecondary: 'Se priser',
+      highlightsTitle: 'Hvorfor booke på forhånd',
+      highlights: [
+        'Meet & greet med klare afhentningsinstruktioner.',
+        'Flysporing og fleksibel afhentningstid.',
+        'Faste priser i PLN uden skjulte gebyrer.',
+        'Betaling med kort, Apple Pay, Google Pay, Revolut eller kontant efter aftale.',
+      ],
+      routeTitle: (airport: string) => `Fra ${airport} til Gdańsk`,
+      routeBody: (airport: string) =>
+        `Vi henter ankomster fra ${airport} og kører til Gdańsk, Sopot og Gdynia.`,
+      destinationsTitle: 'Populære destinationer i Tri-City',
+      faqTitle: 'FAQ',
+      faq: [
+        {
+          question: 'Er der direkte fly fra {city} til Gdańsk?',
+          answer: 'Direkte fly er sæsonbaserede. Tjek den aktuelle tidsplan før rejsen.',
+        },
+        {
+          question: 'Hvordan møder jeg chaufføren?',
+          answer: 'Du modtager afhentningsinstruktioner og kontaktinfo i bekræftelses-e-mailen.',
+        },
+        {
+          question: 'Sporer I fly?',
+          answer: 'Ja, vi overvåger ankomster og justerer afhentningstiden.',
+        },
+        {
+          question: 'Kan jeg betale med kort?',
+          answer: 'Ja, kortbetaling er muligt. Kontant efter aftale.',
+        },
+      ],
+    },
+    cityTaxi: {
+      title: 'Taxi Gdańsk',
+      subtitle: 'Faste priser og tilgængelighed 24/7.',
+      intro: 'Taxi Gdańsk til lufthavnstransfer og byture. Professionelle chauffører, hurtig bekræftelse og klare priser.',
+      ctaPrimary: 'Book taxi',
+      ctaSecondary: 'Se priser',
+      highlightsTitle: 'Hvorfor vælge os',
+      highlights: [
+        'Faste priser uden skjulte gebyrer.',
+        'Tilgængelig 24/7 til lufthavn og byture.',
+        'Flysporing og fleksibel afhentningstid.',
+        'Betaling med kort, Apple Pay, Google Pay, Revolut eller kontant efter aftale.',
+      ],
+      serviceAreaTitle: 'Serviceområde',
+      serviceArea: [
+        'Gdańsk gamle by og centrum',
+        'Gdańsk Wrzeszcz og Oliwa',
+        'Gdańsk lufthavn (GDN)',
+        'Sopot og Gdynia',
+      ],
+      routesTitle: 'Populære taxiruter',
+      routes: [
+        'Gdańsk lufthavn → gamle by',
+        'Gdańsk lufthavn → Sopot',
+        'Gdańsk lufthavn → Gdynia',
+        'Gamle by → Gdańsk lufthavn',
+      ],
+      cityRoutesTitle: 'Taxipriser fra Gdańsk lufthavn',
+      cityRoutesDescription: 'Se den aktuelle pris fra Gdańsk lufthavn til disse destinationer.',
+      cityRoutesItem: (destination: string) => `Taxipris fra Gdańsk lufthavn til ${destination}`,
+      faqTitle: 'FAQ',
+      faq: [
+        {
+          question: 'Hvor hurtigt er bekræftelsen?',
+          answer: 'De fleste bookinger bekræftes inden for 5–10 minutter via e-mail.',
+        },
+        {
+          question: 'Har I faste priser?',
+          answer: 'Ja, lufthavnsruter har faste priser i begge retninger.',
+        },
+        {
+          question: 'Kan jeg betale med kort?',
+          answer: 'Ja, kortbetaling er muligt. Kontant efter aftale.',
+        },
+        {
+          question: 'Sporer I fly?',
+          answer: 'Ja, vi overvåger ankomster og justerer afhentningstiden.',
         },
       ],
     },

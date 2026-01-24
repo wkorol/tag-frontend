@@ -4,6 +4,8 @@ export type PublicRouteKey =
   | 'airportTaxi'
   | 'airportSopot'
   | 'airportGdynia'
+  | 'countryLanding'
+  | 'taxiGdanskCity'
   | 'orderAirportGdansk'
   | 'orderAirportSopot'
   | 'orderAirportGdynia'
@@ -17,6 +19,8 @@ const routeSlugs: Record<Locale, Record<PublicRouteKey, string>> = {
     airportTaxi: 'gdansk-airport-taxi',
     airportSopot: 'gdansk-airport-to-sopot',
     airportGdynia: 'gdansk-airport-to-gdynia',
+    countryLanding: 'gdansk-airport-transfer-uk',
+    taxiGdanskCity: 'taxi-gdansk',
     orderAirportGdansk: 'book-gdansk-airport-transfer',
     orderAirportSopot: 'book-gdansk-airport-sopot',
     orderAirportGdynia: 'book-gdansk-airport-gdynia',
@@ -29,6 +33,8 @@ const routeSlugs: Record<Locale, Record<PublicRouteKey, string>> = {
     airportTaxi: 'taxi-lotnisko-gdansk',
     airportSopot: 'lotnisko-gdansk-sopot',
     airportGdynia: 'lotnisko-gdansk-gdynia',
+    countryLanding: 'transfer-lotnisko-gdansk',
+    taxiGdanskCity: 'taxi-gdansk',
     orderAirportGdansk: 'rezerwacja-lotnisko-gdansk',
     orderAirportSopot: 'rezerwacja-lotnisko-gdansk-sopot',
     orderAirportGdynia: 'rezerwacja-lotnisko-gdansk-gdynia',
@@ -41,6 +47,8 @@ const routeSlugs: Record<Locale, Record<PublicRouteKey, string>> = {
     airportTaxi: 'gdansk-flughafen-taxi',
     airportSopot: 'gdansk-flughafen-sopot',
     airportGdynia: 'gdansk-flughafen-gdynia',
+    countryLanding: 'gdansk-airport-transfer-deutschland',
+    taxiGdanskCity: 'taxi-gdansk',
     orderAirportGdansk: 'buchung-gdansk-flughafen',
     orderAirportSopot: 'buchung-gdansk-flughafen-sopot',
     orderAirportGdynia: 'buchung-gdansk-flughafen-gdynia',
@@ -53,6 +61,8 @@ const routeSlugs: Record<Locale, Record<PublicRouteKey, string>> = {
     airportTaxi: 'gdansk-lentokentta-taksi',
     airportSopot: 'gdansk-lentokentta-sopot',
     airportGdynia: 'gdansk-lentokentta-gdynia',
+    countryLanding: 'gdansk-lentokenttakuljetus-suomi',
+    taxiGdanskCity: 'taxi-gdansk',
     orderAirportGdansk: 'varaus-gdansk-lentokentta',
     orderAirportSopot: 'varaus-gdansk-lentokentta-sopot',
     orderAirportGdynia: 'varaus-gdansk-lentokentta-gdynia',
@@ -65,6 +75,8 @@ const routeSlugs: Record<Locale, Record<PublicRouteKey, string>> = {
     airportTaxi: 'gdansk-flyplass-taxi',
     airportSopot: 'gdansk-flyplass-sopot',
     airportGdynia: 'gdansk-flyplass-gdynia',
+    countryLanding: 'gdansk-flyplasstransport-norge',
+    taxiGdanskCity: 'taxi-gdansk',
     orderAirportGdansk: 'bestilling-gdansk-flyplass',
     orderAirportSopot: 'bestilling-gdansk-flyplass-sopot',
     orderAirportGdynia: 'bestilling-gdansk-flyplass-gdynia',
@@ -77,6 +89,8 @@ const routeSlugs: Record<Locale, Record<PublicRouteKey, string>> = {
     airportTaxi: 'gdansk-flygplats-taxi',
     airportSopot: 'gdansk-flygplats-sopot',
     airportGdynia: 'gdansk-flygplats-gdynia',
+    countryLanding: 'gdansk-flygplatstransfer-sverige',
+    taxiGdanskCity: 'taxi-gdansk',
     orderAirportGdansk: 'bokning-gdansk-flygplats',
     orderAirportSopot: 'bokning-gdansk-flygplats-sopot',
     orderAirportGdynia: 'bokning-gdansk-flygplats-gdynia',
@@ -89,6 +103,8 @@ const routeSlugs: Record<Locale, Record<PublicRouteKey, string>> = {
     airportTaxi: 'gdansk-lufthavn-taxa',
     airportSopot: 'gdansk-lufthavn-sopot',
     airportGdynia: 'gdansk-lufthavn-gdynia',
+    countryLanding: 'gdansk-lufthavn-transfer-danmark',
+    taxiGdanskCity: 'taxi-gdansk',
     orderAirportGdansk: 'booking-gdansk-lufthavn',
     orderAirportSopot: 'booking-gdansk-lufthavn-sopot',
     orderAirportGdynia: 'booking-gdansk-lufthavn-gdynia',
