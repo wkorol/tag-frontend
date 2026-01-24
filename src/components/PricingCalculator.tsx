@@ -666,9 +666,7 @@ export function PricingCalculator() {
         const gdanskFixedPrice =
           !isAirportRoute &&
           pickupInGdansk &&
-          destinationInGdansk &&
-          !gdanskCenterPickup &&
-          !gdanskCenterDestination
+          destinationInGdansk
             ? getGdanskCityPrice(distance)
             : null;
 

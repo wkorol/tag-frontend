@@ -822,8 +822,6 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
         const distance = routedInfo?.km ?? straightDistance;
         const pickupInGdansk = isPointInsideGeoJson(pickup, cityPolygons.gdansk);
         const destinationInGdansk = isPointInsideGeoJson(destination, cityPolygons.gdansk);
-        const gdanskCenterPickup = getCenterKey(pickup) === 'gdansk';
-        const gdanskCenterDestination = getCenterKey(destination) === 'gdansk';
 
         if (!active) return;
 
@@ -918,9 +916,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
         const gdanskFixedPrice =
           !isAirportRoute &&
           pickupInGdansk &&
-          destinationInGdansk &&
-          !gdanskCenterPickup &&
-          !gdanskCenterDestination
+          destinationInGdansk
             ? getGdanskCityPrice(distance)
             : null;
 
