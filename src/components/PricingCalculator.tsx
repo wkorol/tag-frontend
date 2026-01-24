@@ -956,7 +956,7 @@ export function PricingCalculator() {
                 </div>
               </div>
               {showTaximeter && day.savingsPercent > 0 && (
-                <div className="mt-2 grid gap-3 sm:grid-cols-2">
+                <div className="mt-2 hidden gap-3 sm:grid sm:grid-cols-2">
                   <div className="flex items-center justify-center">
                     <div
                       className="inline-flex items-center rounded-full font-semibold shadow-sm"
