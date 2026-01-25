@@ -55,8 +55,10 @@
       },
       "scripts": {
           "dev": "vite",
-      "build": "node scripts/update-sitemap.mjs && vite build && npm run build:ssr",
-      "build:static": "node scripts/update-sitemap.mjs && vite build && npm run build:ssr && node scripts/prerender.mjs",
+      "prebuild": "node scripts/update-sitemap.mjs",
+      "prebuild:static": "node scripts/update-sitemap.mjs",
+      "build": "vite build && npm run build:ssr",
+      "build:static": "vite build && npm run build:ssr && node scripts/prerender.mjs",
       "build:ssr": "vite build --ssr src/entry-server.tsx --outDir build-ssr",
       "start": "node server.mjs"
   }
