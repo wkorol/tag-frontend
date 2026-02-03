@@ -1306,15 +1306,15 @@ function PrivacyPolicy() {
 
 function Footer$1() {
   const { t, locale } = useI18n();
-  return /* @__PURE__ */ jsx("footer", { className: "bg-gray-900 text-gray-300 py-12", children: /* @__PURE__ */ jsxs("div", { className: "max-w-6xl mx-auto px-4", children: [
+  return /* @__PURE__ */ jsx("footer", { className: "bg-gray-900 text-gray-100 py-12", children: /* @__PURE__ */ jsxs("div", { className: "max-w-6xl mx-auto px-4", children: [
     /* @__PURE__ */ jsxs("div", { className: "grid md:grid-cols-4 gap-8", children: [
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx("h3", { className: "text-white mb-4", children: "Taxi Airport Gdańsk" }),
-        /* @__PURE__ */ jsx("p", { className: "text-sm", children: t.footer.description })
+        /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-200", children: t.footer.description })
       ] }),
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx("h4", { className: "text-white mb-4", children: t.footer.contactTitle }),
-        /* @__PURE__ */ jsxs("div", { className: "space-y-3 text-sm", children: [
+        /* @__PURE__ */ jsxs("div", { className: "space-y-3 text-sm text-gray-200", children: [
           /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
             /* @__PURE__ */ jsx(Mail, { className: "w-4 h-4" }),
             /* @__PURE__ */ jsx(
@@ -1322,7 +1322,7 @@ function Footer$1() {
               {
                 href: "mailto:booking@taxiairportgdansk.com",
                 onClick: () => trackContactClick("email"),
-                className: "hover:text-white transition-colors",
+                className: "text-white hover:text-gray-200 transition-colors",
                 children: "booking@taxiairportgdansk.com"
               }
             )
@@ -1331,13 +1331,13 @@ function Footer$1() {
             /* @__PURE__ */ jsx(MapPin, { className: "w-4 h-4" }),
             /* @__PURE__ */ jsx("span", { children: t.footer.location })
           ] }),
-          /* @__PURE__ */ jsx("p", { className: "text-xs text-gray-400 mt-4", children: t.footer.bookingNote })
+          /* @__PURE__ */ jsx("p", { className: "text-xs text-gray-300 mt-4", children: t.footer.bookingNote })
         ] })
       ] }),
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx("h4", { className: "text-white mb-4", children: t.footer.hoursTitle }),
-        /* @__PURE__ */ jsx("p", { className: "text-sm", children: t.footer.hoursBody }),
-        /* @__PURE__ */ jsx("p", { className: "text-sm mt-2", children: t.footer.hoursSub })
+        /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-200", children: t.footer.hoursBody }),
+        /* @__PURE__ */ jsx("p", { className: "text-sm mt-2 text-gray-200", children: t.footer.hoursSub })
       ] }),
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx("h4", { className: "text-white mb-4", children: t.footer.routesTitle }),
@@ -1347,7 +1347,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "countryLanding"),
               onClick: () => trackNavClick("footer_country_landing"),
-              className: "block hover:text-white transition-colors",
+              className: "block text-white hover:text-gray-200 transition-colors",
               children: t.countryLanding?.title ?? t.navbar.airportTaxi
             }
           ),
@@ -1356,7 +1356,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "taxiGdanskCity"),
               onClick: () => trackNavClick("footer_taxi_gdansk"),
-              className: "block hover:text-white transition-colors",
+              className: "block text-white hover:text-gray-200 transition-colors",
               children: t.cityTaxi?.title ?? "Taxi Gdańsk"
             }
           ),
@@ -1365,7 +1365,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "airportTaxi"),
               onClick: () => trackNavClick("footer_airport_taxi"),
-              className: "block hover:text-white transition-colors",
+              className: "block text-white hover:text-gray-200 transition-colors",
               children: t.navbar.airportTaxi
             }
           ),
@@ -1374,7 +1374,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "airportSopot"),
               onClick: () => trackNavClick("footer_airport_sopot"),
-              className: "block hover:text-white transition-colors",
+              className: "block text-white hover:text-gray-200 transition-colors",
               children: t.navbar.airportSopot
             }
           ),
@@ -1383,14 +1383,14 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "airportGdynia"),
               onClick: () => trackNavClick("footer_airport_gdynia"),
-              className: "block hover:text-white transition-colors",
+              className: "block text-white hover:text-gray-200 transition-colors",
               children: t.navbar.airportGdynia
             }
           )
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "border-t border-gray-800 mt-8 pt-8 text-center text-sm", children: /* @__PURE__ */ jsxs("p", { children: [
+    /* @__PURE__ */ jsx("div", { className: "border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-200", children: /* @__PURE__ */ jsxs("p", { children: [
       "© ",
       (/* @__PURE__ */ new Date()).getFullYear(),
       " Taxi Airport Gdańsk. ",
@@ -1401,19 +1401,19 @@ function Footer$1() {
         {
           href: getRoutePath(locale, "cookies"),
           onClick: () => trackNavClick("footer_cookies"),
-          className: "text-gray-300 hover:text-white underline",
+          className: "text-white hover:text-gray-200 underline",
           children: t.footer.cookiePolicy
         }
       ),
       " ",
-      /* @__PURE__ */ jsx("span", { className: "text-gray-500", children: "|" }),
+      /* @__PURE__ */ jsx("span", { className: "text-gray-400", children: "|" }),
       " ",
       /* @__PURE__ */ jsx(
         "a",
         {
           href: getRoutePath(locale, "privacy"),
           onClick: () => trackNavClick("footer_privacy"),
-          className: "text-gray-300 hover:text-white underline",
+          className: "text-white hover:text-gray-200 underline",
           children: t.footer.privacyPolicy
         }
       )

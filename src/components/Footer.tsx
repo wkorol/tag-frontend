@@ -7,25 +7,25 @@ export function Footer() {
   const { t, locale } = useI18n();
 
   return (
-    <footer className="bg-gray-900 text-gray-300 py-12">
+    <footer className="bg-gray-900 text-gray-100 py-12">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-white mb-4">Taxi Airport Gdańsk</h3>
-            <p className="text-sm">
+            <p className="text-sm text-gray-200">
               {t.footer.description}
             </p>
           </div>
 
           <div>
             <h4 className="text-white mb-4">{t.footer.contactTitle}</h4>
-            <div className="space-y-3 text-sm">
+            <div className="space-y-3 text-sm text-gray-200">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
                 <a
                   href="mailto:booking@taxiairportgdansk.com"
                   onClick={() => trackContactClick('email')}
-                  className="hover:text-white transition-colors"
+                  className="text-white hover:text-gray-200 transition-colors"
                 >
                   booking@taxiairportgdansk.com
                 </a>
@@ -34,7 +34,7 @@ export function Footer() {
                 <MapPin className="w-4 h-4" />
                 <span>{t.footer.location}</span>
               </div>
-              <p className="text-xs text-gray-400 mt-4">
+              <p className="text-xs text-gray-300 mt-4">
                 {t.footer.bookingNote}
               </p>
             </div>
@@ -42,8 +42,8 @@ export function Footer() {
 
           <div>
             <h4 className="text-white mb-4">{t.footer.hoursTitle}</h4>
-            <p className="text-sm">{t.footer.hoursBody}</p>
-            <p className="text-sm mt-2">
+            <p className="text-sm text-gray-200">{t.footer.hoursBody}</p>
+            <p className="text-sm mt-2 text-gray-200">
               {t.footer.hoursSub}
             </p>
           </div>
@@ -54,35 +54,35 @@ export function Footer() {
               <a
                 href={getRoutePath(locale, 'countryLanding')}
                 onClick={() => trackNavClick('footer_country_landing')}
-                className="block hover:text-white transition-colors"
+                className="block text-white hover:text-gray-200 transition-colors"
               >
                 {t.countryLanding?.title ?? t.navbar.airportTaxi}
               </a>
               <a
                 href={getRoutePath(locale, 'taxiGdanskCity')}
                 onClick={() => trackNavClick('footer_taxi_gdansk')}
-                className="block hover:text-white transition-colors"
+                className="block text-white hover:text-gray-200 transition-colors"
               >
                 {t.cityTaxi?.title ?? 'Taxi Gdańsk'}
               </a>
               <a
                 href={getRoutePath(locale, 'airportTaxi')}
                 onClick={() => trackNavClick('footer_airport_taxi')}
-                className="block hover:text-white transition-colors"
+                className="block text-white hover:text-gray-200 transition-colors"
               >
                 {t.navbar.airportTaxi}
               </a>
               <a
                 href={getRoutePath(locale, 'airportSopot')}
                 onClick={() => trackNavClick('footer_airport_sopot')}
-                className="block hover:text-white transition-colors"
+                className="block text-white hover:text-gray-200 transition-colors"
               >
                 {t.navbar.airportSopot}
               </a>
               <a
                 href={getRoutePath(locale, 'airportGdynia')}
                 onClick={() => trackNavClick('footer_airport_gdynia')}
-                className="block hover:text-white transition-colors"
+                className="block text-white hover:text-gray-200 transition-colors"
               >
                 {t.navbar.airportGdynia}
               </a>
@@ -90,24 +90,24 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
+        <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-200">
           <p>
             &copy; {new Date().getFullYear()} Taxi Airport Gdańsk. {t.footer.rights}
             {' '}
             <a
               href={getRoutePath(locale, 'cookies')}
               onClick={() => trackNavClick('footer_cookies')}
-              className="text-gray-300 hover:text-white underline"
+              className="text-white hover:text-gray-200 underline"
             >
               {t.footer.cookiePolicy}
             </a>
             {' '}
-            <span className="text-gray-500">|</span>
+            <span className="text-gray-400">|</span>
             {' '}
             <a
               href={getRoutePath(locale, 'privacy')}
               onClick={() => trackNavClick('footer_privacy')}
-              className="text-gray-300 hover:text-white underline"
+              className="text-white hover:text-gray-200 underline"
             >
               {t.footer.privacyPolicy}
             </a>
