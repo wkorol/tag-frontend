@@ -207,8 +207,8 @@ html {
   }
   50% {
     transform: scale(1.05);
-    background-color: rgb(194 65 12); /* orange-700 */
-    box-shadow: 0 0 20px 5px rgba(194, 65, 12, 0.4);
+    background-color: rgb(154 52 18); /* orange-800 */
+    box-shadow: 0 0 20px 5px rgba(154, 52, 18, 0.4);
   }
 }
 

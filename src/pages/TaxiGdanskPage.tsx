@@ -41,7 +41,7 @@ export function TaxiGdanskPage() {
                       window.location.href = `${basePath}/`;
                     }
                   }}
-                  className="inline-flex items-center gap-2 bg-orange-700 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-600 transition-colors animate-pulse-glow"
+                  className="inline-flex items-center gap-2 bg-orange-800 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-700 transition-colors animate-pulse-glow"
                 >
                   {content.ctaPrimary}
                 </a>

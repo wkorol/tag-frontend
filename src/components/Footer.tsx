@@ -7,7 +7,7 @@ export function Footer() {
   const { t, locale } = useI18n();
 
   return (
-    <footer className="bg-gray-900 text-gray-100 py-12">
+    <footer className="bg-gray-900 text-gray-200 py-12">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8">
           <div>
@@ -25,7 +25,7 @@ export function Footer() {
                 <a
                   href="mailto:booking@taxiairportgdansk.com"
                   onClick={() => trackContactClick('email')}
-                  className="text-white hover:text-gray-200 transition-colors"
+                  className="text-white visited:text-white hover:text-gray-200 transition-colors"
                 >
                   booking@taxiairportgdansk.com
                 </a>
@@ -34,7 +34,7 @@ export function Footer() {
                 <MapPin className="w-4 h-4" />
                 <span>{t.footer.location}</span>
               </div>
-              <p className="text-xs text-gray-300 mt-4">
+              <p className="text-xs text-gray-200 mt-4">
                 {t.footer.bookingNote}
               </p>
             </div>
@@ -54,35 +54,35 @@ export function Footer() {
               <a
                 href={getRoutePath(locale, 'countryLanding')}
                 onClick={() => trackNavClick('footer_country_landing')}
-                className="block text-white hover:text-gray-200 transition-colors"
+                className="block text-white visited:text-white hover:text-gray-200 transition-colors"
               >
                 {t.countryLanding?.title ?? t.navbar.airportTaxi}
               </a>
               <a
                 href={getRoutePath(locale, 'taxiGdanskCity')}
                 onClick={() => trackNavClick('footer_taxi_gdansk')}
-                className="block text-white hover:text-gray-200 transition-colors"
+                className="block text-white visited:text-white hover:text-gray-200 transition-colors"
               >
                 {t.cityTaxi?.title ?? 'Taxi Gdańsk'}
               </a>
               <a
                 href={getRoutePath(locale, 'airportTaxi')}
                 onClick={() => trackNavClick('footer_airport_taxi')}
-                className="block text-white hover:text-gray-200 transition-colors"
+                className="block text-white visited:text-white hover:text-gray-200 transition-colors"
               >
                 {t.navbar.airportTaxi}
               </a>
               <a
                 href={getRoutePath(locale, 'airportSopot')}
                 onClick={() => trackNavClick('footer_airport_sopot')}
-                className="block text-white hover:text-gray-200 transition-colors"
+                className="block text-white visited:text-white hover:text-gray-200 transition-colors"
               >
                 {t.navbar.airportSopot}
               </a>
               <a
                 href={getRoutePath(locale, 'airportGdynia')}
                 onClick={() => trackNavClick('footer_airport_gdynia')}
-                className="block text-white hover:text-gray-200 transition-colors"
+                className="block text-white visited:text-white hover:text-gray-200 transition-colors"
               >
                 {t.navbar.airportGdynia}
               </a>
@@ -90,24 +90,24 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-200">
+        <div className="border-t border-gray-600 mt-8 pt-8 text-center text-sm text-gray-200">
           <p>
             &copy; {new Date().getFullYear()} Taxi Airport Gdańsk. {t.footer.rights}
             {' '}
             <a
               href={getRoutePath(locale, 'cookies')}
               onClick={() => trackNavClick('footer_cookies')}
-              className="text-white hover:text-gray-200 underline"
+              className="text-white visited:text-white hover:text-gray-200 underline"
             >
               {t.footer.cookiePolicy}
             </a>
             {' '}
-            <span className="text-gray-400">|</span>
+            <span className="text-gray-300">|</span>
             {' '}
             <a
               href={getRoutePath(locale, 'privacy')}
               onClick={() => trackNavClick('footer_privacy')}
-              className="text-white hover:text-gray-200 underline"
+              className="text-white visited:text-white hover:text-gray-200 underline"
             >
               {t.footer.privacyPolicy}
             </a>

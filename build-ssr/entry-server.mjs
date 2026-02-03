@@ -762,7 +762,7 @@ function Hero() {
                 trackCtaClick("hero_order_online");
                 requestScrollTo("vehicle-selection");
               },
-              className: "inline-flex items-center gap-2 bg-orange-700 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-600 transition-colors animate-pulse-glow",
+              className: "inline-flex items-center gap-2 bg-orange-800 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-700 transition-colors animate-pulse-glow",
               children: t.common.orderOnlineNow
             }
           )
@@ -1306,7 +1306,7 @@ function PrivacyPolicy() {
 
 function Footer$1() {
   const { t, locale } = useI18n();
-  return /* @__PURE__ */ jsx("footer", { className: "bg-gray-900 text-gray-100 py-12", children: /* @__PURE__ */ jsxs("div", { className: "max-w-6xl mx-auto px-4", children: [
+  return /* @__PURE__ */ jsx("footer", { className: "bg-gray-900 text-gray-200 py-12", children: /* @__PURE__ */ jsxs("div", { className: "max-w-6xl mx-auto px-4", children: [
     /* @__PURE__ */ jsxs("div", { className: "grid md:grid-cols-4 gap-8", children: [
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx("h3", { className: "text-white mb-4", children: "Taxi Airport Gdańsk" }),
@@ -1322,7 +1322,7 @@ function Footer$1() {
               {
                 href: "mailto:booking@taxiairportgdansk.com",
                 onClick: () => trackContactClick("email"),
-                className: "text-white hover:text-gray-200 transition-colors",
+                className: "text-white visited:text-white hover:text-gray-200 transition-colors",
                 children: "booking@taxiairportgdansk.com"
               }
             )
@@ -1331,7 +1331,7 @@ function Footer$1() {
             /* @__PURE__ */ jsx(MapPin, { className: "w-4 h-4" }),
             /* @__PURE__ */ jsx("span", { children: t.footer.location })
           ] }),
-          /* @__PURE__ */ jsx("p", { className: "text-xs text-gray-300 mt-4", children: t.footer.bookingNote })
+          /* @__PURE__ */ jsx("p", { className: "text-xs text-gray-200 mt-4", children: t.footer.bookingNote })
         ] })
       ] }),
       /* @__PURE__ */ jsxs("div", { children: [
@@ -1347,7 +1347,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "countryLanding"),
               onClick: () => trackNavClick("footer_country_landing"),
-              className: "block text-white hover:text-gray-200 transition-colors",
+              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
               children: t.countryLanding?.title ?? t.navbar.airportTaxi
             }
           ),
@@ -1356,7 +1356,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "taxiGdanskCity"),
               onClick: () => trackNavClick("footer_taxi_gdansk"),
-              className: "block text-white hover:text-gray-200 transition-colors",
+              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
               children: t.cityTaxi?.title ?? "Taxi Gdańsk"
             }
           ),
@@ -1365,7 +1365,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "airportTaxi"),
               onClick: () => trackNavClick("footer_airport_taxi"),
-              className: "block text-white hover:text-gray-200 transition-colors",
+              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
               children: t.navbar.airportTaxi
             }
           ),
@@ -1374,7 +1374,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "airportSopot"),
               onClick: () => trackNavClick("footer_airport_sopot"),
-              className: "block text-white hover:text-gray-200 transition-colors",
+              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
               children: t.navbar.airportSopot
             }
           ),
@@ -1383,14 +1383,14 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "airportGdynia"),
               onClick: () => trackNavClick("footer_airport_gdynia"),
-              className: "block text-white hover:text-gray-200 transition-colors",
+              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
               children: t.navbar.airportGdynia
             }
           )
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-200", children: /* @__PURE__ */ jsxs("p", { children: [
+    /* @__PURE__ */ jsx("div", { className: "border-t border-gray-600 mt-8 pt-8 text-center text-sm text-gray-200", children: /* @__PURE__ */ jsxs("p", { children: [
       "© ",
       (/* @__PURE__ */ new Date()).getFullYear(),
       " Taxi Airport Gdańsk. ",
@@ -1401,19 +1401,19 @@ function Footer$1() {
         {
           href: getRoutePath(locale, "cookies"),
           onClick: () => trackNavClick("footer_cookies"),
-          className: "text-white hover:text-gray-200 underline",
+          className: "text-white visited:text-white hover:text-gray-200 underline",
           children: t.footer.cookiePolicy
         }
       ),
       " ",
-      /* @__PURE__ */ jsx("span", { className: "text-gray-400", children: "|" }),
+      /* @__PURE__ */ jsx("span", { className: "text-gray-300", children: "|" }),
       " ",
       /* @__PURE__ */ jsx(
         "a",
         {
           href: getRoutePath(locale, "privacy"),
           onClick: () => trackNavClick("footer_privacy"),
-          className: "text-white hover:text-gray-200 underline",
+          className: "text-white visited:text-white hover:text-gray-200 underline",
           children: t.footer.privacyPolicy
         }
       )
@@ -1500,7 +1500,7 @@ function NotFoundPage() {
             Link,
             {
               to: homePath,
-              className: "inline-flex items-center gap-2 bg-orange-700 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-600 transition-colors animate-pulse-glow",
+              className: "inline-flex items-center gap-2 bg-orange-800 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-700 transition-colors animate-pulse-glow",
               children: t.common.notFoundCta
             }
           ),
@@ -1645,7 +1645,7 @@ function CountryLanding() {
                   window.location.href = `${basePath}/`;
                 }
               },
-              className: "inline-flex items-center gap-2 bg-orange-700 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-600 transition-colors animate-pulse-glow",
+              className: "inline-flex items-center gap-2 bg-orange-800 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-700 transition-colors animate-pulse-glow",
               children: country.ctaPrimary
             }
           ),
@@ -1712,7 +1712,49 @@ function CountryAirportLanding() {
     country
   };
   const landing = t.airportLanding;
+  const landingAny = landing;
   const destinations = t.pages?.gdanskTaxi?.examples ?? [];
+  const resolveLandingText = (value, fallback, ...args) => {
+    if (typeof value === "function") {
+      try {
+        return value(...args);
+      } catch {
+        return fallback;
+      }
+    }
+    if (typeof value === "string") {
+      return replaceTokens(value, tokens);
+    }
+    return fallback;
+  };
+  const landingTitle = resolveLandingText(
+    landingAny.title,
+    `${airportData.city} - transfer from ${airportData.airport} to Gdańsk`,
+    airportData.city,
+    airportData.airport
+  );
+  const landingDescription = resolveLandingText(
+    landingAny.description,
+    `Private airport transfer from ${airportData.airport} to Gdańsk, Sopot and Gdynia with fixed prices.`,
+    airportData.city,
+    airportData.airport
+  );
+  const landingIntro = resolveLandingText(
+    landingAny.intro,
+    `Book your transfer in advance and get quick confirmation with flight tracking included.`,
+    airportData.city,
+    airportData.airport
+  );
+  const landingRouteTitle = resolveLandingText(
+    landingAny.routeTitle,
+    `Route from ${airportData.airport}`,
+    airportData.airport
+  );
+  const landingRouteBody = resolveLandingText(
+    landingAny.routeBody,
+    `We monitor arrivals and organize a smooth pickup from ${airportData.airport} to your address in the Tri-City area.`,
+    airportData.airport
+  );
   const highlights = landing.highlights.map((item) => replaceTokens(item, tokens));
   const faq = landing.faq.map((entry) => ({
     question: replaceTokens(entry.question, tokens),
@@ -1727,13 +1769,13 @@ function CountryAirportLanding() {
           {
             items: [
               { label: t.common.home, href: `${basePath}/` },
-              { label: landing.title(airportData.city, airportData.airport) }
+              { label: landingTitle }
             ]
           }
         ),
-        /* @__PURE__ */ jsx("h1", { className: "text-3xl text-gray-900 mb-4", children: landing.title(airportData.city, airportData.airport) }),
-        /* @__PURE__ */ jsx("p", { className: "text-gray-600 mb-4", children: landing.description(airportData.city, airportData.airport) }),
-        /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-500 mb-6", children: landing.intro(airportData.city, airportData.airport) }),
+        /* @__PURE__ */ jsx("h1", { className: "text-3xl text-gray-900 mb-4", children: landingTitle }),
+        /* @__PURE__ */ jsx("p", { className: "text-gray-600 mb-4", children: landingDescription }),
+        /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-500 mb-6", children: landingIntro }),
         /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap gap-3", children: [
           /* @__PURE__ */ jsx(
             "a",
@@ -1747,7 +1789,7 @@ function CountryAirportLanding() {
                   window.location.href = `${basePath}/`;
                 }
               },
-              className: "inline-flex items-center gap-2 bg-orange-700 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-600 transition-colors animate-pulse-glow",
+              className: "inline-flex items-center gap-2 bg-orange-800 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-700 transition-colors animate-pulse-glow",
               children: landing.ctaPrimary
             }
           ),
@@ -1764,8 +1806,8 @@ function CountryAirportLanding() {
       ] }) }) }),
       /* @__PURE__ */ jsx("section", { className: "py-12", children: /* @__PURE__ */ jsxs("div", { className: "max-w-5xl mx-auto px-4 grid gap-6 md:grid-cols-2", children: [
         /* @__PURE__ */ jsxs("div", { className: "bg-white border border-gray-200 rounded-2xl p-6", children: [
-          /* @__PURE__ */ jsx("h2", { className: "text-xl text-gray-900 mb-3", children: landing.routeTitle(airportData.airport) }),
-          /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-600", children: landing.routeBody(airportData.airport) })
+          /* @__PURE__ */ jsx("h2", { className: "text-xl text-gray-900 mb-3", children: landingRouteTitle }),
+          /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-600", children: landingRouteBody })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "bg-white border border-gray-200 rounded-2xl p-6", children: [
           /* @__PURE__ */ jsx("h2", { className: "text-xl text-gray-900 mb-3", children: landing.highlightsTitle }),
@@ -1863,7 +1905,7 @@ function CityRouteLanding() {
                   window.location.href = `${basePath}/${getRouteSlug(locale, "pricing")}?from=airport&to=${encodeURIComponent(destination)}#pricing-calculator`;
                 }
               },
-              className: "inline-flex items-center gap-2 bg-orange-700 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-600 transition-colors animate-pulse-glow",
+              className: "inline-flex items-center gap-2 bg-orange-800 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-700 transition-colors animate-pulse-glow",
               children: "Sprawdź cenę w kalkulatorze"
             }
           ),
@@ -1956,7 +1998,7 @@ function TaxiGdanskPage() {
                   window.location.href = `${basePath}/`;
                 }
               },
-              className: "inline-flex items-center gap-2 bg-orange-700 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-600 transition-colors animate-pulse-glow",
+              className: "inline-flex items-center gap-2 bg-orange-800 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-700 transition-colors animate-pulse-glow",
               children: content.ctaPrimary
             }
           ),
@@ -2023,7 +2065,7 @@ const Footer = lazy(() => Promise.resolve().then(() => Footer$2).then((mod) => (
 const OrderForm = lazy(() => import('./assets/OrderForm-CjlXdu33.mjs').then((mod) => ({ default: mod.OrderForm })));
 const QuoteForm = lazy(() => import('./assets/QuoteForm-pLVSBhbI.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./assets/ManageOrder-CJSOJO9N.mjs').then((mod) => ({ default: mod.ManageOrder })));
-const RouteLanding = lazy(() => import('./assets/RouteLanding-XvzdmTU3.mjs').then((mod) => ({ default: mod.RouteLanding })));
+const RouteLanding = lazy(() => import('./assets/RouteLanding-NL9TORIN.mjs').then((mod) => ({ default: mod.RouteLanding })));
 const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-BvbUymvq.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
 const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-BvbUymvq.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
 const PricingPage = lazy(() => import('./assets/PricingPage-DWuPyIo0.mjs').then((mod) => ({ default: mod.PricingPage })));

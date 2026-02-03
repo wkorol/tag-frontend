@@ -1735,9 +1735,9 @@ html {
   }
 
   50% {
-    background-color: #f97316;
+    background-color: #9a3412;
     transform: scale(1.05);
-    box-shadow: 0 0 20px 5px #f9731666;
+    box-shadow: 0 0 20px 5px #9a341266;
   }
 }
 

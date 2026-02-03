@@ -33,7 +33,55 @@ export function CountryAirportLanding() {
     country,
   };
   const landing = t.airportLanding;
+  const landingAny = landing as Record<string, unknown>;
   const destinations = t.pages?.gdanskTaxi?.examples ?? [];
+
+  const resolveLandingText = (
+    value: unknown,
+    fallback: string,
+    ...args: string[]
+  ) => {
+    if (typeof value === 'function') {
+      try {
+        return (value as (...fnArgs: string[]) => string)(...args);
+      } catch {
+        return fallback;
+      }
+    }
+    if (typeof value === 'string') {
+      return replaceTokens(value, tokens);
+    }
+    return fallback;
+  };
+
+  const landingTitle = resolveLandingText(
+    landingAny.title,
+    `${airportData.city} - transfer from ${airportData.airport} to Gdańsk`,
+    airportData.city,
+    airportData.airport
+  );
+  const landingDescription = resolveLandingText(
+    landingAny.description,
+    `Private airport transfer from ${airportData.airport} to Gdańsk, Sopot and Gdynia with fixed prices.`,
+    airportData.city,
+    airportData.airport
+  );
+  const landingIntro = resolveLandingText(
+    landingAny.intro,
+    `Book your transfer in advance and get quick confirmation with flight tracking included.`,
+    airportData.city,
+    airportData.airport
+  );
+  const landingRouteTitle = resolveLandingText(
+    landingAny.routeTitle,
+    `Route from ${airportData.airport}`,
+    airportData.airport
+  );
+  const landingRouteBody = resolveLandingText(
+    landingAny.routeBody,
+    `We monitor arrivals and organize a smooth pickup from ${airportData.airport} to your address in the Tri-City area.`,
+    airportData.airport
+  );
 
   const highlights = landing.highlights.map((item) => replaceTokens(item, tokens));
   const faq = landing.faq.map((entry) => ({
@@ -51,17 +99,17 @@ export function CountryAirportLanding() {
               <Breadcrumbs
                 items={[
                   { label: t.common.home, href: `${basePath}/` },
-                  { label: landing.title(airportData.city, airportData.airport) },
+                  { label: landingTitle },
                 ]}
               />
               <h1 className="text-3xl text-gray-900 mb-4">
-                {landing.title(airportData.city, airportData.airport)}
+                {landingTitle}
               </h1>
               <p className="text-gray-600 mb-4">
-                {landing.description(airportData.city, airportData.airport)}
+                {landingDescription}
               </p>
               <p className="text-sm text-gray-500 mb-6">
-                {landing.intro(airportData.city, airportData.airport)}
+                {landingIntro}
               </p>
               <div className="flex flex-wrap gap-3">
                 <a
@@ -74,7 +122,7 @@ export function CountryAirportLanding() {
                       window.location.href = `${basePath}/`;
                     }
                   }}
-                  className="inline-flex items-center gap-2 bg-orange-700 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-600 transition-colors animate-pulse-glow"
+                  className="inline-flex items-center gap-2 bg-orange-800 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-700 transition-colors animate-pulse-glow"
                 >
                   {landing.ctaPrimary}
                 </a>
@@ -93,9 +141,9 @@ export function CountryAirportLanding() {
         <section className="py-12">
           <div className="max-w-5xl mx-auto px-4 grid gap-6 md:grid-cols-2">
             <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h2 className="text-xl text-gray-900 mb-3">{landing.routeTitle(airportData.airport)}</h2>
+              <h2 className="text-xl text-gray-900 mb-3">{landingRouteTitle}</h2>
               <p className="text-sm text-gray-600">
-                {landing.routeBody(airportData.airport)}
+                {landingRouteBody}
               </p>
             </div>
             <div className="bg-white border border-gray-200 rounded-2xl p-6">
