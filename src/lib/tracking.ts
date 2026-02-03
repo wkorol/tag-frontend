@@ -1,5 +1,7 @@
+import { isAnalyticsEnabled } from './analytics';
+
 export const trackContactClick = (type: 'whatsapp' | 'call' | 'email') => {
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' || !isAnalyticsEnabled()) {
     return;
   }
 
@@ -20,7 +22,7 @@ export const trackContactClick = (type: 'whatsapp' | 'call' | 'email') => {
 };
 
 const trackEvent = (name: string, payload: Record<string, unknown>) => {
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' || !isAnalyticsEnabled()) {
     return;
   }
 
@@ -38,7 +40,7 @@ const trackEvent = (name: string, payload: Record<string, unknown>) => {
 };
 
 export const trackPageView = (path: string, title?: string) => {
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' || !isAnalyticsEnabled()) {
     return;
   }
 

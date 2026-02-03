@@ -20,6 +20,7 @@ const contentTypes = {
   '.css': 'text/css',
   '.html': 'text/html',
   '.json': 'application/json',
+  '.webmanifest': 'application/manifest+json',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',

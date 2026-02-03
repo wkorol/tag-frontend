@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { Footer } from '../components/Footer';
 import { FloatingActions } from '../components/FloatingActions';
@@ -17,7 +17,10 @@ export function CountryAirportLanding() {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
   const { airportSlug } = useParams<{ airportSlug: string }>();
-  const airportData = airportSlug ? getCountryAirportBySlug(locale, airportSlug) : null;
+  const location = useLocation();
+  const slugFromPath = location.pathname.replace(/\/$/, '').split('/').pop() ?? null;
+  const resolvedSlug = airportSlug ?? slugFromPath;
+  const airportData = resolvedSlug ? getCountryAirportBySlug(locale, resolvedSlug) : null;
 
   if (!airportData) {
     return <NotFoundPage />;

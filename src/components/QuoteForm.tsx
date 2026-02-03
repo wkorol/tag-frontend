@@ -10,6 +10,7 @@ import { buildAdditionalNotes } from '../lib/orderNotes';
 import { hasMarketingConsent } from '../lib/consent';
 import { getApiBaseUrl } from '../lib/api';
 import { trackFormClose, trackFormStart, trackFormSubmit, trackFormValidation } from '../lib/tracking';
+import { isAnalyticsEnabled } from '../lib/analytics';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
 
 const AIRPORT_COORD = { lat: 54.3776, lon: 18.4662 };
@@ -403,7 +404,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
   };
 
   const trackConversion = () => {
-    if (typeof window === 'undefined') {
+    if (typeof window === 'undefined' || !isAnalyticsEnabled()) {
       return;
     }
 

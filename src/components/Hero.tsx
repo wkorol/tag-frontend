@@ -20,8 +20,7 @@ export function Hero() {
         src={heroBgUrl}
         srcSet="/background-960.webp 960w, /background-1600.webp 1600w"
         sizes="100vw"
-        alt=""
-        aria-hidden="true"
+        alt="Taxi Airport Gdansk hero background"
         className="hero-bg absolute inset-0 -z-10 h-full w-full object-cover opacity-20 pointer-events-none"
         loading="eager"
         fetchpriority="high"

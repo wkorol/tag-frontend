@@ -1,3 +1,5 @@
+import { isAnalyticsEnabled } from './analytics';
+
 const STORAGE_KEY = 'cookie-consent';
 
 export type ConsentStatus = 'accepted' | 'rejected' | null;
@@ -26,7 +28,7 @@ export const setConsentStatus = (status: Exclude<ConsentStatus, null>): void => 
 export const hasMarketingConsent = (): boolean => getConsentStatus() === 'accepted';
 
 export const updateGtagConsent = (status: ConsentStatus): void => {
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' || !isAnalyticsEnabled()) {
     return;
   }
 
