@@ -59,12 +59,17 @@ const applyAsyncStyles = (html) =>
   });
 
 const template = applyAsyncStyles(await fs.readFile(path.join(clientDir, 'index.html'), 'utf-8'));
+const escapeInlineJson = (value) =>
+  JSON.stringify(value).replace(/</g, '\\u003c');
 
 for (const route of routes) {
-  const appHtml = render(route);
+  const rendered = render(route);
+  const appHtml = typeof rendered === 'string' ? rendered : rendered.appHtml;
+  const locale = typeof rendered === 'string' ? 'en' : rendered.initialLocale;
+  const hydrationScript = `<script>window.__I18N_LOCALE__=${escapeInlineJson(locale)};</script>`;
   const html = template.replace(
     '<div id="root"></div>',
-    `<div id="root">${appHtml}</div>`
+    `${hydrationScript}<div id="root">${appHtml}</div>`
   );
   const withSeo = html.replace(
     /<!-- SEO:BEGIN -->[\s\S]*?<!-- SEO:END -->/,

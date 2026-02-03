@@ -1,8 +1,7 @@
-import { MessageCircle, Mail, Bus, Car, Clock, BadgeCheck, Plane, CalendarCheck2, BadgeDollarSign, MapPin, Headphones } from 'lucide-react';
 import logo from 'figma:asset/9bf12920b9f211a57ac7e4ff94480c867662dafa.png';
-import logoAvif from '../assets/7a4ddc58-4604-4ddd-9d85-e57bfd26feba.avif';
-import logoAvif540 from '../assets/540.avif';
-import logoAvif640 from '../assets/640.avif';
+import logoAvif384 from '../assets/logo-384.avif';
+import logoAvif512 from '../assets/logo-512.avif';
+import logoAvif640 from '../assets/logo-640.avif';
 import { trackContactClick, trackCtaClick } from '../lib/tracking';
 import { useI18n, localeToPath } from '../lib/i18n';
 import { requestScrollTo } from '../lib/scroll';
@@ -16,14 +15,14 @@ export function Hero() {
 
   return (
     <div id="hero" className="relative overflow-hidden bg-gradient-to-br from-blue-900 to-blue-700 text-white">
-      <img
-        src={heroBgUrl}
-        srcSet="/background-640.webp 640w, /background-960.webp 960w, /background-1280.webp 1280w, /background-1600.webp 1600w"
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1600px"
+        <img
+          src={heroBgUrl}
+          srcSet="/background-480.webp 480w, /background-640.webp 640w, /background-960.webp 960w, /background-1280.webp 1280w, /background-1600.webp 1600w"
+          sizes="(max-width: 640px) 75vw, (max-width: 1024px) 90vw, 1600px"
         alt="Taxi Airport Gdansk hero background"
         className="hero-bg absolute inset-0 -z-10 h-full w-full object-cover opacity-20 pointer-events-none"
         loading="eager"
-        fetchPriority="high"
+        fetchpriority="high"
         decoding="async"
         width={1600}
         height={900}
@@ -43,21 +42,21 @@ export function Hero() {
             <div className="hero-logo flex justify-center mb-2">
               <picture>
                 <source
-                  srcSet={`${logoAvif540} 540w, ${logoAvif640} 640w, ${logoAvif} 768w`}
+                  srcSet={`${logoAvif384} 384w, ${logoAvif512} 512w, ${logoAvif640} 640w`}
                   type="image/avif"
-                  sizes="(max-width: 640px) 72vw, 24rem"
+                  sizes="(max-width: 640px) 68vw, 22rem"
                 />
                 <img
                   src={logo}
                   alt={t.hero.logoAlt}
                   className="h-auto"
-                  style={{ width: 'min(24rem, 72vw)' }}
+                  style={{ width: 'min(22rem, 68vw)' }}
                   width={768}
                   height={768}
                   decoding="async"
                   loading="eager"
-                  fetchPriority="low"
-                  sizes="(max-width: 640px) 72vw, 24rem"
+                  fetchpriority="low"
+                  sizes="(max-width: 640px) 68vw, 22rem"
                 />
               </picture>
             </div>
@@ -68,7 +67,7 @@ export function Hero() {
                 onClick={() => trackContactClick('whatsapp')}
                 className="inline-flex items-center gap-2 bg-white text-blue-900 px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors"
             >
-              <MessageCircle className="w-5 h-5"/>
+              <span aria-hidden="true">💬</span>
               {t.common.whatsapp}
             </a>
             <a
@@ -76,7 +75,7 @@ export function Hero() {
                 onClick={() => trackContactClick('email')}
                 className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-6 py-3 rounded-lg hover:bg-white/20 transition-colors"
             >
-              <Mail className="w-5 h-5" />
+              <span aria-hidden="true">✉️</span>
               {t.hero.orderViaEmail}
             </a>
             <a
@@ -115,7 +114,7 @@ export function Hero() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
-                  <Plane className="w-8 h-8 text-orange-400 mx-auto mb-2"/>
+                  <span aria-hidden="true" className="text-2xl mb-2">✈️</span>
                   <h3 className="text-white mb-1">{t.hero.benefitsList.flightTrackingTitle}</h3>
                   <p className="text-blue-200 text-sm">
                     {t.hero.benefitsList.flightTrackingBody}
@@ -123,7 +122,7 @@ export function Hero() {
                 </div>
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
-                  <BadgeCheck className="w-8 h-8 text-yellow-400 mx-auto mb-2"/>
+                  <span aria-hidden="true" className="text-2xl mb-2">✅</span>
                   <h3 className="text-white mb-1">{t.hero.benefitsList.meetGreetTitle}</h3>
                   <p className="text-blue-200 text-sm">
                     {t.hero.benefitsList.meetGreetBody}
@@ -131,7 +130,7 @@ export function Hero() {
                 </div>
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
-                  <Clock className="w-8 h-8 text-green-400 mx-auto mb-2"/>
+                  <span aria-hidden="true" className="text-2xl mb-2">⏱️</span>
                   <h3 className="text-white mb-1">{t.hero.benefitsList.fastConfirmationTitle}</h3>
                   <p className="text-blue-200 text-sm">
                     {t.hero.benefitsList.fastConfirmationBody}
@@ -147,7 +146,7 @@ export function Hero() {
                 </div>
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
-                  <CalendarCheck2 className="w-8 h-8 text-cyan-300 mx-auto mb-2"/>
+                  <span aria-hidden="true" className="text-2xl mb-2">📅</span>
                   <h3 className="text-white mb-1">{t.hero.benefitsList.freePrebookingTitle}</h3>
                   <p className="text-blue-200 text-sm">
                     {t.hero.benefitsList.freePrebookingBody}
@@ -155,7 +154,7 @@ export function Hero() {
                 </div>
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
-                  <BadgeDollarSign className="w-8 h-8 text-emerald-300 mx-auto mb-2"/>
+                  <span aria-hidden="true" className="text-2xl mb-2">💵</span>
                   <h3 className="text-white mb-1">{t.hero.benefitsList.fixedPriceTitle}</h3>
                   <p className="text-blue-200 text-sm">
                     {t.hero.benefitsList.fixedPriceBody}
@@ -163,7 +162,7 @@ export function Hero() {
                 </div>
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
-                  <MapPin className="w-8 h-8 text-indigo-200 mx-auto mb-2"/>
+                  <span aria-hidden="true" className="text-2xl mb-2">📍</span>
                   <h3 className="text-white mb-1">{t.hero.benefitsList.localExpertiseTitle}</h3>
                   <p className="text-blue-200 text-sm">
                     {t.hero.benefitsList.localExpertiseBody}
@@ -171,7 +170,7 @@ export function Hero() {
                 </div>
                 <div
                     className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
-                  <Headphones className="w-8 h-8 text-rose-200 mx-auto mb-2"/>
+                  <span aria-hidden="true" className="text-2xl mb-2">🎧</span>
                   <h3 className="text-white mb-1">{t.hero.benefitsList.assistanceTitle}</h3>
                   <p className="text-blue-200 text-sm">
                     {t.hero.benefitsList.assistanceBody}
@@ -193,7 +192,7 @@ export function Hero() {
             {/* Standard Cars Card */}
             <div
                 className="bg-gradient-to-br from-gray-100/20 to-gray-200/20 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-white/30 hover:border-white/50 transition-all flex flex-col items-center justify-center p-8">
-              <Car className="w-16 h-16 text-blue-100 mb-3"/>
+              <span aria-hidden="true" className="text-5xl mb-3">🚕</span>
               <p className="text-white text-center mb-2">{t.hero.standardCarsTitle}</p>
               <p className="text-blue-200 text-sm text-center">
                 {t.hero.standardCarsBody}
@@ -202,7 +201,7 @@ export function Hero() {
 
             {/* Buses Card */}
             <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/20 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-blue-300/30 hover:border-blue-300/50 transition-all flex flex-col items-center justify-center p-8">
-              <Bus className="w-16 h-16 text-blue-200 mb-3" />
+              <span aria-hidden="true" className="text-5xl mb-3">🚌</span>
               <p className="text-white text-center mb-2">{t.hero.busTitle}</p>
               <p className="text-blue-200 text-sm text-center">
                 {t.hero.busBody}

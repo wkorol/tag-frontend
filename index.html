@@ -17,8 +17,8 @@
         rel="preload"
         as="image"
         href="/background-960.webp"
-        imagesrcset="/background-640.webp 640w, /background-960.webp 960w, /background-1280.webp 1280w, /background-1600.webp 1600w"
-        imagesizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1600px"
+        imagesrcset="/background-480.webp 480w, /background-640.webp 640w, /background-960.webp 960w, /background-1280.webp 1280w, /background-1600.webp 1600w"
+        imagesizes="(max-width: 640px) 75vw, (max-width: 1024px) 90vw, 1600px"
         fetchpriority="high"
         type="image/webp"
       />
@@ -28,7 +28,7 @@
     <body>
       <noscript><!-- NOSCRIPT:BEGIN -->Taxi Airport Gdańsk provides 24/7 airport transfers across Gdańsk, Sopot, and Gdynia. Fixed pricing, professional drivers, and fast confirmation. Contact: booking [at] taxiairportgdansk [dot] com.<!-- NOSCRIPT:END --></noscript>
       <div id="root"></div>
-      <script type="module" src="/src/main.tsx"></script>
+      <script type="module" src="/src/main.tsx" fetchpriority="low"></script>
       <!-- Google tag (gtag.js) loaded lazily on production hosts -->
       <script>
         (function() {
@@ -61,13 +61,21 @@
           window.gtag('js', new Date());
           window.gtag('config', 'AW-17848598074');
 
-          if ('requestIdleCallback' in window) {
-            window.requestIdleCallback(loadGtag, { timeout: 4000 });
-          } else {
-            window.addEventListener('load', function() {
-              window.setTimeout(loadGtag, 1500);
-            }, { once: true });
-          }
+          var loadOnInteraction = function() {
+            loadGtag();
+            window.removeEventListener('pointerdown', loadOnInteraction);
+            window.removeEventListener('keydown', loadOnInteraction);
+            window.removeEventListener('touchstart', loadOnInteraction);
+            window.removeEventListener('scroll', loadOnInteraction);
+          };
+
+          window.addEventListener('pointerdown', loadOnInteraction, { once: true, passive: true });
+          window.addEventListener('keydown', loadOnInteraction, { once: true });
+          window.addEventListener('touchstart', loadOnInteraction, { once: true, passive: true });
+          window.addEventListener('scroll', loadOnInteraction, { once: true, passive: true });
+          window.addEventListener('load', function() {
+            window.setTimeout(loadGtag, 10000);
+          }, { once: true });
         })();
       </script>
     </body>

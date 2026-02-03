@@ -14,17 +14,43 @@ export function CookieBanner() {
   }, []);
 
   useEffect(() => {
+    let timer: number | undefined;
+    let cleaned = false;
+
+    const cleanup = () => {
+      if (cleaned) {
+        return;
+      }
+      cleaned = true;
+      window.removeEventListener('pointerdown', reveal);
+      window.removeEventListener('keydown', reveal);
+      window.removeEventListener('touchstart', reveal);
+      if (timer) {
+        window.clearTimeout(timer);
+      }
+    };
+
+    const reveal = () => {
+      cleanup();
+      setVisible(true);
+    };
+
     try {
       const existing = getConsentStatus();
       if (existing) {
         updateGtagConsent(existing);
         setVisible(existing !== 'accepted');
-        return;
+        return cleanup;
       }
-      setVisible(true);
+      window.addEventListener('pointerdown', reveal, { once: true, passive: true });
+      window.addEventListener('keydown', reveal, { once: true });
+      window.addEventListener('touchstart', reveal, { once: true, passive: true });
+      timer = window.setTimeout(reveal, 12000);
     } catch {
-      setVisible(true);
+      reveal();
     }
+
+    return cleanup;
   }, []);
 
   const accept = () => {

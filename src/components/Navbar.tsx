@@ -1,4 +1,3 @@
-import { Menu, X, Globe } from 'lucide-react';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Locale, localeToPath, localeToRootPath, useI18n } from '../lib/i18n';
@@ -120,7 +119,7 @@ export function Navbar() {
               {t.navbar.prices}
             </a>
             <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Globe className="w-4 h-4" />
+              <span aria-hidden="true" className="text-sm">🌐</span>
               <label className="sr-only" htmlFor="language-select">
                 {t.navbar.language}
               </label>
@@ -160,9 +159,9 @@ export function Navbar() {
             className="md:hidden text-gray-700 hover:text-blue-600"
           >
             {isMenuOpen ? (
-              <X className="w-6 h-6" />
+              <span aria-hidden="true" className="block text-2xl leading-none">×</span>
             ) : (
-              <Menu className="w-6 h-6" />
+              <span aria-hidden="true" className="block text-xl leading-none">☰</span>
             )}
           </button>
         </div>
@@ -213,7 +212,7 @@ export function Navbar() {
               {t.navbar.prices}
             </a>
             <div className="flex items-center gap-2 py-2 text-gray-700">
-              <Globe className="w-4 h-4" />
+              <span aria-hidden="true" className="text-sm">🌐</span>
               <label className="text-sm" htmlFor="language-select-mobile">
                 {t.navbar.language}
               </label>

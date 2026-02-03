@@ -33,26 +33,6 @@ const contentTypes = {
 
 const templatePath = path.join(clientDir, 'index.html');
 let template = await fs.readFile(templatePath, 'utf-8');
-
-const applyAsyncStyles = (html) =>
-  html.replace(/<link\s+([^>]*?)rel=["']stylesheet["']([^>]*)>/gi, (match, pre, post) => {
-    const attrs = `${pre} ${post}`.trim().replace(/\s+/g, ' ');
-    const hrefMatch = attrs.match(/href=["']([^"']+)["']/i);
-    if (!hrefMatch) {
-      return match;
-    }
-    const href = hrefMatch[1];
-    const cleaned = attrs
-      .replace(/\s*rel=["']stylesheet["']\s*/i, ' ')
-      .replace(/\s*href=["'][^"']+["']\s*/i, ' ')
-      .trim();
-    const extra = cleaned ? ` ${cleaned}` : '';
-    const preload = `<link rel="preload" as="style" href="${href}"${extra} onload="this.onload=null;this.rel='stylesheet'">`;
-    const noscript = `<noscript><link rel="stylesheet" href="${href}"${extra}></noscript>`;
-    return `${preload}\n${noscript}`;
-  });
-
-template = applyAsyncStyles(template);
 let render;
 for (const candidate of ssrEntryCandidates) {
   try {
@@ -83,6 +63,9 @@ const applyNoscript = (html, urlPath) =>
 
 const applyHtmlLang = (html, urlPath) =>
   html.replace(/<html lang="[^"]*">/, `<html lang="${getHtmlLang(urlPath)}">`);
+
+const escapeInlineJson = (value) =>
+  JSON.stringify(value).replace(/</g, '\\u003c');
 
 const localeRoots = new Set(locales.map((locale) => `/${locale}`));
 const localeRootsWithSlash = new Set(locales.map((locale) => `/${locale}/`));
@@ -117,6 +100,29 @@ const legacyRedirects = new Map([
 ]);
 
 const isAdminPath = (urlPath) => /^\/(?:[a-z]{2}\/)?admin(?:\/orders\/[^/]+)?$/.test(urlPath);
+
+const detectPreferredLocale = (acceptLanguage) => {
+  if (!acceptLanguage) {
+    return 'en';
+  }
+
+  const choices = acceptLanguage
+    .split(',')
+    .map((part) => part.trim().split(';')[0]?.toLowerCase())
+    .filter(Boolean);
+
+  for (const choice of choices) {
+    if (locales.includes(choice)) {
+      return choice;
+    }
+    const base = choice.split('-')[0];
+    if (base && locales.includes(base)) {
+      return base;
+    }
+  }
+
+  return 'en';
+};
 
 const isKnownPath = (urlPath) =>
   urlPath === '/' ||
@@ -168,6 +174,13 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  if (urlPath === '/') {
+    const locale = detectPreferredLocale(req.headers['accept-language']);
+    res.writeHead(302, { Location: `/${locale}/${requestUrl.search}` });
+    res.end();
+    return;
+  }
+
   if (urlPath.length > 1 && urlPath.endsWith('/') && !localeRootsWithSlash.has(urlPath)) {
     res.writeHead(301, { Location: `${urlPath.slice(0, -1)}${requestUrl.search}` });
     res.end();
@@ -184,10 +197,13 @@ const server = createServer(async (req, res) => {
   const isNotFound = !isKnownPath(urlPath);
 
   try {
-    const appHtml = render(urlPath);
+    const rendered = render(urlPath);
+    const appHtml = typeof rendered === 'string' ? rendered : rendered.appHtml;
+    const locale = typeof rendered === 'string' ? 'en' : rendered.initialLocale;
+    const hydrationScript = `<script>window.__I18N_LOCALE__=${escapeInlineJson(locale)};</script>`;
     const html = template.replace(
       '<div id="root"></div>',
-      `<div id="root">${appHtml}</div>`
+      `${hydrationScript}<div id="root">${appHtml}</div>`
     );
     const finalHtml = applyHtmlLang(applyNoscript(applySeo(html, urlPath), urlPath), urlPath);
     res.writeHead(isNotFound ? 404 : 200, { 'Content-Type': 'text/html' });
