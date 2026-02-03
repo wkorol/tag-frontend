@@ -16,9 +16,11 @@
       <link
         rel="preload"
         as="image"
-        href="/background-1600.webp"
-        imagesrcset="/background-960.webp 960w, /background-1600.webp 1600w"
-        imagesizes="100vw"
+        href="/background-960.webp"
+        imagesrcset="/background-640.webp 640w, /background-960.webp 960w, /background-1280.webp 1280w, /background-1600.webp 1600w"
+        imagesizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1600px"
+        fetchpriority="high"
+        type="image/webp"
       />
 
     </head>
@@ -27,8 +29,7 @@
       <noscript><!-- NOSCRIPT:BEGIN -->Taxi Airport Gdańsk provides 24/7 airport transfers across Gdańsk, Sopot, and Gdynia. Fixed pricing, professional drivers, and fast confirmation. Contact: booking [at] taxiairportgdansk [dot] com.<!-- NOSCRIPT:END --></noscript>
       <div id="root"></div>
       <script type="module" src="/src/main.tsx"></script>
-      <!-- Google tag (gtag.js) loaded after app bootstrap to avoid render blocking -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17848598074"></script>
+      <!-- Google tag (gtag.js) loaded lazily on production hosts -->
       <script>
         (function() {
           var allowedHosts = ['taxiairportgdansk.com', 'www.taxiairportgdansk.com'];
@@ -39,6 +40,18 @@
             return;
           }
 
+          var gtagLoaded = false;
+          var loadGtag = function() {
+            if (gtagLoaded) {
+              return;
+            }
+            gtagLoaded = true;
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17848598074';
+            document.head.appendChild(script);
+          };
+
           window.gtag('consent', 'default', {
             ad_storage: 'denied',
             analytics_storage: 'denied',
@@ -47,6 +60,14 @@
           });
           window.gtag('js', new Date());
           window.gtag('config', 'AW-17848598074');
+
+          if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(loadGtag, { timeout: 4000 });
+          } else {
+            window.addEventListener('load', function() {
+              window.setTimeout(loadGtag, 1500);
+            }, { once: true });
+          }
         })();
       </script>
     </body>

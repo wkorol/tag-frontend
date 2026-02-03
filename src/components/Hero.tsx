@@ -12,18 +12,18 @@ export function Hero() {
   const basePath = localeToPath(locale);
   const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
 
-  const heroBgUrl = '/background-1600.webp';
+  const heroBgUrl = '/background-960.webp';
 
   return (
     <div id="hero" className="relative overflow-hidden bg-gradient-to-br from-blue-900 to-blue-700 text-white">
       <img
         src={heroBgUrl}
-        srcSet="/background-960.webp 960w, /background-1600.webp 1600w"
-        sizes="100vw"
+        srcSet="/background-640.webp 640w, /background-960.webp 960w, /background-1280.webp 1280w, /background-1600.webp 1600w"
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1600px"
         alt="Taxi Airport Gdansk hero background"
         className="hero-bg absolute inset-0 -z-10 h-full w-full object-cover opacity-20 pointer-events-none"
         loading="eager"
-        fetchpriority="high"
+        fetchPriority="high"
         decoding="async"
         width={1600}
         height={900}
@@ -45,19 +45,19 @@ export function Hero() {
                 <source
                   srcSet={`${logoAvif540} 540w, ${logoAvif640} 640w, ${logoAvif} 768w`}
                   type="image/avif"
-                  sizes="(max-width: 640px) 80vw, 31rem"
+                  sizes="(max-width: 640px) 72vw, 24rem"
                 />
                 <img
                   src={logo}
                   alt={t.hero.logoAlt}
                   className="h-auto"
-                  style={{ width: '31rem' }}
+                  style={{ width: 'min(24rem, 72vw)' }}
                   width={768}
                   height={768}
                   decoding="async"
                   loading="eager"
-                  fetchpriority="high"
-                  sizes="(max-width: 640px) 80vw, 31rem"
+                  fetchPriority="low"
+                  sizes="(max-width: 640px) 72vw, 24rem"
                 />
               </picture>
             </div>

@@ -141,21 +141,27 @@ function Landing() {
       <main>
         <Hero />
         
-        {step === 'vehicle' ? (
-          <VehicleTypeSelector onSelectType={handleVehicleSelect} />
-        ) : (
-          <Pricing 
-            vehicleType={vehicleType}
-            onOrderRoute={handleOrderRoute}
-            onRequestQuote={handleRequestQuote}
-            onBack={handleBackToVehicleSelection}
-          />
-        )}
+        <div className="defer-render">
+          {step === 'vehicle' ? (
+            <VehicleTypeSelector onSelectType={handleVehicleSelect} />
+          ) : (
+            <Pricing
+              vehicleType={vehicleType}
+              onOrderRoute={handleOrderRoute}
+              onRequestQuote={handleRequestQuote}
+              onBack={handleBackToVehicleSelection}
+            />
+          )}
+        </div>
 
-        <TrustSection />
+        <div className="defer-render">
+          <TrustSection />
+        </div>
       </main>
-      
-      <Footer />
+
+      <div className="defer-render">
+        <Footer />
+      </div>
 
       {selectedRoute && (
         <Suspense fallback={null}>

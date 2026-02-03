@@ -2062,8 +2062,8 @@ html {
     object-fit: cover;
     object-position: center;
     opacity: 0.35;
-    filter: blur(3px);
-    transform: scale(1.2);
+    filter: blur(1px);
+    transform: scale(1.05);
   }
 
   .hero-content {
@@ -2271,5 +2271,12 @@ html {
 
   .max-w-7xl {
     max-width: var(--container-7xl);
+  }
+}
+
+@supports (content-visibility: auto) {
+  .defer-render {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 1200px;
   }
 }
