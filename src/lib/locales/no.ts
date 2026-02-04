@@ -450,7 +450,8 @@ const no = {
       "night": "Nattpris",
       "reasonDay": "standard dagpris",
       "reasonLate": "henting etter 21:30 eller før 5:30",
-      "reasonHoliday": "søndag/helligdag"
+      "reasonHoliday": "søndag/helligdag",
+      "banner": (label: string, price: number, reason: string) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Kunne ikke sende bestillingen. Prøv igjen.",
     "submitNetworkError": "Nettverksfeil ved innsending. Prøv igjen.",
@@ -510,6 +511,7 @@ const no = {
     "notesHelp": "F.eks. barnesete, ventetid, spesielle instruksjoner",
     "submitting": "Sender...",
     "formIncomplete": "Fyll ut skjemaet for å fortsette",
+    "confirmOrder": (price: number) => `Bekreft bestilling (${price} PLN)`,
     "reassurance": "Ingen forhåndsbetaling. Gratis avbestilling. Bekreftelse på 5–10 min."
   },
   "quoteForm": {

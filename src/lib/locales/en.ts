@@ -451,7 +451,8 @@ const en = {
       "night": "Night rate",
       "reasonDay": "standard day rate",
       "reasonLate": "pickup after 21:30 or before 5:30",
-      "reasonHoliday": "Sunday/public holiday"
+      "reasonHoliday": "Sunday/public holiday",
+      "banner": (label: string, price: number, reason: string) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Failed to submit order. Please try again.",
     "submitNetworkError": "Network error while submitting the order. Please try again.",
@@ -511,6 +512,7 @@ const en = {
     "notesHelp": "E.g., child seat required, waiting time, special instructions",
     "submitting": "Submitting...",
     "formIncomplete": "Complete the form to continue",
+    "confirmOrder": (price: number) => `Confirm order (${price} PLN)`,
     "reassurance": "No prepayment. Free cancellation. Confirmation in 5–10 min."
   },
   "quoteForm": {

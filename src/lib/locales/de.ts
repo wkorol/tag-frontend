@@ -449,7 +449,8 @@ const de = {
       "night": "Nachttarif",
       "reasonDay": "Standard-Tagtarif",
       "reasonLate": "Abholung nach 21:30 oder vor 5:30",
-      "reasonHoliday": "Sonntag/Feiertag"
+      "reasonHoliday": "Sonntag/Feiertag",
+      "banner": (label: string, price: number, reason: string) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Bestellung konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
     "submitNetworkError": "Netzwerkfehler beim Senden der Bestellung. Bitte versuchen Sie es erneut.",
@@ -509,6 +510,7 @@ const de = {
     "notesHelp": "Z. B. Kindersitz erforderlich, Wartezeit, besondere Anweisungen",
     "submitting": "Wird gesendet...",
     "formIncomplete": "Formular ausfüllen, um fortzufahren",
+    "confirmOrder": (price: number) => `Bestellung bestätigen (${price} PLN)`,
     "reassurance": "Keine Vorauszahlung. Kostenlose Stornierung. Bestätigung in 5–10 Min."
   },
   "quoteForm": {

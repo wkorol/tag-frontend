@@ -451,7 +451,8 @@ const pl = {
       "night": "Taryfa nocna",
       "reasonDay": "standardowa taryfa dzienna",
       "reasonLate": "odbiór po 21:30 lub przed 5:30",
-      "reasonHoliday": "niedziela/święto"
+      "reasonHoliday": "niedziela/święto",
+      "banner": (label: string, price: number, reason: string) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Nie udało się wysłać zamówienia. Spróbuj ponownie.",
     "submitNetworkError": "Błąd sieci podczas wysyłania zamówienia. Spróbuj ponownie.",
@@ -511,6 +512,7 @@ const pl = {
     "notesHelp": "Np. fotelik dziecięcy, czas oczekiwania, specjalne instrukcje",
     "submitting": "Wysyłanie...",
     "formIncomplete": "Uzupełnij formularz, aby kontynuować",
+    "confirmOrder": (price: number) => `Potwierdź zamówienie (${price} PLN)`,
     "reassurance": "Bez przedpłaty. Darmowa anulacja. Potwierdzenie w 5–10 min."
   },
   "quoteForm": {

@@ -449,7 +449,8 @@ const sv = {
       "night": "Nattpris",
       "reasonDay": "standard dagpris",
       "reasonLate": "upphämtning efter 21:30 eller före 5:30",
-      "reasonHoliday": "söndag/helgdag"
+      "reasonHoliday": "söndag/helgdag",
+      "banner": (label: string, price: number, reason: string) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Det gick inte att skicka beställningen. Försök igen.",
     "submitNetworkError": "Nätverksfel vid skickandet. Försök igen.",
@@ -509,6 +510,7 @@ const sv = {
     "notesHelp": "T.ex. barnstol, väntetid, särskilda instruktioner",
     "submitting": "Skickar...",
     "formIncomplete": "Fyll i formuläret för att fortsätta",
+    "confirmOrder": (price: number) => `Bekräfta beställning (${price} PLN)`,
     "reassurance": "Ingen förskottsbetalning. Gratis avbokning. Bekräftelse inom 5–10 min."
   },
   "quoteForm": {

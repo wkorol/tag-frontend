@@ -447,7 +447,8 @@ const fi = {
       "night": "Yötaksa",
       "reasonDay": "vakiopäivätaksa",
       "reasonLate": "nouto klo 21:30 jälkeen tai ennen 5:30",
-      "reasonHoliday": "sunnuntai/pyhäpäivä"
+      "reasonHoliday": "sunnuntai/pyhäpäivä",
+      "banner": (label: string, price: number, reason: string) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Tilauksen lähetys epäonnistui. Yritä uudelleen.",
     "submitNetworkError": "Verkkovirhe tilausta lähetettäessä. Yritä uudelleen.",
@@ -507,6 +508,7 @@ const fi = {
     "notesHelp": "Esim. lastenistuin, odotusaika, erityisohjeet",
     "submitting": "Lähetetään...",
     "formIncomplete": "Täytä lomake jatkaaksesi",
+    "confirmOrder": (price: number) => `Vahvista tilaus (${price} PLN)`,
     "reassurance": "Ei ennakkomaksua. Ilmainen peruutus. Vahvistus 5–10 min."
   },
   "quoteForm": {
