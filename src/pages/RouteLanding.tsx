@@ -21,6 +21,14 @@ interface RouteLandingProps {
 export function RouteLanding({ title, description, route, examples, pricing }: RouteLandingProps) {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
+  const seoParagraph =
+    typeof t.routeLanding?.seoParagraph === 'function'
+      ? t.routeLanding.seoParagraph(route)
+      : `Book private airport transfer on route ${route} with fixed prices, 24/7 availability, and quick confirmation.`;
+  const pricingSubtitle =
+    typeof t.routeLanding?.pricingSubtitle === 'function'
+      ? t.routeLanding.pricingSubtitle(route)
+      : `Estimated prices for route ${route}.`;
   const orderLinks = [
     {
       href: `${basePath}/${getRouteSlug(locale, 'orderAirportGdansk')}`,
@@ -55,7 +63,7 @@ export function RouteLanding({ title, description, route, examples, pricing }: R
               />
               <h1 className="text-3xl text-gray-900 mb-4">{title}</h1>
               <p className="text-gray-600 mb-6">{description}</p>
-              <p className="text-sm text-gray-500 mb-6">{t.routeLanding.seoParagraph(route)}</p>
+              <p className="text-sm text-gray-500 mb-6">{seoParagraph}</p>
               <a
                 href={`${basePath}/`}
                 onClick={(event) => {
@@ -123,7 +131,7 @@ export function RouteLanding({ title, description, route, examples, pricing }: R
               <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                 <div>
                   <h2 className="text-xl text-gray-900">{t.routeLanding.pricingTitle}</h2>
-                  <p className="text-sm text-gray-600">{t.routeLanding.pricingSubtitle(route)}</p>
+                  <p className="text-sm text-gray-600">{pricingSubtitle}</p>
                 </div>
                 <span className="text-xs uppercase tracking-wide text-gray-500">{t.routeLanding.vehicleLabel}</span>
               </div>

@@ -2063,12 +2063,12 @@ const TrustSection = lazy(
 );
 const Footer = lazy(() => Promise.resolve().then(() => Footer$2).then((mod) => ({ default: mod.Footer })));
 const OrderForm = lazy(() => import('./assets/OrderForm-CjlXdu33.mjs').then((mod) => ({ default: mod.OrderForm })));
-const QuoteForm = lazy(() => import('./assets/QuoteForm-pLVSBhbI.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
+const QuoteForm = lazy(() => import('./assets/QuoteForm-xCAp2D5F.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./assets/ManageOrder-CJSOJO9N.mjs').then((mod) => ({ default: mod.ManageOrder })));
-const RouteLanding = lazy(() => import('./assets/RouteLanding-NL9TORIN.mjs').then((mod) => ({ default: mod.RouteLanding })));
-const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-BvbUymvq.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
-const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-BvbUymvq.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./assets/PricingPage-DWuPyIo0.mjs').then((mod) => ({ default: mod.PricingPage })));
+const RouteLanding = lazy(() => import('./assets/RouteLanding-CFlAhiEO.mjs').then((mod) => ({ default: mod.RouteLanding })));
+const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-DLUc346H.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
+const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-DLUc346H.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
+const PricingPage = lazy(() => import('./assets/PricingPage-CiIJrGHb.mjs').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-Eiiw4mOS.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-CA1d_B91.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
@@ -2779,7 +2779,8 @@ const en = {
       "night": "Night rate",
       "reasonDay": "standard day rate",
       "reasonLate": "pickup after 21:30 or before 5:30",
-      "reasonHoliday": "Sunday/public holiday"
+      "reasonHoliday": "Sunday/public holiday",
+      "banner": (label, price, reason) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Failed to submit order. Please try again.",
     "submitNetworkError": "Network error while submitting the order. Please try again.",
@@ -2839,6 +2840,7 @@ const en = {
     "notesHelp": "E.g., child seat required, waiting time, special instructions",
     "submitting": "Submitting...",
     "formIncomplete": "Complete the form to continue",
+    "confirmOrder": (price) => `Confirm order (${price} PLN)`,
     "reassurance": "No prepayment. Free cancellation. Confirmation in 5–10 min."
   },
   "quoteForm": {
@@ -2880,6 +2882,8 @@ const en = {
     "priceHelp": "Propose your price for this ride. We'll review and respond within 5-10 minutes.",
     "fixedRouteChecking": "Checking if this route qualifies for a fixed price...",
     "fixedRouteTitle": "Fixed price available",
+    "fixedRouteDistance": (distance) => `Distance: ${distance} km`,
+    "fixedRouteComputed": (price) => `${price} PLN`,
     "fixedRouteCta": "Book fixed price",
     "fixedRouteHint": "Use the fixed-price booking for the fastest confirmation.",
     "fixedRouteAllDay": "All-day rate applies",
@@ -2887,6 +2891,10 @@ const en = {
     "fixedRouteNight": "Night rate applies",
     "fixedRouteLocked": "This route qualifies for a fixed price. Please book via the fixed-price form.",
     "longRouteTitle": "Long route estimate",
+    "longRouteDistance": (distance) => `Distance: ${distance} km`,
+    "longRouteTaximeter": (price, rate) => `Taximeter: ${price} PLN (${rate} PLN/km)`,
+    "longRouteProposed": (price) => `Proposed price: ${price} PLN`,
+    "longRouteSavings": (percent) => `Savings: ${percent}%`,
     "longRouteNote": "You can still enter your own price below.",
     "date": "Date",
     "pickupTime": "Pickup Time",
@@ -3617,7 +3625,8 @@ const pl = {
       "night": "Taryfa nocna",
       "reasonDay": "standardowa taryfa dzienna",
       "reasonLate": "odbiór po 21:30 lub przed 5:30",
-      "reasonHoliday": "niedziela/święto"
+      "reasonHoliday": "niedziela/święto",
+      "banner": (label, price, reason) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Nie udało się wysłać zamówienia. Spróbuj ponownie.",
     "submitNetworkError": "Błąd sieci podczas wysyłania zamówienia. Spróbuj ponownie.",
@@ -3677,6 +3686,7 @@ const pl = {
     "notesHelp": "Np. fotelik dziecięcy, czas oczekiwania, specjalne instrukcje",
     "submitting": "Wysyłanie...",
     "formIncomplete": "Uzupełnij formularz, aby kontynuować",
+    "confirmOrder": (price) => `Potwierdź zamówienie (${price} PLN)`,
     "reassurance": "Bez przedpłaty. Darmowa anulacja. Potwierdzenie w 5–10 min."
   },
   "quoteForm": {
@@ -3718,6 +3728,8 @@ const pl = {
     "priceHelp": "Zaproponuj cenę za przejazd. Odpowiemy w 5–10 minut.",
     "fixedRouteChecking": "Sprawdzamy, czy ta trasa ma stałą cenę...",
     "fixedRouteTitle": "Stała cena dostępna",
+    "fixedRouteDistance": (distance) => `Dystans: ${distance} km`,
+    "fixedRouteComputed": (price) => `${price} PLN`,
     "fixedRouteCta": "Zarezerwuj stałą cenę",
     "fixedRouteHint": "Skorzystaj z rezerwacji stałej ceny, aby uzyskać najszybsze potwierdzenie.",
     "fixedRouteAllDay": "Stawka całodobowa",
@@ -3725,6 +3737,10 @@ const pl = {
     "fixedRouteNight": "Obowiązuje taryfa nocna",
     "fixedRouteLocked": "Ta trasa ma stałą cenę. Zarezerwuj ją przez formularz stałej ceny.",
     "longRouteTitle": "Długi dystans - orientacyjna wycena",
+    "longRouteDistance": (distance) => `Dystans: ${distance} km`,
+    "longRouteTaximeter": (price, rate) => `Taksometr: ${price} PLN (${rate} PLN/km)`,
+    "longRouteProposed": (price) => `Proponowana cena: ${price} PLN`,
+    "longRouteSavings": (percent) => `Oszczędność: ${percent}%`,
     "longRouteNote": "Możesz nadal zaproponować własną cenę poniżej.",
     "date": "Data",
     "pickupTime": "Godzina odbioru",
@@ -4453,7 +4469,8 @@ const de = {
       "night": "Nachttarif",
       "reasonDay": "Standard-Tagtarif",
       "reasonLate": "Abholung nach 21:30 oder vor 5:30",
-      "reasonHoliday": "Sonntag/Feiertag"
+      "reasonHoliday": "Sonntag/Feiertag",
+      "banner": (label, price, reason) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Bestellung konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
     "submitNetworkError": "Netzwerkfehler beim Senden der Bestellung. Bitte versuchen Sie es erneut.",
@@ -4513,6 +4530,7 @@ const de = {
     "notesHelp": "Z. B. Kindersitz erforderlich, Wartezeit, besondere Anweisungen",
     "submitting": "Wird gesendet...",
     "formIncomplete": "Formular ausfüllen, um fortzufahren",
+    "confirmOrder": (price) => `Bestellung bestätigen (${price} PLN)`,
     "reassurance": "Keine Vorauszahlung. Kostenlose Stornierung. Bestätigung in 5–10 Min."
   },
   "quoteForm": {
@@ -4554,6 +4572,8 @@ const de = {
     "priceHelp": "Schlagen Sie Ihren Preis vor. Wir prüfen und antworten innerhalb von 5-10 Minuten.",
     "fixedRouteChecking": "Wir prüfen, ob diese Strecke einen Festpreis hat...",
     "fixedRouteTitle": "Festpreis verfügbar",
+    "fixedRouteDistance": (distance) => `Entfernung: ${distance} km`,
+    "fixedRouteComputed": (price) => `${price} PLN`,
     "fixedRouteCta": "Festpreis buchen",
     "fixedRouteHint": "Für die schnellste Bestätigung den Festpreis buchen.",
     "fixedRouteAllDay": "All-day rate applies",
@@ -4561,6 +4581,10 @@ const de = {
     "fixedRouteNight": "Nachttarif gilt",
     "fixedRouteLocked": "Diese Strecke hat einen Festpreis. Bitte über das Festpreis-Formular buchen.",
     "longRouteTitle": "Long route estimate",
+    "longRouteDistance": (distance) => `Entfernung: ${distance} km`,
+    "longRouteTaximeter": (price, rate) => `Taxameter: ${price} PLN (${rate} PLN/km)`,
+    "longRouteProposed": (price) => `Vorgeschlagener Preis: ${price} PLN`,
+    "longRouteSavings": (percent) => `Ersparnis: ${percent}%`,
     "longRouteNote": "You can still enter your own price below.",
     "date": "Datum",
     "pickupTime": "Abholzeit",
@@ -5287,7 +5311,8 @@ const fi = {
       "night": "Yötaksa",
       "reasonDay": "vakiopäivätaksa",
       "reasonLate": "nouto klo 21:30 jälkeen tai ennen 5:30",
-      "reasonHoliday": "sunnuntai/pyhäpäivä"
+      "reasonHoliday": "sunnuntai/pyhäpäivä",
+      "banner": (label, price, reason) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Tilauksen lähetys epäonnistui. Yritä uudelleen.",
     "submitNetworkError": "Verkkovirhe tilausta lähetettäessä. Yritä uudelleen.",
@@ -5347,6 +5372,7 @@ const fi = {
     "notesHelp": "Esim. lastenistuin, odotusaika, erityisohjeet",
     "submitting": "Lähetetään...",
     "formIncomplete": "Täytä lomake jatkaaksesi",
+    "confirmOrder": (price) => `Vahvista tilaus (${price} PLN)`,
     "reassurance": "Ei ennakkomaksua. Ilmainen peruutus. Vahvistus 5–10 min."
   },
   "quoteForm": {
@@ -5388,6 +5414,8 @@ const fi = {
     "priceHelp": "Ehdota hintaa tälle matkalle. Tarkistamme ja vastaamme 5-10 minuutissa.",
     "fixedRouteChecking": "Checking if this route qualifies for a fixed price...",
     "fixedRouteTitle": "Fixed price available",
+    "fixedRouteDistance": (distance) => `Distance: ${distance} km`,
+    "fixedRouteComputed": (price) => `${price} PLN`,
     "fixedRouteCta": "Book fixed price",
     "fixedRouteHint": "Use the fixed-price booking for the fastest confirmation.",
     "fixedRouteAllDay": "All-day rate applies",
@@ -5395,6 +5423,10 @@ const fi = {
     "fixedRouteNight": "Night rate applies",
     "fixedRouteLocked": "This route qualifies for a fixed price. Please book via the fixed-price form.",
     "longRouteTitle": "Long route estimate",
+    "longRouteDistance": (distance) => `Distance: ${distance} km`,
+    "longRouteTaximeter": (price, rate) => `Taximeter: ${price} PLN (${rate} PLN/km)`,
+    "longRouteProposed": (price) => `Proposed price: ${price} PLN`,
+    "longRouteSavings": (percent) => `Savings: ${percent}%`,
     "longRouteNote": "You can still enter your own price below.",
     "date": "Päivämäärä",
     "pickupTime": "Noutoaika",
@@ -6124,7 +6156,8 @@ const no = {
       "night": "Nattpris",
       "reasonDay": "standard dagpris",
       "reasonLate": "henting etter 21:30 eller før 5:30",
-      "reasonHoliday": "søndag/helligdag"
+      "reasonHoliday": "søndag/helligdag",
+      "banner": (label, price, reason) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Kunne ikke sende bestillingen. Prøv igjen.",
     "submitNetworkError": "Nettverksfeil ved innsending. Prøv igjen.",
@@ -6184,6 +6217,7 @@ const no = {
     "notesHelp": "F.eks. barnesete, ventetid, spesielle instruksjoner",
     "submitting": "Sender...",
     "formIncomplete": "Fyll ut skjemaet for å fortsette",
+    "confirmOrder": (price) => `Bekreft bestilling (${price} PLN)`,
     "reassurance": "Ingen forhåndsbetaling. Gratis avbestilling. Bekreftelse på 5–10 min."
   },
   "quoteForm": {
@@ -6225,6 +6259,8 @@ const no = {
     "priceHelp": "Foreslå din pris. Vi vurderer og svarer innen 5-10 minutter.",
     "fixedRouteChecking": "Checking if this route qualifies for a fixed price...",
     "fixedRouteTitle": "Fixed price available",
+    "fixedRouteDistance": (distance) => `Distance: ${distance} km`,
+    "fixedRouteComputed": (price) => `${price} PLN`,
     "fixedRouteCta": "Book fixed price",
     "fixedRouteHint": "Use the fixed-price booking for the fastest confirmation.",
     "fixedRouteAllDay": "All-day rate applies",
@@ -6232,6 +6268,10 @@ const no = {
     "fixedRouteNight": "Night rate applies",
     "fixedRouteLocked": "This route qualifies for a fixed price. Please book via the fixed-price form.",
     "longRouteTitle": "Long route estimate",
+    "longRouteDistance": (distance) => `Distance: ${distance} km`,
+    "longRouteTaximeter": (price, rate) => `Taximeter: ${price} PLN (${rate} PLN/km)`,
+    "longRouteProposed": (price) => `Proposed price: ${price} PLN`,
+    "longRouteSavings": (percent) => `Savings: ${percent}%`,
     "longRouteNote": "You can still enter your own price below.",
     "date": "Dato",
     "pickupTime": "Hentetid",
@@ -6959,7 +6999,8 @@ const sv = {
       "night": "Nattpris",
       "reasonDay": "standard dagpris",
       "reasonLate": "upphämtning efter 21:30 eller före 5:30",
-      "reasonHoliday": "söndag/helgdag"
+      "reasonHoliday": "söndag/helgdag",
+      "banner": (label, price, reason) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Det gick inte att skicka beställningen. Försök igen.",
     "submitNetworkError": "Nätverksfel vid skickandet. Försök igen.",
@@ -7019,6 +7060,7 @@ const sv = {
     "notesHelp": "T.ex. barnstol, väntetid, särskilda instruktioner",
     "submitting": "Skickar...",
     "formIncomplete": "Fyll i formuläret för att fortsätta",
+    "confirmOrder": (price) => `Bekräfta beställning (${price} PLN)`,
     "reassurance": "Ingen förskottsbetalning. Gratis avbokning. Bekräftelse inom 5–10 min."
   },
   "quoteForm": {
@@ -7060,6 +7102,8 @@ const sv = {
     "priceHelp": "Föreslå ditt pris för resan. Vi granskar och svarar inom 5-10 minuter.",
     "fixedRouteChecking": "Checking if this route qualifies for a fixed price...",
     "fixedRouteTitle": "Fixed price available",
+    "fixedRouteDistance": (distance) => `Distance: ${distance} km`,
+    "fixedRouteComputed": (price) => `${price} PLN`,
     "fixedRouteCta": "Book fixed price",
     "fixedRouteHint": "Use the fixed-price booking for the fastest confirmation.",
     "fixedRouteAllDay": "All-day rate applies",
@@ -7067,6 +7111,10 @@ const sv = {
     "fixedRouteNight": "Night rate applies",
     "fixedRouteLocked": "This route qualifies for a fixed price. Please book via the fixed-price form.",
     "longRouteTitle": "Long route estimate",
+    "longRouteDistance": (distance) => `Distance: ${distance} km`,
+    "longRouteTaximeter": (price, rate) => `Taximeter: ${price} PLN (${rate} PLN/km)`,
+    "longRouteProposed": (price) => `Proposed price: ${price} PLN`,
+    "longRouteSavings": (percent) => `Savings: ${percent}%`,
     "longRouteNote": "You can still enter your own price below.",
     "date": "Datum",
     "pickupTime": "Upphämtningstid",
@@ -7794,7 +7842,8 @@ const da = {
       "night": "Natpris",
       "reasonDay": "standard dagpris",
       "reasonLate": "afhentning efter 21:30 eller før 5:30",
-      "reasonHoliday": "søndag/helligdag"
+      "reasonHoliday": "søndag/helligdag",
+      "banner": (label, price, reason) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Bestillingen kunne ikke sendes. Prøv igen.",
     "submitNetworkError": "Netværksfejl ved afsendelse af bestillingen. Prøv igen.",
@@ -7854,6 +7903,7 @@ const da = {
     "notesHelp": "Fx barnesæde, ventetid, særlige instruktioner",
     "submitting": "Sender...",
     "formIncomplete": "Udfyld formularen for at fortsætte",
+    "confirmOrder": (price) => `Bekræft bestilling (${price} PLN)`,
     "reassurance": "Ingen forudbetaling. Gratis afbestilling. Bekræftelse på 5–10 min."
   },
   "quoteForm": {
@@ -7895,6 +7945,8 @@ const da = {
     "priceHelp": "Foreslå din pris. Vi vurderer og svarer inden for 5-10 minutter.",
     "fixedRouteChecking": "Checking if this route qualifies for a fixed price...",
     "fixedRouteTitle": "Fixed price available",
+    "fixedRouteDistance": (distance) => `Distance: ${distance} km`,
+    "fixedRouteComputed": (price) => `${price} PLN`,
     "fixedRouteCta": "Book fixed price",
     "fixedRouteHint": "Use the fixed-price booking for the fastest confirmation.",
     "fixedRouteAllDay": "All-day rate applies",
@@ -7902,6 +7954,10 @@ const da = {
     "fixedRouteNight": "Night rate applies",
     "fixedRouteLocked": "This route qualifies for a fixed price. Please book via the fixed-price form.",
     "longRouteTitle": "Long route estimate",
+    "longRouteDistance": (distance) => `Distance: ${distance} km`,
+    "longRouteTaximeter": (price, rate) => `Taximeter: ${price} PLN (${rate} PLN/km)`,
+    "longRouteProposed": (price) => `Proposed price: ${price} PLN`,
+    "longRouteSavings": (percent) => `Savings: ${percent}%`,
     "longRouteNote": "You can still enter your own price below.",
     "date": "Dato",
     "pickupTime": "Afhentningstid",

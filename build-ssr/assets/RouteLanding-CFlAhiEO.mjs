@@ -10,6 +10,8 @@ import 'lucide-react';
 function RouteLanding({ title, description, route, examples, pricing }) {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
+  const seoParagraph = typeof t.routeLanding?.seoParagraph === "function" ? t.routeLanding.seoParagraph(route) : `Book private airport transfer on route ${route} with fixed prices, 24/7 availability, and quick confirmation.`;
+  const pricingSubtitle = typeof t.routeLanding?.pricingSubtitle === "function" ? t.routeLanding.pricingSubtitle(route) : `Estimated prices for route ${route}.`;
   const orderLinks = [
     {
       href: `${basePath}/${getRouteSlug(locale, "orderAirportGdansk")}`,
@@ -43,7 +45,7 @@ function RouteLanding({ title, description, route, examples, pricing }) {
         ),
         /* @__PURE__ */ jsx("h1", { className: "text-3xl text-gray-900 mb-4", children: title }),
         /* @__PURE__ */ jsx("p", { className: "text-gray-600 mb-6", children: description }),
-        /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-500 mb-6", children: t.routeLanding.seoParagraph(route) }),
+        /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-500 mb-6", children: seoParagraph }),
         /* @__PURE__ */ jsx(
           "a",
           {
@@ -97,7 +99,7 @@ function RouteLanding({ title, description, route, examples, pricing }) {
         /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap items-center justify-between gap-2 mb-4", children: [
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx("h2", { className: "text-xl text-gray-900", children: t.routeLanding.pricingTitle }),
-            /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-600", children: t.routeLanding.pricingSubtitle(route) })
+            /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-600", children: pricingSubtitle })
           ] }),
           /* @__PURE__ */ jsx("span", { className: "text-xs uppercase tracking-wide text-gray-500", children: t.routeLanding.vehicleLabel })
         ] }),
