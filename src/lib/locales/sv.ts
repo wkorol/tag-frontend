@@ -267,13 +267,13 @@ const sv = {
   },
   "routeLanding": {
     "orderNow": "Boka online nu",
-    "quickLinks": "Quick links",
+    "quickLinks": "Snabblänkar",
     "pricingLink": "Se priser",
     "orderLinks": {
-      "airportGdansk": "Book airport → Gdańsk",
-      "airportSopot": "Book airport → Sopot",
-      "airportGdynia": "Book airport → Gdynia",
-      "custom": "Custom route"
+      "airportGdansk": "Boka flygplats → Gdańsk",
+      "airportSopot": "Boka flygplats → Sopot",
+      "airportGdynia": "Boka flygplats → Gdynia",
+      "custom": "Anpassad rutt"
     },
     "pricingTitle": "Exempelpriser",
     "vehicleLabel": "Standardbil",

@@ -267,13 +267,13 @@ const da = {
   },
   "routeLanding": {
     "orderNow": "Book online nu",
-    "quickLinks": "Quick links",
+    "quickLinks": "Hurtige links",
     "pricingLink": "Se priser",
     "orderLinks": {
-      "airportGdansk": "Book airport → Gdańsk",
-      "airportSopot": "Book airport → Sopot",
-      "airportGdynia": "Book airport → Gdynia",
-      "custom": "Custom route"
+      "airportGdansk": "Book lufthavn → Gdańsk",
+      "airportSopot": "Book lufthavn → Sopot",
+      "airportGdynia": "Book lufthavn → Gdynia",
+      "custom": "Tilpasset rute"
     },
     "pricingTitle": "Eksempelpriser",
     "vehicleLabel": "Standardbil",

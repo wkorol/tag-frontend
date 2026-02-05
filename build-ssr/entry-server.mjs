@@ -2065,7 +2065,7 @@ const Footer = lazy(() => Promise.resolve().then(() => Footer$2).then((mod) => (
 const OrderForm = lazy(() => import('./assets/OrderForm-CjlXdu33.mjs').then((mod) => ({ default: mod.OrderForm })));
 const QuoteForm = lazy(() => import('./assets/QuoteForm-xCAp2D5F.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./assets/ManageOrder-CJSOJO9N.mjs').then((mod) => ({ default: mod.ManageOrder })));
-const RouteLanding = lazy(() => import('./assets/RouteLanding-CFlAhiEO.mjs').then((mod) => ({ default: mod.RouteLanding })));
+const RouteLanding = lazy(() => import('./assets/RouteLanding-CIjxRoWS.mjs').then((mod) => ({ default: mod.RouteLanding })));
 const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-DLUc346H.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
 const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-DLUc346H.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
 const PricingPage = lazy(() => import('./assets/PricingPage-CiIJrGHb.mjs').then((mod) => ({ default: mod.PricingPage })));
@@ -4287,13 +4287,13 @@ const de = {
   },
   "routeLanding": {
     "orderNow": "Jetzt online reservieren",
-    "quickLinks": "Quick links",
+    "quickLinks": "Schnellzugriffe",
     "pricingLink": "Preise ansehen",
     "orderLinks": {
-      "airportGdansk": "Book airport → Gdańsk",
-      "airportSopot": "Book airport → Sopot",
-      "airportGdynia": "Book airport → Gdynia",
-      "custom": "Custom route"
+      "airportGdansk": "Flughafen → Gdańsk buchen",
+      "airportSopot": "Flughafen → Sopot buchen",
+      "airportGdynia": "Flughafen → Gdynia buchen",
+      "custom": "Individuelle Strecke"
     },
     "pricingTitle": "Beispielpreise",
     "vehicleLabel": "Standardwagen",
@@ -5131,13 +5131,13 @@ const fi = {
   },
   "routeLanding": {
     "orderNow": "Varaa verkossa nyt",
-    "quickLinks": "Quick links",
+    "quickLinks": "Pikalinkit",
     "pricingLink": "Katso hinnat",
     "orderLinks": {
-      "airportGdansk": "Book airport → Gdańsk",
-      "airportSopot": "Book airport → Sopot",
-      "airportGdynia": "Book airport → Gdynia",
-      "custom": "Custom route"
+      "airportGdansk": "Varaa lentokenttä → Gdańsk",
+      "airportSopot": "Varaa lentokenttä → Sopot",
+      "airportGdynia": "Varaa lentokenttä → Gdynia",
+      "custom": "Mukautettu reitti"
     },
     "pricingTitle": "Esimerkkihinnat",
     "vehicleLabel": "Perusauto",
@@ -5973,13 +5973,13 @@ const no = {
   },
   "routeLanding": {
     "orderNow": "Reserver online nå",
-    "quickLinks": "Quick links",
+    "quickLinks": "Hurtiglenker",
     "pricingLink": "Se priser",
     "orderLinks": {
-      "airportGdansk": "Book airport → Gdańsk",
-      "airportSopot": "Book airport → Sopot",
-      "airportGdynia": "Book airport → Gdynia",
-      "custom": "Custom route"
+      "airportGdansk": "Bestill flyplass → Gdańsk",
+      "airportSopot": "Bestill flyplass → Sopot",
+      "airportGdynia": "Bestill flyplass → Gdynia",
+      "custom": "Tilpasset rute"
     },
     "pricingTitle": "Eksempelpriser",
     "vehicleLabel": "Standardbil",
@@ -6817,13 +6817,13 @@ const sv = {
   },
   "routeLanding": {
     "orderNow": "Boka online nu",
-    "quickLinks": "Quick links",
+    "quickLinks": "Snabblänkar",
     "pricingLink": "Se priser",
     "orderLinks": {
-      "airportGdansk": "Book airport → Gdańsk",
-      "airportSopot": "Book airport → Sopot",
-      "airportGdynia": "Book airport → Gdynia",
-      "custom": "Custom route"
+      "airportGdansk": "Boka flygplats → Gdańsk",
+      "airportSopot": "Boka flygplats → Sopot",
+      "airportGdynia": "Boka flygplats → Gdynia",
+      "custom": "Anpassad rutt"
     },
     "pricingTitle": "Exempelpriser",
     "vehicleLabel": "Standardbil",
@@ -7661,13 +7661,13 @@ const da = {
   },
   "routeLanding": {
     "orderNow": "Book online nu",
-    "quickLinks": "Quick links",
+    "quickLinks": "Hurtige links",
     "pricingLink": "Se priser",
     "orderLinks": {
-      "airportGdansk": "Book airport → Gdańsk",
-      "airportSopot": "Book airport → Sopot",
-      "airportGdynia": "Book airport → Gdynia",
-      "custom": "Custom route"
+      "airportGdansk": "Book lufthavn → Gdańsk",
+      "airportSopot": "Book lufthavn → Sopot",
+      "airportGdynia": "Book lufthavn → Gdynia",
+      "custom": "Tilpasset rute"
     },
     "pricingTitle": "Eksempelpriser",
     "vehicleLabel": "Standardbil",

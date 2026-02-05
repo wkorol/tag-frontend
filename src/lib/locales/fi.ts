@@ -267,13 +267,13 @@ const fi = {
   },
   "routeLanding": {
     "orderNow": "Varaa verkossa nyt",
-    "quickLinks": "Quick links",
+    "quickLinks": "Pikalinkit",
     "pricingLink": "Katso hinnat",
     "orderLinks": {
-      "airportGdansk": "Book airport → Gdańsk",
-      "airportSopot": "Book airport → Sopot",
-      "airportGdynia": "Book airport → Gdynia",
-      "custom": "Custom route"
+      "airportGdansk": "Varaa lentokenttä → Gdańsk",
+      "airportSopot": "Varaa lentokenttä → Sopot",
+      "airportGdynia": "Varaa lentokenttä → Gdynia",
+      "custom": "Mukautettu reitti"
     },
     "pricingTitle": "Esimerkkihinnat",
     "vehicleLabel": "Perusauto",
