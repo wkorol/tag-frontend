@@ -3,13 +3,21 @@ const sameAsFromEnv = (process.env.SEO_SAME_AS ?? '')
   .map((item) => item.trim())
   .filter((item) => /^https?:\/\//.test(item));
 
+const defaultLocale = 'pl';
+
 export const site = {
   name: 'Taxi Airport Gdańsk',
   url: 'https://taxiairportgdansk.com',
   ogImage: 'https://taxiairportgdansk.com/og-image.png',
   logo: 'https://taxiairportgdansk.com/og-image.png',
   image: 'https://taxiairportgdansk.com/og-image.png',
-  sameAs: sameAsFromEnv.length > 0 ? sameAsFromEnv : ['https://wa.me/48694347548'],
+  sameAs:
+    sameAsFromEnv.length > 0
+      ? sameAsFromEnv
+      : [
+          'https://wa.me/48694347548',
+          'https://www.google.com/maps/search/?api=1&query=Taxi+Airport+Gda%C5%84sk',
+        ],
 };
 
 export const locales = ['en', 'pl', 'de', 'fi', 'no', 'sv', 'da'];
@@ -453,9 +461,9 @@ const metaByLocale = {
         'Zuverlässiger Taxi-Transfer vom Flughafen Gdańsk nach Gdynia mit Festpreis.',
     },
     taxiGdanskCity: {
-      title: 'Taxi Gdańsk | Taxi Airport Gdańsk',
+      title: 'Taxi Danzig (Gdańsk) | Taxi Airport Gdańsk',
       description:
-        'Taxi Gdańsk mit Festpreisen, 24/7 Verfügbarkeit und schneller Bestätigung. Flughafentransfers und Stadtfahrten.',
+        'Taxi in Danzig (Gdańsk) mit Festpreisen, 24/7 Verfügbarkeit und schneller Bestätigung. Flughafen- und Stadttransfers.',
     },
     countryLanding: {
       title: 'Flughafentransfer Gdańsk für Deutschland | Taxi Airport Gdańsk',
@@ -520,9 +528,9 @@ const metaByLocale = {
         'Kuljetus Gdańskin lentokentältä Gdyniaan kiinteällä hinnalla ja nopealla varauksella.',
     },
     taxiGdanskCity: {
-      title: 'Taxi Gdańsk | Taxi Airport Gdańsk',
+      title: 'Taxi Gdańskissa | Taxi Airport Gdańsk',
       description:
-        'Taxi Gdańsk kiinteillä hinnoilla, 24/7 ja nopealla vahvistuksella. Lentokenttä- ja kaupunkikuljetukset.',
+        'Taxi Gdańskissa kiinteillä hinnoilla, 24/7 saatavuudella ja nopealla vahvistuksella. Lentokenttä- ja kaupunkikuljetukset.',
     },
     countryLanding: {
       title: 'Gdańskin lentokenttäkuljetus Suomesta | Taxi Airport Gdańsk',
@@ -587,9 +595,9 @@ const metaByLocale = {
         'Transfer fra Gdańsk flyplass til Gdynia med fast pris og rask bestilling.',
     },
     taxiGdanskCity: {
-      title: 'Taxi Gdańsk | Taxi Airport Gdańsk',
+      title: 'Taxi i Gdańsk | Taxi Airport Gdańsk',
       description:
-        'Taxi Gdańsk med faste priser, 24/7 tilgjengelighet og rask bekreftelse. Flyplass- og bytransport.',
+        'Taxi i Gdańsk med faste priser, 24/7 tilgjengelighet og rask bekreftelse. Flyplass- og bytransport.',
     },
     countryLanding: {
       title: 'Flyplasstransport Gdańsk for Norge | Taxi Airport Gdańsk',
@@ -654,9 +662,9 @@ const metaByLocale = {
         'Transfer från Gdańsk flygplats till Gdynia med fast pris och snabb bokning.',
     },
     taxiGdanskCity: {
-      title: 'Taxi Gdańsk | Taxi Airport Gdańsk',
+      title: 'Taxi i Gdańsk | Taxi Airport Gdańsk',
       description:
-        'Taxi Gdańsk med fasta priser, 24/7 tillgänglighet och snabb bekräftelse. Flygplats- och stadstransfer.',
+        'Taxi i Gdańsk med fasta priser, tillgänglighet dygnet runt och snabb bekräftelse. Flygplats- och stadstransfer.',
     },
     countryLanding: {
       title: 'Flygplatstransfer Gdańsk för Sverige | Taxi Airport Gdańsk',
@@ -721,9 +729,9 @@ const metaByLocale = {
         'Transfer fra Gdańsk lufthavn til Gdynia med fast pris og hurtig booking.',
     },
     taxiGdanskCity: {
-      title: 'Taxi Gdańsk | Taxi Airport Gdańsk',
+      title: 'Taxi i Gdańsk | Taxi Airport Gdańsk',
       description:
-        'Taxi Gdańsk med faste priser, 24/7 tilgængelighed og hurtig bekræftelse. Lufthavns- og bytransfer.',
+        'Taxi i Gdańsk med faste priser, 24/7 tilgængelighed og hurtig bekræftelse. Lufthavns- og bytransfer.',
     },
     countryLanding: {
       title: 'Lufthavnstransfer Gdańsk for Danmark | Taxi Airport Gdańsk',
@@ -757,7 +765,7 @@ const metaByLocale = {
     },
     cookies: {
       title: 'Cookiepolitik | Taxi Airport Gdańsk',
-      description: 'Information om cookies hos Taxi Airport Gdańsk.',
+      description: 'Information om cookies hos Taxi Airport Gdańsk på dansk.',
     },
     privacy: {
       title: 'Privatlivspolitik | Taxi Airport Gdańsk',
@@ -1215,7 +1223,7 @@ export const buildSeoTags = (urlPath) => {
                 })
                 .join('');
 
-    const xDefault = `<link rel="alternate" hreflang="x-default" href="${site.url}/">`;
+    const xDefault = `<link rel="alternate" hreflang="x-default" href="${site.url}/${defaultLocale}/">`;
     const robots = isIndexablePath(urlPath) ? 'index,follow' : 'noindex,nofollow';
 
   const ogLocale = (localeHreflangMap[locale] ?? [locale])[0] ?? locale;

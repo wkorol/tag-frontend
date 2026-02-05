@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { locales, routeSlugs, countryAirportSlugsByLocale, cityRouteSlugsByLocale } from '../seo-data.mjs';
 
 const SITE_URL = 'https://taxiairportgdansk.com';
+const DEFAULT_LOCALE = 'pl';
 const LOCALE_HREFLANG_MAP = {
   en: ['en', 'en-GB'],
   pl: ['pl', 'pl-PL'],
@@ -102,7 +103,10 @@ const buildLocalizedUrl = (locale, routeKey) => {
   return `${SITE_URL}/${locale}/${routeSlugs[locale][routeKey]}`;
 };
 
-const addXDefault = (alternates) => [...alternates, { hreflang: 'x-default', href: `${SITE_URL}/` }];
+const addXDefault = (alternates) => [
+  ...alternates,
+  { hreflang: 'x-default', href: `${SITE_URL}/${DEFAULT_LOCALE}/` },
+];
 
 const addEntry = (entries, entry) => {
   entries.push({
@@ -127,20 +131,7 @@ const buildAlternateSetForLocaleOnly = (locale, href) =>
 
 const entries = [];
 
-const rootAlternates = locales.flatMap((locale) =>
-  (LOCALE_HREFLANG_MAP[locale] ?? [locale]).map((hreflang) => ({
-    hreflang,
-    href: `${SITE_URL}/${locale}/`,
-  }))
-);
 const homeLastmod = await getRouteLastmod('home');
-addEntry(entries, {
-  loc: `${SITE_URL}/`,
-  lastmod: homeLastmod,
-  changefreq: 'weekly',
-  priority: '1.0',
-  alternates: rootAlternates,
-});
 
 for (const locale of locales) {
   addEntry(entries, {

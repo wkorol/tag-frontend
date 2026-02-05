@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://taxiairportgdansk.com/</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/" />
-    <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/" />
-    <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/" />
-    <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://taxiairportgdansk.com/de/" />
-    <xhtml:link rel="alternate" hreflang="de-DE" href="https://taxiairportgdansk.com/de/" />
-    <xhtml:link rel="alternate" hreflang="fi" href="https://taxiairportgdansk.com/fi/" />
-    <xhtml:link rel="alternate" hreflang="fi-FI" href="https://taxiairportgdansk.com/fi/" />
-    <xhtml:link rel="alternate" hreflang="no" href="https://taxiairportgdansk.com/no/" />
-    <xhtml:link rel="alternate" hreflang="nb-NO" href="https://taxiairportgdansk.com/no/" />
-    <xhtml:link rel="alternate" hreflang="sv" href="https://taxiairportgdansk.com/sv/" />
-    <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/" />
-    <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/" />
-    <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
-  </url>
-  <url>
     <loc>https://taxiairportgdansk.com/en/</loc>
     <lastmod>2026-02-05</lastmod>
     <changefreq>weekly</changefreq>
@@ -40,7 +19,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/</loc>
@@ -61,7 +40,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/</loc>
@@ -82,7 +61,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/fi/</loc>
@@ -103,7 +82,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/</loc>
@@ -124,7 +103,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/</loc>
@@ -145,7 +124,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/da/</loc>
@@ -166,7 +145,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/gdansk-airport-taxi</loc>
@@ -187,7 +166,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-taxi" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-taxa" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-taxa" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk</loc>
@@ -208,7 +187,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-taxi" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-taxa" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-taxa" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/gdansk-flughafen-taxi</loc>
@@ -229,7 +208,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-taxi" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-taxa" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-taxa" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/fi/gdansk-lentokentta-taksi</loc>
@@ -250,7 +229,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-taxi" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-taxa" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-taxa" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/gdansk-flyplass-taxi</loc>
@@ -271,7 +250,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-taxi" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-taxa" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-taxa" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/gdansk-flygplats-taxi</loc>
@@ -292,7 +271,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-taxi" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-taxa" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-taxa" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/da/gdansk-lufthavn-taxa</loc>
@@ -313,7 +292,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-taxi" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-taxa" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-taxa" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/gdansk-airport-to-sopot</loc>
@@ -334,7 +313,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-sopot" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-sopot" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-sopot" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/lotnisko-gdansk-sopot</loc>
@@ -355,7 +334,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-sopot" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-sopot" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-sopot" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/gdansk-flughafen-sopot</loc>
@@ -376,7 +355,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-sopot" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-sopot" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-sopot" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/fi/gdansk-lentokentta-sopot</loc>
@@ -397,7 +376,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-sopot" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-sopot" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-sopot" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/gdansk-flyplass-sopot</loc>
@@ -418,7 +397,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-sopot" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-sopot" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-sopot" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/gdansk-flygplats-sopot</loc>
@@ -439,7 +418,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-sopot" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-sopot" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-sopot" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/da/gdansk-lufthavn-sopot</loc>
@@ -460,7 +439,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-sopot" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-sopot" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-sopot" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/gdansk-airport-to-gdynia</loc>
@@ -481,7 +460,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-gdynia" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-gdynia" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-gdynia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/lotnisko-gdansk-gdynia</loc>
@@ -502,7 +481,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-gdynia" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-gdynia" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-gdynia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/gdansk-flughafen-gdynia</loc>
@@ -523,7 +502,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-gdynia" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-gdynia" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-gdynia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/fi/gdansk-lentokentta-gdynia</loc>
@@ -544,7 +523,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-gdynia" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-gdynia" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-gdynia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/gdansk-flyplass-gdynia</loc>
@@ -565,7 +544,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-gdynia" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-gdynia" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-gdynia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/gdansk-flygplats-gdynia</loc>
@@ -586,7 +565,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-gdynia" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-gdynia" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-gdynia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/da/gdansk-lufthavn-gdynia</loc>
@@ -607,7 +586,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplats-gdynia" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-gdynia" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-gdynia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/gdansk-airport-transfer-uk</loc>
@@ -628,7 +607,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-sverige" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-danmark" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-danmark" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/transfer-lotnisko-gdansk</loc>
@@ -649,7 +628,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-sverige" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-danmark" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-danmark" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/gdansk-airport-transfer-deutschland</loc>
@@ -670,7 +649,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-sverige" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-danmark" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-danmark" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/fi/gdansk-lentokenttakuljetus-suomi</loc>
@@ -691,7 +670,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-sverige" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-danmark" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-danmark" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/gdansk-flyplasstransport-norge</loc>
@@ -712,7 +691,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-sverige" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-danmark" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-danmark" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-sverige</loc>
@@ -733,7 +712,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-sverige" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-danmark" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-danmark" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-danmark</loc>
@@ -754,7 +733,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-sverige" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-danmark" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-danmark" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/taxi-gdansk</loc>
@@ -775,7 +754,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/taxi-gdansk" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/taxi-gdansk" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/taxi-gdansk" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/taxi-gdansk</loc>
@@ -796,7 +775,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/taxi-gdansk" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/taxi-gdansk" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/taxi-gdansk" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/taxi-gdansk</loc>
@@ -817,7 +796,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/taxi-gdansk" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/taxi-gdansk" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/taxi-gdansk" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/fi/taxi-gdansk</loc>
@@ -838,7 +817,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/taxi-gdansk" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/taxi-gdansk" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/taxi-gdansk" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/taxi-gdansk</loc>
@@ -859,7 +838,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/taxi-gdansk" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/taxi-gdansk" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/taxi-gdansk" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/taxi-gdansk</loc>
@@ -880,7 +859,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/taxi-gdansk" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/taxi-gdansk" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/taxi-gdansk" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/da/taxi-gdansk</loc>
@@ -901,7 +880,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/taxi-gdansk" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/taxi-gdansk" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/taxi-gdansk" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/book-gdansk-airport-transfer</loc>
@@ -922,7 +901,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/rezerwacja-lotnisko-gdansk</loc>
@@ -943,7 +922,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/buchung-gdansk-flughafen</loc>
@@ -964,7 +943,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/fi/varaus-gdansk-lentokentta</loc>
@@ -985,7 +964,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/bestilling-gdansk-flyplass</loc>
@@ -1006,7 +985,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats</loc>
@@ -1027,7 +1006,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/da/booking-gdansk-lufthavn</loc>
@@ -1048,7 +1027,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/book-gdansk-airport-sopot</loc>
@@ -1069,7 +1048,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats-sopot" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-sopot" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-sopot" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/rezerwacja-lotnisko-gdansk-sopot</loc>
@@ -1090,7 +1069,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats-sopot" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-sopot" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-sopot" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/buchung-gdansk-flughafen-sopot</loc>
@@ -1111,7 +1090,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats-sopot" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-sopot" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-sopot" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/fi/varaus-gdansk-lentokentta-sopot</loc>
@@ -1132,7 +1111,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats-sopot" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-sopot" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-sopot" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/bestilling-gdansk-flyplass-sopot</loc>
@@ -1153,7 +1132,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats-sopot" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-sopot" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-sopot" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats-sopot</loc>
@@ -1174,7 +1153,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats-sopot" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-sopot" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-sopot" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-sopot</loc>
@@ -1195,7 +1174,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats-sopot" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-sopot" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-sopot" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/book-gdansk-airport-gdynia</loc>
@@ -1216,7 +1195,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats-gdynia" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-gdynia" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-gdynia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/rezerwacja-lotnisko-gdansk-gdynia</loc>
@@ -1237,7 +1216,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats-gdynia" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-gdynia" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-gdynia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/buchung-gdansk-flughafen-gdynia</loc>
@@ -1258,7 +1237,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats-gdynia" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-gdynia" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-gdynia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/fi/varaus-gdansk-lentokentta-gdynia</loc>
@@ -1279,7 +1258,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats-gdynia" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-gdynia" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-gdynia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/bestilling-gdansk-flyplass-gdynia</loc>
@@ -1300,7 +1279,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats-gdynia" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-gdynia" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-gdynia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats-gdynia</loc>
@@ -1321,7 +1300,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats-gdynia" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-gdynia" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-gdynia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-gdynia</loc>
@@ -1342,7 +1321,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-gdansk-flygplats-gdynia" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-gdynia" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-gdansk-lufthavn-gdynia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/book-custom-transfer</loc>
@@ -1363,7 +1342,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/rezerwacja-niestandardowa</loc>
@@ -1384,7 +1363,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/buchung-individuell</loc>
@@ -1405,7 +1384,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/fi/varaus-mukautettu</loc>
@@ -1426,7 +1405,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/bestilling-tilpasset</loc>
@@ -1447,7 +1426,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/bokning-anpassad</loc>
@@ -1468,7 +1447,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/da/booking-tilpasset</loc>
@@ -1489,7 +1468,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/pricing</loc>
@@ -1510,7 +1489,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/priser" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/priser" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/priser" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/cennik</loc>
@@ -1531,7 +1510,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/priser" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/priser" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/priser" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/preise</loc>
@@ -1552,7 +1531,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/priser" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/priser" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/priser" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/fi/hinnasto</loc>
@@ -1573,7 +1552,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/priser" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/priser" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/priser" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/priser</loc>
@@ -1594,7 +1573,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/priser" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/priser" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/priser" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/priser</loc>
@@ -1615,7 +1594,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/priser" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/priser" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/priser" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/da/priser</loc>
@@ -1636,7 +1615,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/priser" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/priser" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/priser" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/cookies</loc>
@@ -1657,7 +1636,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/kakor" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/cookiepolitik" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/cookiepolitik" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/polityka-cookies</loc>
@@ -1678,7 +1657,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/kakor" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/cookiepolitik" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/cookiepolitik" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/cookie-richtlinie</loc>
@@ -1699,7 +1678,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/kakor" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/cookiepolitik" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/cookiepolitik" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/fi/evasteet</loc>
@@ -1720,7 +1699,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/kakor" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/cookiepolitik" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/cookiepolitik" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/informasjonskapsler</loc>
@@ -1741,7 +1720,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/kakor" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/cookiepolitik" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/cookiepolitik" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/kakor</loc>
@@ -1762,7 +1741,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/kakor" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/cookiepolitik" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/cookiepolitik" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/da/cookiepolitik</loc>
@@ -1783,7 +1762,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/kakor" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/cookiepolitik" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/cookiepolitik" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/privacy</loc>
@@ -1804,7 +1783,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/integritetspolicy" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/privatlivspolitik" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/privatlivspolitik" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/polityka-prywatnosci</loc>
@@ -1825,7 +1804,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/integritetspolicy" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/privatlivspolitik" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/privatlivspolitik" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/datenschutz</loc>
@@ -1846,7 +1825,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/integritetspolicy" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/privatlivspolitik" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/privatlivspolitik" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/fi/tietosuoja</loc>
@@ -1867,7 +1846,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/integritetspolicy" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/privatlivspolitik" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/privatlivspolitik" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/personvern</loc>
@@ -1888,7 +1867,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/integritetspolicy" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/privatlivspolitik" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/privatlivspolitik" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/integritetspolicy</loc>
@@ -1909,7 +1888,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/integritetspolicy" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/privatlivspolitik" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/privatlivspolitik" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/da/privatlivspolitik</loc>
@@ -1930,7 +1909,7 @@
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/integritetspolicy" />
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/privatlivspolitik" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/privatlivspolitik" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/gdansk-airport-transfer-aberdeen</loc>
@@ -1939,7 +1918,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-aberdeen" />
     <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-aberdeen" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/gdansk-airport-transfer-belfast</loc>
@@ -1948,7 +1927,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-belfast" />
     <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-belfast" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/gdansk-airport-transfer-bristol</loc>
@@ -1957,7 +1936,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-bristol" />
     <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-bristol" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/gdansk-airport-transfer-birmingham</loc>
@@ -1966,7 +1945,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-birmingham" />
     <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-birmingham" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/gdansk-airport-transfer-edinburgh</loc>
@@ -1975,7 +1954,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-edinburgh" />
     <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-edinburgh" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/gdansk-airport-transfer-leeds-bradford</loc>
@@ -1984,7 +1963,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-leeds-bradford" />
     <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-leeds-bradford" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/gdansk-airport-transfer-liverpool</loc>
@@ -1993,7 +1972,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-liverpool" />
     <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-liverpool" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/gdansk-airport-transfer-london-luton</loc>
@@ -2002,7 +1981,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-london-luton" />
     <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-london-luton" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/gdansk-airport-transfer-london-stansted</loc>
@@ -2011,7 +1990,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-london-stansted" />
     <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-london-stansted" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/en/gdansk-airport-transfer-manchester</loc>
@@ -2020,7 +1999,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-manchester" />
     <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/gdansk-airport-transfer-manchester" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/gdansk-flughafentransfer-dortmund</loc>
@@ -2029,7 +2008,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="de" href="https://taxiairportgdansk.com/de/gdansk-flughafentransfer-dortmund" />
     <xhtml:link rel="alternate" hreflang="de-DE" href="https://taxiairportgdansk.com/de/gdansk-flughafentransfer-dortmund" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/gdansk-flughafentransfer-frankfurt</loc>
@@ -2038,7 +2017,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="de" href="https://taxiairportgdansk.com/de/gdansk-flughafentransfer-frankfurt" />
     <xhtml:link rel="alternate" hreflang="de-DE" href="https://taxiairportgdansk.com/de/gdansk-flughafentransfer-frankfurt" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/gdansk-flughafentransfer-hamburg</loc>
@@ -2047,7 +2026,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="de" href="https://taxiairportgdansk.com/de/gdansk-flughafentransfer-hamburg" />
     <xhtml:link rel="alternate" hreflang="de-DE" href="https://taxiairportgdansk.com/de/gdansk-flughafentransfer-hamburg" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/de/gdansk-flughafentransfer-munchen</loc>
@@ -2056,7 +2035,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="de" href="https://taxiairportgdansk.com/de/gdansk-flughafentransfer-munchen" />
     <xhtml:link rel="alternate" hreflang="de-DE" href="https://taxiairportgdansk.com/de/gdansk-flughafentransfer-munchen" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/fi/gdansk-lentokenttakuljetus-helsinki</loc>
@@ -2065,7 +2044,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="fi" href="https://taxiairportgdansk.com/fi/gdansk-lentokenttakuljetus-helsinki" />
     <xhtml:link rel="alternate" hreflang="fi-FI" href="https://taxiairportgdansk.com/fi/gdansk-lentokenttakuljetus-helsinki" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/fi/gdansk-lentokenttakuljetus-turku</loc>
@@ -2074,7 +2053,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="fi" href="https://taxiairportgdansk.com/fi/gdansk-lentokenttakuljetus-turku" />
     <xhtml:link rel="alternate" hreflang="fi-FI" href="https://taxiairportgdansk.com/fi/gdansk-lentokenttakuljetus-turku" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/gdansk-flyplasstransport-alesund</loc>
@@ -2083,7 +2062,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="no" href="https://taxiairportgdansk.com/no/gdansk-flyplasstransport-alesund" />
     <xhtml:link rel="alternate" hreflang="nb-NO" href="https://taxiairportgdansk.com/no/gdansk-flyplasstransport-alesund" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/gdansk-flyplasstransport-bergen</loc>
@@ -2092,7 +2071,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="no" href="https://taxiairportgdansk.com/no/gdansk-flyplasstransport-bergen" />
     <xhtml:link rel="alternate" hreflang="nb-NO" href="https://taxiairportgdansk.com/no/gdansk-flyplasstransport-bergen" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/gdansk-flyplasstransport-haugesund</loc>
@@ -2101,7 +2080,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="no" href="https://taxiairportgdansk.com/no/gdansk-flyplasstransport-haugesund" />
     <xhtml:link rel="alternate" hreflang="nb-NO" href="https://taxiairportgdansk.com/no/gdansk-flyplasstransport-haugesund" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/gdansk-flyplasstransport-oslo-gardermoen</loc>
@@ -2110,7 +2089,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="no" href="https://taxiairportgdansk.com/no/gdansk-flyplasstransport-oslo-gardermoen" />
     <xhtml:link rel="alternate" hreflang="nb-NO" href="https://taxiairportgdansk.com/no/gdansk-flyplasstransport-oslo-gardermoen" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/gdansk-flyplasstransport-oslo-torp</loc>
@@ -2119,7 +2098,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="no" href="https://taxiairportgdansk.com/no/gdansk-flyplasstransport-oslo-torp" />
     <xhtml:link rel="alternate" hreflang="nb-NO" href="https://taxiairportgdansk.com/no/gdansk-flyplasstransport-oslo-torp" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/gdansk-flyplasstransport-stavanger</loc>
@@ -2128,7 +2107,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="no" href="https://taxiairportgdansk.com/no/gdansk-flyplasstransport-stavanger" />
     <xhtml:link rel="alternate" hreflang="nb-NO" href="https://taxiairportgdansk.com/no/gdansk-flyplasstransport-stavanger" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/gdansk-flyplasstransport-tromso</loc>
@@ -2137,7 +2116,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="no" href="https://taxiairportgdansk.com/no/gdansk-flyplasstransport-tromso" />
     <xhtml:link rel="alternate" hreflang="nb-NO" href="https://taxiairportgdansk.com/no/gdansk-flyplasstransport-tromso" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/no/gdansk-flyplasstransport-trondheim</loc>
@@ -2146,7 +2125,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="no" href="https://taxiairportgdansk.com/no/gdansk-flyplasstransport-trondheim" />
     <xhtml:link rel="alternate" hreflang="nb-NO" href="https://taxiairportgdansk.com/no/gdansk-flyplasstransport-trondheim" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-goteborg</loc>
@@ -2155,7 +2134,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="sv" href="https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-goteborg" />
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-goteborg" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-malmo</loc>
@@ -2164,7 +2143,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="sv" href="https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-malmo" />
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-malmo" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-skelleftea</loc>
@@ -2173,7 +2152,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="sv" href="https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-skelleftea" />
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-skelleftea" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-stockholm-arlanda</loc>
@@ -2182,7 +2161,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="sv" href="https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-stockholm-arlanda" />
     <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/gdansk-flygplatstransfer-stockholm-arlanda" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-aarhus</loc>
@@ -2191,7 +2170,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-aarhus" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-aarhus" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-billund</loc>
@@ -2200,7 +2179,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-billund" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-billund" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-copenhagen</loc>
@@ -2209,7 +2188,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-copenhagen" />
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/gdansk-lufthavn-transfer-copenhagen" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-slupsk</loc>
@@ -2218,7 +2197,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-slupsk" />
     <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-slupsk" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-malbork</loc>
@@ -2227,7 +2206,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-malbork" />
     <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-malbork" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-olsztyn</loc>
@@ -2236,7 +2215,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-olsztyn" />
     <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-olsztyn" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-starogard-gdanski</loc>
@@ -2245,7 +2224,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-starogard-gdanski" />
     <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-starogard-gdanski" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-wladyslawowo</loc>
@@ -2254,7 +2233,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-wladyslawowo" />
     <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-wladyslawowo" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-hel</loc>
@@ -2263,7 +2242,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-hel" />
     <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-hel" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-ostroda</loc>
@@ -2272,7 +2251,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-ostroda" />
     <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-ostroda" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-wejherowo</loc>
@@ -2281,7 +2260,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-wejherowo" />
     <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-wejherowo" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-rumia</loc>
@@ -2290,7 +2269,7 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-rumia" />
     <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-rumia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
   <url>
     <loc>https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-reda</loc>
@@ -2299,6 +2278,6 @@
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-reda" />
     <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/taxi-lotnisko-gdansk-reda" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/pl/" />
   </url>
 </urlset>
