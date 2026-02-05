@@ -101,6 +101,15 @@ const legacyRedirects = new Map([
 
 const isAdminPath = (urlPath) => /^\/(?:[a-z]{2}\/)?admin(?:\/orders\/[^/]+)?$/.test(urlPath);
 
+const isBotUserAgent = (userAgent) => {
+  if (!userAgent) {
+    return true;
+  }
+  return /bot|crawler|spider|crawling|googlebot|adsbot-google|mediapartners-google|google-structured-data-testing-tool|storebot-google|bingbot|msnbot|yandexbot|yandeximages|yandexvideo|yandexmedia|yandexblogs|yandexfavicons|yandexwebmaster|baiduspider|duckduckbot|slurp|seznambot|seznam|sogou|exabot|facebot|facebookexternalhit|twitterbot|linkedinbot|pinterest|applebot|petalbot|ahrefsbot|semrushbot|mj12bot|dotbot|ccbot|gptbot|cohere-ai|bytespider/i.test(
+    userAgent
+  );
+};
+
 const detectPreferredLocale = (acceptLanguage) => {
   if (!acceptLanguage) {
     return 'en';
@@ -175,10 +184,18 @@ const server = createServer(async (req, res) => {
   }
 
   if (urlPath === '/') {
-    const locale = detectPreferredLocale(req.headers['accept-language']);
-    res.writeHead(302, { Location: `/${locale}/${requestUrl.search}` });
-    res.end();
-    return;
+    const userAgent = Array.isArray(req.headers['user-agent'])
+      ? req.headers['user-agent'].join(' ')
+      : req.headers['user-agent'];
+    if (!isBotUserAgent(userAgent)) {
+      const locale = detectPreferredLocale(req.headers['accept-language']);
+      res.writeHead(302, {
+        Location: `/${locale}/${requestUrl.search}`,
+        Vary: 'Accept-Language, User-Agent',
+      });
+      res.end();
+      return;
+    }
   }
 
   if (urlPath.length > 1 && urlPath.endsWith('/') && !localeRootsWithSlash.has(urlPath)) {
