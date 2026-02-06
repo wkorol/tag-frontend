@@ -43,6 +43,11 @@ jobs:
             pwd
             cd /opt/tag-frontend
             ls -la
+            cat > /opt/tag-frontend/.env << 'EOF'
+            ACME_EMAIL=${{ secrets.ACME_EMAIL }}
+            LOGS_USER=${{ secrets.LOGS_USER }}
+            LOGS_PASS_HASH=${{ secrets.LOGS_PASS_HASH }}
+            EOF
             if [ -f /opt/tag-frontend/deploy/Caddyfile ]; then
               cp /opt/tag-frontend/deploy/Caddyfile /opt/tag-frontend/Caddyfile
             fi
