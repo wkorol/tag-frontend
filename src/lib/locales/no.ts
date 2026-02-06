@@ -267,13 +267,13 @@ const no = {
   },
   "routeLanding": {
     "orderNow": "Reserver online nå",
-    "quickLinks": "Quick links",
+    "quickLinks": "Hurtiglenker",
     "pricingLink": "Se priser",
     "orderLinks": {
-      "airportGdansk": "Book airport → Gdańsk",
-      "airportSopot": "Book airport → Sopot",
-      "airportGdynia": "Book airport → Gdynia",
-      "custom": "Custom route"
+      "airportGdansk": "Bestill flyplass → Gdańsk",
+      "airportSopot": "Bestill flyplass → Sopot",
+      "airportGdynia": "Bestill flyplass → Gdynia",
+      "custom": "Tilpasset rute"
     },
     "pricingTitle": "Eksempelpriser",
     "vehicleLabel": "Standardbil",
@@ -450,7 +450,8 @@ const no = {
       "night": "Nattpris",
       "reasonDay": "standard dagpris",
       "reasonLate": "henting etter 21:30 eller før 5:30",
-      "reasonHoliday": "søndag/helligdag"
+      "reasonHoliday": "søndag/helligdag",
+      "banner": (label: string, price: number, reason: string) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Kunne ikke sende bestillingen. Prøv igjen.",
     "submitNetworkError": "Nettverksfeil ved innsending. Prøv igjen.",
@@ -510,6 +511,7 @@ const no = {
     "notesHelp": "F.eks. barnesete, ventetid, spesielle instruksjoner",
     "submitting": "Sender...",
     "formIncomplete": "Fyll ut skjemaet for å fortsette",
+    "confirmOrder": (price: number) => `Bekreft bestilling (${price} PLN)`,
     "reassurance": "Ingen forhåndsbetaling. Gratis avbestilling. Bekreftelse på 5–10 min."
   },
   "quoteForm": {
@@ -551,6 +553,8 @@ const no = {
     "priceHelp": "Foreslå din pris. Vi vurderer og svarer innen 5-10 minutter.",
     "fixedRouteChecking": "Checking if this route qualifies for a fixed price...",
     "fixedRouteTitle": "Fixed price available",
+    "fixedRouteDistance": (distance: number) => `Distance: ${distance} km`,
+    "fixedRouteComputed": (price: number) => `${price} PLN`,
     "fixedRouteCta": "Book fixed price",
     "fixedRouteHint": "Use the fixed-price booking for the fastest confirmation.",
     "fixedRouteAllDay": "All-day rate applies",
@@ -558,6 +562,10 @@ const no = {
     "fixedRouteNight": "Night rate applies",
     "fixedRouteLocked": "This route qualifies for a fixed price. Please book via the fixed-price form.",
     "longRouteTitle": "Long route estimate",
+    "longRouteDistance": (distance: number) => `Distance: ${distance} km`,
+    "longRouteTaximeter": (price: number, rate: number) => `Taximeter: ${price} PLN (${rate} PLN/km)`,
+    "longRouteProposed": (price: number) => `Proposed price: ${price} PLN`,
+    "longRouteSavings": (percent: number) => `Savings: ${percent}%`,
     "longRouteNote": "You can still enter your own price below.",
     "date": "Dato",
     "pickupTime": "Hentetid",

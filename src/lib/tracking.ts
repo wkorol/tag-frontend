@@ -1,4 +1,5 @@
 import { isAnalyticsEnabled } from './analytics';
+import { hasMarketingConsent } from './consent';
 
 export const trackContactClick = (type: 'whatsapp' | 'call' | 'email') => {
   if (typeof window === 'undefined' || !isAnalyticsEnabled()) {
@@ -11,6 +12,11 @@ export const trackContactClick = (type: 'whatsapp' | 'call' | 'email') => {
       event_category: 'contact',
       event_label: type,
     });
+    if (type === 'whatsapp' && hasMarketingConsent()) {
+      gtag('event', 'conversion', {
+        send_to: 'AW-17848598074/5v3jCOfcyPMbELr8775C',
+      });
+    }
   }
 
   if (Array.isArray(window.dataLayer)) {

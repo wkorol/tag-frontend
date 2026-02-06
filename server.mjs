@@ -103,8 +103,13 @@ const isAdminPath = (urlPath) => /^\/(?:[a-z]{2}\/)?admin(?:\/orders\/[^/]+)?$/.
 
 const detectPreferredLocale = (acceptLanguage) => {
   if (!acceptLanguage) {
-    return 'en';
+    return 'pl';
   }
+
+  const localeAliases = {
+    nb: 'no',
+    nn: 'no',
+  };
 
   const choices = acceptLanguage
     .split(',')
@@ -115,13 +120,24 @@ const detectPreferredLocale = (acceptLanguage) => {
     if (locales.includes(choice)) {
       return choice;
     }
+
+    const alias = localeAliases[choice];
+    if (alias && locales.includes(alias)) {
+      return alias;
+    }
+
     const base = choice.split('-')[0];
+    const baseAlias = base ? localeAliases[base] : null;
+    if (baseAlias && locales.includes(baseAlias)) {
+      return baseAlias;
+    }
+
     if (base && locales.includes(base)) {
       return base;
     }
   }
 
-  return 'en';
+  return 'pl';
 };
 
 const isKnownPath = (urlPath) =>
@@ -176,7 +192,10 @@ const server = createServer(async (req, res) => {
 
   if (urlPath === '/') {
     const locale = detectPreferredLocale(req.headers['accept-language']);
-    res.writeHead(302, { Location: `/${locale}/${requestUrl.search}` });
+    res.writeHead(302, {
+      Location: `/${locale}/${requestUrl.search}`,
+      Vary: 'Accept-Language',
+    });
     res.end();
     return;
   }

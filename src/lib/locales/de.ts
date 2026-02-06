@@ -267,13 +267,13 @@ const de = {
   },
   "routeLanding": {
     "orderNow": "Jetzt online reservieren",
-    "quickLinks": "Quick links",
+    "quickLinks": "Schnellzugriffe",
     "pricingLink": "Preise ansehen",
     "orderLinks": {
-      "airportGdansk": "Book airport → Gdańsk",
-      "airportSopot": "Book airport → Sopot",
-      "airportGdynia": "Book airport → Gdynia",
-      "custom": "Custom route"
+      "airportGdansk": "Flughafen → Gdańsk buchen",
+      "airportSopot": "Flughafen → Sopot buchen",
+      "airportGdynia": "Flughafen → Gdynia buchen",
+      "custom": "Individuelle Strecke"
     },
     "pricingTitle": "Beispielpreise",
     "vehicleLabel": "Standardwagen",
@@ -449,7 +449,8 @@ const de = {
       "night": "Nachttarif",
       "reasonDay": "Standard-Tagtarif",
       "reasonLate": "Abholung nach 21:30 oder vor 5:30",
-      "reasonHoliday": "Sonntag/Feiertag"
+      "reasonHoliday": "Sonntag/Feiertag",
+      "banner": (label: string, price: number, reason: string) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Bestellung konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
     "submitNetworkError": "Netzwerkfehler beim Senden der Bestellung. Bitte versuchen Sie es erneut.",
@@ -509,6 +510,7 @@ const de = {
     "notesHelp": "Z. B. Kindersitz erforderlich, Wartezeit, besondere Anweisungen",
     "submitting": "Wird gesendet...",
     "formIncomplete": "Formular ausfüllen, um fortzufahren",
+    "confirmOrder": (price: number) => `Bestellung bestätigen (${price} PLN)`,
     "reassurance": "Keine Vorauszahlung. Kostenlose Stornierung. Bestätigung in 5–10 Min."
   },
   "quoteForm": {
@@ -550,6 +552,8 @@ const de = {
     "priceHelp": "Schlagen Sie Ihren Preis vor. Wir prüfen und antworten innerhalb von 5-10 Minuten.",
     "fixedRouteChecking": "Wir prüfen, ob diese Strecke einen Festpreis hat...",
     "fixedRouteTitle": "Festpreis verfügbar",
+    "fixedRouteDistance": (distance: number) => `Entfernung: ${distance} km`,
+    "fixedRouteComputed": (price: number) => `${price} PLN`,
     "fixedRouteCta": "Festpreis buchen",
     "fixedRouteHint": "Für die schnellste Bestätigung den Festpreis buchen.",
     "fixedRouteAllDay": "All-day rate applies",
@@ -557,6 +561,10 @@ const de = {
     "fixedRouteNight": "Nachttarif gilt",
     "fixedRouteLocked": "Diese Strecke hat einen Festpreis. Bitte über das Festpreis-Formular buchen.",
     "longRouteTitle": "Long route estimate",
+    "longRouteDistance": (distance: number) => `Entfernung: ${distance} km`,
+    "longRouteTaximeter": (price: number, rate: number) => `Taxameter: ${price} PLN (${rate} PLN/km)`,
+    "longRouteProposed": (price: number) => `Vorgeschlagener Preis: ${price} PLN`,
+    "longRouteSavings": (percent: number) => `Ersparnis: ${percent}%`,
     "longRouteNote": "You can still enter your own price below.",
     "date": "Datum",
     "pickupTime": "Abholzeit",

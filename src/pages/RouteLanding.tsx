@@ -21,6 +21,34 @@ interface RouteLandingProps {
 export function RouteLanding({ title, description, route, examples, pricing }: RouteLandingProps) {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
+
+  const fallbackSeoParagraphByLocale: Record<string, string> = {
+    pl: `Zarezerwuj prywatny transfer lotniskowy na trasie ${route} ze stałą ceną, dostępnością 24/7 i szybkim potwierdzeniem.`,
+    de: `Buchen Sie einen privaten Flughafentransfer auf der Strecke ${route} mit Festpreis, 24/7 Verfügbarkeit und schneller Bestätigung.`,
+    fi: `Varaa yksityinen lentokenttäkuljetus reitille ${route} kiinteällä hinnalla, 24/7 saatavuudella ja nopealla vahvistuksella.`,
+    no: `Bestill privat flyplasstransport på ruten ${route} med fast pris, 24/7 tilgjengelighet og rask bekreftelse.`,
+    sv: `Boka privat flygplatstransfer på sträckan ${route} med fast pris, tillgänglighet dygnet runt och snabb bekräftelse.`,
+    da: `Book privat lufthavnstransfer på ruten ${route} med fast pris, 24/7 tilgængelighed og hurtig bekræftelse.`,
+    en: `Book private airport transfer on route ${route} with fixed prices, 24/7 availability, and quick confirmation.`,
+  };
+  const fallbackPricingSubtitleByLocale: Record<string, string> = {
+    pl: `Szacunkowe ceny dla trasy ${route}.`,
+    de: `Beispielpreise für die Strecke ${route}.`,
+    fi: `Arvioidut hinnat reitille ${route}.`,
+    no: `Estimerte priser for ruten ${route}.`,
+    sv: `Uppskattade priser för sträckan ${route}.`,
+    da: `Estimerede priser for ruten ${route}.`,
+    en: `Estimated prices for route ${route}.`,
+  };
+
+  const seoParagraph =
+    typeof t.routeLanding?.seoParagraph === 'function'
+      ? t.routeLanding.seoParagraph(route)
+      : fallbackSeoParagraphByLocale[locale] ?? fallbackSeoParagraphByLocale.en;
+  const pricingSubtitle =
+    typeof t.routeLanding?.pricingSubtitle === 'function'
+      ? t.routeLanding.pricingSubtitle(route)
+      : fallbackPricingSubtitleByLocale[locale] ?? fallbackPricingSubtitleByLocale.en;
   const orderLinks = [
     {
       href: `${basePath}/${getRouteSlug(locale, 'orderAirportGdansk')}`,
@@ -55,7 +83,7 @@ export function RouteLanding({ title, description, route, examples, pricing }: R
               />
               <h1 className="text-3xl text-gray-900 mb-4">{title}</h1>
               <p className="text-gray-600 mb-6">{description}</p>
-              <p className="text-sm text-gray-500 mb-6">{t.routeLanding.seoParagraph(route)}</p>
+              <p className="text-sm text-gray-500 mb-6">{seoParagraph}</p>
               <a
                 href={`${basePath}/`}
                 onClick={(event) => {
@@ -123,7 +151,7 @@ export function RouteLanding({ title, description, route, examples, pricing }: R
               <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                 <div>
                   <h2 className="text-xl text-gray-900">{t.routeLanding.pricingTitle}</h2>
-                  <p className="text-sm text-gray-600">{t.routeLanding.pricingSubtitle(route)}</p>
+                  <p className="text-sm text-gray-600">{pricingSubtitle}</p>
                 </div>
                 <span className="text-xs uppercase tracking-wide text-gray-500">{t.routeLanding.vehicleLabel}</span>
               </div>

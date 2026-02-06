@@ -451,7 +451,8 @@ const pl = {
       "night": "Taryfa nocna",
       "reasonDay": "standardowa taryfa dzienna",
       "reasonLate": "odbiór po 21:30 lub przed 5:30",
-      "reasonHoliday": "niedziela/święto"
+      "reasonHoliday": "niedziela/święto",
+      "banner": (label: string, price: number, reason: string) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Nie udało się wysłać zamówienia. Spróbuj ponownie.",
     "submitNetworkError": "Błąd sieci podczas wysyłania zamówienia. Spróbuj ponownie.",
@@ -511,6 +512,7 @@ const pl = {
     "notesHelp": "Np. fotelik dziecięcy, czas oczekiwania, specjalne instrukcje",
     "submitting": "Wysyłanie...",
     "formIncomplete": "Uzupełnij formularz, aby kontynuować",
+    "confirmOrder": (price: number) => `Potwierdź zamówienie (${price} PLN)`,
     "reassurance": "Bez przedpłaty. Darmowa anulacja. Potwierdzenie w 5–10 min."
   },
   "quoteForm": {
@@ -552,6 +554,8 @@ const pl = {
     "priceHelp": "Zaproponuj cenę za przejazd. Odpowiemy w 5–10 minut.",
     "fixedRouteChecking": "Sprawdzamy, czy ta trasa ma stałą cenę...",
     "fixedRouteTitle": "Stała cena dostępna",
+    "fixedRouteDistance": (distance: number) => `Dystans: ${distance} km`,
+    "fixedRouteComputed": (price: number) => `${price} PLN`,
     "fixedRouteCta": "Zarezerwuj stałą cenę",
     "fixedRouteHint": "Skorzystaj z rezerwacji stałej ceny, aby uzyskać najszybsze potwierdzenie.",
     "fixedRouteAllDay": "Stawka całodobowa",
@@ -559,6 +563,10 @@ const pl = {
     "fixedRouteNight": "Obowiązuje taryfa nocna",
     "fixedRouteLocked": "Ta trasa ma stałą cenę. Zarezerwuj ją przez formularz stałej ceny.",
     "longRouteTitle": "Długi dystans - orientacyjna wycena",
+    "longRouteDistance": (distance: number) => `Dystans: ${distance} km`,
+    "longRouteTaximeter": (price: number, rate: number) => `Taksometr: ${price} PLN (${rate} PLN/km)`,
+    "longRouteProposed": (price: number) => `Proponowana cena: ${price} PLN`,
+    "longRouteSavings": (percent: number) => `Oszczędność: ${percent}%`,
     "longRouteNote": "Możesz nadal zaproponować własną cenę poniżej.",
     "date": "Data",
     "pickupTime": "Godzina odbioru",

@@ -267,13 +267,13 @@ const fi = {
   },
   "routeLanding": {
     "orderNow": "Varaa verkossa nyt",
-    "quickLinks": "Quick links",
+    "quickLinks": "Pikalinkit",
     "pricingLink": "Katso hinnat",
     "orderLinks": {
-      "airportGdansk": "Book airport → Gdańsk",
-      "airportSopot": "Book airport → Sopot",
-      "airportGdynia": "Book airport → Gdynia",
-      "custom": "Custom route"
+      "airportGdansk": "Varaa lentokenttä → Gdańsk",
+      "airportSopot": "Varaa lentokenttä → Sopot",
+      "airportGdynia": "Varaa lentokenttä → Gdynia",
+      "custom": "Mukautettu reitti"
     },
     "pricingTitle": "Esimerkkihinnat",
     "vehicleLabel": "Perusauto",
@@ -447,7 +447,8 @@ const fi = {
       "night": "Yötaksa",
       "reasonDay": "vakiopäivätaksa",
       "reasonLate": "nouto klo 21:30 jälkeen tai ennen 5:30",
-      "reasonHoliday": "sunnuntai/pyhäpäivä"
+      "reasonHoliday": "sunnuntai/pyhäpäivä",
+      "banner": (label: string, price: number, reason: string) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Tilauksen lähetys epäonnistui. Yritä uudelleen.",
     "submitNetworkError": "Verkkovirhe tilausta lähetettäessä. Yritä uudelleen.",
@@ -507,6 +508,7 @@ const fi = {
     "notesHelp": "Esim. lastenistuin, odotusaika, erityisohjeet",
     "submitting": "Lähetetään...",
     "formIncomplete": "Täytä lomake jatkaaksesi",
+    "confirmOrder": (price: number) => `Vahvista tilaus (${price} PLN)`,
     "reassurance": "Ei ennakkomaksua. Ilmainen peruutus. Vahvistus 5–10 min."
   },
   "quoteForm": {
@@ -548,6 +550,8 @@ const fi = {
     "priceHelp": "Ehdota hintaa tälle matkalle. Tarkistamme ja vastaamme 5-10 minuutissa.",
     "fixedRouteChecking": "Checking if this route qualifies for a fixed price...",
     "fixedRouteTitle": "Fixed price available",
+    "fixedRouteDistance": (distance: number) => `Distance: ${distance} km`,
+    "fixedRouteComputed": (price: number) => `${price} PLN`,
     "fixedRouteCta": "Book fixed price",
     "fixedRouteHint": "Use the fixed-price booking for the fastest confirmation.",
     "fixedRouteAllDay": "All-day rate applies",
@@ -555,6 +559,10 @@ const fi = {
     "fixedRouteNight": "Night rate applies",
     "fixedRouteLocked": "This route qualifies for a fixed price. Please book via the fixed-price form.",
     "longRouteTitle": "Long route estimate",
+    "longRouteDistance": (distance: number) => `Distance: ${distance} km`,
+    "longRouteTaximeter": (price: number, rate: number) => `Taximeter: ${price} PLN (${rate} PLN/km)`,
+    "longRouteProposed": (price: number) => `Proposed price: ${price} PLN`,
+    "longRouteSavings": (percent: number) => `Savings: ${percent}%`,
     "longRouteNote": "You can still enter your own price below.",
     "date": "Päivämäärä",
     "pickupTime": "Noutoaika",

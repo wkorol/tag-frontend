@@ -451,7 +451,8 @@ const en = {
       "night": "Night rate",
       "reasonDay": "standard day rate",
       "reasonLate": "pickup after 21:30 or before 5:30",
-      "reasonHoliday": "Sunday/public holiday"
+      "reasonHoliday": "Sunday/public holiday",
+      "banner": (label: string, price: number, reason: string) => `${label}: ${price} PLN (${reason})`
     },
     "submitError": "Failed to submit order. Please try again.",
     "submitNetworkError": "Network error while submitting the order. Please try again.",
@@ -511,6 +512,7 @@ const en = {
     "notesHelp": "E.g., child seat required, waiting time, special instructions",
     "submitting": "Submitting...",
     "formIncomplete": "Complete the form to continue",
+    "confirmOrder": (price: number) => `Confirm order (${price} PLN)`,
     "reassurance": "No prepayment. Free cancellation. Confirmation in 5–10 min."
   },
   "quoteForm": {
@@ -552,6 +554,8 @@ const en = {
     "priceHelp": "Propose your price for this ride. We'll review and respond within 5-10 minutes.",
     "fixedRouteChecking": "Checking if this route qualifies for a fixed price...",
     "fixedRouteTitle": "Fixed price available",
+    "fixedRouteDistance": (distance: number) => `Distance: ${distance} km`,
+    "fixedRouteComputed": (price: number) => `${price} PLN`,
     "fixedRouteCta": "Book fixed price",
     "fixedRouteHint": "Use the fixed-price booking for the fastest confirmation.",
     "fixedRouteAllDay": "All-day rate applies",
@@ -559,6 +563,10 @@ const en = {
     "fixedRouteNight": "Night rate applies",
     "fixedRouteLocked": "This route qualifies for a fixed price. Please book via the fixed-price form.",
     "longRouteTitle": "Long route estimate",
+    "longRouteDistance": (distance: number) => `Distance: ${distance} km`,
+    "longRouteTaximeter": (price: number, rate: number) => `Taximeter: ${price} PLN (${rate} PLN/km)`,
+    "longRouteProposed": (price: number) => `Proposed price: ${price} PLN`,
+    "longRouteSavings": (percent: number) => `Savings: ${percent}%`,
     "longRouteNote": "You can still enter your own price below.",
     "date": "Date",
     "pickupTime": "Pickup Time",

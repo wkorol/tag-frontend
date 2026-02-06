@@ -4,7 +4,7 @@ import { u as useI18n, l as localeToPath, g as getRouteSlug, r as requestScrollT
 import { Pricing } from './Pricing-DGYBJCfi.mjs';
 import { useLocation } from 'react-router-dom';
 import { Calculator, MapPin, X, Navigation } from 'lucide-react';
-import { d as distanceKm, i as isPointInsideGeoJson, c as cityPolygons, a as centerPolygons, Q as QuoteForm } from './QuoteForm-pLVSBhbI.mjs';
+import { d as distanceKm, i as isPointInsideGeoJson, c as cityPolygons, a as centerPolygons, Q as QuoteForm } from './QuoteForm-xCAp2D5F.mjs';
 import { F as FIXED_PRICES } from './fixedPricing-DAP14xsE.mjs';
 import { u as useEurRate, p as preloadEurRate, f as formatEur } from './currency-U83_MmBu.mjs';
 import { OrderForm } from './OrderForm-CjlXdu33.mjs';
@@ -16,7 +16,7 @@ import './api-DBSK1IQb.mjs';
 
 const AIRPORT_COORD = { lat: 54.3776, lon: 18.4662 };
 const AIRPORT_GEOCODE_QUERY = "Terminal pasazerski odloty, Port Lotniczy Gdansk im. Lecha Walesy";
-const GOOGLE_MAPS_KEY = "AIzaSyCZn_Y7YkTDjJe8715PJ0jVbcwaim7kKFE";
+const GOOGLE_MAPS_KEY = undefined                                    ;
 const GDANSK_BIAS = { lat: 54.352, lon: 18.6466 };
 const GDANSK_RADIUS_METERS = 6e4;
 const AIRPORT_RADIUS_KM = 2.5;
@@ -129,7 +129,7 @@ function PricingCalculator() {
   const [destinationPoint, setDestinationPoint] = useState(null);
   const showDebug = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("debug") === "1";
   const [googleReady, setGoogleReady] = useState(false);
-  const directionsServiceRef = useRef(null);
+  useRef(null);
   const placesLibRef = useRef(null);
   const sessionTokenRef = useRef(null);
   const prefillSearchRef = useRef(null);
@@ -161,40 +161,10 @@ function PricingCalculator() {
     }
   }, [location.search, airportAddress]);
   useEffect(() => {
-    if (typeof window === "undefined") {
+    {
       return;
     }
-    if (window.google?.maps) {
-      setGoogleReady(true);
-      return;
-    }
-    const existing = document.querySelector('script[data-google-maps="true"]');
-    if (existing) {
-      existing.addEventListener("load", () => setGoogleReady(true), { once: true });
-      return;
-    }
-    const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(GOOGLE_MAPS_KEY)}&loading=async&v=weekly`;
-    script.async = true;
-    script.defer = true;
-    script.dataset.googleMaps = "true";
-    script.addEventListener("load", () => setGoogleReady(true));
-    document.head.appendChild(script);
   }, []);
-  const ensureDirectionsService = () => {
-    if (!googleReady) {
-      return null;
-    }
-    if (directionsServiceRef.current) {
-      return directionsServiceRef.current;
-    }
-    const google = window.google;
-    if (!google?.maps) {
-      return null;
-    }
-    directionsServiceRef.current = new google.maps.DirectionsService();
-    return directionsServiceRef.current;
-  };
   const ensurePlacesLibrary = async () => {
     if (!googleReady) {
       return null;
@@ -263,7 +233,10 @@ function PricingCalculator() {
     const controller = new AbortController();
     const timer = window.setTimeout(async () => {
       try {
-        if (!GOOGLE_MAPS_KEY) ;
+        if (!GOOGLE_MAPS_KEY) {
+          setPickupSuggestions([]);
+          return;
+        }
         const lib = await ensurePlacesLibrary();
         if (!lib) {
           setPickupSuggestions([]);
@@ -320,7 +293,10 @@ function PricingCalculator() {
     const controller = new AbortController();
     const timer = window.setTimeout(async () => {
       try {
-        if (!GOOGLE_MAPS_KEY) ;
+        if (!GOOGLE_MAPS_KEY) {
+          setDestinationSuggestions([]);
+          return;
+        }
         const lib = await ensurePlacesLibrary();
         if (!lib) {
           setDestinationSuggestions([]);
@@ -375,11 +351,6 @@ function PricingCalculator() {
       setIsChecking(false);
       return;
     }
-    if (!googleReady) {
-      setIsChecking(false);
-      setError(null);
-      return;
-    }
     let active = true;
     const controller = new AbortController();
     const timer = window.setTimeout(async () => {
@@ -392,37 +363,9 @@ function PricingCalculator() {
         if (geocodeCache.current.has(key)) {
           return geocodeCache.current.get(key) ?? null;
         }
-        const lib = await ensurePlacesLibrary();
-        if (!lib) {
+        {
           return null;
         }
-        const sessionToken = await getSessionToken();
-        const request = {
-          input: value,
-          region: "pl",
-          language: locale,
-          locationBias: getLocationBounds(GDANSK_BIAS, GDANSK_RADIUS_METERS),
-          sessionToken: sessionToken ?? void 0
-        };
-        const { suggestions } = await lib.AutocompleteSuggestion.fetchAutocompleteSuggestions(request);
-        const prediction = Array.isArray(suggestions) ? suggestions[0]?.placePrediction : null;
-        if (!prediction?.placeId) {
-          geocodeCache.current.set(key, null);
-          return null;
-        }
-        const place = prediction.toPlace ? prediction.toPlace() : new lib.Place({ id: prediction.placeId });
-        await place.fetchFields({ fields: ["location"] });
-        const location2 = place.location;
-        const lat = typeof location2?.lat === "function" ? location2.lat() : Number(location2?.lat);
-        const lon = typeof location2?.lng === "function" ? location2.lng() : Number(location2?.lng);
-        const point = Number.isFinite(lat) && Number.isFinite(lon) ? { lat, lon } : null;
-        if (!point) {
-          geocodeCache.current.set(key, null);
-          return null;
-        }
-        resetSessionToken();
-        geocodeCache.current.set(key, point);
-        return point;
       };
       const getRouteInfo = async (from, to) => {
         const key = `${from.lat.toFixed(5)},${from.lon.toFixed(5)}|${to.lat.toFixed(5)},${to.lon.toFixed(5)}`;
@@ -430,49 +373,10 @@ function PricingCalculator() {
           const cached = routeDistanceCache.current.get(key);
           return cached ?? null;
         }
-        const directions = ensureDirectionsService();
-        if (!directions) {
+        {
           routeDistanceCache.current.set(key, null);
           return null;
         }
-        const google = window.google;
-        const origin = new google.maps.LatLng(from.lat, from.lon);
-        const destination = new google.maps.LatLng(to.lat, to.lon);
-        const resultInfo = await new Promise((resolve) => {
-          directions.route(
-            {
-              origin,
-              destination,
-              travelMode: google.maps.TravelMode.DRIVING,
-              provideRouteAlternatives: false
-            },
-            (result2, status) => {
-              if (status !== google.maps.DirectionsStatus.OK) {
-                resolve({ distance: null });
-                return;
-              }
-              const meters = result2?.routes?.[0]?.legs?.[0]?.distance?.value;
-              if (typeof meters !== "number" || !Number.isFinite(meters)) {
-                resolve({ distance: null });
-                return;
-              }
-              const overviewPath = result2?.routes?.[0]?.overview_path;
-              const path = Array.isArray(overviewPath) ? overviewPath.map((point) => ({
-                lat: typeof point?.lat === "function" ? point.lat() : Number(point?.lat),
-                lon: typeof point?.lng === "function" ? point.lng() : Number(point?.lng)
-              })).filter((point) => Number.isFinite(point.lat) && Number.isFinite(point.lon)) : void 0;
-              resolve({ distance: meters, path: path && path.length > 1 ? path : void 0 });
-            }
-          );
-        });
-        if (resultInfo.distance === null) {
-          routeDistanceCache.current.set(key, null);
-          return null;
-        }
-        const km = resultInfo.distance / 1e3;
-        const info = { km, source: "google", path: resultInfo.path };
-        routeDistanceCache.current.set(key, info);
-        return info;
       };
       const isAirportPoint = (point) => distanceKm(point, AIRPORT_COORD) <= AIRPORT_RADIUS_KM;
       const isBaninoPoint = (point) => distanceKm(point, BANINO_COORD) <= BANINO_RADIUS_KM;
