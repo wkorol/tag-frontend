@@ -77,10 +77,10 @@ export function CookieBanner() {
       aria-live="polite"
     >
       <div
-        className="mx-auto max-w-3xl rounded-3xl text-white border border-slate-800 p-6 sm:p-7 shadow-[0_20px_60px_rgba(0,0,0,0.55)]"
+        className="mx-auto max-w-3xl overflow-hidden rounded-3xl text-white border border-slate-800 shadow-[0_20px_60px_rgba(0,0,0,0.55)]"
         style={{ backgroundColor: '#0b0f1a' }}
       >
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="p-6 sm:p-7">
           <div className="space-y-2">
             <p className="text-base font-semibold tracking-wide">{t.cookieBanner.title}</p>
             <p className="text-sm text-slate-200 leading-relaxed">
@@ -93,18 +93,20 @@ export function CookieBanner() {
               {t.cookieBanner.readPolicy}
             </a>
           </div>
+        </div>
+        <div className="border-t border-white/10 bg-slate-900/60 px-6 py-4 sm:px-7">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
             <button
               type="button"
               onClick={reject}
-              className="border border-white/25 text-white text-base font-semibold px-7 py-3 rounded-full hover:border-white/60 transition"
+              className="w-full sm:w-auto border border-white/25 text-white text-base font-semibold px-7 py-3 rounded-full hover:border-white/60 transition"
             >
               {t.cookieBanner.decline}
             </button>
             <button
               type="button"
               onClick={accept}
-              className="bg-amber-400 hover:bg-amber-300 text-slate-900 text-base font-semibold px-8 py-3 rounded-full shadow-lg shadow-amber-400/35 transition"
+              className="w-full sm:w-auto bg-amber-400 hover:bg-amber-300 text-slate-900 text-base font-semibold px-8 py-3 rounded-full shadow-lg shadow-amber-400/35 transition"
             >
               {t.cookieBanner.accept}
             </button>

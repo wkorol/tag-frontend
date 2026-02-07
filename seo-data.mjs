@@ -3,7 +3,7 @@ const sameAsFromEnv = (process.env.SEO_SAME_AS ?? '')
   .map((item) => item.trim())
   .filter((item) => /^https?:\/\//.test(item));
 
-const defaultLocale = 'pl';
+const defaultLocale = 'en';
 
 export const site = {
   name: 'Taxi Airport Gdańsk',
@@ -1144,9 +1144,6 @@ export const getRouteKeyFromSlug = (locale, slug) => {
 
 export const buildLocalizedUrl = (locale, routeKey) => {
   if (!routeKey) {
-    if (locale === defaultLocale) {
-      return `${site.url}/`;
-    }
     return `${site.url}/${locale}/`;
   }
   return `${site.url}/${locale}/${routeSlugs[locale][routeKey]}`;
@@ -1425,6 +1422,6 @@ export const buildSeoTags = (urlPath) => {
 };
 
 export const buildNoscript = (urlPath) => {
-  const locale = getLocaleFromPath(urlPath) ?? 'en';
+  const locale = getLocaleFromPath(urlPath) ?? defaultLocale;
   return metaByLocale[locale]?.noscript ?? metaByLocale.en.noscript;
 };

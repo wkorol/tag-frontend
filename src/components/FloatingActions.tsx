@@ -89,7 +89,7 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
         <a
           href={whatsappLink}
           onClick={() => trackContactClick('whatsapp')}
-          className="rounded-full px-5 py-3 text-white shadow-lg flex items-center justify-center gap-2"
+          className="rounded-full px-5 py-3 text-gray-900 shadow-lg flex items-center justify-center gap-2"
           style={{ backgroundColor: '#25D366' }}
         >
           {t.common.whatsapp}
@@ -119,7 +119,7 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
           <a
             href={whatsappLink}
             onClick={() => trackContactClick('whatsapp')}
-            className="flex-1 rounded-full px-4 py-3 text-center text-white shadow-sm flex items-center justify-center gap-2"
+            className="flex-1 rounded-full px-4 py-3 text-center text-gray-900 shadow-sm flex items-center justify-center gap-2"
             style={{ backgroundColor: '#25D366' }}
           >
             <svg viewBox="0 0 32 32" aria-hidden="true" className="h-5 w-5 fill-current">

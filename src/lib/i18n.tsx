@@ -6,6 +6,9 @@ export type Translation = typeof en;
 
 const STORAGE_KEY = 'tag_locale';
 
+export const DEFAULT_LOCALE: Locale = 'en';
+export const SUPPORTED_LOCALES: Locale[] = ['en', 'de', 'fi', 'no', 'sv', 'da', 'pl'];
+
 export const localeToPath = (locale: Locale) => {
   switch (locale) {
     case 'pl':
@@ -41,7 +44,7 @@ export const getLocaleFromPathname = (pathname: string): Locale | null => {
 
 const detectLocale = (): Locale => {
   if (typeof window === 'undefined') {
-    return 'en';
+    return DEFAULT_LOCALE;
   }
 
   const pathname = window.location.pathname;
@@ -55,6 +58,13 @@ const detectLocale = (): Locale => {
     return stored;
   }
 
+  return DEFAULT_LOCALE;
+};
+
+export const detectBrowserLocale = (): Locale => {
+  if (typeof navigator === 'undefined') {
+    return DEFAULT_LOCALE;
+  }
   const languages = navigator.languages ?? [navigator.language];
   const normalized = languages.map((lang) => lang?.toLowerCase() ?? '');
   if (normalized.some((lang) => lang.startsWith('pl'))) return 'pl';

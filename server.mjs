@@ -184,12 +184,6 @@ const server = createServer(async (req, res) => {
     return;
   }
 
-  if (urlPath === '/pl' || urlPath === '/pl/') {
-    res.writeHead(301, { Location: `/${requestUrl.search}` });
-    res.end();
-    return;
-  }
-
   if (localeRoots.has(urlPath)) {
     res.writeHead(301, { Location: `${urlPath}/${requestUrl.search}` });
     res.end();

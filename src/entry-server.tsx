@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import App from './App';
-import { I18nProvider, getLocaleFromPathname, type Locale, type Translation } from './lib/i18n';
+import { DEFAULT_LOCALE, I18nProvider, getLocaleFromPathname, type Locale, type Translation } from './lib/i18n';
 import en from './lib/locales/en';
 import pl from './lib/locales/pl';
 import de from './lib/locales/de';
@@ -22,7 +22,7 @@ const serverTranslations: Record<Locale, Translation> = {
 };
 
 export function render(url: string) {
-  const initialLocale = getLocaleFromPathname(url) ?? 'en';
+  const initialLocale = getLocaleFromPathname(url) ?? DEFAULT_LOCALE;
   const initialTranslations = serverTranslations[initialLocale];
   const appHtml = renderToString(
     <StrictMode>

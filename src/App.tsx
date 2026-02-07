@@ -31,7 +31,7 @@ const AdminOrderPage = lazy(() => import('./pages/AdminOrderPage').then((mod) =>
 import { trackFormOpen, trackPageView, trackSectionView, trackVehicleSelect } from './lib/tracking';
 import { consumeScrollTarget, scrollToId } from './lib/scroll';
 import { getRouteSlug, PublicRouteKey } from './lib/routes';
-import { Locale, localeToPath, localeToRootPath, useI18n } from './lib/i18n';
+import { DEFAULT_LOCALE, Locale, SUPPORTED_LOCALES, detectBrowserLocale, localeToPath, localeToRootPath, useI18n } from './lib/i18n';
 import { getCountryAirports } from './lib/countryAirports';
 import { getCityRoutes } from './lib/cityRoutes';
 
@@ -44,8 +44,6 @@ const renderCityRouteRoutes = (locale: Locale) =>
   getCityRoutes(locale).map((route) => (
     <Route key={route.slug} path={route.slug} element={<CityRouteLanding />} />
   ));
-
-const SUPPORTED_LOCALES: Locale[] = ['en', 'de', 'fi', 'no', 'sv', 'da', 'pl'];
 
 function Landing() {
   const { t } = useI18n();
@@ -280,7 +278,7 @@ export default function App() {
     <>
       <Suspense fallback={null}>
         <Routes>
-          <Route path="/" element={<AutoRedirect />} />
+          <Route path="/" element={<RootLanding />} />
           {SUPPORTED_LOCALES.map((locale) => renderLocalizedRoutes(locale, t))}
           <Route path="/cookies" element={<LegacyRedirectToRoute routeKey="cookies" />} />
           <Route path="/privacy" element={<LegacyRedirectToRoute routeKey="privacy" />} />
@@ -313,14 +311,6 @@ function LocalizedShell({ locale }: { locale: Locale }) {
   return <Outlet />;
 }
 
-function AutoRedirect() {
-  const { locale } = useI18n();
-  const location = useLocation();
-  const target = `${localeToRootPath(locale)}${location.search}${location.hash}`;
-
-  return <Navigate to={target} replace />;
-}
-
 function LegacyRedirect({ to }: { to: string }) {
   const { locale } = useI18n();
   const location = useLocation();
@@ -347,4 +337,121 @@ function LegacyAdminOrderRedirect() {
   const target = `${basePath}/admin/orders/${id ?? ''}${location.search}${location.hash}`;
 
   return <Navigate to={target} replace />;
+}
+
+function RootLanding() {
+  const { locale } = useI18n();
+  return (
+    <>
+      <LanguageBanner />
+      <LocalePrompt />
+      <Landing key={`root-${locale}`} />
+    </>
+  );
+}
+
+function LanguageBanner() {
+  return (
+    <div className="bg-gradient-to-r from-amber-50 via-white to-amber-50 text-gray-900">
+      <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-3 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2 text-gray-800">
+          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-amber-200 text-xs font-semibold text-amber-900">
+            A
+          </span>
+          <span className="font-medium">
+            Prefer another language?
+          </span>
+          <span className="text-gray-600">
+            Choose a version:
+          </span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {SUPPORTED_LOCALES.map((lang) => (
+            <a
+              key={lang}
+              href={localeToRootPath(lang)}
+              className="rounded-full border border-amber-200 bg-white px-3 py-1 text-xs font-semibold text-amber-900 transition hover:border-amber-300 hover:bg-amber-100"
+            >
+              {lang.toUpperCase()}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LocalePrompt() {
+  const { locale, setLocale } = useI18n();
+  const location = useLocation();
+  const [show, setShow] = useState(false);
+  const [suggested, setSuggested] = useState<Locale | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (location.pathname !== '/') return;
+    const dismissed = window.localStorage.getItem('tag_locale_prompted');
+    if (dismissed === '1') return;
+    const detected = detectBrowserLocale();
+    if (detected === DEFAULT_LOCALE) return;
+    if (detected === locale) return;
+    setSuggested(detected);
+    setShow(true);
+  }, [locale, location.pathname]);
+
+  const accept = () => {
+    if (!suggested) return;
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('tag_locale_prompted', '1');
+    }
+    setLocale(suggested);
+    window.location.href = `${localeToRootPath(suggested)}${location.search}${location.hash}`;
+  };
+
+  const dismiss = () => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('tag_locale_prompted', '1');
+    }
+    setShow(false);
+  };
+
+  if (!show || !suggested) {
+    return null;
+  }
+
+  const label = suggested.toUpperCase();
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4">
+      <div
+        className="rounded-3xl border border-amber-200 bg-white p-6 shadow-2xl"
+        style={{ width: 'min(92vw, 420px)' }}
+      >
+        <div className="flex flex-col gap-4 text-center">
+          <div className="text-lg font-semibold text-gray-900">
+            We detected your browser language
+          </div>
+          <div className="text-sm text-gray-700">
+            Switch to <span className="font-semibold text-gray-900">{label}</span>?
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <button
+              type="button"
+              onClick={accept}
+              className="w-full rounded-full bg-blue-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-blue-700 sm:w-auto"
+            >
+              Switch language
+            </button>
+            <button
+              type="button"
+              onClick={dismiss}
+              className="w-full rounded-full border border-gray-200 px-6 py-3 text-base font-medium text-gray-700 hover:border-gray-300 sm:w-auto"
+            >
+              Not now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
