@@ -40,5 +40,5 @@ logs.taxiairportgdansk.com {
     basicauth /* {
         {$LOGS_USER} {$LOGS_PASS_HASH}
     }
-    reverse_proxy host.docker.internal:8080
+    reverse_proxy logs:8080
 }

@@ -21,6 +21,14 @@ services:
     image: ghcr.io/wkorol/tag-frontend:latest
     restart: unless-stopped
 
+  logs:
+    image: amir20/dozzle:v8
+    restart: unless-stopped
+    environment:
+      - DOZZLE_ADDR=:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
   postgres:
     image: postgres:16-alpine
     restart: unless-stopped
