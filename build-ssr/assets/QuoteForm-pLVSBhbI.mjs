@@ -53,7 +53,7 @@ const GDYNIA_CENTER_COORD = { lat: 54.5189, lon: 18.5305 };
 const GDYNIA_CENTER_RADIUS_KM = 4;
 const SOPOT_CENTER_COORD = { lat: 54.4416, lon: 18.5601 };
 const SOPOT_CENTER_RADIUS_KM = 3;
-const GOOGLE_MAPS_KEY = undefined                                    ;
+const GOOGLE_MAPS_KEY = "AIzaSyCZn_Y7YkTDjJe8715PJ0jVbcwaim7kKFE";
 const GDANSK_BIAS = { lat: 54.352, lon: 18.6466 };
 const GDANSK_RADIUS_METERS = 6e4;
 const AIRPORT_GEOCODE_QUERY = "Terminal pasazerski odloty, Port Lotniczy Gdansk im. Lecha Walesy";
@@ -271,9 +271,25 @@ function QuoteForm({ onClose, initialVehicleType = "standard" }) {
   const eurText = fixedTotalPrice ? formatEur(fixedTotalPrice, eurRate) : null;
   const fieldClass = (base, invalid) => `${base}${invalid ? " border-red-400 bg-red-50 focus:ring-red-200 focus:border-red-500" : ""}`;
   useEffect(() => {
-    {
+    if (typeof window === "undefined") {
       return;
     }
+    if (window.google?.maps) {
+      setGoogleReady(true);
+      return;
+    }
+    const existing = document.querySelector('script[data-google-maps="true"]');
+    if (existing) {
+      existing.addEventListener("load", () => setGoogleReady(true), { once: true });
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(GOOGLE_MAPS_KEY)}&loading=async&v=weekly`;
+    script.async = true;
+    script.defer = true;
+    script.dataset.googleMaps = "true";
+    script.addEventListener("load", () => setGoogleReady(true));
+    document.head.appendChild(script);
   }, []);
   const ensureDirectionsService = () => {
     if (!googleReady) {
@@ -448,10 +464,7 @@ function QuoteForm({ onClose, initialVehicleType = "standard" }) {
     const controller = new AbortController();
     const timer = window.setTimeout(async () => {
       try {
-        if (!GOOGLE_MAPS_KEY) {
-          setPickupSuggestions([]);
-          return;
-        }
+        if (!GOOGLE_MAPS_KEY) ;
         const lib = await ensurePlacesLibrary();
         if (!lib) {
           setPickupSuggestions([]);
@@ -496,10 +509,7 @@ function QuoteForm({ onClose, initialVehicleType = "standard" }) {
     const controller = new AbortController();
     const timer = window.setTimeout(async () => {
       try {
-        if (!GOOGLE_MAPS_KEY) {
-          setDestinationSuggestions([]);
-          return;
-        }
+        if (!GOOGLE_MAPS_KEY) ;
         const lib = await ensurePlacesLibrary();
         if (!lib) {
           setDestinationSuggestions([]);

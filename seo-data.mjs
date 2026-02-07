@@ -1143,11 +1143,13 @@ export const getRouteKeyFromSlug = (locale, slug) => {
 };
 
 export const buildLocalizedUrl = (locale, routeKey) => {
-  const base = `${site.url}/${locale}`;
   if (!routeKey) {
-    return `${base}/`;
+    if (locale === defaultLocale) {
+      return `${site.url}/`;
+    }
+    return `${site.url}/${locale}/`;
   }
-  return `${base}/${routeSlugs[locale][routeKey]}`;
+  return `${site.url}/${locale}/${routeSlugs[locale][routeKey]}`;
 };
 
 export const buildRootUrl = (routeKey) => {
@@ -1161,7 +1163,7 @@ const isIndexablePath = (urlPath) => {
   if (urlPath.includes('/admin')) return false;
   const pathParts = urlPath.replace(/\/$/, '').split('/').filter(Boolean);
   const localeFromPath = getLocaleFromPath(urlPath);
-  const locale = localeFromPath ?? 'en';
+  const locale = localeFromPath ?? defaultLocale;
   const slug = localeFromPath ? (pathParts[1] ?? '') : (pathParts[0] ?? '');
   if (!slug) return true;
   if (!localeFromPath) return false;
@@ -1170,11 +1172,11 @@ const isIndexablePath = (urlPath) => {
   return Boolean(getRouteKeyFromSlug(locale, slug));
 };
 
-export const getHtmlLang = (urlPath) => getLocaleFromPath(urlPath) ?? 'en';
+export const getHtmlLang = (urlPath) => getLocaleFromPath(urlPath) ?? defaultLocale;
 
 export const buildSeoTags = (urlPath) => {
     const localeFromPath = getLocaleFromPath(urlPath);
-    const locale = localeFromPath ?? 'en';
+    const locale = localeFromPath ?? defaultLocale;
 
     const pathParts = urlPath.replace(/\/$/, '').split('/').filter(Boolean);
 
@@ -1213,9 +1215,7 @@ export const buildSeoTags = (urlPath) => {
                 .join('')
             : locales
                 .flatMap((lang) => {
-                    const href = routeKey
-                        ? buildLocalizedUrl(lang, routeKey)
-                        : `${site.url}/${lang}/`;
+                    const href = buildLocalizedUrl(lang, routeKey);
                     const hreflangs = localeHreflangMap[lang] ?? [lang];
                     return hreflangs.map(
                         (hreflang) => `<link rel="alternate" hreflang="${hreflang}" href="${href}">`
@@ -1223,7 +1223,7 @@ export const buildSeoTags = (urlPath) => {
                 })
                 .join('');
 
-    const xDefault = `<link rel="alternate" hreflang="x-default" href="${site.url}/${defaultLocale}/">`;
+    const xDefault = `<link rel="alternate" hreflang="x-default" href="${site.url}/">`;
     const robots = isIndexablePath(urlPath) ? 'index,follow' : 'noindex,nofollow';
 
   const ogLocale = (localeHreflangMap[locale] ?? [locale])[0] ?? locale;

@@ -98,6 +98,9 @@ const getRouteLastmod = async (routeKey) => {
 
 const buildLocalizedUrl = (locale, routeKey) => {
   if (!routeKey || routeKey === 'home') {
+    if (locale === DEFAULT_LOCALE) {
+      return `${SITE_URL}/`;
+    }
     return `${SITE_URL}/${locale}/`;
   }
   return `${SITE_URL}/${locale}/${routeSlugs[locale][routeKey]}`;
@@ -105,7 +108,7 @@ const buildLocalizedUrl = (locale, routeKey) => {
 
 const addXDefault = (alternates) => [
   ...alternates,
-  { hreflang: 'x-default', href: `${SITE_URL}/${DEFAULT_LOCALE}/` },
+  { hreflang: 'x-default', href: `${SITE_URL}/` },
 ];
 
 const addEntry = (entries, entry) => {

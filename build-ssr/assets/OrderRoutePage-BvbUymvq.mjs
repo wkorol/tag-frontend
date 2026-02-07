@@ -3,7 +3,7 @@ import { useMemo, useEffect, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { u as useI18n, c as trackFormOpen, l as localeToPath, b as FloatingActions } from '../entry-server.mjs';
 import { OrderForm } from './OrderForm-CjlXdu33.mjs';
-import { Q as QuoteForm } from './QuoteForm-xCAp2D5F.mjs';
+import { Q as QuoteForm } from './QuoteForm-pLVSBhbI.mjs';
 import 'react-dom/server';
 import 'react-router-dom/server.js';
 import 'react-dom';

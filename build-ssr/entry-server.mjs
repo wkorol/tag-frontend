@@ -292,6 +292,45 @@ const isAnalyticsEnabled = () => {
   return PROD_HOSTS.has(window.location.hostname);
 };
 
+const STORAGE_KEY = "cookie-consent";
+const getConsentStatus = () => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+  const value = window.localStorage.getItem(STORAGE_KEY);
+  if (value === "accepted" || value === "rejected") {
+    return value;
+  }
+  return null;
+};
+const setConsentStatus = (status) => {
+  if (typeof window === "undefined") {
+    return;
+  }
+  window.localStorage.setItem(STORAGE_KEY, status);
+};
+const hasMarketingConsent = () => getConsentStatus() === "accepted";
+const updateGtagConsent = (status) => {
+  if (typeof window === "undefined" || !isAnalyticsEnabled()) {
+    return;
+  }
+  const gtag = window.gtag;
+  if (typeof gtag !== "function") {
+    return;
+  }
+  if (status === "accepted") {
+    gtag("consent", "update", {
+      ad_storage: "granted",
+      analytics_storage: "granted"
+    });
+    return;
+  }
+  gtag("consent", "update", {
+    ad_storage: "denied",
+    analytics_storage: "denied"
+  });
+};
+
 const trackContactClick = (type) => {
   if (typeof window === "undefined" || !isAnalyticsEnabled()) {
     return;
@@ -302,6 +341,11 @@ const trackContactClick = (type) => {
       event_category: "contact",
       event_label: type
     });
+    if (type === "whatsapp" && hasMarketingConsent()) {
+      gtag("event", "conversion", {
+        send_to: "AW-17848598074/5v3jCOfcyPMbELr8775C"
+      });
+    }
   }
   if (Array.isArray(window.dataLayer)) {
     window.dataLayer.push({
@@ -896,45 +940,6 @@ function Hero() {
     ] })
   ] });
 }
-
-const STORAGE_KEY = "cookie-consent";
-const getConsentStatus = () => {
-  if (typeof window === "undefined") {
-    return null;
-  }
-  const value = window.localStorage.getItem(STORAGE_KEY);
-  if (value === "accepted" || value === "rejected") {
-    return value;
-  }
-  return null;
-};
-const setConsentStatus = (status) => {
-  if (typeof window === "undefined") {
-    return;
-  }
-  window.localStorage.setItem(STORAGE_KEY, status);
-};
-const hasMarketingConsent = () => getConsentStatus() === "accepted";
-const updateGtagConsent = (status) => {
-  if (typeof window === "undefined" || !isAnalyticsEnabled()) {
-    return;
-  }
-  const gtag = window.gtag;
-  if (typeof gtag !== "function") {
-    return;
-  }
-  if (status === "accepted") {
-    gtag("consent", "update", {
-      ad_storage: "granted",
-      analytics_storage: "granted"
-    });
-    return;
-  }
-  gtag("consent", "update", {
-    ad_storage: "denied",
-    analytics_storage: "denied"
-  });
-};
 
 function CookieBanner() {
   const { t, locale } = useI18n();
@@ -2063,12 +2068,12 @@ const TrustSection = lazy(
 );
 const Footer = lazy(() => Promise.resolve().then(() => Footer$2).then((mod) => ({ default: mod.Footer })));
 const OrderForm = lazy(() => import('./assets/OrderForm-CjlXdu33.mjs').then((mod) => ({ default: mod.OrderForm })));
-const QuoteForm = lazy(() => import('./assets/QuoteForm-xCAp2D5F.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
+const QuoteForm = lazy(() => import('./assets/QuoteForm-pLVSBhbI.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./assets/ManageOrder-CJSOJO9N.mjs').then((mod) => ({ default: mod.ManageOrder })));
 const RouteLanding = lazy(() => import('./assets/RouteLanding-CIjxRoWS.mjs').then((mod) => ({ default: mod.RouteLanding })));
-const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-DLUc346H.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
-const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-DLUc346H.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./assets/PricingPage-CiIJrGHb.mjs').then((mod) => ({ default: mod.PricingPage })));
+const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-BvbUymvq.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
+const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-BvbUymvq.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
+const PricingPage = lazy(() => import('./assets/PricingPage-DWuPyIo0.mjs').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-Eiiw4mOS.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-CA1d_B91.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));

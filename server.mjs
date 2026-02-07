@@ -184,18 +184,14 @@ const server = createServer(async (req, res) => {
     return;
   }
 
-  if (localeRoots.has(urlPath)) {
-    res.writeHead(301, { Location: `${urlPath}/${requestUrl.search}` });
+  if (urlPath === '/pl' || urlPath === '/pl/') {
+    res.writeHead(301, { Location: `/${requestUrl.search}` });
     res.end();
     return;
   }
 
-  if (urlPath === '/') {
-    const locale = detectPreferredLocale(req.headers['accept-language']);
-    res.writeHead(302, {
-      Location: `/${locale}/${requestUrl.search}`,
-      Vary: 'Accept-Language',
-    });
+  if (localeRoots.has(urlPath)) {
+    res.writeHead(301, { Location: `${urlPath}/${requestUrl.search}` });
     res.end();
     return;
   }
