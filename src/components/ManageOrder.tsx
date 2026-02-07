@@ -5,6 +5,7 @@ import { formatEur } from '../lib/currency';
 import { buildAdditionalNotes, parseAdditionalNotes, RouteType } from '../lib/orderNotes';
 import { getApiBaseUrl } from '../lib/api';
 import { Locale, useI18n } from '../lib/i18n';
+import { usePageTitle } from '../lib/usePageTitle';
 
 const API_BASE_URL = getApiBaseUrl();
 const SIGN_FEE = 20;
@@ -73,6 +74,7 @@ type OrderState = {
 export function ManageOrder({ orderId }: ManageOrderProps) {
   const { t, locale } = useI18n();
   const emailLocale: Locale = locale === 'pl' ? 'pl' : 'en';
+  usePageTitle(t.manageOrder.manageTitle);
   const accessTokenParam = useMemo(
     () => new URLSearchParams(window.location.search).get('token') ?? '',
     []

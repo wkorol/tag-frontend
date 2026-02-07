@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Calendar, CheckCircle2, XCircle } from 'lucide-react';
 import { getApiBaseUrl } from '../lib/api';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
+import { usePageTitle } from '../lib/usePageTitle';
 
 type AdminOrder = {
   id: string;
@@ -97,6 +98,7 @@ export function AdminOrderPage() {
   const { t, locale, setLocale } = useI18n();
   const adminLocale: Locale = 'pl';
   const basePath = localeToPath(adminLocale);
+  usePageTitle(t.adminOrder.title);
   const navigate = useNavigate();
   const { id } = useParams();
   const [searchParams] = useSearchParams();

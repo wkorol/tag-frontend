@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { getApiBaseUrl } from '../lib/api';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
+import { usePageTitle } from '../lib/usePageTitle';
 
 type AdminOrder = {
   id: string;
@@ -30,6 +31,7 @@ export function AdminOrdersPage() {
   const { t, locale, setLocale } = useI18n();
   const adminLocale: Locale = 'pl';
   const basePath = localeToPath(adminLocale);
+  usePageTitle(t.adminOrders.title);
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token') ?? '';
   const [orders, setOrders] = useState<AdminOrder[]>([]);

@@ -7,6 +7,7 @@ import { getRouteSlug } from '../lib/routes';
 import { requestScrollTo } from '../lib/scroll';
 import { trackCtaClick, trackNavClick } from '../lib/tracking';
 import { getCountryAirports } from '../lib/countryAirports';
+import { usePageTitle } from '../lib/usePageTitle';
 
 export function CountryLanding() {
   const { t, locale } = useI18n();
@@ -25,6 +26,7 @@ export function CountryLanding() {
     faqTitle: t.routeLanding?.faqTitle ?? 'FAQ',
     faq: t.routeLanding?.faq ?? [],
   };
+  usePageTitle(country.title);
 
   return (
     <div className="min-h-screen bg-gray-50">

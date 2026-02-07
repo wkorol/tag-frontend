@@ -34,6 +34,7 @@ import { getRouteSlug, PublicRouteKey } from './lib/routes';
 import { DEFAULT_LOCALE, Locale, SUPPORTED_LOCALES, detectBrowserLocale, localeToPath, localeToRootPath, useI18n } from './lib/i18n';
 import { getCountryAirports } from './lib/countryAirports';
 import { getCityRoutes } from './lib/cityRoutes';
+import { usePageTitle } from './lib/usePageTitle';
 
 const renderCountryAirportRoutes = (locale: Locale) =>
   getCountryAirports(locale).map((airport) => (
@@ -47,6 +48,7 @@ const renderCityRouteRoutes = (locale: Locale) =>
 
 function Landing() {
   const { t } = useI18n();
+  usePageTitle(t.hero.headline);
   const [step, setStep] = useState<'vehicle' | 'pricing'>('vehicle');
   const [vehicleType, setVehicleType] = useState<'standard' | 'bus'>('standard');
   const [selectedRoute, setSelectedRoute] = useState<{ from: string; to: string; priceDay: number; priceNight: number; type: 'standard' | 'bus' } | null>(null);

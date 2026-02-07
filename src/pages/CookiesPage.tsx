@@ -5,10 +5,12 @@ import { Footer } from '../components/Footer';
 import { FloatingActions } from '../components/FloatingActions';
 import { Navbar } from '../components/Navbar';
 import { localeToPath, useI18n } from '../lib/i18n';
+import { usePageTitle } from '../lib/usePageTitle';
 
 export function CookiesPage() {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
+  usePageTitle(t.cookiePolicy.title);
 
   return (
     <div className="min-h-screen bg-gray-50">

@@ -12,13 +12,20 @@ export function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const basePath = localeToPath(locale);
+  const strippedPath = location.pathname.replace(/^\/(en|pl|de|fi|no|sv|da)/, '');
+  const pathWithoutLeading = strippedPath.replace(/^\//, '');
+  const [firstSegment] = pathWithoutLeading.split('/').filter(Boolean);
+  const currentRouteKey = firstSegment ? getRouteKeyFromSlug(locale, firstSegment) : null;
+  const isHome = !firstSegment;
+  const isPricing = currentRouteKey === 'pricing';
+  const isAirportTaxi = currentRouteKey === 'airportTaxi';
+  const isAirportSopot = currentRouteKey === 'airportSopot';
+  const isAirportGdynia = currentRouteKey === 'airportGdynia';
 
   const handleLocaleChange = (nextLocale: Locale) => {
     trackLocaleChange(locale, nextLocale);
     setLocale(nextLocale);
     const nextBasePath = localeToPath(nextLocale);
-    const strippedPath = location.pathname.replace(/^\/(en|pl|de|fi|no|sv|da)/, '');
-    const pathWithoutLeading = strippedPath.replace(/^\//, '');
     const [firstSegment, ...restSegments] = pathWithoutLeading.split('/').filter(Boolean);
     const routeKey = firstSegment ? getRouteKeyFromSlug(locale, firstSegment) : null;
     const nextSlug = routeKey ? getRouteSlug(nextLocale, routeKey) : '';
@@ -38,9 +45,6 @@ export function Navbar() {
   const handleNavClick = (event: React.MouseEvent<HTMLAnchorElement>, sectionId: string, label: string) => {
     event.preventDefault();
     trackNavClick(label);
-    const strippedPath = location.pathname.replace(/^\/(en|pl|de|fi|no|sv|da)/, '');
-    const pathWithoutLeading = strippedPath.replace(/^\//, '');
-    const [firstSegment] = pathWithoutLeading.split('/').filter(Boolean);
     const currentRouteKey = firstSegment ? getRouteKeyFromSlug(locale, firstSegment) : null;
     const targetId =
       sectionId === 'vehicle-selection' && currentRouteKey === 'pricing'
@@ -79,7 +83,9 @@ export function Navbar() {
             <a
               href={`${basePath}/`}
               onClick={() => trackNavClick('home')}
-              className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
+              className={`transition-colors whitespace-nowrap ${
+                isHome ? 'text-blue-700 font-semibold' : 'text-gray-700 hover:text-blue-600'
+              }`}
             >
               {t.navbar.home}
             </a>
@@ -93,28 +99,36 @@ export function Navbar() {
             <a
               href={getRoutePath(locale, 'airportTaxi')}
               onClick={() => trackNavClick('airport_taxi')}
-              className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
+              className={`transition-colors whitespace-nowrap ${
+                isAirportTaxi ? 'text-blue-700 font-semibold' : 'text-gray-700 hover:text-blue-600'
+              }`}
             >
               {t.navbar.airportTaxi}
             </a>
             <a
               href={getRoutePath(locale, 'airportSopot')}
               onClick={() => trackNavClick('airport_sopot')}
-              className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
+              className={`transition-colors whitespace-nowrap ${
+                isAirportSopot ? 'text-blue-700 font-semibold' : 'text-gray-700 hover:text-blue-600'
+              }`}
             >
               {t.navbar.airportSopot}
             </a>
             <a
               href={getRoutePath(locale, 'airportGdynia')}
               onClick={() => trackNavClick('airport_gdynia')}
-              className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
+              className={`transition-colors whitespace-nowrap ${
+                isAirportGdynia ? 'text-blue-700 font-semibold' : 'text-gray-700 hover:text-blue-600'
+              }`}
             >
               {t.navbar.airportGdynia}
             </a>
             <a
               href={getRoutePath(locale, 'pricing')}
               onClick={() => trackNavClick('pricing')}
-              className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
+              className={`transition-colors whitespace-nowrap ${
+                isPricing ? 'text-blue-700 font-semibold' : 'text-gray-700 hover:text-blue-600'
+              }`}
             >
               {t.navbar.prices}
             </a>
@@ -172,7 +186,9 @@ export function Navbar() {
             <a
               href={`${basePath}/`}
               onClick={() => trackNavClick('mobile_home')}
-              className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
+              className={`block w-full text-left py-2 transition-colors ${
+                isHome ? 'text-blue-700 font-semibold' : 'text-gray-700 hover:text-blue-600'
+              }`}
             >
               {t.navbar.home}
             </a>
@@ -186,28 +202,36 @@ export function Navbar() {
             <a
               href={getRoutePath(locale, 'airportTaxi')}
               onClick={() => trackNavClick('mobile_airport_taxi')}
-              className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
+              className={`block w-full text-left py-2 transition-colors ${
+                isAirportTaxi ? 'text-blue-700 font-semibold' : 'text-gray-700 hover:text-blue-600'
+              }`}
             >
               {t.navbar.airportTaxi}
             </a>
             <a
               href={getRoutePath(locale, 'airportSopot')}
               onClick={() => trackNavClick('mobile_airport_sopot')}
-              className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
+              className={`block w-full text-left py-2 transition-colors ${
+                isAirportSopot ? 'text-blue-700 font-semibold' : 'text-gray-700 hover:text-blue-600'
+              }`}
             >
               {t.navbar.airportSopot}
             </a>
             <a
               href={getRoutePath(locale, 'airportGdynia')}
               onClick={() => trackNavClick('mobile_airport_gdynia')}
-              className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
+              className={`block w-full text-left py-2 transition-colors ${
+                isAirportGdynia ? 'text-blue-700 font-semibold' : 'text-gray-700 hover:text-blue-600'
+              }`}
             >
               {t.navbar.airportGdynia}
             </a>
             <a
               href={getRoutePath(locale, 'pricing')}
               onClick={() => trackNavClick('mobile_pricing')}
-              className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
+              className={`block w-full text-left py-2 transition-colors ${
+                isPricing ? 'text-blue-700 font-semibold' : 'text-gray-700 hover:text-blue-600'
+              }`}
             >
               {t.navbar.prices}
             </a>

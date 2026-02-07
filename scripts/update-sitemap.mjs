@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { locales, routeSlugs, countryAirportSlugsByLocale, cityRouteSlugsByLocale } from '../seo-data.mjs';
 
 const SITE_URL = 'https://taxiairportgdansk.com';
-const DEFAULT_LOCALE = 'pl';
+const DEFAULT_LOCALE = 'en';
 const LOCALE_HREFLANG_MAP = {
   en: ['en', 'en-GB'],
   pl: ['pl', 'pl-PL'],
@@ -98,9 +98,6 @@ const getRouteLastmod = async (routeKey) => {
 
 const buildLocalizedUrl = (locale, routeKey) => {
   if (!routeKey || routeKey === 'home') {
-    if (locale === DEFAULT_LOCALE) {
-      return `${SITE_URL}/`;
-    }
     return `${SITE_URL}/${locale}/`;
   }
   return `${SITE_URL}/${locale}/${routeSlugs[locale][routeKey]}`;
@@ -135,6 +132,14 @@ const buildAlternateSetForLocaleOnly = (locale, href) =>
 const entries = [];
 
 const homeLastmod = await getRouteLastmod('home');
+
+addEntry(entries, {
+  loc: `${SITE_URL}/`,
+  lastmod: homeLastmod,
+  changefreq: 'weekly',
+  priority: '0.9',
+  alternates: buildAlternateSetForRoute('home'),
+});
 
 for (const locale of locales) {
   addEntry(entries, {

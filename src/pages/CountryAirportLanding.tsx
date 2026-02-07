@@ -9,6 +9,7 @@ import { requestScrollTo } from '../lib/scroll';
 import { trackCtaClick, trackNavClick } from '../lib/tracking';
 import { getCountryAirportBySlug, getCountryAirportCountry } from '../lib/countryAirports';
 import { NotFoundPage } from './NotFoundPage';
+import { usePageTitle } from '../lib/usePageTitle';
 
 const replaceTokens = (text: string, tokens: Record<string, string>) =>
   Object.entries(tokens).reduce((acc, [key, value]) => acc.replaceAll(`{${key}}`, value), text);
@@ -60,6 +61,7 @@ export function CountryAirportLanding() {
     airportData.city,
     airportData.airport
   );
+  usePageTitle(landingTitle);
   const landingDescription = resolveLandingText(
     landingAny.description,
     `Private airport transfer from ${airportData.airport} to Gdańsk, Sopot and Gdynia with fixed prices.`,

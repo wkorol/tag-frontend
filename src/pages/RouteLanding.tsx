@@ -6,6 +6,7 @@ import { localeToPath, useI18n } from '../lib/i18n';
 import { getRouteSlug } from '../lib/routes';
 import { trackCtaClick, trackNavClick } from '../lib/tracking';
 import { requestScrollTo } from '../lib/scroll';
+import { usePageTitle } from '../lib/usePageTitle';
 
 interface RouteLandingProps {
   title: string;
@@ -21,6 +22,7 @@ interface RouteLandingProps {
 export function RouteLanding({ title, description, route, examples, pricing }: RouteLandingProps) {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
+  usePageTitle(title);
 
   const fallbackSeoParagraphByLocale: Record<string, string> = {
     pl: `Zarezerwuj prywatny transfer lotniskowy na trasie ${route} ze stałą ceną, dostępnością 24/7 i szybkim potwierdzeniem.`,

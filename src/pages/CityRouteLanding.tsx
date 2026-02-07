@@ -9,6 +9,7 @@ import { requestScrollTo } from '../lib/scroll';
 import { trackCtaClick, trackNavClick } from '../lib/tracking';
 import { getCityRouteBySlug, getCityRoutes } from '../lib/cityRoutes';
 import { NotFoundPage } from './NotFoundPage';
+import { usePageTitle } from '../lib/usePageTitle';
 
 export function CityRouteLanding() {
   const { t, locale } = useI18n();
@@ -26,6 +27,7 @@ export function CityRouteLanding() {
 
   const destination = route.destination;
   const cityTaxi = t.cityTaxi;
+  usePageTitle(`Cena taxi z lotniska Gdańsk do ${destination}`);
 
   return (
     <div className="min-h-screen bg-gray-50">

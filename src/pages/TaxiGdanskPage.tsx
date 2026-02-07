@@ -7,12 +7,14 @@ import { getRouteSlug } from '../lib/routes';
 import { requestScrollTo } from '../lib/scroll';
 import { trackCtaClick, trackNavClick } from '../lib/tracking';
 import { getCityRoutes } from '../lib/cityRoutes';
+import { usePageTitle } from '../lib/usePageTitle';
 
 export function TaxiGdanskPage() {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
   const content = t.cityTaxi;
   const cityRoutes = getCityRoutes(locale);
+  usePageTitle(content.title);
 
   return (
     <div className="min-h-screen bg-gray-50">

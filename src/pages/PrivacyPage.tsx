@@ -4,10 +4,12 @@ import { Footer } from '../components/Footer';
 import { FloatingActions } from '../components/FloatingActions';
 import { Navbar } from '../components/Navbar';
 import { localeToPath, useI18n } from '../lib/i18n';
+import { usePageTitle } from '../lib/usePageTitle';
 
 export function PrivacyPage() {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
+  usePageTitle(t.privacyPolicy.title);
 
   return (
     <div className="min-h-screen bg-gray-50">

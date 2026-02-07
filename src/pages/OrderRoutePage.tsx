@@ -5,6 +5,7 @@ import { OrderForm } from '../components/OrderForm';
 import { QuoteForm } from '../components/QuoteForm';
 import { trackFormOpen } from '../lib/tracking';
 import { localeToPath, useI18n } from '../lib/i18n';
+import { usePageTitle } from '../lib/usePageTitle';
 
 type OrderRouteKey = 'airportTaxi' | 'airportSopot' | 'airportGdynia';
 
@@ -16,6 +17,13 @@ export function OrderRoutePage({ routeKey }: OrderRoutePageProps) {
   const { t, locale } = useI18n();
   const navigate = useNavigate();
   const basePath = localeToPath(locale);
+  const orderTitle =
+    routeKey === 'airportSopot'
+      ? t.routeLanding.orderLinks.airportSopot
+      : routeKey === 'airportGdynia'
+        ? t.routeLanding.orderLinks.airportGdynia
+        : t.routeLanding.orderLinks.airportGdansk;
+  usePageTitle(orderTitle);
 
   const route = useMemo(() => {
     if (routeKey === 'airportSopot') {
@@ -63,9 +71,10 @@ export function OrderRoutePage({ routeKey }: OrderRoutePageProps) {
 }
 
 export function CustomOrderPage() {
-  const { locale } = useI18n();
+  const { t, locale } = useI18n();
   const navigate = useNavigate();
   const basePath = localeToPath(locale);
+  usePageTitle(t.routeLanding.orderLinks.custom);
 
   useEffect(() => {
     trackFormOpen('quote');

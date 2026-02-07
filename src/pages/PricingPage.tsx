@@ -12,10 +12,12 @@ import { localeToPath, useI18n } from '../lib/i18n';
 import { Calculator } from 'lucide-react';
 import { trackCtaClick, trackFormOpen, trackNavClick } from '../lib/tracking';
 import { requestScrollTo, scrollToId } from '../lib/scroll';
+import { usePageTitle } from '../lib/usePageTitle';
 
 export function PricingPage() {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
+  usePageTitle(t.pricingLanding.title);
   const [vehicleType, setVehicleType] = useState<'standard' | 'bus'>('standard');
   const [selectedRoute, setSelectedRoute] = useState<{
     from: string;

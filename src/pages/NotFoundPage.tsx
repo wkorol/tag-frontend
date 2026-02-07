@@ -3,11 +3,13 @@ import { Footer } from '../components/Footer';
 import { Navbar } from '../components/Navbar';
 import { getRoutePath } from '../lib/routes';
 import { localeToRootPath, useI18n } from '../lib/i18n';
+import { usePageTitle } from '../lib/usePageTitle';
 
 export function NotFoundPage() {
   const { t, locale } = useI18n();
   const location = useLocation();
   const homePath = localeToRootPath(locale);
+  usePageTitle(t.common.notFoundTitle);
   const links = [
     { href: getRoutePath(locale, 'pricing'), label: t.navbar.prices },
     { href: getRoutePath(locale, 'airportTaxi'), label: t.navbar.airportTaxi },
