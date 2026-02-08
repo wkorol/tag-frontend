@@ -32,6 +32,10 @@ export function CookieBanner() {
       if (typeof loadGtag === 'function') {
         loadGtag();
       }
+      const gtag = (window as { gtag?: (...args: unknown[]) => void }).gtag;
+      if (typeof gtag === 'function') {
+        gtag('event', 'page_view');
+      }
     }
     setVisible(false);
   };

@@ -47,6 +47,11 @@
           var ids = [];
           if (isAdsId(adsId)) ids.push(adsId);
           if (isGa4Id(ga4Id)) ids.push(ga4Id);
+          var debugMode = false;
+          try {
+            var params = new URLSearchParams(window.location.search);
+            debugMode = params.get('debug') === '1';
+          } catch {}
 
           var gtagLoaded = false;
           var loadGtag = function() {
@@ -69,6 +74,10 @@
           });
           window.gtag('js', new Date());
           ids.forEach(function(id) {
+            if (isGa4Id(id) && debugMode) {
+              window.gtag('config', id, { debug_mode: true });
+              return;
+            }
             window.gtag('config', id);
           });
 
