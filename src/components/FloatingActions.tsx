@@ -13,7 +13,9 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
   const basePath = localeToPath(locale);
   const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
   const [cookieBannerOffset, setCookieBannerOffset] = useState(0);
+  const [isCookieBannerVisible, setIsCookieBannerVisible] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isTargetVisible, setIsTargetVisible] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -26,6 +28,7 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
       const banner = document.querySelector('[data-cookie-banner]') as HTMLElement | null;
       if (!banner) {
         setCookieBannerOffset(0);
+        setIsCookieBannerVisible(false);
         if (resizeObserver) {
           resizeObserver.disconnect();
           resizeObserver = null;
@@ -33,6 +36,7 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
         return;
       }
 
+      setIsCookieBannerVisible(true);
       const height = banner.getBoundingClientRect().height;
       setCookieBannerOffset(Math.ceil(height) + 12);
 
@@ -62,6 +66,59 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
     if (typeof window === 'undefined') {
       return;
     }
+    if (!('IntersectionObserver' in window)) {
+      return;
+    }
+    let observer: IntersectionObserver | null = null;
+    const observed = new Set<Element>();
+
+    const connect = () => {
+      const targets = [
+        document.getElementById(orderTargetId),
+        document.getElementById('pricing-booking'),
+      ].filter(Boolean) as Element[];
+
+      if (targets.length === 0) {
+        setIsTargetVisible(false);
+        return;
+      }
+
+      if (!observer) {
+        observer = new IntersectionObserver(
+          (entries) => {
+            setIsTargetVisible(entries.some((entry) => entry.isIntersecting));
+          },
+          {
+            root: null,
+            threshold: 0.2,
+          }
+        );
+      }
+
+      targets.forEach((target) => {
+        if (!observed.has(target)) {
+          observer!.observe(target);
+          observed.add(target);
+        }
+      });
+    };
+
+    connect();
+    const mutationObserver = new MutationObserver(connect);
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      mutationObserver.disconnect();
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, [orderTargetId]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
     const updateVisibility = () => {
       const topVisible = window.scrollY <= 120;
       const bottomVisible = window.innerHeight + window.scrollY >= document.body.scrollHeight - 120;
@@ -76,7 +133,7 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
     };
   }, []);
 
-  if (hide || !isVisible) {
+  if (hide || !isVisible || isCookieBannerVisible || isTargetVisible) {
     return null;
   }
 

@@ -147,7 +147,7 @@ function Landing() {
       <main>
         <Hero />
         
-        <div className="defer-render">
+        <div className="defer-render defer-render-lg">
           <Suspense fallback={null}>
             {step === 'vehicle' ? (
               <VehicleTypeSelector onSelectType={handleVehicleSelect} />
@@ -162,14 +162,14 @@ function Landing() {
           </Suspense>
         </div>
 
-        <div className="defer-render">
+        <div className="defer-render defer-render-md">
           <Suspense fallback={null}>
             <TrustSection />
           </Suspense>
         </div>
       </main>
 
-      <div className="defer-render">
+      <div className="defer-render defer-render-sm">
         <Suspense fallback={null}>
           <Footer />
         </Suspense>

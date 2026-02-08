@@ -6,51 +6,36 @@ import { getRoutePath } from '../lib/routes';
 
 export function CookieBanner() {
   const { t, locale } = useI18n();
-  const [visible, setVisible] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const isClient = typeof window !== 'undefined';
+  const [mounted] = useState(isClient);
+  const [visible, setVisible] = useState(() => {
+    if (!isClient) {
+      return false;
+    }
+    try {
+      const existing = getConsentStatus();
+      if (existing) {
+        updateGtagConsent(existing);
+        return existing !== 'accepted';
+      }
+      return true;
+    } catch {
+      return true;
+    }
+  });
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    let timer: number | undefined;
-    let cleaned = false;
-
-    const cleanup = () => {
-      if (cleaned) {
-        return;
-      }
-      cleaned = true;
-      window.removeEventListener('pointerdown', reveal);
-      window.removeEventListener('keydown', reveal);
-      window.removeEventListener('touchstart', reveal);
-      if (timer) {
-        window.clearTimeout(timer);
-      }
-    };
-
-    const reveal = () => {
-      cleanup();
-      setVisible(true);
-    };
-
     try {
       const existing = getConsentStatus();
       if (existing) {
         updateGtagConsent(existing);
         setVisible(existing !== 'accepted');
-        return cleanup;
+        return;
       }
-      window.addEventListener('pointerdown', reveal, { once: true, passive: true });
-      window.addEventListener('keydown', reveal, { once: true });
-      window.addEventListener('touchstart', reveal, { once: true, passive: true });
-      timer = window.setTimeout(reveal, 12000);
+      setVisible(true);
     } catch {
-      reveal();
+      setVisible(true);
     }
-
-    return cleanup;
   }, []);
 
   const accept = () => {
@@ -88,7 +73,7 @@ export function CookieBanner() {
             </p>
             <a
               href={getRoutePath(locale, 'cookies')}
-              className="inline-block text-sm text-slate-300 hover:text-white underline"
+              className="inline-block text-sm text-blue-300 hover:text-blue-200 underline"
             >
               {t.cookieBanner.readPolicy}
             </a>
@@ -106,7 +91,7 @@ export function CookieBanner() {
             <button
               type="button"
               onClick={accept}
-              className="w-full sm:w-auto bg-amber-400 hover:bg-amber-300 text-slate-900 text-base font-semibold px-8 py-3 rounded-full shadow-lg shadow-amber-400/35 transition"
+              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold px-8 py-3 rounded-lg shadow-lg shadow-blue-600/30 transition"
             >
               {t.cookieBanner.accept}
             </button>
