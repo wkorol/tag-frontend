@@ -50,11 +50,24 @@ export const trackPageView = (path: string, title?: string) => {
     return;
   }
 
+  const pageTitle = title ?? document.title;
+  const pageLocation = window.location.href;
+  const ga4Id = (window as { __ga4Id?: string | null }).__ga4Id;
+
   trackEvent('page_view', {
     page_path: path,
-    page_title: title ?? document.title,
-    page_location: window.location.href,
+    page_title: pageTitle,
+    page_location: pageLocation,
   });
+
+  const gtag = (window as { gtag?: (...args: unknown[]) => void }).gtag;
+  if (typeof gtag === 'function' && ga4Id) {
+    gtag('config', ga4Id, {
+      page_path: path,
+      page_title: pageTitle,
+      page_location: pageLocation,
+    });
+  }
 };
 
 export const trackNavClick = (label: string) => {
@@ -149,5 +162,35 @@ export const trackSectionView = (section: string) => {
   trackEvent('section_view', {
     event_category: 'navigation',
     event_label: section,
+  });
+};
+
+export const trackScrollDepth = (percent: number) => {
+  trackEvent('scroll_depth', {
+    event_category: 'engagement',
+    event_label: `${percent}%`,
+    value: percent,
+  });
+};
+
+export const trackOutboundClick = (url: string) => {
+  trackEvent('outbound_click', {
+    event_category: 'navigation',
+    event_label: url,
+  });
+};
+
+export const trackLinkClick = (label: string, href?: string) => {
+  trackEvent('link_click', {
+    event_category: 'navigation',
+    event_label: label,
+    ...(href ? { link_url: href } : {}),
+  });
+};
+
+export const trackButtonClick = (label: string) => {
+  trackEvent('button_click', {
+    event_category: 'cta',
+    event_label: label,
   });
 };

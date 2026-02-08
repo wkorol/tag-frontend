@@ -47,6 +47,7 @@
           var ids = [];
           if (isAdsId(adsId)) ids.push(adsId);
           if (isGa4Id(ga4Id)) ids.push(ga4Id);
+          window.__ga4Id = isGa4Id(ga4Id) ? ga4Id : null;
           var debugMode = false;
           try {
             var params = new URLSearchParams(window.location.search);

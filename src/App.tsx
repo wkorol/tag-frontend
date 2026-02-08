@@ -28,7 +28,16 @@ const CustomOrderPage = lazy(() => import('./pages/OrderRoutePage').then((mod) =
 const PricingPage = lazy(() => import('./pages/PricingPage').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./pages/AdminOrdersPage').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./pages/AdminOrderPage').then((mod) => ({ default: mod.AdminOrderPage })));
-import { trackFormOpen, trackPageView, trackSectionView, trackVehicleSelect } from './lib/tracking';
+import {
+  trackFormOpen,
+  trackPageView,
+  trackSectionView,
+  trackVehicleSelect,
+  trackScrollDepth,
+  trackOutboundClick,
+  trackLinkClick,
+  trackButtonClick,
+} from './lib/tracking';
 import { consumeScrollTarget, scrollToId } from './lib/scroll';
 import { getRouteSlug, PublicRouteKey } from './lib/routes';
 import { DEFAULT_LOCALE, Locale, SUPPORTED_LOCALES, detectBrowserLocale, localeToPath, localeToRootPath, useI18n } from './lib/i18n';
@@ -275,6 +284,105 @@ export default function App() {
   useEffect(() => {
     trackPageView(`${location.pathname}${location.search}`);
   }, [location.pathname, location.search]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    const thresholds = [25, 50, 75, 100];
+    const seen = new Set<number>();
+
+    const onScroll = () => {
+      const doc = document.documentElement;
+      const scrollTop = window.scrollY || doc.scrollTop;
+      const height = doc.scrollHeight - doc.clientHeight;
+      if (height <= 0) {
+        return;
+      }
+      const percent = Math.round((scrollTop / height) * 100);
+      thresholds.forEach((threshold) => {
+        if (!seen.has(threshold) && percent >= threshold) {
+          seen.add(threshold);
+          trackScrollDepth(threshold);
+        }
+      });
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    const onClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (!target) {
+        return;
+      }
+      const button = target.closest('button') as HTMLButtonElement | null;
+      if (button) {
+        const label = (button.innerText || button.getAttribute('aria-label') || '').trim();
+        if (label) {
+          trackButtonClick(label);
+        }
+      }
+      const anchor = target.closest('a') as HTMLAnchorElement | null;
+      if (!anchor || !anchor.href) {
+        return;
+      }
+      try {
+        const href = new URL(anchor.href);
+        const label = (anchor.innerText || anchor.getAttribute('aria-label') || '').trim();
+        if (label) {
+          trackLinkClick(label, href.toString());
+        }
+        if (href.origin !== window.location.origin) {
+          trackOutboundClick(href.toString());
+        }
+      } catch {
+        return;
+      }
+    };
+    document.addEventListener('click', onClick);
+    return () => {
+      document.removeEventListener('click', onClick);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      return;
+    }
+    const sections = Array.from(document.querySelectorAll('main section[id]')) as HTMLElement[];
+    if (sections.length === 0) {
+      return;
+    }
+    const seen = new Set<string>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+          const id = (entry.target as HTMLElement).id;
+          if (id && !seen.has(id)) {
+            seen.add(id);
+            trackSectionView(id);
+          }
+        });
+      },
+      { threshold: 0.35 }
+    );
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, [location.pathname]);
 
   return (
     <>
