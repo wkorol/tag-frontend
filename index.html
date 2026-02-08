@@ -62,6 +62,12 @@
             var script = document.createElement('script');
             script.async = true;
             script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(ids[0] || adsId);
+            script.onload = function() {
+              window.__gtagLoaded = true;
+              if (window.__updateGtagDebug) {
+                window.__updateGtagDebug();
+              }
+            };
             document.head.appendChild(script);
           };
           window.__loadGtag = loadGtag;
@@ -96,6 +102,23 @@
           window.addEventListener('load', function() {
             window.setTimeout(loadGtag, 10000);
           }, { once: true });
+
+          if (debugMode) {
+            var debugEl = document.createElement('div');
+            debugEl.style.cssText = 'position:fixed;left:10px;bottom:10px;z-index:2147483646;background:#0b0f1a;color:#e2e8f0;padding:10px 12px;border-radius:10px;font:12px/1.4 -apple-system,system-ui,Segoe UI,Roboto,Arial;box-shadow:0 10px 30px rgba(0,0,0,0.35);max-width:90vw;';
+            debugEl.textContent = 'GA debug…';
+            document.body.appendChild(debugEl);
+            window.__updateGtagDebug = function() {
+              var consent = null;
+              try { consent = localStorage.getItem('cookie-consent'); } catch {}
+              var gtagType = typeof window.gtag;
+              var loaded = window.__gtagLoaded ? 'yes' : 'no';
+              var dl = (window.dataLayer && window.dataLayer.length) ? window.dataLayer.length : 0;
+              debugEl.textContent = 'GA debug | gtag: ' + gtagType + ' | loaded: ' + loaded + ' | consent: ' + consent + ' | dataLayer: ' + dl;
+            };
+            window.__updateGtagDebug();
+            loadGtag();
+          }
         })();
       </script>
     </body>
