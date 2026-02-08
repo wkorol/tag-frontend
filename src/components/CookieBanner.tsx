@@ -27,6 +27,12 @@ export function CookieBanner() {
   const accept = () => {
     setConsentStatus('accepted');
     updateGtagConsent('accepted');
+    if (typeof window !== 'undefined') {
+      const loadGtag = (window as { __loadGtag?: () => void }).__loadGtag;
+      if (typeof loadGtag === 'function') {
+        loadGtag();
+      }
+    }
     setVisible(false);
   };
 

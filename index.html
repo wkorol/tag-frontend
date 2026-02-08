@@ -40,6 +40,14 @@
             return;
           }
 
+          var ga4Id = 'G-SGV8S5XKSE';
+          var adsId = 'AW-17848598074';
+          var isGa4Id = function(value) { return /^G-[A-Z0-9]+$/i.test(value); };
+          var isAdsId = function(value) { return /^AW-\d+$/.test(value); };
+          var ids = [];
+          if (isAdsId(adsId)) ids.push(adsId);
+          if (isGa4Id(ga4Id)) ids.push(ga4Id);
+
           var gtagLoaded = false;
           var loadGtag = function() {
             if (gtagLoaded) {
@@ -48,9 +56,10 @@
             gtagLoaded = true;
             var script = document.createElement('script');
             script.async = true;
-            script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17848598074';
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(ids[0] || adsId);
             document.head.appendChild(script);
           };
+          window.__loadGtag = loadGtag;
 
           window.gtag('consent', 'default', {
             ad_storage: 'denied',
@@ -59,7 +68,9 @@
             security_storage: 'granted'
           });
           window.gtag('js', new Date());
-          window.gtag('config', 'AW-17848598074');
+          ids.forEach(function(id) {
+            window.gtag('config', id);
+          });
 
           var loadOnInteraction = function() {
             loadGtag();
