@@ -6,25 +6,11 @@ import { getRoutePath } from '../lib/routes';
 
 export function CookieBanner() {
   const { t, locale } = useI18n();
-  const isClient = typeof window !== 'undefined';
-  const [mounted] = useState(isClient);
-  const [visible, setVisible] = useState(() => {
-    if (!isClient) {
-      return false;
-    }
-    try {
-      const existing = getConsentStatus();
-      if (existing) {
-        updateGtagConsent(existing);
-        return existing !== 'accepted';
-      }
-      return true;
-    } catch {
-      return true;
-    }
-  });
+  const [mounted, setMounted] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     try {
       const existing = getConsentStatus();
       if (existing) {
