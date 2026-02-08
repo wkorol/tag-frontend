@@ -2004,6 +2004,11 @@ html {
   line-height: 1;
 }
 
+.pricing-sunday-note {
+  font-size: 9px;
+  line-height: 1;
+}
+
 .booking-form {
   user-select: none;
 }
@@ -2130,6 +2135,10 @@ html {
 
   .pricing-sunday {
     font-size: 0.6rem;
+  }
+
+  .pricing-sunday-note {
+    font-size: 7px;
   }
 
   .pricing-custom-title {
