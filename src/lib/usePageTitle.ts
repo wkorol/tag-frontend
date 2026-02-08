@@ -8,6 +8,8 @@ export function usePageTitle(title?: string | null) {
       return;
     }
     const trimmed = (title ?? '').trim();
-    document.title = trimmed ? `${trimmed} | ${BRAND_TITLE}` : BRAND_TITLE;
+    const nextTitle = trimmed ? `${trimmed} | ${BRAND_TITLE}` : BRAND_TITLE;
+    (window as { __pageTitle?: string }).__pageTitle = nextTitle;
+    document.title = nextTitle;
   }, [title]);
 }

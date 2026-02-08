@@ -50,7 +50,10 @@ export const trackPageView = (path: string, title?: string) => {
     return;
   }
 
-  const pageTitle = title ?? document.title;
+  const pageTitle =
+    title ??
+    (window as { __pageTitle?: string }).__pageTitle ??
+    document.title;
   const pageLocation = window.location.href;
   const ga4Id = (window as { __ga4Id?: string | null }).__ga4Id;
 
