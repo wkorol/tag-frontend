@@ -1,8 +1,21 @@
 const pl = {
   "common": {
     "whatsapp": "WhatsApp",
+    "bookViaWhatsapp": "Zamów przez WhatsApp",
+    "progress": "Postęp",
+    "stepCounter": (current: number, total: number) => `Krok ${current}/${total}`,
+    "remainingFields": (count: number) => {
+      if (count === 1) return "Pozostało jeszcze 1 pole do wypełnienia";
+      const mod10 = count % 10;
+      const mod100 = count % 100;
+      const isFew = mod10 >= 2 && mod10 <= 4 && !(mod100 >= 12 && mod100 <= 14);
+      return `Pozostało jeszcze ${count} ${isFew ? "pola" : "pól"} do wypełnienia`;
+    },
     "orderOnlineNow": "Złóż zamówienie online",
     "orderNow": "Rezerwuj",
+    "continue": "Dalej",
+    "back": "Wstecz",
+    "optional": "opcjonalnie",
     "close": "Zamknij",
     "noPrepayment": "Bez przedpłaty",
     "backToHome": "← Wróć na stronę główną",
@@ -63,7 +76,7 @@ const pl = {
     "fleetLabel": "Pojazdy",
     "standardCarsTitle": "Samochody standard",
     "standardCarsBody": "1–4 pasażerów | Komfortowe sedany i SUV-y",
-    "busTitle": "Busy i więcej",
+    "busTitle": "Usługa BUS",
     "busBody": "5–8 pasażerów | Idealne dla większych grup"
   },
   "vehicle": {
@@ -189,7 +202,7 @@ const pl = {
     "companyTitle": "Dane firmy",
     "paymentTitle": "Płatność i faktury",
     "comfortTitle": "Komfort i bezpieczeństwo",
-    "paymentBody": "Gotówka lub karta na życzenie. Faktury dla firm.",
+    "paymentBody": "Płatność gotówką lub kartą. Faktury VAT dla firm.",
     "comfortBody": "Foteliki dziecięce na życzenie. Profesjonalni, licencjonowani kierowcy i pomoc door-to-door."
   },
   "footer": {
@@ -444,8 +457,10 @@ const pl = {
     "validation": {
       "phoneLetters": "Wpisz poprawny numer telefonu (tylko cyfry).",
       "phoneLength": "Wpisz poprawny numer telefonu (7–15 cyfr, opcjonalnie +).",
+      "emailRequired": "Podaj adres e-mail.",
       "email": "Wpisz poprawny adres e-mail.",
-      "datePast": "Wybierz dzisiejszą lub przyszłą datę."
+      "datePast": "Wybierz dzisiejszą lub przyszłą datę.",
+      "timePast": "Wybierz obecną lub przyszłą godzinę."
     },
     "rate": {
       "day": "Taryfa dzienna",
@@ -483,6 +498,7 @@ const pl = {
     "signEmpty": "Tutaj pojawi się Twoje imię",
     "flightNumber": "Numer lotu",
     "flightPlaceholder": "np. LO123",
+    "flightUnknown": "Nie znam jeszcze numeru lotu",
     "pickupAddress": "Adres odbioru",
     "pickupPlaceholder": "Wpisz pełny adres odbioru",
     "passengers": "Liczba pasażerów",

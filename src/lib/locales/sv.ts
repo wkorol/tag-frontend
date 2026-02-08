@@ -1,8 +1,15 @@
 const sv = {
   "common": {
     "whatsapp": "WhatsApp",
+    "bookViaWhatsapp": "Boka via WhatsApp",
+    "progress": "Framsteg",
+    "stepCounter": (current: number, total: number) => `Steg ${current}/${total}`,
+    "remainingFields": (count: number) => `${count} fält kvar`,
     "orderOnlineNow": "Boka taxi online",
     "orderNow": "Boka nu",
+    "continue": "Fortsätt",
+    "back": "Tillbaka",
+    "optional": "valfritt",
     "close": "Stäng",
     "noPrepayment": "Ingen förskottsbetalning",
     "backToHome": "← Tillbaka till startsidan",
@@ -95,7 +102,7 @@ const sv = {
     "customRouteBody": "Behöver du en annan destination?",
     "customRoutePrice": "Fasta priser",
     "customRoutePriceBody": "Flexibel prissättning baserat på din rutt",
-    "customRouteAutoNote": "The calculator will estimate the price after you enter the addresses.",
+    "customRouteAutoNote": "Kalkylatorn uppskattar priset efter att du har angett adresserna.",
     "requestQuote": "Boka nu",
     "pricesNote": "Priserna inkluderar moms. Fler destinationer på begäran.",
     "tableTitle": "Pristabell",
@@ -189,7 +196,7 @@ const sv = {
     "companyTitle": "Företagsuppgifter",
     "paymentTitle": "Betalning & faktura",
     "comfortTitle": "Komfort & säkerhet",
-    "paymentBody": "Kontant eller kort på begäran. Fakturor tillgängliga för företagskunder.",
+    "paymentBody": "Betala kontant eller med kort. Faktura tillgänglig för företag.",
     "comfortBody": "Barnstolar på begäran. Professionella, licensierade förare och dörr-till-dörr-hjälp."
   },
   "footer": {
@@ -442,8 +449,10 @@ const sv = {
     "validation": {
       "phoneLetters": "Ange ett giltigt telefonnummer (endast siffror).",
       "phoneLength": "Ange ett giltigt telefonnummer (7–15 siffror, valfri +).",
+      "emailRequired": "Ange din e-postadress.",
       "email": "Ange en giltig e-postadress.",
-      "datePast": "Välj dagens datum eller ett framtida datum."
+      "datePast": "Välj dagens datum eller ett framtida datum.",
+      "timePast": "Välj nuvarande tid eller en framtida tid."
     },
     "rate": {
       "day": "Dagpris",
@@ -481,6 +490,7 @@ const sv = {
     "signEmpty": "Ditt namn visas här",
     "flightNumber": "Flygnummer",
     "flightPlaceholder": "t.ex. LO123",
+    "flightUnknown": "Jag vet inte flygnumret än",
     "pickupAddress": "Upphämtningsadress",
     "pickupPlaceholder": "Ange fullständig upphämtningsadress",
     "passengers": "Antal passagerare",
@@ -547,7 +557,7 @@ const sv = {
     "tariff2": "Tariff 2 (stad, 22–6): 5.85 PLN/km.",
     "tariff3": "Tariff 3 (utanför stad, 6–22): 7.80 PLN/km.",
     "tariff4": "Tariff 4 (utanför stad, 22–6): 11.70 PLN/km.",
-    "autoPriceNote": "The calculator will estimate the price after you enter the addresses.",
+    "autoPriceNote": "Kalkylatorn uppskattar priset efter att du har angett adresserna.",
     "fixedPriceHint": "Om du vill föreslå fast pris, klicka här och fyll i fältet.",
     "pricePlaceholder": "Ange ditt erbjudande i PLN (t.ex. 150)",
     "priceHelp": "Föreslå ditt pris för resan. Vi granskar och svarar inom 5-10 minuter.",
@@ -666,7 +676,7 @@ const sv = {
     "signServiceSign": "Meet with a name sign",
     "signServiceFee": "+20 PLN added to final price",
     "signServiceSelf": "Find the driver myself at the parking",
-    "signServiceSelfNote": "The driver will contact you on WhatsApp or by phone and you'll meet up.",
+    "signServiceSelfNote": "Föraren kontaktar dig via WhatsApp eller telefon och ni möts.",
     "signText": "Text på skylt",
     "flightNumber": "Flygnummer",
     "pickupAddress": "Upphämtningsadress",

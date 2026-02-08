@@ -87,7 +87,11 @@ const loadTranslations = async (locale) => {
   translationCache[locale] = module.default;
   return module.default;
 };
-const I18nContext = createContext(null);
+const GLOBAL_I18N_CONTEXT_KEY = "__tag_i18n_context__";
+const I18nContext = globalThis[GLOBAL_I18N_CONTEXT_KEY] ?? createContext(null);
+if (!globalThis[GLOBAL_I18N_CONTEXT_KEY]) {
+  globalThis[GLOBAL_I18N_CONTEXT_KEY] = I18nContext;
+}
 function I18nProvider({
   children,
   initialLocale,
@@ -2171,18 +2175,18 @@ function TaxiGdanskPage() {
 const VehicleTypeSelector = lazy(
   () => import('./assets/VehicleTypeSelector-CAqmTE6l.mjs').then((mod) => ({ default: mod.VehicleTypeSelector }))
 );
-const Pricing = lazy(() => import('./assets/Pricing-DoCAjVeb.mjs').then((mod) => ({ default: mod.Pricing })));
+const Pricing = lazy(() => import('./assets/Pricing-D6gWOQdH.mjs').then((mod) => ({ default: mod.Pricing })));
 const TrustSection = lazy(
-  () => import('./assets/TrustSection-DMDpM944.mjs').then((mod) => ({ default: mod.TrustSection }))
+  () => import('./assets/TrustSection-wjwr276G.mjs').then((mod) => ({ default: mod.TrustSection }))
 );
 const Footer = lazy(() => Promise.resolve().then(() => Footer$2).then((mod) => ({ default: mod.Footer })));
-const OrderForm = lazy(() => import('./assets/OrderForm-XE0jVSxN.mjs').then((mod) => ({ default: mod.OrderForm })));
+const OrderForm = lazy(() => import('./assets/OrderForm-D9qulcyj.mjs').then((mod) => ({ default: mod.OrderForm })));
 const QuoteForm = lazy(() => import('./assets/QuoteForm-B3efjAvR.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./assets/ManageOrder-Ck8XQ8bP.mjs').then((mod) => ({ default: mod.ManageOrder })));
 const RouteLanding = lazy(() => import('./assets/RouteLanding-CFkyNwtE.mjs').then((mod) => ({ default: mod.RouteLanding })));
-const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-0hAb8Flt.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
-const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-0hAb8Flt.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./assets/PricingPage-Cxx4aiq_.mjs').then((mod) => ({ default: mod.PricingPage })));
+const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-BuG9QIiq.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
+const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-BuG9QIiq.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
+const PricingPage = lazy(() => import('./assets/PricingPage-CHncLLEl.mjs').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-BUrCeOQJ.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-CX4EhBYw.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
@@ -2627,8 +2631,15 @@ function LocalePrompt() {
 const en = {
   "common": {
     "whatsapp": "WhatsApp",
-    "orderOnlineNow": "Order online",
+    "bookViaWhatsapp": "Book via WhatsApp",
+    "progress": "Progress",
+    "stepCounter": (current, total) => `Step ${current}/${total}`,
+    "remainingFields": (count) => `Remaining fields: ${count}`,
+    "orderOnlineNow": "Book online",
     "orderNow": "Book Now",
+    "continue": "Continue",
+    "back": "Back",
+    "optional": "optional",
     "close": "Close",
     "noPrepayment": "No prepayment",
     "backToHome": "← Back to home",
@@ -2677,7 +2688,7 @@ const en = {
       "flexiblePaymentsTitle": "Flexible payments",
       "flexiblePaymentsBody": "Card, Apple Pay, Google Pay, Revolut, or cash.",
       "freePrebookingTitle": "Free prebooking",
-      "freePrebookingBody": "Cancel anytime for free. Fully automated, no support needed.",
+      "freePrebookingBody": "Cancel anytime for free. Edit or cancel your booking online.",
       "fixedPriceTitle": "Fixed price guarantee",
       "fixedPriceBody": "Fixed price both ways. The price you book is the price you pay.",
       "localExpertiseTitle": "Local expertise",
@@ -2689,7 +2700,7 @@ const en = {
     "fleetLabel": "Vehicles",
     "standardCarsTitle": "Standard Cars",
     "standardCarsBody": "1-4 passengers | Comfortable sedans and SUVs",
-    "busTitle": "& More Buses",
+    "busTitle": "BUS Service",
     "busBody": "5-8 passengers | Perfect for larger groups"
   },
   "vehicle": {
@@ -2815,7 +2826,7 @@ const en = {
     "companyTitle": "Company details",
     "paymentTitle": "Payment & invoices",
     "comfortTitle": "Comfort & safety",
-    "paymentBody": "Cash or card on request. Invoices available for business clients.",
+    "paymentBody": "Pay by cash or card. VAT invoices available for business clients.",
     "comfortBody": "Child seats available on request. Professional, licensed drivers and door-to-door assistance."
   },
   "footer": {
@@ -3070,8 +3081,10 @@ const en = {
     "validation": {
       "phoneLetters": "Please enter a valid phone number (digits only).",
       "phoneLength": "Please enter a valid phone number (7–15 digits, optional +).",
+      "emailRequired": "Please enter your email address.",
       "email": "Please enter a valid email address.",
-      "datePast": "Please select today or a future date."
+      "datePast": "Please select today or a future date.",
+      "timePast": "Please select the current time or a future time."
     },
     "rate": {
       "day": "Day rate",
@@ -3109,6 +3122,7 @@ const en = {
     "signEmpty": "Your name will appear here",
     "flightNumber": "Flight Number",
     "flightPlaceholder": "e.g. LO123",
+    "flightUnknown": "I don't know the flight number yet",
     "pickupAddress": "Pickup Address",
     "pickupPlaceholder": "Enter full pickup address",
     "passengers": "Number of Passengers",
@@ -3474,8 +3488,21 @@ const en$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 const pl = {
   "common": {
     "whatsapp": "WhatsApp",
+    "bookViaWhatsapp": "Zamów przez WhatsApp",
+    "progress": "Postęp",
+    "stepCounter": (current, total) => `Krok ${current}/${total}`,
+    "remainingFields": (count) => {
+      if (count === 1) return "Pozostało jeszcze 1 pole do wypełnienia";
+      const mod10 = count % 10;
+      const mod100 = count % 100;
+      const isFew = mod10 >= 2 && mod10 <= 4 && !(mod100 >= 12 && mod100 <= 14);
+      return `Pozostało jeszcze ${count} ${isFew ? "pola" : "pól"} do wypełnienia`;
+    },
     "orderOnlineNow": "Złóż zamówienie online",
     "orderNow": "Rezerwuj",
+    "continue": "Dalej",
+    "back": "Wstecz",
+    "optional": "opcjonalnie",
     "close": "Zamknij",
     "noPrepayment": "Bez przedpłaty",
     "backToHome": "← Wróć na stronę główną",
@@ -3536,7 +3563,7 @@ const pl = {
     "fleetLabel": "Pojazdy",
     "standardCarsTitle": "Samochody standard",
     "standardCarsBody": "1–4 pasażerów | Komfortowe sedany i SUV-y",
-    "busTitle": "Busy i więcej",
+    "busTitle": "Usługa BUS",
     "busBody": "5–8 pasażerów | Idealne dla większych grup"
   },
   "vehicle": {
@@ -3662,7 +3689,7 @@ const pl = {
     "companyTitle": "Dane firmy",
     "paymentTitle": "Płatność i faktury",
     "comfortTitle": "Komfort i bezpieczeństwo",
-    "paymentBody": "Gotówka lub karta na życzenie. Faktury dla firm.",
+    "paymentBody": "Płatność gotówką lub kartą. Faktury VAT dla firm.",
     "comfortBody": "Foteliki dziecięce na życzenie. Profesjonalni, licencjonowani kierowcy i pomoc door-to-door."
   },
   "footer": {
@@ -3917,8 +3944,10 @@ const pl = {
     "validation": {
       "phoneLetters": "Wpisz poprawny numer telefonu (tylko cyfry).",
       "phoneLength": "Wpisz poprawny numer telefonu (7–15 cyfr, opcjonalnie +).",
+      "emailRequired": "Podaj adres e-mail.",
       "email": "Wpisz poprawny adres e-mail.",
-      "datePast": "Wybierz dzisiejszą lub przyszłą datę."
+      "datePast": "Wybierz dzisiejszą lub przyszłą datę.",
+      "timePast": "Wybierz obecną lub przyszłą godzinę."
     },
     "rate": {
       "day": "Taryfa dzienna",
@@ -3956,6 +3985,7 @@ const pl = {
     "signEmpty": "Tutaj pojawi się Twoje imię",
     "flightNumber": "Numer lotu",
     "flightPlaceholder": "np. LO123",
+    "flightUnknown": "Nie znam jeszcze numeru lotu",
     "pickupAddress": "Adres odbioru",
     "pickupPlaceholder": "Wpisz pełny adres odbioru",
     "passengers": "Liczba pasażerów",
@@ -4321,8 +4351,15 @@ const pl$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 const de = {
   "common": {
     "whatsapp": "WhatsApp",
+    "bookViaWhatsapp": "Über WhatsApp buchen",
+    "progress": "Fortschritt",
+    "stepCounter": (current, total) => `Schritt ${current}/${total}`,
+    "remainingFields": (count) => `Noch ${count} Felder auszufüllen`,
     "orderOnlineNow": "Taxi online buchen",
     "orderNow": "Jetzt reservieren",
+    "continue": "Weiter",
+    "back": "Zurück",
+    "optional": "optional",
     "close": "Schließen",
     "noPrepayment": "Keine Vorauszahlung",
     "backToHome": "← Zurück zur Startseite",
@@ -4415,7 +4452,7 @@ const de = {
     "customRouteBody": "Brauchen Sie ein anderes Ziel?",
     "customRoutePrice": "Festpreise",
     "customRoutePriceBody": "Flexible Preise je nach Strecke",
-    "customRouteAutoNote": "The calculator will estimate the price after you enter the addresses.",
+    "customRouteAutoNote": "Der Rechner schätzt den Preis, nachdem Sie die Adressen eingegeben haben.",
     "requestQuote": "Jetzt reservieren",
     "pricesNote": "Preise inkl. MwSt. Weitere Ziele auf Anfrage.",
     "tableTitle": "Preistabelle",
@@ -4509,7 +4546,7 @@ const de = {
     "companyTitle": "Unternehmensdaten",
     "paymentTitle": "Zahlung & Rechnungen",
     "comfortTitle": "Komfort & Sicherheit",
-    "paymentBody": "Bar oder Karte auf Anfrage. Rechnungen für Geschäftskunden verfügbar.",
+    "paymentBody": "Bar oder mit Karte. Rechnungen (VAT) für Geschäftskunden verfügbar.",
     "comfortBody": "Kindersitze auf Anfrage. Professionelle, lizenzierte Fahrer und Tür-zu-Tür-Service."
   },
   "footer": {
@@ -4762,8 +4799,10 @@ const de = {
     "validation": {
       "phoneLetters": "Bitte geben Sie eine gültige Telefonnummer ein (nur Ziffern).",
       "phoneLength": "Bitte geben Sie eine gültige Telefonnummer ein (7–15 Ziffern, optional +).",
+      "emailRequired": "Bitte geben Sie Ihre E-Mail-Adresse ein.",
       "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-      "datePast": "Bitte wählen Sie ein heutiges oder zukünftiges Datum."
+      "datePast": "Bitte wählen Sie ein heutiges oder zukünftiges Datum.",
+      "timePast": "Bitte wählen Sie die aktuelle Uhrzeit oder eine zukünftige Uhrzeit."
     },
     "rate": {
       "day": "Tagtarif",
@@ -4801,6 +4840,7 @@ const de = {
     "signEmpty": "Ihr Name erscheint hier",
     "flightNumber": "Flugnummer",
     "flightPlaceholder": "z. B. LO123",
+    "flightUnknown": "Ich kenne die Flugnummer noch nicht",
     "pickupAddress": "Abholadresse",
     "pickupPlaceholder": "Vollständige Abholadresse eingeben",
     "passengers": "Anzahl der Passagiere",
@@ -4867,7 +4907,7 @@ const de = {
     "tariff2": "Tarif 2 (Stadt, 22–6): 5.85 PLN/km.",
     "tariff3": "Tarif 3 (außerhalb, 6–22): 7.80 PLN/km.",
     "tariff4": "Tarif 4 (außerhalb, 22–6): 11.70 PLN/km.",
-    "autoPriceNote": "The calculator will estimate the price after you enter the addresses.",
+    "autoPriceNote": "Der Rechner schätzt den Preis, nachdem Sie die Adressen eingegeben haben.",
     "fixedPriceHint": "Wenn Sie einen Festpreis vorschlagen möchten, klicken Sie hier und füllen das Feld aus.",
     "pricePlaceholder": "Ihr Angebot in PLN eingeben (z. B. 150)",
     "priceHelp": "Schlagen Sie Ihren Preis vor. Wir prüfen und antworten innerhalb von 5-10 Minuten.",
@@ -4986,7 +5026,7 @@ const de = {
     "signServiceSign": "Meet with a name sign",
     "signServiceFee": "+20 PLN added to final price",
     "signServiceSelf": "Find the driver myself at the parking",
-    "signServiceSelfNote": "The driver will contact you on WhatsApp or by phone and you'll meet up.",
+    "signServiceSelfNote": "Der Fahrer kontaktiert dich per WhatsApp oder telefonisch und ihr trefft euch.",
     "signText": "Text für Namensschild",
     "flightNumber": "Flugnummer",
     "pickupAddress": "Abholadresse",
@@ -5166,8 +5206,15 @@ const de$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 const fi = {
   "common": {
     "whatsapp": "WhatsApp",
+    "bookViaWhatsapp": "Varaa WhatsAppissa",
+    "progress": "Edistyminen",
+    "stepCounter": (current, total) => `Vaihe ${current}/${total}`,
+    "remainingFields": (count) => `Jäljellä ${count} kenttää`,
     "orderOnlineNow": "Varaa taksi verkossa",
     "orderNow": "Varaa nyt",
+    "continue": "Jatka",
+    "back": "Takaisin",
+    "optional": "valinnainen",
     "close": "Sulje",
     "noPrepayment": "Ei ennakkomaksua",
     "backToHome": "← Takaisin etusivulle",
@@ -5260,7 +5307,7 @@ const fi = {
     "customRouteBody": "Tarvitsetko toisen kohteen?",
     "customRoutePrice": "Kiinteat hinnat",
     "customRoutePriceBody": "Joustava hinnoittelu reitin mukaan",
-    "customRouteAutoNote": "The calculator will estimate the price after you enter the addresses.",
+    "customRouteAutoNote": "Laskuri arvioi hinnan, kun olet syöttänyt osoitteet.",
     "requestQuote": "Varaa nyt",
     "pricesNote": "Hinnat sisältävät ALV:n. Lisäkohteet pyynnöstä.",
     "tableTitle": "Hintataulukko",
@@ -5354,7 +5401,7 @@ const fi = {
     "companyTitle": "Yritystiedot",
     "paymentTitle": "Maksu & laskut",
     "comfortTitle": "Mukavuus & turvallisuus",
-    "paymentBody": "Käteinen tai kortti pyynnöstä. Laskut yritysasiakkaille.",
+    "paymentBody": "Maksa käteisellä tai kortilla. Lasku saatavilla yritysasiakkaille.",
     "comfortBody": "Lastenistuimet pyynnöstä. Ammattitaitoiset, lisensoidut kuljettajat ja ovelta ovelle -palvelu."
   },
   "footer": {
@@ -5605,8 +5652,10 @@ const fi = {
     "validation": {
       "phoneLetters": "Syötä kelvollinen puhelinnumero (vain numeroita).",
       "phoneLength": "Syötä kelvollinen puhelinnumero (7–15 numeroa, valinnainen +).",
+      "emailRequired": "Syötä sähköpostiosoite.",
       "email": "Syötä kelvollinen sähköpostiosoite.",
-      "datePast": "Valitse tämän päivän tai tuleva päivämäärä."
+      "datePast": "Valitse tämän päivän tai tuleva päivämäärä.",
+      "timePast": "Valitse nykyinen tai tuleva kellonaika."
     },
     "rate": {
       "day": "Päivätaksa",
@@ -5644,6 +5693,7 @@ const fi = {
     "signEmpty": "Nimesi näkyy tässä",
     "flightNumber": "Lennon numero",
     "flightPlaceholder": "esim. LO123",
+    "flightUnknown": "En tiedä lentonumeroa vielä",
     "pickupAddress": "Nouto-osoite",
     "pickupPlaceholder": "Syötä täydellinen nouto-osoite",
     "passengers": "Matkustajien määrä",
@@ -5710,7 +5760,7 @@ const fi = {
     "tariff2": "Tariffi 2 (kaupunki, 22–6): 5.85 PLN/km.",
     "tariff3": "Tariffi 3 (kaupungin ulkopuolella, 6–22): 7.80 PLN/km.",
     "tariff4": "Tariffi 4 (kaupungin ulkopuolella, 22–6): 11.70 PLN/km.",
-    "autoPriceNote": "The calculator will estimate the price after you enter the addresses.",
+    "autoPriceNote": "Laskuri arvioi hinnan, kun olet syöttänyt osoitteet.",
     "fixedPriceHint": "Jos haluat ehdottaa kiinteää hintaa, klikkaa tästä ja täytä kenttä.",
     "pricePlaceholder": "Syötä tarjous PLN (esim. 150)",
     "priceHelp": "Ehdota hintaa tälle matkalle. Tarkistamme ja vastaamme 5-10 minuutissa.",
@@ -5829,7 +5879,7 @@ const fi = {
     "signServiceSign": "Meet with a name sign",
     "signServiceFee": "+20 PLN added to final price",
     "signServiceSelf": "Find the driver myself at the parking",
-    "signServiceSelfNote": "The driver will contact you on WhatsApp or by phone and you'll meet up.",
+    "signServiceSelfNote": "Kuljettaja ottaa yhteyttä WhatsAppissa tai puhelimitse ja tapaatte.",
     "signText": "Nimikyltti",
     "flightNumber": "Lennon numero",
     "pickupAddress": "Nouto-osoite",
@@ -6009,8 +6059,15 @@ const fi$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 const no = {
   "common": {
     "whatsapp": "WhatsApp",
+    "bookViaWhatsapp": "Bestill via WhatsApp",
+    "progress": "Fremdrift",
+    "stepCounter": (current, total) => `Steg ${current}/${total}`,
+    "remainingFields": (count) => `${count} felt gjenstår`,
     "orderOnlineNow": "Bestill taxi på nett",
     "orderNow": "Reserver nå",
+    "continue": "Fortsett",
+    "back": "Tilbake",
+    "optional": "valgfritt",
     "close": "Lukk",
     "noPrepayment": "Ingen forhåndsbetaling",
     "backToHome": "← Tilbake til forsiden",
@@ -6103,7 +6160,7 @@ const no = {
     "customRouteBody": "Trenger du et annet reisemål?",
     "customRoutePrice": "Faste priser",
     "customRoutePriceBody": "Fleksible priser basert på ruten",
-    "customRouteAutoNote": "The calculator will estimate the price after you enter the addresses.",
+    "customRouteAutoNote": "Kalkulatoren estimerer prisen etter at du har skrevet inn adressene.",
     "requestQuote": "Bestill nå",
     "pricesNote": "Prisene inkluderer MVA. Flere destinasjoner på forespørsel.",
     "tableTitle": "Pristabell",
@@ -6197,7 +6254,7 @@ const no = {
     "companyTitle": "Firmadetaljer",
     "paymentTitle": "Betaling & faktura",
     "comfortTitle": "Komfort & sikkerhet",
-    "paymentBody": "Kontant eller kort på forespørsel. Faktura tilgjengelig for bedrifter.",
+    "paymentBody": "Betal med kontanter eller kort. Faktura tilgjengelig for bedrifter.",
     "comfortBody": "Barneseter på forespørsel. Profesjonelle, lisensierte sjåfører og dør-til-dør-hjelp."
   },
   "footer": {
@@ -6451,8 +6508,10 @@ const no = {
     "validation": {
       "phoneLetters": "Vennligst oppgi et gyldig telefonnummer (kun tall).",
       "phoneLength": "Vennligst oppgi et gyldig telefonnummer (7–15 sifre, valgfri +).",
+      "emailRequired": "Vennligst oppgi e-postadressen din.",
       "email": "Vennligst oppgi en gyldig e-postadresse.",
-      "datePast": "Velg dagens dato eller en fremtidig dato."
+      "datePast": "Velg dagens dato eller en fremtidig dato.",
+      "timePast": "Velg nåværende tidspunkt eller et fremtidig tidspunkt."
     },
     "rate": {
       "day": "Dagpris",
@@ -6490,6 +6549,7 @@ const no = {
     "signEmpty": "Navnet ditt vises her",
     "flightNumber": "Flynummer",
     "flightPlaceholder": "f.eks. LO123",
+    "flightUnknown": "Jeg vet ikke flynummeret ennå",
     "pickupAddress": "Henteadresse",
     "pickupPlaceholder": "Skriv inn full henteadresse",
     "passengers": "Antall passasjerer",
@@ -6556,7 +6616,7 @@ const no = {
     "tariff2": "Takst 2 (by, 22–6): 5.85 PLN/km.",
     "tariff3": "Takst 3 (utenfor by, 6–22): 7.80 PLN/km.",
     "tariff4": "Takst 4 (utenfor by, 22–6): 11.70 PLN/km.",
-    "autoPriceNote": "The calculator will estimate the price after you enter the addresses.",
+    "autoPriceNote": "Kalkulatoren estimerer prisen etter at du har skrevet inn adressene.",
     "fixedPriceHint": "Hvis du ønsker fastpris, klikk her og fyll inn.",
     "pricePlaceholder": "Skriv inn ditt tilbud i PLN (f.eks. 150)",
     "priceHelp": "Foreslå din pris. Vi vurderer og svarer innen 5-10 minutter.",
@@ -6674,7 +6734,7 @@ const no = {
     "signServiceSign": "Meet with a name sign",
     "signServiceFee": "+20 PLN added to final price",
     "signServiceSelf": "Find the driver myself at the parking",
-    "signServiceSelfNote": "The driver will contact you on WhatsApp or by phone and you'll meet up.",
+    "signServiceSelfNote": "Sjåføren kontakter deg på WhatsApp eller telefon, og dere møtes.",
     "signText": "Tekst på skilt",
     "flightNumber": "Flynummer",
     "pickupAddress": "Henteadresse",
@@ -6854,8 +6914,15 @@ const no$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 const sv = {
   "common": {
     "whatsapp": "WhatsApp",
+    "bookViaWhatsapp": "Boka via WhatsApp",
+    "progress": "Framsteg",
+    "stepCounter": (current, total) => `Steg ${current}/${total}`,
+    "remainingFields": (count) => `${count} fält kvar`,
     "orderOnlineNow": "Boka taxi online",
     "orderNow": "Boka nu",
+    "continue": "Fortsätt",
+    "back": "Tillbaka",
+    "optional": "valfritt",
     "close": "Stäng",
     "noPrepayment": "Ingen förskottsbetalning",
     "backToHome": "← Tillbaka till startsidan",
@@ -6948,7 +7015,7 @@ const sv = {
     "customRouteBody": "Behöver du en annan destination?",
     "customRoutePrice": "Fasta priser",
     "customRoutePriceBody": "Flexibel prissättning baserat på din rutt",
-    "customRouteAutoNote": "The calculator will estimate the price after you enter the addresses.",
+    "customRouteAutoNote": "Kalkylatorn uppskattar priset efter att du har angett adresserna.",
     "requestQuote": "Boka nu",
     "pricesNote": "Priserna inkluderar moms. Fler destinationer på begäran.",
     "tableTitle": "Pristabell",
@@ -7042,7 +7109,7 @@ const sv = {
     "companyTitle": "Företagsuppgifter",
     "paymentTitle": "Betalning & faktura",
     "comfortTitle": "Komfort & säkerhet",
-    "paymentBody": "Kontant eller kort på begäran. Fakturor tillgängliga för företagskunder.",
+    "paymentBody": "Betala kontant eller med kort. Faktura tillgänglig för företag.",
     "comfortBody": "Barnstolar på begäran. Professionella, licensierade förare och dörr-till-dörr-hjälp."
   },
   "footer": {
@@ -7295,8 +7362,10 @@ const sv = {
     "validation": {
       "phoneLetters": "Ange ett giltigt telefonnummer (endast siffror).",
       "phoneLength": "Ange ett giltigt telefonnummer (7–15 siffror, valfri +).",
+      "emailRequired": "Ange din e-postadress.",
       "email": "Ange en giltig e-postadress.",
-      "datePast": "Välj dagens datum eller ett framtida datum."
+      "datePast": "Välj dagens datum eller ett framtida datum.",
+      "timePast": "Välj nuvarande tid eller en framtida tid."
     },
     "rate": {
       "day": "Dagpris",
@@ -7334,6 +7403,7 @@ const sv = {
     "signEmpty": "Ditt namn visas här",
     "flightNumber": "Flygnummer",
     "flightPlaceholder": "t.ex. LO123",
+    "flightUnknown": "Jag vet inte flygnumret än",
     "pickupAddress": "Upphämtningsadress",
     "pickupPlaceholder": "Ange fullständig upphämtningsadress",
     "passengers": "Antal passagerare",
@@ -7400,7 +7470,7 @@ const sv = {
     "tariff2": "Tariff 2 (stad, 22–6): 5.85 PLN/km.",
     "tariff3": "Tariff 3 (utanför stad, 6–22): 7.80 PLN/km.",
     "tariff4": "Tariff 4 (utanför stad, 22–6): 11.70 PLN/km.",
-    "autoPriceNote": "The calculator will estimate the price after you enter the addresses.",
+    "autoPriceNote": "Kalkylatorn uppskattar priset efter att du har angett adresserna.",
     "fixedPriceHint": "Om du vill föreslå fast pris, klicka här och fyll i fältet.",
     "pricePlaceholder": "Ange ditt erbjudande i PLN (t.ex. 150)",
     "priceHelp": "Föreslå ditt pris för resan. Vi granskar och svarar inom 5-10 minuter.",
@@ -7519,7 +7589,7 @@ const sv = {
     "signServiceSign": "Meet with a name sign",
     "signServiceFee": "+20 PLN added to final price",
     "signServiceSelf": "Find the driver myself at the parking",
-    "signServiceSelfNote": "The driver will contact you on WhatsApp or by phone and you'll meet up.",
+    "signServiceSelfNote": "Föraren kontaktar dig via WhatsApp eller telefon och ni möts.",
     "signText": "Text på skylt",
     "flightNumber": "Flygnummer",
     "pickupAddress": "Upphämtningsadress",
@@ -7699,8 +7769,15 @@ const sv$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 const da = {
   "common": {
     "whatsapp": "WhatsApp",
+    "bookViaWhatsapp": "Book via WhatsApp",
+    "progress": "Fremskridt",
+    "stepCounter": (current, total) => `Trin ${current}/${total}`,
+    "remainingFields": (count) => `${count} felter tilbage`,
     "orderOnlineNow": "Book taxi online",
     "orderNow": "Book nu",
+    "continue": "Fortsæt",
+    "back": "Tilbage",
+    "optional": "valgfrit",
     "close": "Luk",
     "noPrepayment": "Ingen forudbetaling",
     "backToHome": "← Tilbage til forsiden",
@@ -7793,7 +7870,7 @@ const da = {
     "customRouteBody": "Har du brug for en anden destination?",
     "customRoutePrice": "Faste priser",
     "customRoutePriceBody": "Fleksible priser baseret på ruten",
-    "customRouteAutoNote": "The calculator will estimate the price after you enter the addresses.",
+    "customRouteAutoNote": "Kalkulatoren estimerer prisen, når du har indtastet adresserne.",
     "requestQuote": "Book nu",
     "pricesNote": "Priserne inkluderer moms. Flere destinationer efter aftale.",
     "tableTitle": "Pristabel",
@@ -7887,7 +7964,7 @@ const da = {
     "companyTitle": "Virksomhedsoplysninger",
     "paymentTitle": "Betaling & faktura",
     "comfortTitle": "Komfort & sikkerhed",
-    "paymentBody": "Kontant eller kort efter aftale. Faktura til erhvervskunder.",
+    "paymentBody": "Betal kontant eller med kort. Faktura til erhvervskunder.",
     "comfortBody": "Barnesæder efter aftale. Professionelle, licenserede chauffører og dør-til-dør-hjælp."
   },
   "footer": {
@@ -8139,8 +8216,10 @@ const da = {
     "validation": {
       "phoneLetters": "Indtast venligst et gyldigt telefonnummer (kun tal).",
       "phoneLength": "Indtast venligst et gyldigt telefonnummer (7–15 cifre, valgfri +).",
+      "emailRequired": "Indtast din e-mailadresse.",
       "email": "Indtast venligst en gyldig e-mailadresse.",
-      "datePast": "Vælg dagens dato eller en fremtidig dato."
+      "datePast": "Vælg dagens dato eller en fremtidig dato.",
+      "timePast": "Vælg nuværende tidspunkt eller et fremtidigt tidspunkt."
     },
     "rate": {
       "day": "Dagpris",
@@ -8178,6 +8257,7 @@ const da = {
     "signEmpty": "Dit navn vises her",
     "flightNumber": "Flynummer",
     "flightPlaceholder": "f.eks. LO123",
+    "flightUnknown": "Jeg kender ikke flynummeret endnu",
     "pickupAddress": "Afhentningsadresse",
     "pickupPlaceholder": "Indtast fuld afhentningsadresse",
     "passengers": "Antal passagerer",
@@ -8244,7 +8324,7 @@ const da = {
     "tariff2": "Takst 2 (by, 22–6): 5.85 PLN/km.",
     "tariff3": "Takst 3 (udenfor by, 6–22): 7.80 PLN/km.",
     "tariff4": "Takst 4 (udenfor by, 22–6): 11.70 PLN/km.",
-    "autoPriceNote": "The calculator will estimate the price after you enter the addresses.",
+    "autoPriceNote": "Kalkulatoren estimerer prisen, når du har indtastet adresserne.",
     "fixedPriceHint": "Hvis du vil foreslå en fast pris, klik her og udfyld feltet.",
     "pricePlaceholder": "Indtast dit tilbud i PLN (fx 150)",
     "priceHelp": "Foreslå din pris. Vi vurderer og svarer inden for 5-10 minutter.",
@@ -8363,7 +8443,7 @@ const da = {
     "signServiceSign": "Meet with a name sign",
     "signServiceFee": "+20 PLN added to final price",
     "signServiceSelf": "Find the driver myself at the parking",
-    "signServiceSelfNote": "The driver will contact you on WhatsApp or by phone and you'll meet up.",
+    "signServiceSelfNote": "Chaufføren kontakter dig via WhatsApp eller telefon, og I mødes.",
     "signText": "Tekst på skilt",
     "flightNumber": "Flynummer",
     "pickupAddress": "Afhentningsadresse",

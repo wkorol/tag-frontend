@@ -15,9 +15,9 @@ function TrustSection() {
       /* @__PURE__ */ jsxs("p", { className: "text-sm text-gray-600", children: [
         "WK DRIVE",
         /* @__PURE__ */ jsx("br", {}),
-        "NIP: 5862330063",
+        "VAT ID (NIP): 5862330063",
         /* @__PURE__ */ jsx("br", {}),
-        "Gdańsk"
+        "Gdańsk, Poland"
       ] })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [

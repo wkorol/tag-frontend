@@ -12,9 +12,9 @@ export function TrustSection() {
             <p className="text-sm text-gray-600">
               WK DRIVE
               <br />
-              NIP: 5862330063
+              VAT ID (NIP): 5862330063
               <br />
-              Gdańsk
+              Gdańsk, Poland
             </p>
           </div>
           <div>

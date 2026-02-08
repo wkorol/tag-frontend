@@ -1,8 +1,15 @@
 const fi = {
   "common": {
     "whatsapp": "WhatsApp",
+    "bookViaWhatsapp": "Varaa WhatsAppissa",
+    "progress": "Edistyminen",
+    "stepCounter": (current: number, total: number) => `Vaihe ${current}/${total}`,
+    "remainingFields": (count: number) => `Jäljellä ${count} kenttää`,
     "orderOnlineNow": "Varaa taksi verkossa",
     "orderNow": "Varaa nyt",
+    "continue": "Jatka",
+    "back": "Takaisin",
+    "optional": "valinnainen",
     "close": "Sulje",
     "noPrepayment": "Ei ennakkomaksua",
     "backToHome": "← Takaisin etusivulle",
@@ -95,7 +102,7 @@ const fi = {
     "customRouteBody": "Tarvitsetko toisen kohteen?",
     "customRoutePrice": "Kiinteat hinnat",
     "customRoutePriceBody": "Joustava hinnoittelu reitin mukaan",
-    "customRouteAutoNote": "The calculator will estimate the price after you enter the addresses.",
+    "customRouteAutoNote": "Laskuri arvioi hinnan, kun olet syöttänyt osoitteet.",
     "requestQuote": "Varaa nyt",
     "pricesNote": "Hinnat sisältävät ALV:n. Lisäkohteet pyynnöstä.",
     "tableTitle": "Hintataulukko",
@@ -189,7 +196,7 @@ const fi = {
     "companyTitle": "Yritystiedot",
     "paymentTitle": "Maksu & laskut",
     "comfortTitle": "Mukavuus & turvallisuus",
-    "paymentBody": "Käteinen tai kortti pyynnöstä. Laskut yritysasiakkaille.",
+    "paymentBody": "Maksa käteisellä tai kortilla. Lasku saatavilla yritysasiakkaille.",
     "comfortBody": "Lastenistuimet pyynnöstä. Ammattitaitoiset, lisensoidut kuljettajat ja ovelta ovelle -palvelu."
   },
   "footer": {
@@ -440,8 +447,10 @@ const fi = {
     "validation": {
       "phoneLetters": "Syötä kelvollinen puhelinnumero (vain numeroita).",
       "phoneLength": "Syötä kelvollinen puhelinnumero (7–15 numeroa, valinnainen +).",
+      "emailRequired": "Syötä sähköpostiosoite.",
       "email": "Syötä kelvollinen sähköpostiosoite.",
-      "datePast": "Valitse tämän päivän tai tuleva päivämäärä."
+      "datePast": "Valitse tämän päivän tai tuleva päivämäärä.",
+      "timePast": "Valitse nykyinen tai tuleva kellonaika."
     },
     "rate": {
       "day": "Päivätaksa",
@@ -479,6 +488,7 @@ const fi = {
     "signEmpty": "Nimesi näkyy tässä",
     "flightNumber": "Lennon numero",
     "flightPlaceholder": "esim. LO123",
+    "flightUnknown": "En tiedä lentonumeroa vielä",
     "pickupAddress": "Nouto-osoite",
     "pickupPlaceholder": "Syötä täydellinen nouto-osoite",
     "passengers": "Matkustajien määrä",
@@ -545,7 +555,7 @@ const fi = {
     "tariff2": "Tariffi 2 (kaupunki, 22–6): 5.85 PLN/km.",
     "tariff3": "Tariffi 3 (kaupungin ulkopuolella, 6–22): 7.80 PLN/km.",
     "tariff4": "Tariffi 4 (kaupungin ulkopuolella, 22–6): 11.70 PLN/km.",
-    "autoPriceNote": "The calculator will estimate the price after you enter the addresses.",
+    "autoPriceNote": "Laskuri arvioi hinnan, kun olet syöttänyt osoitteet.",
     "fixedPriceHint": "Jos haluat ehdottaa kiinteää hintaa, klikkaa tästä ja täytä kenttä.",
     "pricePlaceholder": "Syötä tarjous PLN (esim. 150)",
     "priceHelp": "Ehdota hintaa tälle matkalle. Tarkistamme ja vastaamme 5-10 minuutissa.",
@@ -664,7 +674,7 @@ const fi = {
     "signServiceSign": "Meet with a name sign",
     "signServiceFee": "+20 PLN added to final price",
     "signServiceSelf": "Find the driver myself at the parking",
-    "signServiceSelfNote": "The driver will contact you on WhatsApp or by phone and you'll meet up.",
+    "signServiceSelfNote": "Kuljettaja ottaa yhteyttä WhatsAppissa tai puhelimitse ja tapaatte.",
     "signText": "Nimikyltti",
     "flightNumber": "Lennon numero",
     "pickupAddress": "Nouto-osoite",

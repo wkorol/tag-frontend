@@ -1,8 +1,15 @@
 const de = {
   "common": {
     "whatsapp": "WhatsApp",
+    "bookViaWhatsapp": "Über WhatsApp buchen",
+    "progress": "Fortschritt",
+    "stepCounter": (current: number, total: number) => `Schritt ${current}/${total}`,
+    "remainingFields": (count: number) => `Noch ${count} Felder auszufüllen`,
     "orderOnlineNow": "Taxi online buchen",
     "orderNow": "Jetzt reservieren",
+    "continue": "Weiter",
+    "back": "Zurück",
+    "optional": "optional",
     "close": "Schließen",
     "noPrepayment": "Keine Vorauszahlung",
     "backToHome": "← Zurück zur Startseite",
@@ -95,7 +102,7 @@ const de = {
     "customRouteBody": "Brauchen Sie ein anderes Ziel?",
     "customRoutePrice": "Festpreise",
     "customRoutePriceBody": "Flexible Preise je nach Strecke",
-    "customRouteAutoNote": "The calculator will estimate the price after you enter the addresses.",
+    "customRouteAutoNote": "Der Rechner schätzt den Preis, nachdem Sie die Adressen eingegeben haben.",
     "requestQuote": "Jetzt reservieren",
     "pricesNote": "Preise inkl. MwSt. Weitere Ziele auf Anfrage.",
     "tableTitle": "Preistabelle",
@@ -189,7 +196,7 @@ const de = {
     "companyTitle": "Unternehmensdaten",
     "paymentTitle": "Zahlung & Rechnungen",
     "comfortTitle": "Komfort & Sicherheit",
-    "paymentBody": "Bar oder Karte auf Anfrage. Rechnungen für Geschäftskunden verfügbar.",
+    "paymentBody": "Bar oder mit Karte. Rechnungen (VAT) für Geschäftskunden verfügbar.",
     "comfortBody": "Kindersitze auf Anfrage. Professionelle, lizenzierte Fahrer und Tür-zu-Tür-Service."
   },
   "footer": {
@@ -442,8 +449,10 @@ const de = {
     "validation": {
       "phoneLetters": "Bitte geben Sie eine gültige Telefonnummer ein (nur Ziffern).",
       "phoneLength": "Bitte geben Sie eine gültige Telefonnummer ein (7–15 Ziffern, optional +).",
+      "emailRequired": "Bitte geben Sie Ihre E-Mail-Adresse ein.",
       "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-      "datePast": "Bitte wählen Sie ein heutiges oder zukünftiges Datum."
+      "datePast": "Bitte wählen Sie ein heutiges oder zukünftiges Datum.",
+      "timePast": "Bitte wählen Sie die aktuelle Uhrzeit oder eine zukünftige Uhrzeit."
     },
     "rate": {
       "day": "Tagtarif",
@@ -481,6 +490,7 @@ const de = {
     "signEmpty": "Ihr Name erscheint hier",
     "flightNumber": "Flugnummer",
     "flightPlaceholder": "z. B. LO123",
+    "flightUnknown": "Ich kenne die Flugnummer noch nicht",
     "pickupAddress": "Abholadresse",
     "pickupPlaceholder": "Vollständige Abholadresse eingeben",
     "passengers": "Anzahl der Passagiere",
@@ -547,7 +557,7 @@ const de = {
     "tariff2": "Tarif 2 (Stadt, 22–6): 5.85 PLN/km.",
     "tariff3": "Tarif 3 (außerhalb, 6–22): 7.80 PLN/km.",
     "tariff4": "Tarif 4 (außerhalb, 22–6): 11.70 PLN/km.",
-    "autoPriceNote": "The calculator will estimate the price after you enter the addresses.",
+    "autoPriceNote": "Der Rechner schätzt den Preis, nachdem Sie die Adressen eingegeben haben.",
     "fixedPriceHint": "Wenn Sie einen Festpreis vorschlagen möchten, klicken Sie hier und füllen das Feld aus.",
     "pricePlaceholder": "Ihr Angebot in PLN eingeben (z. B. 150)",
     "priceHelp": "Schlagen Sie Ihren Preis vor. Wir prüfen und antworten innerhalb von 5-10 Minuten.",
@@ -666,7 +676,7 @@ const de = {
     "signServiceSign": "Meet with a name sign",
     "signServiceFee": "+20 PLN added to final price",
     "signServiceSelf": "Find the driver myself at the parking",
-    "signServiceSelfNote": "The driver will contact you on WhatsApp or by phone and you'll meet up.",
+    "signServiceSelfNote": "Der Fahrer kontaktiert dich per WhatsApp oder telefonisch und ihr trefft euch.",
     "signText": "Text für Namensschild",
     "flightNumber": "Flugnummer",
     "pickupAddress": "Abholadresse",

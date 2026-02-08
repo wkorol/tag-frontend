@@ -1,5 +1,5 @@
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import { Plane, MapPin, Calendar, FileText, Users, Info, Luggage } from 'lucide-react';
 import { u as useEurRate, f as formatEur, g as getApiBaseUrl } from './currency-DvMRQ8I8.mjs';
 import { b as buildAdditionalNotes } from './orderNotes-Bh0j39S6.mjs';
@@ -38,11 +38,12 @@ const validatePhoneNumber = (value, messages) => {
   }
   return null;
 };
-const validateEmail = (value, message) => {
+const validateEmail = (value, messages) => {
   const trimmed = value.trim();
+  if (!trimmed) return messages.emailRequired;
   const basicEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!basicEmail.test(trimmed)) {
-    return message;
+    return messages.email;
   }
   return null;
 };
@@ -50,11 +51,14 @@ function OrderForm({ route, onClose }) {
   const { t, locale } = useI18n();
   const emailLocale = locale === "pl" ? "pl" : "en";
   const basePath = localeToPath(locale);
+  const [step, setStep] = useState("trip");
+  const [stepAttempted, setStepAttempted] = useState(false);
   const [formData, setFormData] = useState({
     pickupType: "",
     signService: "self",
     signText: "",
     flightNumber: "",
+    flightUnknown: false,
     passengers: "1",
     largeLuggage: "no",
     address: "",
@@ -100,7 +104,7 @@ function OrderForm({ route, onClose }) {
   const signServiceSelf = t.orderForm.signServiceSelf ?? "Find the driver yourself";
   const signServiceSelfNote = t.orderForm.signServiceSelfNote ?? "";
   const isPhoneValid = !validatePhoneNumber(formData.phone, t.orderForm.validation);
-  const isEmailValid = !validateEmail(formData.email, t.orderForm.validation.email);
+  const isEmailValid = !validateEmail(formData.email, t.orderForm.validation);
   const showRateBanner = (message) => {
     setRateBanner(message);
     if (toastTimeoutRef.current !== null) {
@@ -117,19 +121,49 @@ function OrderForm({ route, onClose }) {
       /* @__PURE__ */ jsx("p", { className: "text-sm text-amber-900", children: rateBanner })
     ] }) });
   };
-  const showValidation = submitAttempted;
+  const showValidation = step === "trip" ? stepAttempted : submitAttempted;
   const pickupTypeError = showValidation && !formData.pickupType;
   const pickupAddressError = showValidation && formData.pickupType === "address" && !formData.address.trim();
-  const signTextError = showValidation && formData.pickupType === "airport" && formData.signService === "sign" && !formData.signText.trim();
-  const flightNumberError = showValidation && formData.pickupType === "airport" && !formData.flightNumber.trim();
+  const flightNumberError = showValidation && formData.pickupType === "airport" && !formData.flightUnknown && !formData.flightNumber.trim();
   const dateError = showValidation && (!formData.date || isPastDate(formData.date));
   const timeError = showValidation && !formData.time;
-  const passengersError = showValidation && !formData.passengers;
-  const luggageError = showValidation && !formData.largeLuggage;
   const nameError = showValidation && !formData.name.trim();
   const phoneErrorState = showValidation && (!formData.phone.trim() || !isPhoneValid);
   const emailErrorState = showValidation && (!formData.email.trim() || !isEmailValid);
   const fieldClass = (base, invalid) => `${base}${invalid ? " border-red-400 bg-red-50 focus:ring-red-200 focus:border-red-500" : ""}`;
+  const remainingFields = useMemo(() => {
+    const isDateOk = Boolean(formData.date) && !isPastDate(formData.date);
+    const isTimeOk = Boolean(formData.time);
+    const isPickupOk = Boolean(formData.pickupType);
+    const isAddressOk = formData.pickupType === "address" ? Boolean(formData.address.trim()) : true;
+    const isFlightOk = formData.pickupType === "airport" ? formData.flightUnknown ? true : Boolean(formData.flightNumber.trim()) : true;
+    const isNameOk = Boolean(formData.name.trim());
+    const isPhoneOk = Boolean(formData.phone.trim()) && isPhoneValid;
+    const isEmailOk = Boolean(formData.email.trim()) && isEmailValid;
+    const requiredChecks = [
+      isPickupOk,
+      isDateOk,
+      isTimeOk,
+      isAddressOk,
+      isFlightOk,
+      isNameOk,
+      isPhoneOk,
+      isEmailOk
+    ];
+    return requiredChecks.filter((ok) => !ok).length;
+  }, [
+    formData.date,
+    formData.time,
+    formData.pickupType,
+    formData.address,
+    formData.flightUnknown,
+    formData.flightNumber,
+    formData.name,
+    formData.phone,
+    formData.email,
+    isPhoneValid,
+    isEmailValid
+  ]);
   const scrollToField = (fieldId) => {
     if (typeof window === "undefined") {
       return;
@@ -256,21 +290,12 @@ function OrderForm({ route, onClose }) {
       missingFieldIds.push("pickupType");
     }
     if (formData.pickupType === "airport") {
-      if (formData.signService === "sign" && !formData.signText.trim()) {
-        missingFieldIds.push("signText");
-      }
-      if (!formData.flightNumber.trim()) {
+      if (!formData.flightUnknown && !formData.flightNumber.trim()) {
         missingFieldIds.push("flightNumber");
       }
     }
     if (formData.pickupType === "address" && !formData.address.trim()) {
       missingFieldIds.push("address");
-    }
-    if (!formData.passengers) {
-      missingFieldIds.push("passengers");
-    }
-    if (!formData.largeLuggage) {
-      missingFieldIds.push("largeLuggage");
     }
     if (!formData.name.trim()) {
       missingFieldIds.push("name");
@@ -287,6 +312,15 @@ function OrderForm({ route, onClose }) {
       scrollToField(missingFieldIds[0]);
       return;
     }
+    const today = getTodayDateString();
+    const nowTime = getCurrentTimeString();
+    if (formData.date === today && formData.time < nowTime) {
+      trackFormValidation("order", 1, "time");
+      trackFormSubmit("order", "validation_error");
+      setError(t.orderForm.validation.timePast);
+      scrollToField("time");
+      return;
+    }
     const phoneError2 = validatePhoneNumber(formData.phone, t.orderForm.validation);
     if (phoneError2) {
       trackFormValidation("order", 1, "phone");
@@ -295,7 +329,7 @@ function OrderForm({ route, onClose }) {
       setError(phoneError2);
       return;
     }
-    const emailError2 = validateEmail(formData.email, t.orderForm.validation.email);
+    const emailError2 = validateEmail(formData.email, t.orderForm.validation);
     if (emailError2) {
       trackFormValidation("order", 1, "email");
       trackFormSubmit("order", "validation_error");
@@ -325,7 +359,7 @@ function OrderForm({ route, onClose }) {
       proposedPrice: String(totalPrice),
       date: formData.date,
       pickupTime: formData.time,
-      flightNumber: formData.pickupType === "airport" ? formData.flightNumber : "N/A",
+      flightNumber: formData.pickupType === "airport" ? formData.flightUnknown ? "TBD" : formData.flightNumber : "N/A",
       fullName: formData.name,
       emailAddress: formData.email,
       phoneNumber: formData.phone,
@@ -344,7 +378,8 @@ function OrderForm({ route, onClose }) {
       const data = await response.json().catch(() => null);
       if (!response.ok) {
         trackFormSubmit("order", "error", "api");
-        setError(data?.error ?? t.orderForm.submitError);
+        const apiError = data?.error ?? t.orderForm.submitError;
+        setError(apiError);
         return;
       }
       setOrderId(data?.id ?? null);
@@ -360,7 +395,7 @@ function OrderForm({ route, onClose }) {
     }
   };
   const handleEmailChange = (value) => {
-    const nextError = validateEmail(value, t.orderForm.validation.email);
+    const nextError = validateEmail(value, t.orderForm.validation);
     setEmailError(nextError);
     if (!nextError && error === emailError) {
       setError(null);
@@ -372,6 +407,10 @@ function OrderForm({ route, onClose }) {
       trackFormStart("order");
     }
     const { name, value } = e.target;
+    if (name === "pickupType") {
+      setStep("trip");
+      setStepAttempted(false);
+    }
     const today = getTodayDateString();
     const nowTime = getCurrentTimeString();
     if (name === "date" && value < today) {
@@ -391,13 +430,6 @@ function OrderForm({ route, onClose }) {
       });
       return;
     }
-    if (name === "time" && formData.date === today && value < nowTime) {
-      setFormData({
-        ...formData,
-        time: nowTime
-      });
-      return;
-    }
     setFormData({
       ...formData,
       [name]: value
@@ -413,6 +445,33 @@ function OrderForm({ route, onClose }) {
       signService: value,
       signText: value === "self" ? "" : prev.signText
     }));
+  };
+  const formScrollRef = useRef(null);
+  const handleContinue = () => {
+    setStepAttempted(true);
+    if (!formData.pickupType) {
+      scrollToField("pickupType");
+      return;
+    }
+    if (!formData.date || isPastDate(formData.date)) {
+      scrollToField("date");
+      return;
+    }
+    if (!formData.time) {
+      scrollToField("time");
+      return;
+    }
+    const today = getTodayDateString();
+    const nowTime = getCurrentTimeString();
+    if (formData.date === today && formData.time < nowTime) {
+      setError(t.orderForm.validation.timePast);
+      scrollToField("time");
+      return;
+    }
+    setStep("details");
+    window.requestAnimationFrame(() => {
+      formScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+    });
   };
   if (submitted) {
     return /* @__PURE__ */ jsx("div", { className: "fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4", children: /* @__PURE__ */ jsx("div", { className: "bg-white rounded-xl max-w-md w-full p-8 relative", children: /* @__PURE__ */ jsxs("div", { className: "bg-green-50 border-2 border-green-500 rounded-xl p-6 text-center", children: [
@@ -476,7 +535,8 @@ function OrderForm({ route, onClose }) {
           displayRoute.from,
           " ↔ ",
           displayRoute.to
-        ] })
+        ] }),
+        remainingFields > 0 && /* @__PURE__ */ jsx("p", { className: "text-[11px] text-gray-600 mt-3", children: t.common.remainingFields(remainingFields) })
       ] }),
       /* @__PURE__ */ jsx(
         "button",
@@ -495,48 +555,128 @@ function OrderForm({ route, onClose }) {
       {
         onSubmit: handleSubmit,
         noValidate: true,
+        ref: formScrollRef,
         className: "booking-form p-6 space-y-6 overflow-y-auto cursor-default",
         children: [
           error && /* @__PURE__ */ jsx("div", { className: "bg-red-50 border-2 border-red-500 rounded-lg p-4 text-red-800", children: error }),
-          /* @__PURE__ */ jsxs("div", { id: "pickupType", tabIndex: -1, children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-gray-700 mb-2", children: t.orderForm.pickupType }),
-            /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-500 mb-3", children: t.orderForm.pickupTypeHint }),
-            /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
-              /* @__PURE__ */ jsxs("label", { className: `flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${formData.pickupType === "airport" ? "border-blue-500 bg-blue-50" : pickupTypeError ? "border-red-400 ring-1 ring-red-200" : "border-gray-200 hover:border-gray-300"}`, children: [
-                /* @__PURE__ */ jsx(
-                  "input",
-                  {
-                    type: "radio",
-                    name: "pickupType",
-                    value: "airport",
-                    checked: formData.pickupType === "airport",
-                    onChange: (e) => {
-                      handleChange(e);
-                    },
-                    className: "w-4 h-4 text-blue-600"
-                  }
-                ),
-                /* @__PURE__ */ jsx(Plane, { className: "w-5 h-5 text-gray-700" }),
-                /* @__PURE__ */ jsx("span", { className: "text-sm leading-snug", children: t.orderForm.airportPickup })
-              ] }),
-              /* @__PURE__ */ jsxs("label", { className: `flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${formData.pickupType === "address" ? "border-blue-500 bg-blue-50" : pickupTypeError ? "border-red-400 ring-1 ring-red-200" : "border-gray-200 hover:border-gray-300"}`, children: [
-                /* @__PURE__ */ jsx(
-                  "input",
-                  {
-                    type: "radio",
-                    name: "pickupType",
-                    value: "address",
-                    checked: formData.pickupType === "address",
-                    onChange: handleChange,
-                    className: "w-4 h-4 text-blue-600"
-                  }
-                ),
-                /* @__PURE__ */ jsx(MapPin, { className: "w-5 h-5 text-gray-700" }),
-                /* @__PURE__ */ jsx("span", { className: "text-sm leading-snug", children: t.orderForm.addressPickup })
+          step === "trip" ? /* @__PURE__ */ jsxs(Fragment, { children: [
+            /* @__PURE__ */ jsxs("div", { id: "pickupType", tabIndex: -1, children: [
+              /* @__PURE__ */ jsx("label", { className: "block text-gray-700 mb-2", children: t.orderForm.pickupType }),
+              /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-500 mb-3", children: t.orderForm.pickupTypeHint }),
+              /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
+                /* @__PURE__ */ jsxs("label", { className: `flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${formData.pickupType === "airport" ? "border-blue-500 bg-blue-50" : pickupTypeError ? "border-red-400 ring-1 ring-red-200" : "border-gray-200 hover:border-gray-300"}`, children: [
+                  /* @__PURE__ */ jsx(
+                    "input",
+                    {
+                      type: "radio",
+                      name: "pickupType",
+                      value: "airport",
+                      checked: formData.pickupType === "airport",
+                      onChange: handleChange,
+                      className: "w-4 h-4 text-blue-600"
+                    }
+                  ),
+                  /* @__PURE__ */ jsx(Plane, { className: "w-5 h-5 text-gray-700" }),
+                  /* @__PURE__ */ jsx("span", { className: "text-sm leading-snug", children: t.orderForm.airportPickup })
+                ] }),
+                /* @__PURE__ */ jsxs("label", { className: `flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${formData.pickupType === "address" ? "border-blue-500 bg-blue-50" : pickupTypeError ? "border-red-400 ring-1 ring-red-200" : "border-gray-200 hover:border-gray-300"}`, children: [
+                  /* @__PURE__ */ jsx(
+                    "input",
+                    {
+                      type: "radio",
+                      name: "pickupType",
+                      value: "address",
+                      checked: formData.pickupType === "address",
+                      onChange: handleChange,
+                      className: "w-4 h-4 text-blue-600"
+                    }
+                  ),
+                  /* @__PURE__ */ jsx(MapPin, { className: "w-5 h-5 text-gray-700" }),
+                  /* @__PURE__ */ jsx("span", { className: "text-sm leading-snug", children: t.orderForm.addressPickup })
+                ] })
               ] })
+            ] }),
+            formData.pickupType && /* @__PURE__ */ jsxs(Fragment, { children: [
+              /* @__PURE__ */ jsx("div", { className: "bg-blue-50 border-2 border-blue-200 rounded-lg p-4", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+                /* @__PURE__ */ jsx("span", { className: "text-gray-700", children: t.orderForm.totalPrice }),
+                /* @__PURE__ */ jsxs("div", { className: "text-right", children: [
+                  /* @__PURE__ */ jsxs("span", { className: "text-blue-900 text-2xl", children: [
+                    totalPrice,
+                    " PLN"
+                  ] }),
+                  eurText && /* @__PURE__ */ jsx("div", { className: "text-gray-500", children: /* @__PURE__ */ jsx("span", { className: "eur-text", children: eurText }) })
+                ] })
+              ] }) }),
+              renderRateBanner(),
+              /* @__PURE__ */ jsxs("div", { className: "grid sm:grid-cols-2 gap-4", children: [
+                /* @__PURE__ */ jsxs("div", { children: [
+                  /* @__PURE__ */ jsxs("label", { htmlFor: "date", className: "block text-gray-700 mb-2", children: [
+                    /* @__PURE__ */ jsx(Calendar, { className: "w-4 h-4 inline mr-2" }),
+                    t.orderForm.date
+                  ] }),
+                  /* @__PURE__ */ jsx(
+                    "input",
+                    {
+                      type: "date",
+                      id: "date",
+                      name: "date",
+                      value: formData.date,
+                      onChange: handleChange,
+                      min: getTodayDateString(),
+                      className: fieldClass(
+                        "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+                        dateError
+                      ),
+                      required: true
+                    }
+                  )
+                ] }),
+                /* @__PURE__ */ jsxs("div", { children: [
+                  /* @__PURE__ */ jsx("label", { htmlFor: "time", className: "block text-gray-700 mb-2", children: t.orderForm.pickupTime }),
+                  /* @__PURE__ */ jsx(
+                    "input",
+                    {
+                      type: "time",
+                      id: "time",
+                      name: "time",
+                      value: formData.time,
+                      onChange: handleChange,
+                      min: formData.date === getTodayDateString() ? getCurrentTimeString() : void 0,
+                      className: fieldClass(
+                        "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+                        timeError
+                      ),
+                      required: true
+                    }
+                  )
+                ] })
+              ] }),
+              /* @__PURE__ */ jsx(
+                "button",
+                {
+                  type: "button",
+                  onClick: handleContinue,
+                  className: "w-full rounded-lg px-5 py-3 bg-blue-600 text-white hover:bg-blue-700 transition-colors",
+                  children: t.common.continue
+                }
+              ),
+              /* @__PURE__ */ jsx("p", { className: "text-xs text-center text-gray-500", children: t.orderForm.reassurance })
             ] })
-          ] }),
-          formData.pickupType && /* @__PURE__ */ jsxs(Fragment, { children: [
+          ] }) : /* @__PURE__ */ jsxs(Fragment, { children: [
+            /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between", children: /* @__PURE__ */ jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => {
+                  setStep("trip");
+                  window.requestAnimationFrame(() => {
+                    formScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+                  });
+                },
+                className: "text-sm text-gray-600 hover:text-gray-800 underline",
+                children: t.common.back
+              }
+            ) }),
             /* @__PURE__ */ jsx("div", { className: "bg-blue-50 border-2 border-blue-200 rounded-lg p-4", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
               /* @__PURE__ */ jsx("span", { className: "text-gray-700", children: t.orderForm.totalPrice }),
               /* @__PURE__ */ jsxs("div", { className: "text-right", children: [
@@ -548,49 +688,6 @@ function OrderForm({ route, onClose }) {
               ] })
             ] }) }),
             renderRateBanner(),
-            /* @__PURE__ */ jsxs("div", { className: "grid sm:grid-cols-2 gap-4", children: [
-              /* @__PURE__ */ jsxs("div", { children: [
-                /* @__PURE__ */ jsxs("label", { htmlFor: "date", className: "block text-gray-700 mb-2", children: [
-                  /* @__PURE__ */ jsx(Calendar, { className: "w-4 h-4 inline mr-2" }),
-                  t.orderForm.date
-                ] }),
-                /* @__PURE__ */ jsx(
-                  "input",
-                  {
-                    type: "date",
-                    id: "date",
-                    name: "date",
-                    value: formData.date,
-                    onChange: handleChange,
-                    min: getTodayDateString(),
-                    className: fieldClass(
-                      "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent",
-                      dateError
-                    ),
-                    required: true
-                  }
-                )
-              ] }),
-              /* @__PURE__ */ jsxs("div", { children: [
-                /* @__PURE__ */ jsx("label", { htmlFor: "time", className: "block text-gray-700 mb-2", children: t.orderForm.pickupTime }),
-                /* @__PURE__ */ jsx(
-                  "input",
-                  {
-                    type: "time",
-                    id: "time",
-                    name: "time",
-                    value: formData.time,
-                    onChange: handleChange,
-                    min: formData.date === getTodayDateString() ? getCurrentTimeString() : void 0,
-                    className: fieldClass(
-                      "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent",
-                      timeError
-                    ),
-                    required: true
-                  }
-                )
-              ] })
-            ] }),
             formData.pickupType === "airport" && /* @__PURE__ */ jsxs(Fragment, { children: [
               /* @__PURE__ */ jsxs("div", { id: "signService", tabIndex: -1, children: [
                 /* @__PURE__ */ jsx("label", { className: "block text-gray-700 mb-2", children: signServiceTitle }),
@@ -638,32 +735,26 @@ function OrderForm({ route, onClose }) {
                   /* @__PURE__ */ jsx(FileText, { className: "w-4 h-4 inline mr-2" }),
                   t.orderForm.signText
                 ] }),
-                /* @__PURE__ */ jsxs(Fragment, { children: [
-                  /* @__PURE__ */ jsx(
-                    "input",
-                    {
-                      type: "text",
-                      id: "signText",
-                      name: "signText",
-                      value: formData.signText,
-                      onChange: handleChange,
-                      placeholder: t.orderForm.signPlaceholder,
-                      className: fieldClass(
-                        "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent",
-                        signTextError
-                      ),
-                      required: true
-                    }
-                  ),
-                  /* @__PURE__ */ jsxs("div", { className: "mt-3 bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-lg p-4", children: [
-                    /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-3 mb-3", children: [
-                      /* @__PURE__ */ jsx(Info, { className: "w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" }),
-                      /* @__PURE__ */ jsx("p", { className: "text-sm text-amber-900", children: t.orderForm.signHelp })
-                    ] }),
-                    /* @__PURE__ */ jsxs("div", { className: "bg-white border-2 border-gray-300 rounded-lg p-4 shadow-sm", children: [
-                      /* @__PURE__ */ jsx("p", { className: "text-[8px] text-gray-500 mb-2 text-center", children: t.orderForm.signPreview }),
-                      /* @__PURE__ */ jsx("div", { className: "bg-white border-4 border-blue-900 rounded p-3 text-center min-h-[60px] flex items-center justify-center", children: /* @__PURE__ */ jsx("p", { className: "text-blue-900 text-lg break-words", children: formData.signText || t.orderForm.signEmpty }) })
-                    ] })
+                /* @__PURE__ */ jsx(
+                  "input",
+                  {
+                    type: "text",
+                    id: "signText",
+                    name: "signText",
+                    value: formData.signText,
+                    onChange: handleChange,
+                    placeholder: t.orderForm.signPlaceholder,
+                    className: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  }
+                ),
+                /* @__PURE__ */ jsxs("div", { className: "mt-3 bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-lg p-4", children: [
+                  /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-3 mb-3", children: [
+                    /* @__PURE__ */ jsx(Info, { className: "w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" }),
+                    /* @__PURE__ */ jsx("p", { className: "text-sm text-amber-900", children: t.orderForm.signHelp })
+                  ] }),
+                  /* @__PURE__ */ jsxs("div", { className: "bg-white border-2 border-gray-300 rounded-lg p-4 shadow-sm", children: [
+                    /* @__PURE__ */ jsx("p", { className: "text-[8px] text-gray-500 mb-2 text-center", children: t.orderForm.signPreview }),
+                    /* @__PURE__ */ jsx("div", { className: "bg-white border-4 border-blue-900 rounded p-3 text-center min-h-[60px] flex items-center justify-center", children: /* @__PURE__ */ jsx("p", { className: "text-blue-900 text-lg break-words", children: formData.signText || formData.name || t.orderForm.signEmpty }) })
                   ] })
                 ] })
               ] }) : null,
@@ -685,9 +776,28 @@ function OrderForm({ route, onClose }) {
                       "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent",
                       flightNumberError
                     ),
-                    required: true
+                    disabled: formData.flightUnknown,
+                    autoComplete: "off"
                   }
-                )
+                ),
+                /* @__PURE__ */ jsxs("label", { className: "mt-2 flex items-center gap-2 text-sm text-gray-600", children: [
+                  /* @__PURE__ */ jsx(
+                    "input",
+                    {
+                      type: "checkbox",
+                      checked: formData.flightUnknown,
+                      onChange: (e) => {
+                        const next = e.target.checked;
+                        setFormData((prev) => ({
+                          ...prev,
+                          flightUnknown: next,
+                          flightNumber: next ? "" : prev.flightNumber
+                        }));
+                      }
+                    }
+                  ),
+                  t.orderForm.flightUnknown
+                ] })
               ] })
             ] }),
             formData.pickupType === "address" && /* @__PURE__ */ jsxs("div", { children: [
@@ -725,11 +835,7 @@ function OrderForm({ route, onClose }) {
                     name: "passengers",
                     value: formData.passengers,
                     onChange: handleChange,
-                    className: fieldClass(
-                      "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent",
-                      passengersError
-                    ),
-                    required: true,
+                    className: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent",
                     children: route.type === "bus" ? /* @__PURE__ */ jsx(Fragment, { children: t.orderForm.passengersBus.map((label, index) => /* @__PURE__ */ jsx("option", { value: 5 + index, children: label }, label)) }) : /* @__PURE__ */ jsx(Fragment, { children: t.orderForm.passengersStandard.map((label, index) => /* @__PURE__ */ jsx("option", { value: 1 + index, children: label }, label)) })
                   }
                 )
@@ -746,11 +852,7 @@ function OrderForm({ route, onClose }) {
                     name: "largeLuggage",
                     value: formData.largeLuggage,
                     onChange: handleChange,
-                    className: fieldClass(
-                      "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent",
-                      luggageError
-                    ),
-                    required: true,
+                    className: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent",
                     children: [
                       /* @__PURE__ */ jsx("option", { value: "no", children: t.orderForm.luggageNo }),
                       /* @__PURE__ */ jsx("option", { value: "yes", children: t.orderForm.luggageYes })
@@ -773,6 +875,7 @@ function OrderForm({ route, onClose }) {
                       value: formData.name,
                       onChange: handleChange,
                       placeholder: t.orderForm.namePlaceholder,
+                      autoComplete: "name",
                       className: fieldClass(
                         "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent",
                         nameError
@@ -793,6 +896,7 @@ function OrderForm({ route, onClose }) {
                       onChange: handleChange,
                       onBlur: handlePhoneBlur,
                       inputMode: "tel",
+                      autoComplete: "tel",
                       placeholder: "+48 123 456 789",
                       className: fieldClass(
                         "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent",
@@ -817,6 +921,7 @@ function OrderForm({ route, onClose }) {
                         handleEmailChange(e.target.value);
                       },
                       placeholder: t.orderForm.emailPlaceholder,
+                      autoComplete: "email",
                       className: fieldClass(
                         "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent",
                         emailErrorState
@@ -827,24 +932,23 @@ function OrderForm({ route, onClose }) {
                   emailError && /* @__PURE__ */ jsx("p", { className: "text-sm text-red-600 mt-2", children: emailError }),
                   /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-500 mt-1", children: t.orderForm.emailHelp })
                 ] }),
-                /* @__PURE__ */ jsxs("div", { children: [
-                  /* @__PURE__ */ jsxs("label", { htmlFor: "description", className: "block text-gray-700 mb-2", children: [
-                    /* @__PURE__ */ jsx(FileText, { className: "w-4 h-4 inline mr-2" }),
-                    t.orderForm.notesTitle
-                  ] }),
-                  /* @__PURE__ */ jsx(
-                    "textarea",
-                    {
-                      id: "description",
-                      name: "description",
-                      value: formData.description,
-                      onChange: handleChange,
-                      placeholder: t.orderForm.notesPlaceholder,
-                      rows: 4,
-                      className: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    }
-                  ),
-                  /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-500 mt-1", children: t.orderForm.notesHelp })
+                /* @__PURE__ */ jsxs("details", { className: "rounded-lg border border-gray-200 bg-gray-50 p-4", children: [
+                  /* @__PURE__ */ jsx("summary", { className: "cursor-pointer text-sm font-semibold text-gray-800", children: t.orderForm.notesTitle }),
+                  /* @__PURE__ */ jsxs("div", { className: "mt-3", children: [
+                    /* @__PURE__ */ jsx(
+                      "textarea",
+                      {
+                        id: "description",
+                        name: "description",
+                        value: formData.description,
+                        onChange: handleChange,
+                        placeholder: t.orderForm.notesPlaceholder,
+                        rows: 4,
+                        className: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                      }
+                    ),
+                    /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-500 mt-1", children: t.orderForm.notesHelp })
+                  ] })
                 ] })
               ] })
             ] }),

@@ -135,7 +135,7 @@ function Pricing({
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "rounded-lg border border-slate-200 bg-slate-50 p-3", children: [
           /* @__PURE__ */ jsx("div", { className: "text-[10px] uppercase tracking-wide text-slate-500", children: t.pricing.tableStandardNight }),
-          /* @__PURE__ */ jsx("div", { className: "mt-0.5 text-[10px] leading-none text-slate-400", children: t.pricing.sundayNote }),
+          /* @__PURE__ */ jsx("div", { className: "pricing-sunday-note mt-0.5 text-slate-400", children: t.pricing.sundayNote }),
           renderPriceWithEur(route.priceNight, "mt-1 text-sm font-semibold text-gray-900")
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "rounded-lg border border-slate-200 bg-slate-50 p-3", children: [
@@ -144,7 +144,7 @@ function Pricing({
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "rounded-lg border border-slate-200 bg-slate-50 p-3", children: [
           /* @__PURE__ */ jsx("div", { className: "text-[10px] uppercase tracking-wide text-slate-500", children: t.pricing.tableBusNight }),
-          /* @__PURE__ */ jsx("div", { className: "mt-0.5 text-[10px] leading-none text-slate-400", children: t.pricing.sundayNote }),
+          /* @__PURE__ */ jsx("div", { className: "pricing-sunday-note mt-0.5 text-slate-400", children: t.pricing.sundayNote }),
           renderPriceWithEur(busRoutes[index]?.priceNight, "mt-1 text-sm font-semibold text-gray-900")
         ] })
       ] })
@@ -192,7 +192,7 @@ function Pricing({
                   eurText(route.priceNight) && /* @__PURE__ */ jsx("div", { className: "eur-row flex items-center justify-end text-blue-200 text-xs whitespace-nowrap", children: /* @__PURE__ */ jsx("span", { className: "eur-text", children: eurText(route.priceNight) }) })
                 ] })
               ] }),
-              /* @__PURE__ */ jsx("div", { className: "mt-1 text-center text-[8px] leading-none text-blue-200/70 whitespace-nowrap", children: t.pricing.sundayNote })
+              /* @__PURE__ */ jsx("div", { className: "pricing-sunday-note mt-1 text-center text-blue-200/70 whitespace-nowrap", children: t.pricing.sundayNote })
             ] })
           ] }),
           /* @__PURE__ */ jsx(

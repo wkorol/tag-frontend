@@ -108,7 +108,17 @@ type I18nContextValue = {
   t: Translation;
 };
 
-const I18nContext = createContext<I18nContextValue | null>(null);
+// Keep context identity stable across Vite HMR/React Refresh.
+// Otherwise provider/consumer can get out of sync and `useI18n` will see `null`.
+const GLOBAL_I18N_CONTEXT_KEY = '__tag_i18n_context__';
+const I18nContext: ReturnType<typeof createContext<I18nContextValue | null>> =
+  (globalThis as unknown as Record<string, unknown>)[GLOBAL_I18N_CONTEXT_KEY] as
+    | ReturnType<typeof createContext<I18nContextValue | null>>
+    | undefined
+  ?? createContext<I18nContextValue | null>(null);
+if (!(globalThis as unknown as Record<string, unknown>)[GLOBAL_I18N_CONTEXT_KEY]) {
+  (globalThis as unknown as Record<string, unknown>)[GLOBAL_I18N_CONTEXT_KEY] = I18nContext;
+}
 
 export function I18nProvider({
   children,

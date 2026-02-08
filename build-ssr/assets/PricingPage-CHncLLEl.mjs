@@ -1,13 +1,13 @@
 import { jsx, jsxs } from 'react/jsx-runtime';
 import { useState, useRef, useEffect, Suspense } from 'react';
 import { u as useI18n, l as localeToPath, g as getRouteSlug, r as requestScrollTo, a as usePageTitle, d as trackFormOpen, N as Navbar, B as Breadcrumbs, t as trackCtaClick, b as trackNavClick, F as Footer, c as FloatingActions, s as scrollToId } from '../entry-server.mjs';
-import { Pricing } from './Pricing-DoCAjVeb.mjs';
+import { Pricing } from './Pricing-D6gWOQdH.mjs';
 import { useLocation } from 'react-router-dom';
 import { Calculator, MapPin, X, Navigation } from 'lucide-react';
 import { d as distanceKm, i as isPointInsideGeoJson, c as cityPolygons, a as centerPolygons, Q as QuoteForm } from './QuoteForm-B3efjAvR.mjs';
 import { F as FIXED_PRICES } from './fixedPricing-DAP14xsE.mjs';
 import { u as useEurRate, p as preloadEurRate, f as formatEur } from './currency-DvMRQ8I8.mjs';
-import { OrderForm } from './OrderForm-XE0jVSxN.mjs';
+import { OrderForm } from './OrderForm-D9qulcyj.mjs';
 import 'react-dom/server';
 import 'react-router-dom/server.js';
 import 'react-dom';

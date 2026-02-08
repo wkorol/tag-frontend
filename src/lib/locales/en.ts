@@ -1,8 +1,15 @@
 const en = {
   "common": {
     "whatsapp": "WhatsApp",
-    "orderOnlineNow": "Order online",
+    "bookViaWhatsapp": "Book via WhatsApp",
+    "progress": "Progress",
+    "stepCounter": (current: number, total: number) => `Step ${current}/${total}`,
+    "remainingFields": (count: number) => `Remaining fields: ${count}`,
+    "orderOnlineNow": "Book online",
     "orderNow": "Book Now",
+    "continue": "Continue",
+    "back": "Back",
+    "optional": "optional",
     "close": "Close",
     "noPrepayment": "No prepayment",
     "backToHome": "← Back to home",
@@ -51,7 +58,7 @@ const en = {
       "flexiblePaymentsTitle": "Flexible payments",
       "flexiblePaymentsBody": "Card, Apple Pay, Google Pay, Revolut, or cash.",
       "freePrebookingTitle": "Free prebooking",
-      "freePrebookingBody": "Cancel anytime for free. Fully automated, no support needed.",
+      "freePrebookingBody": "Cancel anytime for free. Edit or cancel your booking online.",
       "fixedPriceTitle": "Fixed price guarantee",
       "fixedPriceBody": "Fixed price both ways. The price you book is the price you pay.",
       "localExpertiseTitle": "Local expertise",
@@ -63,7 +70,7 @@ const en = {
     "fleetLabel": "Vehicles",
     "standardCarsTitle": "Standard Cars",
     "standardCarsBody": "1-4 passengers | Comfortable sedans and SUVs",
-    "busTitle": "& More Buses",
+    "busTitle": "BUS Service",
     "busBody": "5-8 passengers | Perfect for larger groups"
   },
   "vehicle": {
@@ -189,7 +196,7 @@ const en = {
     "companyTitle": "Company details",
     "paymentTitle": "Payment & invoices",
     "comfortTitle": "Comfort & safety",
-    "paymentBody": "Cash or card on request. Invoices available for business clients.",
+    "paymentBody": "Pay by cash or card. VAT invoices available for business clients.",
     "comfortBody": "Child seats available on request. Professional, licensed drivers and door-to-door assistance."
   },
   "footer": {
@@ -444,8 +451,10 @@ const en = {
     "validation": {
       "phoneLetters": "Please enter a valid phone number (digits only).",
       "phoneLength": "Please enter a valid phone number (7–15 digits, optional +).",
+      "emailRequired": "Please enter your email address.",
       "email": "Please enter a valid email address.",
-      "datePast": "Please select today or a future date."
+      "datePast": "Please select today or a future date.",
+      "timePast": "Please select the current time or a future time."
     },
     "rate": {
       "day": "Day rate",
@@ -483,6 +492,7 @@ const en = {
     "signEmpty": "Your name will appear here",
     "flightNumber": "Flight Number",
     "flightPlaceholder": "e.g. LO123",
+    "flightUnknown": "I don't know the flight number yet",
     "pickupAddress": "Pickup Address",
     "pickupPlaceholder": "Enter full pickup address",
     "passengers": "Number of Passengers",
