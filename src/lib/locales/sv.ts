@@ -1,7 +1,7 @@
 const sv = {
   "common": {
     "whatsapp": "WhatsApp",
-    "orderOnlineNow": "Kolla pris och boka TAXI",
+    "orderOnlineNow": "Boka taxi online",
     "orderNow": "Boka nu",
     "close": "Stäng",
     "noPrepayment": "Ingen förskottsbetalning",

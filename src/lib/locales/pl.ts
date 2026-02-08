@@ -1,7 +1,7 @@
 const pl = {
   "common": {
     "whatsapp": "WhatsApp",
-    "orderOnlineNow": "Sprawdź cenę i zarezerwuj TAXI",
+    "orderOnlineNow": "Złóż zamówienie online",
     "orderNow": "Rezerwuj",
     "close": "Zamknij",
     "noPrepayment": "Bez przedpłaty",

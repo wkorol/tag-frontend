@@ -1,7 +1,7 @@
 const da = {
   "common": {
     "whatsapp": "WhatsApp",
-    "orderOnlineNow": "Tjek pris og book TAXI",
+    "orderOnlineNow": "Book taxi online",
     "orderNow": "Book nu",
     "close": "Luk",
     "noPrepayment": "Ingen forudbetaling",

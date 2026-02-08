@@ -1,7 +1,7 @@
 const no = {
   "common": {
     "whatsapp": "WhatsApp",
-    "orderOnlineNow": "Sjekk pris og bestill TAXI",
+    "orderOnlineNow": "Bestill taxi på nett",
     "orderNow": "Reserver nå",
     "close": "Lukk",
     "noPrepayment": "Ingen forhåndsbetaling",

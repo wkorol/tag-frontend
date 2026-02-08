@@ -1,7 +1,7 @@
 const en = {
   "common": {
     "whatsapp": "WhatsApp",
-    "orderOnlineNow": "Check price and book TAXI",
+    "orderOnlineNow": "Order online",
     "orderNow": "Book Now",
     "close": "Close",
     "noPrepayment": "No prepayment",

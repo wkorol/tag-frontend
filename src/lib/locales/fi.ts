@@ -1,7 +1,7 @@
 const fi = {
   "common": {
     "whatsapp": "WhatsApp",
-    "orderOnlineNow": "Tarkista hinta ja varaa TAKSI",
+    "orderOnlineNow": "Varaa taksi verkossa",
     "orderNow": "Varaa nyt",
     "close": "Sulje",
     "noPrepayment": "Ei ennakkomaksua",

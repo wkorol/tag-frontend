@@ -63,6 +63,17 @@ export function Hero() {
 
           <div className="hero-cta flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a
+                href={`${basePath}/`}
+                onClick={(event) => {
+                  event.preventDefault();
+                  trackCtaClick('hero_order_online');
+                  requestScrollTo('vehicle-selection');
+                }}
+                className="inline-flex items-center gap-2 bg-orange-800 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-700 transition-colors animate-pulse-glow"
+            >
+              {t.common.orderOnlineNow}
+            </a>
+            <a
                 href={whatsappLink}
                 onClick={() => trackContactClick('whatsapp')}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-gray-900 font-semibold text-base shadow-sm transition-colors"
@@ -81,17 +92,6 @@ export function Hero() {
             >
               <span aria-hidden="true">✉️</span>
               {t.hero.orderViaEmail}
-            </a>
-            <a
-                href={`${basePath}/`}
-                onClick={(event) => {
-                  event.preventDefault();
-                  trackCtaClick('hero_order_online');
-                  requestScrollTo('vehicle-selection');
-                }}
-                className="inline-flex items-center gap-2 bg-orange-800 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-700 transition-colors animate-pulse-glow"
-            >
-              {t.common.orderOnlineNow}
             </a>
           </div>
           <div className="mt-2 flex justify-center">
