@@ -61,7 +61,7 @@
             gtagLoaded = true;
             var script = document.createElement('script');
             script.async = true;
-            script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(ids[0] || adsId);
+            script.src = '/gtag/js?id=' + encodeURIComponent(ids[0] || adsId);
             script.onload = function() {
               window.__gtagLoaded = true;
               if (window.__updateGtagDebug) {
