@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { getApiBaseUrl } from './api';
 
 const CACHE_TTL_MS = 1000 * 60 * 60 * 6;
 const STORAGE_KEY = 'eur-rate-cache';
@@ -24,7 +25,8 @@ export const preloadEurRate = () => {
 
 async function fetchEurRate(): Promise<number | null> {
   try {
-    const response = await fetch('/api/eur-rate');
+    const apiBaseUrl = getApiBaseUrl();
+    const response = await fetch(`${apiBaseUrl}/api/eur-rate`);
     if (!response.ok) {
       return null;
     }

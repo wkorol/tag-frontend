@@ -75,6 +75,7 @@ const sv = {
     "busTitle": "BUS Service",
     "busPassengers": "5-8 passagerare",
     "busDescription": "Idealisk för större grupper och familjer med extra bagage",
+    "selfManageBadge": "Redigera eller avboka bokningen själv",
     "examplePrices": "Exempelpriser:",
     "airportGdansk": "Flygplats ↔ Gdańsk",
     "airportSopot": "Flygplats ↔ Sopot",

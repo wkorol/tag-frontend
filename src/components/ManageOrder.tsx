@@ -631,11 +631,8 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                   </span>
                 </div>
                 {order.price > 0 && formatEur(order.price, eurRate) && (
-                  <div className="flex items-center gap-2 text-gray-500">
+                  <div className="text-gray-500">
                     <span className="eur-text">{formatEur(order.price, eurRate)}</span>
-                    <span className="live-badge">
-                      {t.common.actualBadge}
-                    </span>
                   </div>
                 )}
                 <div className="flex items-center gap-2">

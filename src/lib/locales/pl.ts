@@ -75,6 +75,7 @@ const pl = {
     "busTitle": "Usługa BUS",
     "busPassengers": "5–8 pasażerów",
     "busDescription": "Idealny dla większych grup i rodzin z większym bagażem",
+    "selfManageBadge": "Edytuj i anuluj zamówienie samodzielnie",
     "examplePrices": "Przykładowe ceny:",
     "airportGdansk": "Lotnisko ↔ Gdańsk",
     "airportSopot": "Lotnisko ↔ Sopot",

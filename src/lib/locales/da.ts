@@ -75,6 +75,7 @@ const da = {
     "busTitle": "BUS Service",
     "busPassengers": "5-8 passagerer",
     "busDescription": "Ideel til større grupper og familier med ekstra bagage",
+    "selfManageBadge": "Rediger eller afbestil din booking selv",
     "examplePrices": "Eksempelpriser:",
     "airportGdansk": "Lufthavn ↔ Gdańsk",
     "airportSopot": "Lufthavn ↔ Sopot",

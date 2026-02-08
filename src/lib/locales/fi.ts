@@ -75,6 +75,7 @@ const fi = {
     "busTitle": "BUS-palvelu",
     "busPassengers": "5-8 matkustajaa",
     "busDescription": "Ihanteellinen suuremmille ryhmille ja perheille, joilla on paljon matkatavaroita",
+    "selfManageBadge": "Muokkaa tai peruuta varauksesi itse",
     "examplePrices": "Esimerkkihinnat:",
     "airportGdansk": "Lentokenttä ↔ Gdańsk",
     "airportSopot": "Lentokenttä ↔ Sopot",

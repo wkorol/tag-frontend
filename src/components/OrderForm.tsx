@@ -8,6 +8,7 @@ import { getApiBaseUrl } from '../lib/api';
 import { trackFormClose, trackFormStart, trackFormSubmit, trackFormValidation } from '../lib/tracking';
 import { isAnalyticsEnabled } from '../lib/analytics';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
+import { isPolishPublicHoliday } from '../lib/polishHolidays';
 
 interface OrderFormProps {
   route: {
@@ -19,18 +20,6 @@ interface OrderFormProps {
   };
   onClose: () => void;
 }
-
-const POLISH_FIXED_HOLIDAYS: Array<[number, number]> = [
-  [1, 1],
-  [1, 6],
-  [5, 1],
-  [5, 3],
-  [8, 15],
-  [11, 1],
-  [11, 11],
-  [12, 25],
-  [12, 26],
-];
 
 const getTodayDateString = () => {
   const now = new Date();
@@ -71,64 +60,6 @@ const validateEmail = (value: string, message: string) => {
     return message;
   }
   return null;
-};
-
-const formatDateKey = (date: Date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
-
-const getEasterSunday = (year: number) => {
-  const a = year % 19;
-  const b = Math.floor(year / 100);
-  const c = year % 100;
-  const d = Math.floor(b / 4);
-  const e = b % 4;
-  const f = Math.floor((b + 8) / 25);
-  const g = Math.floor((b - f + 1) / 3);
-  const h = (19 * a + b - d - g + 15) % 30;
-  const i = Math.floor(c / 4);
-  const k = c % 4;
-  const l = (32 + 2 * e + 2 * i - h - k) % 7;
-  const m = Math.floor((a + 11 * h + 22 * l) / 451);
-  const month = Math.floor((h + l - 7 * m + 114) / 31);
-  const day = ((h + l - 7 * m + 114) % 31) + 1;
-  return new Date(year, month - 1, day);
-};
-
-const addDays = (date: Date, days: number) => {
-  const next = new Date(date);
-  next.setDate(next.getDate() + days);
-  return next;
-};
-
-const getPolishHolidayKeys = (year: number) => {
-  const keys = new Set<string>();
-  POLISH_FIXED_HOLIDAYS.forEach(([month, day]) => {
-    keys.add(formatDateKey(new Date(year, month - 1, day)));
-  });
-
-  const easterSunday = getEasterSunday(year);
-  keys.add(formatDateKey(easterSunday));
-  keys.add(formatDateKey(addDays(easterSunday, 1))); // Easter Monday
-  keys.add(formatDateKey(addDays(easterSunday, 49))); // Pentecost Sunday
-  keys.add(formatDateKey(addDays(easterSunday, 60))); // Corpus Christi
-
-  return keys;
-};
-
-const isPolishPublicHoliday = (date: Date, apiHolidayKeys: Set<string> | null) => {
-  if (date.getDay() === 0) {
-    return true;
-  }
-  const dateKey = formatDateKey(date);
-  if (apiHolidayKeys?.has(dateKey)) {
-    return true;
-  }
-  const fallbackKeys = getPolishHolidayKeys(date.getFullYear());
-  return fallbackKeys.has(dateKey);
 };
 
 export function OrderForm({ route, onClose }: OrderFormProps) {
@@ -576,11 +507,8 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                 {t.orderForm.totalPrice} <span className="font-bold text-blue-600">{totalPrice} PLN</span>
               </p>
               {eurText && (
-                <div className="mt-1 flex items-center justify-center gap-2 text-gray-500">
+                <div className="mt-1 text-gray-500">
                   <span className="eur-text">{eurText}</span>
-                  <span className="live-badge">
-                    {t.common.actualBadge}
-                  </span>
                 </div>
               )}
             </div>
@@ -702,11 +630,8 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
                   <div className="text-right">
                     <span className="text-blue-900 text-2xl">{totalPrice} PLN</span>
                     {eurText && (
-                      <div className="flex items-center justify-end gap-2 text-gray-500">
+                      <div className="text-gray-500">
                         <span className="eur-text">{eurText}</span>
-                        <span className="live-badge">
-                          {t.common.actualBadge}
-                        </span>
                       </div>
                     )}
                   </div>
@@ -1061,12 +986,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
               <span className="flex flex-col items-center gap-1">
                 <span>{t.orderForm.confirmOrder(totalPrice)}</span>
                 {eurText && (
-                  <span className="inline-flex items-center gap-2 text-[11px] text-blue-100">
-                    <span>{eurText}</span>
-                    <span className="live-badge">
-                      {t.common.actualBadge}
-                    </span>
-                  </span>
+                  <span className="text-[11px] text-blue-100">{eurText}</span>
                 )}
               </span>
             )}

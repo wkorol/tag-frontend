@@ -82,6 +82,28 @@ export function Pricing({
   const title = vehicleType === 'bus' ? t.pricing.titleBus : t.pricing.titleStandard;
   const eurRate = useEurRate();
   const eurText = (pln: number) => formatEur(pln, eurRate);
+  const renderPriceWithEur = (pln: number | null | undefined, plnLineClassName?: string) => {
+    if (typeof pln !== 'number' || !Number.isFinite(pln)) {
+      return (
+        <div className="leading-tight">
+          <div className={plnLineClassName}>—</div>
+          <div className="min-h-[16px] text-xs text-gray-500" />
+        </div>
+      );
+    }
+    const eur = eurText(pln);
+	    return (
+	      <div className="leading-tight">
+	        <div className={plnLineClassName}>
+	          <span className="inline-flex items-baseline gap-1 whitespace-nowrap">
+	            <span className="tabular-nums">{pln}</span>
+	            <span className="pricing-rate-currency font-semibold text-slate-500 tracking-wider">PLN</span>
+	          </span>
+	        </div>
+	        <div className="min-h-[16px] text-xs text-gray-500">{eur ? <span className="eur-text">{eur}</span> : ''}</div>
+	      </div>
+	    );
+	  };
   useEffect(() => {
     preloadEurRate();
   }, []);
@@ -95,9 +117,19 @@ export function Pricing({
             <tr className="bg-slate-100 text-slate-700">
               <th className="border border-slate-200 px-4 py-3 text-left">{t.pricing.tableRoute}</th>
               <th className="border border-slate-200 px-4 py-3 text-right">{t.pricing.tableStandardDay}</th>
-              <th className="border border-slate-200 px-4 py-3 text-right">{t.pricing.tableStandardNight}</th>
+              <th className="border border-slate-200 px-4 py-3 text-right">
+                <div className="leading-tight text-right">
+                  <div>{t.pricing.tableStandardNight}</div>
+                  <div className="text-[10px] font-normal text-slate-500">{t.pricing.sundayNote}</div>
+                </div>
+              </th>
               <th className="border border-slate-200 px-4 py-3 text-right">{t.pricing.tableBusDay}</th>
-              <th className="border border-slate-200 px-4 py-3 text-right">{t.pricing.tableBusNight}</th>
+              <th className="border border-slate-200 px-4 py-3 text-right">
+                <div className="leading-tight text-right">
+                  <div>{t.pricing.tableBusNight}</div>
+                  <div className="text-[10px] font-normal text-slate-500">{t.pricing.sundayNote}</div>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -106,10 +138,10 @@ export function Pricing({
                 <td className="border border-slate-200 px-4 py-3">
                   {route.from} ↔ {route.to}
                 </td>
-                <td className="border border-slate-200 px-4 py-3 text-right">{route.priceDay} PLN</td>
-                <td className="border border-slate-200 px-4 py-3 text-right">{route.priceNight} PLN</td>
-                <td className="border border-slate-200 px-4 py-3 text-right">{busRoutes[index]?.priceDay} PLN</td>
-                <td className="border border-slate-200 px-4 py-3 text-right">{busRoutes[index]?.priceNight} PLN</td>
+                <td className="border border-slate-200 px-4 py-3 text-right">{renderPriceWithEur(route.priceDay)}</td>
+                <td className="border border-slate-200 px-4 py-3 text-right">{renderPriceWithEur(route.priceNight)}</td>
+                <td className="border border-slate-200 px-4 py-3 text-right">{renderPriceWithEur(busRoutes[index]?.priceDay)}</td>
+                <td className="border border-slate-200 px-4 py-3 text-right">{renderPriceWithEur(busRoutes[index]?.priceNight)}</td>
               </tr>
             ))}
           </tbody>
@@ -125,19 +157,21 @@ export function Pricing({
             <div className="mt-3 grid grid-cols-2 gap-3 text-xs text-gray-600">
               <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
                 <div className="text-[10px] uppercase tracking-wide text-slate-500">{t.pricing.tableStandardDay}</div>
-                <div className="mt-1 text-sm font-semibold text-gray-900">{route.priceDay} PLN</div>
+                {renderPriceWithEur(route.priceDay, 'mt-1 text-sm font-semibold text-gray-900')}
               </div>
               <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
                 <div className="text-[10px] uppercase tracking-wide text-slate-500">{t.pricing.tableStandardNight}</div>
-                <div className="mt-1 text-sm font-semibold text-gray-900">{route.priceNight} PLN</div>
+                <div className="mt-0.5 text-[10px] leading-none text-slate-400">{t.pricing.sundayNote}</div>
+                {renderPriceWithEur(route.priceNight, 'mt-1 text-sm font-semibold text-gray-900')}
               </div>
               <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
                 <div className="text-[10px] uppercase tracking-wide text-slate-500">{t.pricing.tableBusDay}</div>
-                <div className="mt-1 text-sm font-semibold text-gray-900">{busRoutes[index]?.priceDay} PLN</div>
+                {renderPriceWithEur(busRoutes[index]?.priceDay, 'mt-1 text-sm font-semibold text-gray-900')}
               </div>
               <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
                 <div className="text-[10px] uppercase tracking-wide text-slate-500">{t.pricing.tableBusNight}</div>
-                <div className="mt-1 text-sm font-semibold text-gray-900">{busRoutes[index]?.priceNight} PLN</div>
+                <div className="mt-0.5 text-[10px] leading-none text-slate-400">{t.pricing.sundayNote}</div>
+                {renderPriceWithEur(busRoutes[index]?.priceNight, 'mt-1 text-sm font-semibold text-gray-900')}
               </div>
             </div>
           </div>
@@ -168,47 +202,47 @@ export function Pricing({
           </div>
 
           <div className="space-y-3 mt-6">
-            <div className="pricing-rate-box flex items-center justify-between bg-white/90 p-4 rounded-lg border border-blue-200 shadow-sm">
-              <div className="flex items-center gap-2">
+            <div className="pricing-rate-box flex items-center justify-between gap-3 bg-white/90 p-4 rounded-lg border border-blue-200 shadow-sm">
+              <div className="flex items-center gap-2 min-w-0">
                 <Sun className="pricing-rate-icon w-5 h-5 text-yellow-500" />
                 <span className="pricing-rate-label text-gray-800 font-medium text-sm">{t.pricing.dayRate}</span>
               </div>
-              <div className="text-right">
-                <span className="pricing-rate-value text-blue-900 font-semibold text-sm">{route.priceDay} PLN</span>
-                {eurText(route.priceDay) && (
-                  <div className="eur-row flex items-center justify-end gap-2 text-gray-500 text-xs whitespace-nowrap">
-                    <span className="eur-text">{eurText(route.priceDay)}</span>
-                    <span className="live-badge">
-                      {t.common.actualBadge}
-                    </span>
-                  </div>
+	              <div className="text-right flex-shrink-0">
+	                <div className="inline-flex items-baseline justify-end gap-1 whitespace-nowrap">
+	                  <span className="pricing-rate-value text-blue-900 font-semibold text-base tabular-nums leading-none">{route.priceDay}</span>
+	                  <span className="pricing-rate-currency font-semibold text-blue-900/70 tracking-wider leading-none">PLN</span>
+	                </div>
+	                {eurText(route.priceDay) && (
+	                  <div className="eur-row flex items-center justify-end text-gray-500 text-xs whitespace-nowrap">
+	                    <span className="eur-text">{eurText(route.priceDay)}</span>
+	                  </div>
                 )}
               </div>
             </div>
             
-            <div className="pricing-rate-box bg-gray-900 p-4 rounded-lg border border-blue-800 shadow-sm text-white">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Moon className="pricing-rate-icon w-5 h-5 text-blue-300" />
-                  <span className="pricing-rate-label font-medium text-sm">{t.pricing.nightRate}</span>
-                </div>
-                <div className="text-right">
-                  <span className="pricing-rate-value font-semibold text-sm">{route.priceNight} PLN</span>
-                  {eurText(route.priceNight) && (
-                    <div className="eur-row flex items-center justify-end gap-2 text-blue-200 text-xs whitespace-nowrap">
-                      <span className="eur-text">{eurText(route.priceNight)}</span>
-                      <span className="live-badge">
-                        {t.common.actualBadge}
-                      </span>
-                    </div>
+			            <div className="pricing-rate-box bg-gray-900 p-4 rounded-lg border border-blue-800 shadow-sm text-white">
+			              <div className="flex items-start justify-between gap-3">
+			                <div className="flex items-start gap-2 min-w-0">
+			                  <Moon className="pricing-rate-icon w-5 h-5 text-blue-300 mt-0.5" />
+                      <div className="pricing-rate-label font-medium text-sm leading-tight">{t.pricing.nightRate}</div>
+			                </div>
+				                <div className="text-right flex-shrink-0">
+	                  <div className="inline-flex items-baseline justify-end gap-1 whitespace-nowrap">
+	                    <span className="pricing-rate-value font-semibold text-base tabular-nums leading-none">{route.priceNight}</span>
+	                    <span className="pricing-rate-currency font-semibold text-white/70 tracking-wider leading-none">PLN</span>
+	                  </div>
+	                  {eurText(route.priceNight) && (
+	                    <div className="eur-row flex items-center justify-end text-blue-200 text-xs whitespace-nowrap">
+	                      <span className="eur-text">{eurText(route.priceNight)}</span>
+	                    </div>
                   )}
                 </div>
               </div>
-              <span className="pricing-sunday mt-2 block text-center text-blue-200 leading-none text-[10px]">
-                {t.pricing.sundayNote}
-              </span>
-            </div>
-          </div>
+                  <div className="mt-1 text-center text-[8px] leading-none text-blue-200/70 whitespace-nowrap">
+                    {t.pricing.sundayNote}
+                  </div>
+		            </div>
+		          </div>
 
           <button
             onClick={() => {

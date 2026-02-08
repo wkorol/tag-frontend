@@ -23,10 +23,8 @@
         type="image/webp"
       />
 
-      <script type="module" crossorigin src="/assets/index-BFyiw9Zb.js"></script>
-      
-      <link rel="preload" as="style" href="/assets/index-CjCdjKvy.css" onload="this.onload=null;this.rel=&#39;stylesheet&#39;">
-      <noscript><link rel="stylesheet" href="/assets/index-CjCdjKvy.css"></noscript>
+      <script type="module" crossorigin src="/assets/index-CtOwjY5Y.js"></script>
+      <link rel="stylesheet" crossorigin href="/assets/index-D3M-4zJA.css">
     </head>
 
     <body>
@@ -43,6 +41,20 @@
             return;
           }
 
+          var ga4Id = 'G-SGV8S5XKSE';
+          var adsId = 'AW-17848598074';
+          var isGa4Id = function(value) { return /^G-[A-Z0-9]+$/i.test(value); };
+          var isAdsId = function(value) { return /^AW-\d+$/.test(value); };
+          var ids = [];
+          if (isAdsId(adsId)) ids.push(adsId);
+          if (isGa4Id(ga4Id)) ids.push(ga4Id);
+          window.__ga4Id = isGa4Id(ga4Id) ? ga4Id : null;
+          var debugMode = false;
+          try {
+            var params = new URLSearchParams(window.location.search);
+            debugMode = params.get('debug') === '1';
+          } catch {}
+
           var gtagLoaded = false;
           var loadGtag = function() {
             if (gtagLoaded) {
@@ -51,9 +63,16 @@
             gtagLoaded = true;
             var script = document.createElement('script');
             script.async = true;
-            script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17848598074';
+            script.src = '/gtag/js?id=' + encodeURIComponent(ids[0] || adsId);
+            script.onload = function() {
+              window.__gtagLoaded = true;
+              if (window.__updateGtagDebug) {
+                window.__updateGtagDebug();
+              }
+            };
             document.head.appendChild(script);
           };
+          window.__loadGtag = loadGtag;
 
           window.gtag('consent', 'default', {
             ad_storage: 'denied',
@@ -62,7 +81,13 @@
             security_storage: 'granted'
           });
           window.gtag('js', new Date());
-          window.gtag('config', 'AW-17848598074');
+          ids.forEach(function(id) {
+            if (isGa4Id(id) && debugMode) {
+              window.gtag('config', id, { debug_mode: true });
+              return;
+            }
+            window.gtag('config', id);
+          });
 
           var loadOnInteraction = function() {
             loadGtag();
@@ -79,6 +104,23 @@
           window.addEventListener('load', function() {
             window.setTimeout(loadGtag, 10000);
           }, { once: true });
+
+          if (debugMode) {
+            var debugEl = document.createElement('div');
+            debugEl.style.cssText = 'position:fixed;left:10px;bottom:10px;z-index:2147483646;background:#0b0f1a;color:#e2e8f0;padding:10px 12px;border-radius:10px;font:12px/1.4 -apple-system,system-ui,Segoe UI,Roboto,Arial;box-shadow:0 10px 30px rgba(0,0,0,0.35);max-width:90vw;';
+            debugEl.textContent = 'GA debug…';
+            document.body.appendChild(debugEl);
+            window.__updateGtagDebug = function() {
+              var consent = null;
+              try { consent = localStorage.getItem('cookie-consent'); } catch {}
+              var gtagType = typeof window.gtag;
+              var loaded = window.__gtagLoaded ? 'yes' : 'no';
+              var dl = (window.dataLayer && window.dataLayer.length) ? window.dataLayer.length : 0;
+              debugEl.textContent = 'GA debug | gtag: ' + gtagType + ' | loaded: ' + loaded + ' | consent: ' + consent + ' | dataLayer: ' + dl;
+            };
+            window.__updateGtagDebug();
+            loadGtag();
+          }
         })();
       </script>
     </body>

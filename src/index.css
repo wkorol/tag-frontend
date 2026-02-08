@@ -1769,6 +1769,38 @@ html {
   animation: 4.5s ease-in-out infinite geminiGlow;
 }
 
+.vehicle-selfmanage-badge {
+  height: 2.25rem; /* 36px, matches tailwind h-9 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.5625rem; /* ~9px */
+  font-weight: 500;
+  line-height: 1.1;
+  box-sizing: border-box;
+}
+
+.vehicle-select-cta {
+  height: 2.75rem; /* 44px, matches tailwind h-11 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem; /* text-sm */
+  box-sizing: border-box;
+}
+
+@media (min-width: 48rem) {
+  .vehicle-selfmanage-badge {
+    height: 2.5rem; /* 40px */
+    font-size: 0.625rem; /* 10px */
+  }
+
+  .vehicle-select-cta {
+    height: 3rem; /* 48px */
+    font-size: 1rem; /* text-base */
+  }
+}
+
 @property --tw-space-y-reverse {
   syntax: "*";
   inherits: false;
@@ -1961,39 +1993,15 @@ html {
   inherits: false
 }
 
-@keyframes live-badge-pulse {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
-  }
-  70% {
-    transform: scale(1.03);
-    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
-  }
-}
-
-.live-badge {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 9999px;
-  background: #10b981;
-  color: #ffffff;
-  padding: 1px 6px;
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  box-shadow: 0 6px 14px rgba(16, 185, 129, 0.35);
-  animation: live-badge-pulse 1.6s ease-in-out infinite;
-}
-
 .eur-text {
   font-size: 11px;
   line-height: 1;
   letter-spacing: 0.01em;
+}
+
+.pricing-rate-currency {
+  font-size: 10px;
+  line-height: 1;
 }
 
 .booking-form {
@@ -2116,6 +2124,10 @@ html {
     white-space: nowrap;
   }
 
+  .pricing-rate-currency {
+    font-size: 8px;
+  }
+
   .pricing-sunday {
     font-size: 0.6rem;
   }
@@ -2186,7 +2198,7 @@ html {
   }
 
   .vehicle-card__info {
-    min-height: 8rem;
+    min-height: 0;
     margin-bottom: 0;
   }
 
@@ -2237,9 +2249,6 @@ html {
     white-space: nowrap;
   }
 
-  .live-badge {
-    display: none;
-  }
 }
 
 .vehicle-grid-mobile {
@@ -2248,8 +2257,8 @@ html {
 
 @media (min-width: 40rem) {
   .vehicle-card__info {
-    min-height: 7.5rem;
-    margin-bottom: 1.5rem;
+    min-height: 0;
+    margin-bottom: 0;
   }
 }
 

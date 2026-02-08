@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { getApiBaseUrl } from '../lib/api';
+import { formatEur } from '../lib/currency';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
+import { preloadEurRate, useEurRate } from '../lib/useEurRate';
 import { usePageTitle } from '../lib/usePageTitle';
 
 type AdminOrder = {
@@ -37,6 +39,22 @@ export function AdminOrdersPage() {
   const [orders, setOrders] = useState<AdminOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const eurRate = useEurRate();
+
+  const renderPrice = (value: string) => {
+    const pln = Number(value);
+    const eurText = pln > 0 ? formatEur(pln, eurRate) : null;
+    return (
+      <div className="leading-tight">
+        <div className="text-slate-900">{value} PLN</div>
+        <div className="min-h-[16px] text-xs text-slate-500">{eurText ?? ''}</div>
+      </div>
+    );
+  };
+
+  useEffect(() => {
+    preloadEurRate();
+  }, []);
 
   useEffect(() => {
     if (locale !== adminLocale) {
@@ -120,7 +138,7 @@ export function AdminOrdersPage() {
                   <div className="text-xs text-slate-500">{order.emailAddress}</div>
                 </div>
                 <div className="col-span-2">
-                  <div className="text-slate-900">{order.proposedPrice} PLN</div>
+                  {renderPrice(order.proposedPrice)}
                   {order.pendingPrice && (
                     <div className="text-xs text-blue-600">{t.adminOrders.pendingPrice(order.pendingPrice)}</div>
                   )}

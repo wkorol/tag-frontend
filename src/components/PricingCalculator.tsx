@@ -899,7 +899,10 @@ export function PricingCalculator() {
           </div>
           {!allDay && (
             <div className="flex items-start justify-between gap-4">
-              <span className="text-sm text-gray-600">{t.pricingCalculator.nightRate}</span>
+              <span className="text-sm text-gray-600 leading-tight">
+                {t.pricingCalculator.nightRate}{' '}
+                <span className="text-[10px] text-gray-400">{t.pricing.sundayNote}</span>
+              </span>
               {renderPrice(night.price)}
             </div>
           )}
@@ -939,7 +942,12 @@ export function PricingCalculator() {
                       <td className="px-3 py-2 text-right">{renderPriceSmall(day.taximeterPrice)}</td>
                     </tr>
                     <tr className="border-t border-slate-200">
-                      <td className="px-3 py-2">{t.pricingCalculator.nightRate}</td>
+                      <td className="px-3 py-2">
+                        <div className="leading-tight">
+                          <div>{t.pricingCalculator.nightRate}</div>
+                          <div className="text-[10px] text-slate-500">{t.pricing.sundayNote}</div>
+                        </div>
+                      </td>
                       <td className="px-3 py-2 text-right">{night.taximeterRate} PLN/km</td>
                       <td className="px-3 py-2 text-right">{renderPriceSmall(night.taximeterPrice)}</td>
                     </tr>
@@ -979,8 +987,11 @@ export function PricingCalculator() {
                   </div>
                 </div>
                 <div className="rounded-lg border border-slate-200 bg-white/70 px-3 py-2">
-                  <div className="text-emerald-700" style={{ fontSize: 'clamp(11px, 2.8vw, 12px)' }}>
-                    {t.pricingCalculator.nightRate}
+                  <div className="leading-tight">
+                    <div className="text-emerald-700" style={{ fontSize: 'clamp(11px, 2.8vw, 12px)' }}>
+                      {t.pricingCalculator.nightRate}
+                    </div>
+                    <div className="text-[10px] text-slate-500">{t.pricing.sundayNote}</div>
                   </div>
                   <div className="mt-1 flex items-center gap-2">
                     {renderPrice(night.proposedPrice)}

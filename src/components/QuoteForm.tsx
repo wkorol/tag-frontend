@@ -9,6 +9,7 @@ import { preloadEurRate, useEurRate } from '../lib/useEurRate';
 import { buildAdditionalNotes } from '../lib/orderNotes';
 import { hasMarketingConsent } from '../lib/consent';
 import { getApiBaseUrl } from '../lib/api';
+import { isPolishPublicHoliday } from '../lib/polishHolidays';
 import { trackFormClose, trackFormStart, trackFormSubmit, trackFormValidation } from '../lib/tracking';
 import { isAnalyticsEnabled } from '../lib/analytics';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
@@ -171,26 +172,6 @@ const getCurrentTimeString = () => {
 const isPastDate = (value: string) => {
   if (!value) return false;
   return value < getTodayDateString();
-};
-
-const isPolishPublicHoliday = (date: Date, apiHolidayKeys: Set<string> | null) => {
-  if (apiHolidayKeys && apiHolidayKeys.has(date.toISOString().split('T')[0])) {
-    return true;
-  }
-  const month = date.getMonth();
-  const day = date.getDate();
-  const fixedHolidays = [
-    { month: 0, day: 1 },
-    { month: 0, day: 6 },
-    { month: 4, day: 1 },
-    { month: 4, day: 3 },
-    { month: 7, day: 15 },
-    { month: 10, day: 1 },
-    { month: 10, day: 11 },
-    { month: 11, day: 25 },
-    { month: 11, day: 26 },
-  ];
-  return fixedHolidays.some((holiday) => holiday.month === month && holiday.day === day);
 };
 
 interface QuoteFormProps {
@@ -1505,14 +1486,14 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
                       {t.quoteForm.fixedRouteComputed(fixedTotalPrice ?? fixedRoute.price)}
                     </span>
                     {eurText && (
-                      <span className="inline-flex items-center gap-2 text-[11px] text-amber-700">
-                        <span>{eurText}</span>
-                        <span className="live-badge">{t.common.actualBadge}</span>
-                      </span>
+                      <span className="text-[11px] text-amber-700">{eurText}</span>
                     )}
                   </div>
                   <div className="mt-2 text-xs text-gray-600">
                     {fixedRoute.rateLabel ?? (fixedRoute.isNight ? t.quoteForm.fixedRouteNight : t.quoteForm.fixedRouteDay)}
+                    {fixedRoute.isNight && (
+                      <span className="ml-1 text-[10px] text-gray-500">{t.pricing.sundayNote}</span>
+                    )}
                   </div>
                 </div>
               )}
@@ -1928,20 +1909,14 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
                   <span className="flex flex-col items-center gap-1">
                     <span>{t.orderForm.confirmOrder(fixedTotalPrice)}</span>
                     {eurText && (
-                      <span className="inline-flex items-center gap-2 text-[11px] text-blue-100">
-                        <span>{eurText}</span>
-                        <span className="live-badge">{t.common.actualBadge}</span>
-                      </span>
+                      <span className="text-[11px] text-blue-100">{eurText}</span>
                     )}
                   </span>
                 ) : longRouteInfo ? (
                   <span className="flex flex-col items-center gap-1">
                     <span>{t.orderForm.confirmOrder(longRouteInfo.proposedPrice)}</span>
                     {formatEur(longRouteInfo.proposedPrice, eurRate) && (
-                      <span className="inline-flex items-center gap-2 text-[11px] text-blue-100">
-                        <span>{formatEur(longRouteInfo.proposedPrice, eurRate)}</span>
-                        <span className="live-badge">{t.common.actualBadge}</span>
-                      </span>
+                      <span className="text-[11px] text-blue-100">{formatEur(longRouteInfo.proposedPrice, eurRate)}</span>
                     )}
                   </span>
                 ) : (

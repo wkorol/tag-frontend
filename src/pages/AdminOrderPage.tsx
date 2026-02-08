@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Calendar, CheckCircle2, XCircle } from 'lucide-react';
 import { getApiBaseUrl } from '../lib/api';
+import { formatEur } from '../lib/currency';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
+import { preloadEurRate, useEurRate } from '../lib/useEurRate';
 import { usePageTitle } from '../lib/usePageTitle';
 
 type AdminOrder = {
@@ -115,6 +117,18 @@ export function AdminOrderPage() {
     flight: false,
   });
   const [submitting, setSubmitting] = useState(false);
+  const eurRate = useEurRate();
+
+  const renderPrice = (value: string) => {
+    const pln = Number(value);
+    const eurText = pln > 0 ? formatEur(pln, eurRate) : null;
+    return (
+      <div className="leading-tight">
+        <div className="text-slate-900">{value} PLN</div>
+        <div className="min-h-[16px] text-xs text-slate-500">{eurText ?? ''}</div>
+      </div>
+    );
+  };
 
   const parsedNotes = useMemo(() => parseNotes(order?.additionalNotes), [order?.additionalNotes]);
 
@@ -140,6 +154,10 @@ export function AdminOrderPage() {
   }, [order?.date, order?.pickupTime]);
 
   const canFulfill = order?.status === 'confirmed' && pickupDateTime && pickupDateTime.getTime() < Date.now();
+
+  useEffect(() => {
+    preloadEurRate();
+  }, []);
 
   const fetchOrder = () => {
     if (!id || !token) {
@@ -409,7 +427,7 @@ export function AdminOrderPage() {
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
                   <div className="text-xs uppercase text-slate-500">{t.adminOrder.priceLabel}</div>
-                  <div className="text-slate-900">{order.proposedPrice} PLN</div>
+                  {renderPrice(order.proposedPrice)}
                   {order.pendingPrice && (
                     <div className="text-sm text-blue-700">{t.adminOrder.pendingPrice(order.pendingPrice)}</div>
                   )}
@@ -434,8 +452,11 @@ export function AdminOrderPage() {
                     </div>
                   )}
                   {typeof parsedNotes?.signFee === 'number' && parsedNotes.signFee > 0 && (
-                    <div className="text-sm text-slate-700">
-                      {t.adminOrder.signFee} {parsedNotes.signFee} PLN
+                    <div className="text-sm text-slate-700 leading-tight">
+                      <div>{t.adminOrder.signFee} {parsedNotes.signFee} PLN</div>
+                      <div className="min-h-[16px] text-xs text-slate-500">
+                        {formatEur(parsedNotes.signFee, eurRate) ?? ''}
+                      </div>
                     </div>
                   )}
                   {parsedNotes?.pickupType === 'airport' && (

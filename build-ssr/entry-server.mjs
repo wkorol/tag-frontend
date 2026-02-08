@@ -7,6 +7,8 @@ import { createPortal } from 'react-dom';
 import { Mail, MapPin } from 'lucide-react';
 
 const STORAGE_KEY$1 = "tag_locale";
+const DEFAULT_LOCALE = "en";
+const SUPPORTED_LOCALES = ["en", "de", "fi", "no", "sv", "da", "pl"];
 const localeToPath = (locale) => {
   switch (locale) {
     case "pl":
@@ -39,7 +41,7 @@ const getLocaleFromPathname = (pathname) => {
 };
 const detectLocale = () => {
   if (typeof window === "undefined") {
-    return "en";
+    return DEFAULT_LOCALE;
   }
   const pathname = window.location.pathname;
   const fromPath = getLocaleFromPathname(pathname);
@@ -49,6 +51,12 @@ const detectLocale = () => {
   const stored = window.localStorage.getItem(STORAGE_KEY$1);
   if (stored === "pl" || stored === "en" || stored === "de" || stored === "fi" || stored === "no" || stored === "sv" || stored === "da") {
     return stored;
+  }
+  return DEFAULT_LOCALE;
+};
+const detectBrowserLocale = () => {
+  if (typeof navigator === "undefined") {
+    return DEFAULT_LOCALE;
   }
   const languages = navigator.languages ?? [navigator.language];
   const normalized = languages.map((lang) => lang?.toLowerCase() ?? "");
@@ -373,11 +381,22 @@ const trackPageView = (path, title) => {
   if (typeof window === "undefined" || !isAnalyticsEnabled()) {
     return;
   }
+  const pageTitle = window.__pageTitle ?? document.title;
+  const pageLocation = window.location.href;
+  const ga4Id = window.__ga4Id;
   trackEvent("page_view", {
     page_path: path,
-    page_title: document.title,
-    page_location: window.location.href
+    page_title: pageTitle,
+    page_location: pageLocation
   });
+  const gtag = window.gtag;
+  if (typeof gtag === "function" && ga4Id) {
+    gtag("config", ga4Id, {
+      page_path: path,
+      page_title: pageTitle,
+      page_location: pageLocation
+    });
+  }
 };
 const trackNavClick = (label) => {
   trackEvent("nav_click", {
@@ -458,6 +477,32 @@ const trackSectionView = (section) => {
     event_label: section
   });
 };
+const trackScrollDepth = (percent) => {
+  trackEvent("scroll_depth", {
+    event_category: "engagement",
+    event_label: `${percent}%`,
+    value: percent
+  });
+};
+const trackOutboundClick = (url) => {
+  trackEvent("outbound_click", {
+    event_category: "navigation",
+    event_label: url
+  });
+};
+const trackLinkClick = (label, href) => {
+  trackEvent("link_click", {
+    event_category: "navigation",
+    event_label: label,
+    ...href ? { link_url: href } : {}
+  });
+};
+const trackButtonClick = (label) => {
+  trackEvent("button_click", {
+    event_category: "cta",
+    event_label: label
+  });
+};
 
 const favicon = "/favicon.svg";
 
@@ -467,14 +512,21 @@ function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const basePath = localeToPath(locale);
+  const strippedPath = location.pathname.replace(/^\/(en|pl|de|fi|no|sv|da)/, "");
+  const pathWithoutLeading = strippedPath.replace(/^\//, "");
+  const [firstSegment] = pathWithoutLeading.split("/").filter(Boolean);
+  const currentRouteKey = firstSegment ? getRouteKeyFromSlug(locale, firstSegment) : null;
+  const isHome = !firstSegment;
+  const isPricing = currentRouteKey === "pricing";
+  const isAirportTaxi = currentRouteKey === "airportTaxi";
+  const isAirportSopot = currentRouteKey === "airportSopot";
+  const isAirportGdynia = currentRouteKey === "airportGdynia";
   const handleLocaleChange = (nextLocale) => {
     trackLocaleChange(locale, nextLocale);
     setLocale(nextLocale);
     const nextBasePath = localeToPath(nextLocale);
-    const strippedPath = location.pathname.replace(/^\/(en|pl|de|fi|no|sv|da)/, "");
-    const pathWithoutLeading = strippedPath.replace(/^\//, "");
-    const [firstSegment, ...restSegments] = pathWithoutLeading.split("/").filter(Boolean);
-    const routeKey = firstSegment ? getRouteKeyFromSlug(locale, firstSegment) : null;
+    const [firstSegment2, ...restSegments] = pathWithoutLeading.split("/").filter(Boolean);
+    const routeKey = firstSegment2 ? getRouteKeyFromSlug(locale, firstSegment2) : null;
     const nextSlug = routeKey ? getRouteSlug(nextLocale, routeKey) : "";
     const nextPath = nextSlug !== "" ? `/${[nextSlug, ...restSegments].filter(Boolean).join("/")}` : strippedPath;
     const searchHash = `${location.search}${location.hash}`;
@@ -485,11 +537,8 @@ function Navbar() {
   const handleNavClick = (event, sectionId, label) => {
     event.preventDefault();
     trackNavClick(label);
-    const strippedPath = location.pathname.replace(/^\/(en|pl|de|fi|no|sv|da)/, "");
-    const pathWithoutLeading = strippedPath.replace(/^\//, "");
-    const [firstSegment] = pathWithoutLeading.split("/").filter(Boolean);
-    const currentRouteKey = firstSegment ? getRouteKeyFromSlug(locale, firstSegment) : null;
-    const targetId = sectionId === "vehicle-selection" && currentRouteKey === "pricing" ? "pricing-booking" : sectionId;
+    const currentRouteKey2 = firstSegment ? getRouteKeyFromSlug(locale, firstSegment) : null;
+    const targetId = sectionId === "vehicle-selection" && currentRouteKey2 === "pricing" ? "pricing-booking" : sectionId;
     const scrolled = requestScrollTo(targetId);
     if (!scrolled) {
       if (targetId === "pricing-booking") {
@@ -523,7 +572,7 @@ function Navbar() {
           {
             href: `${basePath}/`,
             onClick: () => trackNavClick("home"),
-            className: "text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap",
+            className: `transition-colors whitespace-nowrap ${isHome ? "text-blue-700 font-semibold" : "text-gray-700 hover:text-blue-600"}`,
             children: t.navbar.home
           }
         ),
@@ -541,7 +590,7 @@ function Navbar() {
           {
             href: getRoutePath(locale, "airportTaxi"),
             onClick: () => trackNavClick("airport_taxi"),
-            className: "text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap",
+            className: `transition-colors whitespace-nowrap ${isAirportTaxi ? "text-blue-700 font-semibold" : "text-gray-700 hover:text-blue-600"}`,
             children: t.navbar.airportTaxi
           }
         ),
@@ -550,7 +599,7 @@ function Navbar() {
           {
             href: getRoutePath(locale, "airportSopot"),
             onClick: () => trackNavClick("airport_sopot"),
-            className: "text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap",
+            className: `transition-colors whitespace-nowrap ${isAirportSopot ? "text-blue-700 font-semibold" : "text-gray-700 hover:text-blue-600"}`,
             children: t.navbar.airportSopot
           }
         ),
@@ -559,7 +608,7 @@ function Navbar() {
           {
             href: getRoutePath(locale, "airportGdynia"),
             onClick: () => trackNavClick("airport_gdynia"),
-            className: "text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap",
+            className: `transition-colors whitespace-nowrap ${isAirportGdynia ? "text-blue-700 font-semibold" : "text-gray-700 hover:text-blue-600"}`,
             children: t.navbar.airportGdynia
           }
         ),
@@ -568,7 +617,7 @@ function Navbar() {
           {
             href: getRoutePath(locale, "pricing"),
             onClick: () => trackNavClick("pricing"),
-            className: "text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap",
+            className: `transition-colors whitespace-nowrap ${isPricing ? "text-blue-700 font-semibold" : "text-gray-700 hover:text-blue-600"}`,
             children: t.navbar.prices
           }
         ),
@@ -625,7 +674,7 @@ function Navbar() {
         {
           href: `${basePath}/`,
           onClick: () => trackNavClick("mobile_home"),
-          className: "block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors",
+          className: `block w-full text-left py-2 transition-colors ${isHome ? "text-blue-700 font-semibold" : "text-gray-700 hover:text-blue-600"}`,
           children: t.navbar.home
         }
       ),
@@ -643,7 +692,7 @@ function Navbar() {
         {
           href: getRoutePath(locale, "airportTaxi"),
           onClick: () => trackNavClick("mobile_airport_taxi"),
-          className: "block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors",
+          className: `block w-full text-left py-2 transition-colors ${isAirportTaxi ? "text-blue-700 font-semibold" : "text-gray-700 hover:text-blue-600"}`,
           children: t.navbar.airportTaxi
         }
       ),
@@ -652,7 +701,7 @@ function Navbar() {
         {
           href: getRoutePath(locale, "airportSopot"),
           onClick: () => trackNavClick("mobile_airport_sopot"),
-          className: "block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors",
+          className: `block w-full text-left py-2 transition-colors ${isAirportSopot ? "text-blue-700 font-semibold" : "text-gray-700 hover:text-blue-600"}`,
           children: t.navbar.airportSopot
         }
       ),
@@ -661,7 +710,7 @@ function Navbar() {
         {
           href: getRoutePath(locale, "airportGdynia"),
           onClick: () => trackNavClick("mobile_airport_gdynia"),
-          className: "block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors",
+          className: `block w-full text-left py-2 transition-colors ${isAirportGdynia ? "text-blue-700 font-semibold" : "text-gray-700 hover:text-blue-600"}`,
           children: t.navbar.airportGdynia
         }
       ),
@@ -670,7 +719,7 @@ function Navbar() {
         {
           href: getRoutePath(locale, "pricing"),
           onClick: () => trackNavClick("mobile_pricing"),
-          className: "block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors",
+          className: `block w-full text-left py-2 transition-colors ${isPricing ? "text-blue-700 font-semibold" : "text-gray-700 hover:text-blue-600"}`,
           children: t.navbar.prices
         }
       ),
@@ -773,14 +822,31 @@ function Hero() {
           )
         ] }) }),
         /* @__PURE__ */ jsxs("div", { className: "hero-cta flex flex-col sm:flex-row gap-4 justify-center items-center", children: [
+          /* @__PURE__ */ jsx(
+            "a",
+            {
+              href: `${basePath}/`,
+              onClick: (event) => {
+                event.preventDefault();
+                trackCtaClick("hero_order_online");
+                requestScrollTo("vehicle-selection");
+              },
+              className: "inline-flex items-center gap-2 bg-orange-800 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-700 transition-colors animate-pulse-glow",
+              children: t.common.orderOnlineNow
+            }
+          ),
           /* @__PURE__ */ jsxs(
             "a",
             {
               href: whatsappLink,
               onClick: () => trackContactClick("whatsapp"),
-              className: "inline-flex items-center gap-2 bg-white text-blue-900 px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors",
+              className: "inline-flex items-center gap-2 px-6 py-3 rounded-lg text-gray-900 font-semibold text-base shadow-sm transition-colors",
+              style: { backgroundColor: "#25D366" },
               children: [
-                /* @__PURE__ */ jsx("span", { "aria-hidden": "true", children: "💬" }),
+                /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 32 32", "aria-hidden": "true", className: "h-5 w-5 fill-current", children: [
+                  /* @__PURE__ */ jsx("path", { d: "M19.11 17.72c-.26-.13-1.52-.75-1.75-.84-.24-.09-.41-.13-.58.13-.17.26-.67.84-.82 1.02-.15.17-.3.2-.56.07-.26-.13-1.1-.4-2.09-1.28-.77-.69-1.29-1.54-1.44-1.8-.15-.26-.02-.4.11-.53.12-.12.26-.3.39-.45.13-.15.17-.26.26-.43.09-.17.04-.32-.02-.45-.06-.13-.58-1.4-.79-1.92-.21-.5-.43-.43-.58-.44-.15-.01-.32-.01-.49-.01-.17 0-.45.06-.68.32-.24.26-.9.88-.9 2.15s.92 2.49 1.05 2.66c.13.17 1.81 2.76 4.4 3.87.62.27 1.1.43 1.48.55.62.2 1.18.17 1.63.1.5-.07 1.52-.62 1.74-1.22.21-.6.21-1.12.15-1.22-.06-.1-.24-.17-.5-.3z" }),
+                  /* @__PURE__ */ jsx("path", { d: "M26.67 5.33A14.9 14.9 0 0016.03 1.5C8.12 1.5 1.5 8.13 1.5 16.03c0 2.4.63 4.76 1.83 6.85L1.5 30.5l7.81-1.79a14.93 14.93 0 006.72 1.61h.01c7.9 0 14.53-6.63 14.53-14.53 0-3.88-1.52-7.53-4.4-10.46zm-10.64 22.3h-.01a12.4 12.4 0 01-6.32-1.73l-.45-.27-4.64 1.06 1.24-4.52-.3-.46a12.45 12.45 0 01-2-6.68c0-6.86 5.58-12.44 12.45-12.44 3.32 0 6.43 1.3 8.77 3.65a12.33 12.33 0 013.64 8.79c0 6.86-5.59 12.44-12.38 12.44z" })
+                ] }),
                 t.common.whatsapp
               ]
             }
@@ -795,19 +861,6 @@ function Hero() {
                 /* @__PURE__ */ jsx("span", { "aria-hidden": "true", children: "✉️" }),
                 t.hero.orderViaEmail
               ]
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            "a",
-            {
-              href: `${basePath}/`,
-              onClick: (event) => {
-                event.preventDefault();
-                trackCtaClick("hero_order_online");
-                requestScrollTo("vehicle-selection");
-              },
-              className: "inline-flex items-center gap-2 bg-orange-800 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-700 transition-colors animate-pulse-glow",
-              children: t.common.orderOnlineNow
             }
           )
         ] }),
@@ -943,49 +996,35 @@ function Hero() {
 
 function CookieBanner() {
   const { t, locale } = useI18n();
-  const [visible, setVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [visible, setVisible] = useState(false);
   useEffect(() => {
     setMounted(true);
-  }, []);
-  useEffect(() => {
-    let timer;
-    let cleaned = false;
-    const cleanup = () => {
-      if (cleaned) {
-        return;
-      }
-      cleaned = true;
-      window.removeEventListener("pointerdown", reveal);
-      window.removeEventListener("keydown", reveal);
-      window.removeEventListener("touchstart", reveal);
-      if (timer) {
-        window.clearTimeout(timer);
-      }
-    };
-    const reveal = () => {
-      cleanup();
-      setVisible(true);
-    };
     try {
       const existing = getConsentStatus();
       if (existing) {
         updateGtagConsent(existing);
         setVisible(existing !== "accepted");
-        return cleanup;
+        return;
       }
-      window.addEventListener("pointerdown", reveal, { once: true, passive: true });
-      window.addEventListener("keydown", reveal, { once: true });
-      window.addEventListener("touchstart", reveal, { once: true, passive: true });
-      timer = window.setTimeout(reveal, 12e3);
+      setVisible(true);
     } catch {
-      reveal();
+      setVisible(true);
     }
-    return cleanup;
   }, []);
   const accept = () => {
     setConsentStatus("accepted");
     updateGtagConsent("accepted");
+    if (typeof window !== "undefined") {
+      const loadGtag = window.__loadGtag;
+      if (typeof loadGtag === "function") {
+        loadGtag();
+      }
+      const gtag = window.gtag;
+      if (typeof gtag === "function") {
+        gtag("event", "page_view");
+      }
+    }
     setVisible(false);
   };
   const reject = () => {
@@ -1004,31 +1043,31 @@ function CookieBanner() {
         style: { position: "fixed", left: 0, right: 0, bottom: 16, zIndex: 2147483647 },
         "data-cookie-banner": true,
         "aria-live": "polite",
-        children: /* @__PURE__ */ jsx(
+        children: /* @__PURE__ */ jsxs(
           "div",
           {
-            className: "mx-auto max-w-3xl rounded-3xl text-white border border-slate-800 p-6 sm:p-7 shadow-[0_20px_60px_rgba(0,0,0,0.55)]",
+            className: "mx-auto max-w-3xl overflow-hidden rounded-3xl text-white border border-slate-800 shadow-[0_20px_60px_rgba(0,0,0,0.55)]",
             style: { backgroundColor: "#0b0f1a" },
-            children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between", children: [
-              /* @__PURE__ */ jsxs("div", { className: "space-y-2", children: [
+            children: [
+              /* @__PURE__ */ jsx("div", { className: "p-6 sm:p-7", children: /* @__PURE__ */ jsxs("div", { className: "space-y-2", children: [
                 /* @__PURE__ */ jsx("p", { className: "text-base font-semibold tracking-wide", children: t.cookieBanner.title }),
                 /* @__PURE__ */ jsx("p", { className: "text-sm text-slate-200 leading-relaxed", children: t.cookieBanner.body }),
                 /* @__PURE__ */ jsx(
                   "a",
                   {
                     href: getRoutePath(locale, "cookies"),
-                    className: "inline-block text-sm text-slate-300 hover:text-white underline",
+                    className: "inline-block text-sm text-blue-300 hover:text-blue-200 underline",
                     children: t.cookieBanner.readPolicy
                   }
                 )
-              ] }),
-              /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4", children: [
+              ] }) }),
+              /* @__PURE__ */ jsx("div", { className: "border-t border-white/10 bg-slate-900/60 px-6 py-4 sm:px-7", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4", children: [
                 /* @__PURE__ */ jsx(
                   "button",
                   {
                     type: "button",
                     onClick: reject,
-                    className: "border border-white/25 text-white text-base font-semibold px-7 py-3 rounded-full hover:border-white/60 transition",
+                    className: "w-full sm:w-auto border border-white/25 text-white text-base font-semibold px-7 py-3 rounded-full hover:border-white/60 transition",
                     children: t.cookieBanner.decline
                   }
                 ),
@@ -1037,12 +1076,12 @@ function CookieBanner() {
                   {
                     type: "button",
                     onClick: accept,
-                    className: "bg-amber-400 hover:bg-amber-300 text-slate-900 text-base font-semibold px-8 py-3 rounded-full shadow-lg shadow-amber-400/35 transition",
+                    className: "w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold px-8 py-3 rounded-lg shadow-lg shadow-blue-600/30 transition",
                     children: t.cookieBanner.accept
                   }
                 )
-              ] })
-            ] })
+              ] }) })
+            ]
           }
         )
       }
@@ -1056,7 +1095,9 @@ function FloatingActions({ orderTargetId = "vehicle-selection", hide = false }) 
   const basePath = localeToPath(locale);
   const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
   const [cookieBannerOffset, setCookieBannerOffset] = useState(0);
+  const [isCookieBannerVisible, setIsCookieBannerVisible] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isTargetVisible, setIsTargetVisible] = useState(false);
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -1066,12 +1107,14 @@ function FloatingActions({ orderTargetId = "vehicle-selection", hide = false }) 
       const banner = document.querySelector("[data-cookie-banner]");
       if (!banner) {
         setCookieBannerOffset(0);
+        setIsCookieBannerVisible(false);
         if (resizeObserver) {
           resizeObserver.disconnect();
           resizeObserver = null;
         }
         return;
       }
+      setIsCookieBannerVisible(true);
       const height = banner.getBoundingClientRect().height;
       setCookieBannerOffset(Math.ceil(height) + 12);
       if (!resizeObserver && "ResizeObserver" in window) {
@@ -1096,6 +1139,52 @@ function FloatingActions({ orderTargetId = "vehicle-selection", hide = false }) 
     if (typeof window === "undefined") {
       return;
     }
+    if (!("IntersectionObserver" in window)) {
+      return;
+    }
+    let observer = null;
+    const observed = /* @__PURE__ */ new Set();
+    const connect = () => {
+      const targets = [
+        document.getElementById(orderTargetId),
+        document.getElementById("pricing-booking")
+      ].filter(Boolean);
+      if (targets.length === 0) {
+        setIsTargetVisible(false);
+        return;
+      }
+      if (!observer) {
+        observer = new IntersectionObserver(
+          (entries) => {
+            setIsTargetVisible(entries.some((entry) => entry.isIntersecting));
+          },
+          {
+            root: null,
+            threshold: 0.2
+          }
+        );
+      }
+      targets.forEach((target) => {
+        if (!observed.has(target)) {
+          observer.observe(target);
+          observed.add(target);
+        }
+      });
+    };
+    connect();
+    const mutationObserver = new MutationObserver(connect);
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
+    return () => {
+      mutationObserver.disconnect();
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, [orderTargetId]);
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
     const updateVisibility = () => {
       const topVisible = window.scrollY <= 120;
       const bottomVisible = window.innerHeight + window.scrollY >= document.body.scrollHeight - 120;
@@ -1109,7 +1198,7 @@ function FloatingActions({ orderTargetId = "vehicle-selection", hide = false }) 
       window.removeEventListener("resize", updateVisibility);
     };
   }, []);
-  if (hide || !isVisible) {
+  if (hide || !isVisible || isCookieBannerVisible || isTargetVisible) {
     return null;
   }
   return /* @__PURE__ */ jsxs(Fragment, { children: [
@@ -1124,7 +1213,7 @@ function FloatingActions({ orderTargetId = "vehicle-selection", hide = false }) 
             {
               href: whatsappLink,
               onClick: () => trackContactClick("whatsapp"),
-              className: "rounded-full px-5 py-3 text-white shadow-lg flex items-center justify-center gap-2",
+              className: "rounded-full px-5 py-3 text-gray-900 shadow-lg flex items-center justify-center gap-2",
               style: { backgroundColor: "#25D366" },
               children: t.common.whatsapp
             }
@@ -1160,7 +1249,7 @@ function FloatingActions({ orderTargetId = "vehicle-selection", hide = false }) 
             {
               href: whatsappLink,
               onClick: () => trackContactClick("whatsapp"),
-              className: "flex-1 rounded-full px-4 py-3 text-center text-white shadow-sm flex items-center justify-center gap-2",
+              className: "flex-1 rounded-full px-4 py-3 text-center text-gray-900 shadow-sm flex items-center justify-center gap-2",
               style: { backgroundColor: "#25D366" },
               children: [
                 /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 32 32", "aria-hidden": "true", className: "h-5 w-5 fill-current", children: [
@@ -1431,9 +1520,23 @@ const Footer$2 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   Footer: Footer$1
 }, Symbol.toStringTag, { value: 'Module' }));
 
+const BRAND_TITLE = "Taxi Airport Gdańsk";
+function usePageTitle(title) {
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return;
+    }
+    const trimmed = (title ?? "").trim();
+    const nextTitle = trimmed ? `${trimmed} | ${BRAND_TITLE}` : BRAND_TITLE;
+    window.__pageTitle = nextTitle;
+    document.title = nextTitle;
+  }, [title]);
+}
+
 function CookiesPage() {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
+  usePageTitle(t.cookiePolicy.title);
   return /* @__PURE__ */ jsxs("div", { className: "min-h-screen bg-gray-50", children: [
     /* @__PURE__ */ jsx(Navbar, {}),
     /* @__PURE__ */ jsxs("main", { children: [
@@ -1457,6 +1560,7 @@ function CookiesPage() {
 function PrivacyPage() {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
+  usePageTitle(t.privacyPolicy.title);
   return /* @__PURE__ */ jsxs("div", { className: "min-h-screen bg-gray-50", children: [
     /* @__PURE__ */ jsx(Navbar, {}),
     /* @__PURE__ */ jsxs("main", { children: [
@@ -1480,6 +1584,7 @@ function NotFoundPage() {
   const { t, locale } = useI18n();
   const location = useLocation();
   const homePath = localeToRootPath(locale);
+  usePageTitle(t.common.notFoundTitle);
   const links = [
     { href: getRoutePath(locale, "pricing"), label: t.navbar.prices },
     { href: getRoutePath(locale, "airportTaxi"), label: t.navbar.airportTaxi },
@@ -1621,6 +1726,7 @@ function CountryLanding() {
     faqTitle: t.routeLanding?.faqTitle ?? "FAQ",
     faq: t.routeLanding?.faq ?? []
   };
+  usePageTitle(country.title);
   return /* @__PURE__ */ jsxs("div", { className: "min-h-screen bg-gray-50", children: [
     /* @__PURE__ */ jsx(Navbar, {}),
     /* @__PURE__ */ jsxs("main", { children: [
@@ -1738,6 +1844,7 @@ function CountryAirportLanding() {
     airportData.city,
     airportData.airport
   );
+  usePageTitle(landingTitle);
   const landingDescription = resolveLandingText(
     landingAny.description,
     `Private airport transfer from ${airportData.airport} to Gdańsk, Sopot and Gdynia with fixed prices.`,
@@ -1870,6 +1977,7 @@ function CityRouteLanding() {
   }
   const destination = route.destination;
   const cityTaxi = t.cityTaxi;
+  usePageTitle(`Cena taxi z lotniska Gdańsk do ${destination}`);
   return /* @__PURE__ */ jsxs("div", { className: "min-h-screen bg-gray-50", children: [
     /* @__PURE__ */ jsx(Navbar, {}),
     /* @__PURE__ */ jsxs("main", { children: [
@@ -1974,6 +2082,7 @@ function TaxiGdanskPage() {
   const basePath = localeToPath(locale);
   const content = t.cityTaxi;
   const cityRoutes = getCityRoutes(locale);
+  usePageTitle(content.title);
   return /* @__PURE__ */ jsxs("div", { className: "min-h-screen bg-gray-50", children: [
     /* @__PURE__ */ jsx(Navbar, {}),
     /* @__PURE__ */ jsxs("main", { children: [
@@ -2060,27 +2169,27 @@ function TaxiGdanskPage() {
 }
 
 const VehicleTypeSelector = lazy(
-  () => import('./assets/VehicleTypeSelector-Dy3x-xly.mjs').then((mod) => ({ default: mod.VehicleTypeSelector }))
+  () => import('./assets/VehicleTypeSelector-CAqmTE6l.mjs').then((mod) => ({ default: mod.VehicleTypeSelector }))
 );
-const Pricing = lazy(() => import('./assets/Pricing-DGYBJCfi.mjs').then((mod) => ({ default: mod.Pricing })));
+const Pricing = lazy(() => import('./assets/Pricing-DoCAjVeb.mjs').then((mod) => ({ default: mod.Pricing })));
 const TrustSection = lazy(
   () => import('./assets/TrustSection-DMDpM944.mjs').then((mod) => ({ default: mod.TrustSection }))
 );
 const Footer = lazy(() => Promise.resolve().then(() => Footer$2).then((mod) => ({ default: mod.Footer })));
-const OrderForm = lazy(() => import('./assets/OrderForm-CjlXdu33.mjs').then((mod) => ({ default: mod.OrderForm })));
-const QuoteForm = lazy(() => import('./assets/QuoteForm-pLVSBhbI.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
-const ManageOrder = lazy(() => import('./assets/ManageOrder-CJSOJO9N.mjs').then((mod) => ({ default: mod.ManageOrder })));
-const RouteLanding = lazy(() => import('./assets/RouteLanding-CIjxRoWS.mjs').then((mod) => ({ default: mod.RouteLanding })));
-const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-BvbUymvq.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
-const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-BvbUymvq.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./assets/PricingPage-DWuPyIo0.mjs').then((mod) => ({ default: mod.PricingPage })));
-const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-Eiiw4mOS.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
-const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-CA1d_B91.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
+const OrderForm = lazy(() => import('./assets/OrderForm-XE0jVSxN.mjs').then((mod) => ({ default: mod.OrderForm })));
+const QuoteForm = lazy(() => import('./assets/QuoteForm-B3efjAvR.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
+const ManageOrder = lazy(() => import('./assets/ManageOrder-Ck8XQ8bP.mjs').then((mod) => ({ default: mod.ManageOrder })));
+const RouteLanding = lazy(() => import('./assets/RouteLanding-CFkyNwtE.mjs').then((mod) => ({ default: mod.RouteLanding })));
+const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-0hAb8Flt.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
+const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-0hAb8Flt.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
+const PricingPage = lazy(() => import('./assets/PricingPage-Cxx4aiq_.mjs').then((mod) => ({ default: mod.PricingPage })));
+const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-BUrCeOQJ.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
+const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-CX4EhBYw.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
 const renderCityRouteRoutes = (locale) => getCityRoutes(locale).map((route) => /* @__PURE__ */ jsx(Route, { path: route.slug, element: /* @__PURE__ */ jsx(CityRouteLanding, {}) }, route.slug));
-const SUPPORTED_LOCALES = ["en", "de", "fi", "no", "sv", "da", "pl"];
 function Landing() {
   const { t } = useI18n();
+  usePageTitle(t.hero.headline);
   const [step, setStep] = useState("vehicle");
   const [vehicleType, setVehicleType] = useState("standard");
   const [selectedRoute, setSelectedRoute] = useState(null);
@@ -2161,7 +2270,7 @@ function Landing() {
     /* @__PURE__ */ jsx(Navbar, {}),
     /* @__PURE__ */ jsxs("main", { children: [
       /* @__PURE__ */ jsx(Hero, {}),
-      /* @__PURE__ */ jsx("div", { className: "defer-render", children: /* @__PURE__ */ jsx(Suspense, { fallback: null, children: step === "vehicle" ? /* @__PURE__ */ jsx(VehicleTypeSelector, { onSelectType: handleVehicleSelect }) : /* @__PURE__ */ jsx(
+      /* @__PURE__ */ jsx("div", { className: "defer-render defer-render-lg", children: /* @__PURE__ */ jsx(Suspense, { fallback: null, children: step === "vehicle" ? /* @__PURE__ */ jsx(VehicleTypeSelector, { onSelectType: handleVehicleSelect }) : /* @__PURE__ */ jsx(
         Pricing,
         {
           vehicleType,
@@ -2170,9 +2279,9 @@ function Landing() {
           onBack: handleBackToVehicleSelection
         }
       ) }) }),
-      /* @__PURE__ */ jsx("div", { className: "defer-render", children: /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(TrustSection, {}) }) })
+      /* @__PURE__ */ jsx("div", { className: "defer-render defer-render-md", children: /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(TrustSection, {}) }) })
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "defer-render", children: /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(Footer, {}) }) }),
+    /* @__PURE__ */ jsx("div", { className: "defer-render defer-render-sm", children: /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(Footer, {}) }) }),
     selectedRoute && /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(
       OrderForm,
       {
@@ -2273,9 +2382,103 @@ function App() {
   useEffect(() => {
     trackPageView(`${location.pathname}${location.search}`);
   }, [location.pathname, location.search]);
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const thresholds = [25, 50, 75, 100];
+    const seen = /* @__PURE__ */ new Set();
+    const onScroll = () => {
+      const doc = document.documentElement;
+      const scrollTop = window.scrollY || doc.scrollTop;
+      const height = doc.scrollHeight - doc.clientHeight;
+      if (height <= 0) {
+        return;
+      }
+      const percent = Math.round(scrollTop / height * 100);
+      thresholds.forEach((threshold) => {
+        if (!seen.has(threshold) && percent >= threshold) {
+          seen.add(threshold);
+          trackScrollDepth(threshold);
+        }
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const onClick = (event) => {
+      const target = event.target;
+      if (!target) {
+        return;
+      }
+      const button = target.closest("button");
+      if (button) {
+        const label = (button.innerText || button.getAttribute("aria-label") || "").trim();
+        if (label) {
+          trackButtonClick(label);
+        }
+      }
+      const anchor = target.closest("a");
+      if (!anchor || !anchor.href) {
+        return;
+      }
+      try {
+        const href = new URL(anchor.href);
+        const label = (anchor.innerText || anchor.getAttribute("aria-label") || "").trim();
+        if (label) {
+          trackLinkClick(label, href.toString());
+        }
+        if (href.origin !== window.location.origin) {
+          trackOutboundClick(href.toString());
+        }
+      } catch {
+        return;
+      }
+    };
+    document.addEventListener("click", onClick);
+    return () => {
+      document.removeEventListener("click", onClick);
+    };
+  }, []);
+  useEffect(() => {
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
+      return;
+    }
+    const sections = Array.from(document.querySelectorAll("main section[id]"));
+    if (sections.length === 0) {
+      return;
+    }
+    const seen = /* @__PURE__ */ new Set();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+          const id = entry.target.id;
+          if (id && !seen.has(id)) {
+            seen.add(id);
+            trackSectionView(id);
+          }
+        });
+      },
+      { threshold: 0.35 }
+    );
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, [location.pathname]);
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsxs(Routes, { children: [
-      /* @__PURE__ */ jsx(Route, { path: "/", element: /* @__PURE__ */ jsx(AutoRedirect, {}) }),
+      /* @__PURE__ */ jsx(Route, { path: "/", element: /* @__PURE__ */ jsx(RootLanding, {}) }),
       SUPPORTED_LOCALES.map((locale) => renderLocalizedRoutes(locale, t)),
       /* @__PURE__ */ jsx(Route, { path: "/cookies", element: /* @__PURE__ */ jsx(LegacyRedirectToRoute, { routeKey: "cookies" }) }),
       /* @__PURE__ */ jsx(Route, { path: "/privacy", element: /* @__PURE__ */ jsx(LegacyRedirectToRoute, { routeKey: "privacy" }) }),
@@ -2302,12 +2505,6 @@ function LocalizedShell({ locale }) {
   }, [locale, setLocale]);
   return /* @__PURE__ */ jsx(Outlet, {});
 }
-function AutoRedirect() {
-  const { locale } = useI18n();
-  const location = useLocation();
-  const target = `${localeToRootPath(locale)}${location.search}${location.hash}`;
-  return /* @__PURE__ */ jsx(Navigate, { to: target, replace: true });
-}
 function LegacyRedirect({ to }) {
   const { locale } = useI18n();
   const location = useLocation();
@@ -2330,11 +2527,107 @@ function LegacyAdminOrderRedirect() {
   const target = `${basePath}/admin/orders/${id ?? ""}${location.search}${location.hash}`;
   return /* @__PURE__ */ jsx(Navigate, { to: target, replace: true });
 }
+function RootLanding() {
+  const { locale } = useI18n();
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx(LanguageBanner, {}),
+    /* @__PURE__ */ jsx(LocalePrompt, {}),
+    /* @__PURE__ */ jsx(Landing, {}, `root-${locale}`)
+  ] });
+}
+function LanguageBanner() {
+  return /* @__PURE__ */ jsx("div", { className: "bg-gradient-to-r from-amber-50 via-white to-amber-50 text-gray-900", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto flex max-w-6xl flex-col gap-2 px-4 py-3 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:justify-between", children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-gray-800", children: [
+      /* @__PURE__ */ jsx("span", { className: "inline-flex h-6 w-6 items-center justify-center rounded-full bg-amber-200 text-xs font-semibold text-amber-900", children: "A" }),
+      /* @__PURE__ */ jsx("span", { className: "font-medium", children: "Prefer another language?" }),
+      /* @__PURE__ */ jsx("span", { className: "text-gray-600", children: "Choose a version:" })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "flex flex-wrap gap-2", children: SUPPORTED_LOCALES.map((lang) => /* @__PURE__ */ jsx(
+      "a",
+      {
+        href: localeToRootPath(lang),
+        className: "rounded-full border border-amber-200 bg-white px-3 py-1 text-xs font-semibold text-amber-900 transition hover:border-amber-300 hover:bg-amber-100",
+        children: lang.toUpperCase()
+      },
+      lang
+    )) })
+  ] }) });
+}
+function LocalePrompt() {
+  const { locale, setLocale } = useI18n();
+  const location = useLocation();
+  const [show, setShow] = useState(false);
+  const [suggested, setSuggested] = useState(null);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (location.pathname !== "/") return;
+    const dismissed = window.localStorage.getItem("tag_locale_prompted");
+    if (dismissed === "1") return;
+    const detected = detectBrowserLocale();
+    if (detected === DEFAULT_LOCALE) return;
+    if (detected === locale) return;
+    setSuggested(detected);
+    setShow(true);
+  }, [locale, location.pathname]);
+  const accept = () => {
+    if (!suggested) return;
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("tag_locale_prompted", "1");
+    }
+    setLocale(suggested);
+    window.location.href = `${localeToRootPath(suggested)}${location.search}${location.hash}`;
+  };
+  const dismiss = () => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("tag_locale_prompted", "1");
+    }
+    setShow(false);
+  };
+  if (!show || !suggested) {
+    return null;
+  }
+  const label = suggested.toUpperCase();
+  return /* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4", children: /* @__PURE__ */ jsx(
+    "div",
+    {
+      className: "rounded-3xl border border-amber-200 bg-white p-6 shadow-2xl",
+      style: { width: "min(92vw, 420px)" },
+      children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-4 text-center", children: [
+        /* @__PURE__ */ jsx("div", { className: "text-lg font-semibold text-gray-900", children: "We detected your browser language" }),
+        /* @__PURE__ */ jsxs("div", { className: "text-sm text-gray-700", children: [
+          "Switch to ",
+          /* @__PURE__ */ jsx("span", { className: "font-semibold text-gray-900", children: label }),
+          "?"
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-3 sm:flex-row sm:justify-center", children: [
+          /* @__PURE__ */ jsx(
+            "button",
+            {
+              type: "button",
+              onClick: accept,
+              className: "w-full rounded-full bg-blue-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-blue-700 sm:w-auto",
+              children: "Switch language"
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            "button",
+            {
+              type: "button",
+              onClick: dismiss,
+              className: "w-full rounded-full border border-gray-200 px-6 py-3 text-base font-medium text-gray-700 hover:border-gray-300 sm:w-auto",
+              children: "Not now"
+            }
+          )
+        ] })
+      ] })
+    }
+  ) });
+}
 
 const en = {
   "common": {
     "whatsapp": "WhatsApp",
-    "orderOnlineNow": "Check price and book TAXI",
+    "orderOnlineNow": "Order online",
     "orderNow": "Book Now",
     "close": "Close",
     "noPrepayment": "No prepayment",
@@ -2408,6 +2701,7 @@ const en = {
     "busTitle": "BUS Service",
     "busPassengers": "5-8 passengers",
     "busDescription": "Ideal for larger groups and families with extra luggage",
+    "selfManageBadge": "Self-service: edit & cancel anytime",
     "examplePrices": "Example prices:",
     "airportGdansk": "Airport ↔ Gdańsk",
     "airportSopot": "Airport ↔ Sopot",
@@ -2422,7 +2716,7 @@ const en = {
     "description": "Fixed prices both ways (to and from the airport). No hidden fees. Night rate applies from 10 PM to 6 AM and on Sundays & public holidays.",
     "dayRate": "Day rate",
     "nightRate": "Night rate",
-    "sundayNote": "(Sundays & holidays)",
+    "sundayNote": "(Sundays & Holidays)",
     "customRouteTitle": "Custom Route",
     "customRouteBody": "Need a different destination?",
     "customRoutePrice": "Fixed prices",
@@ -3180,7 +3474,7 @@ const en$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 const pl = {
   "common": {
     "whatsapp": "WhatsApp",
-    "orderOnlineNow": "Sprawdź cenę i zarezerwuj TAXI",
+    "orderOnlineNow": "Złóż zamówienie online",
     "orderNow": "Rezerwuj",
     "close": "Zamknij",
     "noPrepayment": "Bez przedpłaty",
@@ -3254,6 +3548,7 @@ const pl = {
     "busTitle": "Usługa BUS",
     "busPassengers": "5–8 pasażerów",
     "busDescription": "Idealny dla większych grup i rodzin z większym bagażem",
+    "selfManageBadge": "Edytuj i anuluj zamówienie samodzielnie",
     "examplePrices": "Przykładowe ceny:",
     "airportGdansk": "Lotnisko ↔ Gdańsk",
     "airportSopot": "Lotnisko ↔ Sopot",
@@ -4026,7 +4321,7 @@ const pl$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 const de = {
   "common": {
     "whatsapp": "WhatsApp",
-    "orderOnlineNow": "Preis prüfen und TAXI buchen",
+    "orderOnlineNow": "Taxi online buchen",
     "orderNow": "Jetzt reservieren",
     "close": "Schließen",
     "noPrepayment": "Keine Vorauszahlung",
@@ -4100,6 +4395,7 @@ const de = {
     "busTitle": "BUS Service",
     "busPassengers": "5-8 Passagiere",
     "busDescription": "Ideal für größere Gruppen und Familien mit mehr Gepäck",
+    "selfManageBadge": "Selbstservice: Buchung ändern oder stornieren",
     "examplePrices": "Beispielpreise:",
     "airportGdansk": "Flughafen ↔ Gdańsk",
     "airportSopot": "Flughafen ↔ Sopot",
@@ -4870,7 +5166,7 @@ const de$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 const fi = {
   "common": {
     "whatsapp": "WhatsApp",
-    "orderOnlineNow": "Tarkista hinta ja varaa TAKSI",
+    "orderOnlineNow": "Varaa taksi verkossa",
     "orderNow": "Varaa nyt",
     "close": "Sulje",
     "noPrepayment": "Ei ennakkomaksua",
@@ -4944,6 +5240,7 @@ const fi = {
     "busTitle": "BUS-palvelu",
     "busPassengers": "5-8 matkustajaa",
     "busDescription": "Ihanteellinen suuremmille ryhmille ja perheille, joilla on paljon matkatavaroita",
+    "selfManageBadge": "Muokkaa tai peruuta varauksesi itse",
     "examplePrices": "Esimerkkihinnat:",
     "airportGdansk": "Lentokenttä ↔ Gdańsk",
     "airportSopot": "Lentokenttä ↔ Sopot",
@@ -5712,7 +6009,7 @@ const fi$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 const no = {
   "common": {
     "whatsapp": "WhatsApp",
-    "orderOnlineNow": "Sjekk pris og bestill TAXI",
+    "orderOnlineNow": "Bestill taxi på nett",
     "orderNow": "Reserver nå",
     "close": "Lukk",
     "noPrepayment": "Ingen forhåndsbetaling",
@@ -5786,6 +6083,7 @@ const no = {
     "busTitle": "BUS Service",
     "busPassengers": "5-8 passasjerer",
     "busDescription": "Ideelt for større grupper og familier med ekstra bagasje",
+    "selfManageBadge": "Rediger eller avbestill bestillingen selv",
     "examplePrices": "Eksempelpriser:",
     "airportGdansk": "Flyplass ↔ Gdańsk",
     "airportSopot": "Flyplass ↔ Sopot",
@@ -6556,7 +6854,7 @@ const no$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 const sv = {
   "common": {
     "whatsapp": "WhatsApp",
-    "orderOnlineNow": "Kolla pris och boka TAXI",
+    "orderOnlineNow": "Boka taxi online",
     "orderNow": "Boka nu",
     "close": "Stäng",
     "noPrepayment": "Ingen förskottsbetalning",
@@ -6630,6 +6928,7 @@ const sv = {
     "busTitle": "BUS Service",
     "busPassengers": "5-8 passagerare",
     "busDescription": "Idealisk för större grupper och familjer med extra bagage",
+    "selfManageBadge": "Redigera eller avboka bokningen själv",
     "examplePrices": "Exempelpriser:",
     "airportGdansk": "Flygplats ↔ Gdańsk",
     "airportSopot": "Flygplats ↔ Sopot",
@@ -7400,7 +7699,7 @@ const sv$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 const da = {
   "common": {
     "whatsapp": "WhatsApp",
-    "orderOnlineNow": "Tjek pris og book TAXI",
+    "orderOnlineNow": "Book taxi online",
     "orderNow": "Book nu",
     "close": "Luk",
     "noPrepayment": "Ingen forudbetaling",
@@ -7474,6 +7773,7 @@ const da = {
     "busTitle": "BUS Service",
     "busPassengers": "5-8 passagerer",
     "busDescription": "Ideel til større grupper og familier med ekstra bagage",
+    "selfManageBadge": "Rediger eller afbestil din booking selv",
     "examplePrices": "Eksempelpriser:",
     "airportGdansk": "Lufthavn ↔ Gdańsk",
     "airportSopot": "Lufthavn ↔ Sopot",
@@ -8250,7 +8550,7 @@ const serverTranslations = {
   da
 };
 function render(url) {
-  const initialLocale = getLocaleFromPathname(url) ?? "en";
+  const initialLocale = getLocaleFromPathname(url) ?? DEFAULT_LOCALE;
   const initialTranslations = serverTranslations[initialLocale];
   const appHtml = renderToString(
     /* @__PURE__ */ jsx(StrictMode, { children: /* @__PURE__ */ jsx(StaticRouter, { location: url, future: { v7_startTransition: true, v7_relativeSplatPath: true }, children: /* @__PURE__ */ jsx(I18nProvider, { initialLocale, initialTranslations, children: /* @__PURE__ */ jsx(App, {}) }) }) })
@@ -8261,4 +8561,4 @@ function render(url) {
   };
 }
 
-export { Breadcrumbs as B, Footer$1 as F, Navbar as N, trackNavClick as a, FloatingActions as b, trackFormOpen as c, trackPricingRouteSelect as d, trackPricingAction as e, trackVehicleSelect as f, getRouteSlug as g, trackFormClose as h, trackFormValidation as i, trackFormSubmit as j, trackFormStart as k, localeToPath as l, isAnalyticsEnabled as m, hasMarketingConsent as n, requestScrollTo as r, render, scrollToId as s, trackCtaClick as t, useI18n as u };
+export { Breadcrumbs as B, Footer$1 as F, Navbar as N, usePageTitle as a, trackNavClick as b, FloatingActions as c, trackFormOpen as d, trackPricingRouteSelect as e, trackPricingAction as f, getRouteSlug as g, trackVehicleSelect as h, trackFormClose as i, trackFormValidation as j, trackFormSubmit as k, localeToPath as l, trackFormStart as m, isAnalyticsEnabled as n, hasMarketingConsent as o, requestScrollTo as r, render, scrollToId as s, trackCtaClick as t, useI18n as u };
