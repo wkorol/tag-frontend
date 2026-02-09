@@ -1,12 +1,19 @@
-import { useEffect, useState } from 'react';
-import { getApiBaseUrl } from './api';
+import { useState, useEffect } from 'react';
 
-const CACHE_TTL_MS = 1000 * 60 * 60 * 6;
-const STORAGE_KEY = 'eur-rate-cache';
-let cachedRate: number | null = null;
+const getApiBaseUrl = () => {
+  const envValue = "https://taxiairportgdansk.com";
+  if (envValue.trim() !== "") {
+    return envValue;
+  }
+  console.warn("VITE_API_BASE_URL is not set; API calls will fail.");
+  return "";
+};
+
+const CACHE_TTL_MS = 1e3 * 60 * 60 * 6;
+const STORAGE_KEY = "eur-rate-cache";
+let cachedRate = null;
 let cachedAt = 0;
-let inflight: Promise<number | null> | null = null;
-
+let inflight = null;
 const startFetch = () => {
   if (cachedRate && Date.now() - cachedAt < CACHE_TTL_MS) {
     return null;
@@ -18,12 +25,10 @@ const startFetch = () => {
   }
   return inflight;
 };
-
-export const preloadEurRate = () => {
+const preloadEurRate = () => {
   startFetch();
 };
-
-async function fetchEurRate(): Promise<number | null> {
+async function fetchEurRate() {
   try {
     const apiBaseUrl = getApiBaseUrl();
     const response = await fetch(`${apiBaseUrl}/api/eur-rate`);
@@ -31,18 +36,17 @@ async function fetchEurRate(): Promise<number | null> {
       return null;
     }
     const data = await response.json();
-    const rate = typeof data?.rate === 'number' ? data.rate : null;
+    const rate = typeof data?.rate === "number" ? data.rate : null;
     if (rate) {
       cachedRate = rate;
       cachedAt = Date.now();
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         try {
           localStorage.setItem(
             STORAGE_KEY,
-            JSON.stringify({ rate, at: cachedAt }),
+            JSON.stringify({ rate, at: cachedAt })
           );
         } catch {
-          // ignore storage errors
         }
       }
     }
@@ -51,17 +55,16 @@ async function fetchEurRate(): Promise<number | null> {
     return null;
   }
 }
-
-export function useEurRate() {
-  const [rate, setRate] = useState<number | null>(() => {
+function useEurRate() {
+  const [rate, setRate] = useState(() => {
     if (cachedRate && Date.now() - cachedAt < CACHE_TTL_MS) {
       return cachedRate;
     }
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
-          const parsed = JSON.parse(stored) as { rate?: number; at?: number };
+          const parsed = JSON.parse(stored);
           if (parsed?.rate && parsed?.at && Date.now() - parsed.at < CACHE_TTL_MS) {
             cachedRate = parsed.rate;
             cachedAt = parsed.at;
@@ -69,53 +72,52 @@ export function useEurRate() {
           }
         }
       } catch {
-        // ignore storage errors
       }
     }
     return null;
   });
-
   useEffect(() => {
     if (cachedRate && Date.now() - cachedAt < CACHE_TTL_MS) {
       return;
     }
     let cancelled = false;
-    const attach = (promise: Promise<number | null>) => {
-      promise
-        .then((value) => {
-          if (!cancelled && value) {
-            setRate(value);
-          }
-        })
-        .catch(() => null);
+    const attach = (promise) => {
+      promise.then((value) => {
+        if (!cancelled && value) {
+          setRate(value);
+        }
+      }).catch(() => null);
     };
-
     const scheduleFetch = () => {
       const promise = startFetch();
       if (promise) {
         attach(promise);
       }
     };
-
-    // Fetch immediately; the result is cached for 6h, so this is typically one request per user per session.
     if (inflight) {
       attach(inflight);
     } else {
       scheduleFetch();
     }
-
-    // Production backends can be cold on first request after deploy. Retry once shortly after mount.
     const retryId = window.setTimeout(() => {
       if (!cancelled && !cachedRate) {
         scheduleFetch();
       }
     }, 1500);
-
     return () => {
       cancelled = true;
       window.clearTimeout(retryId);
     };
   }, []);
-
   return rate;
 }
+
+function formatEur(pln, rate) {
+  if (!rate || !Number.isFinite(pln)) {
+    return null;
+  }
+  const eur = Math.round(pln * rate);
+  return `~${eur}EUR`;
+}
+
+export { formatEur as f, getApiBaseUrl as g, preloadEurRate as p, useEurRate as u };

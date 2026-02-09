@@ -433,6 +433,7 @@ const pl = {
     ],
     "cityRoutesTitle": "Ceny taxi z lotniska Gdańsk",
     "cityRoutesDescription": "Sprawdź cenę przejazdu z lotniska Gdańsk do wybranych miast.",
+    "cityRoutesItem": (destination: string) => `Lotnisko Gdańsk → ${destination}`,
     "faqTitle": "FAQ",
     "faq": [
       {

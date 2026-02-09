@@ -427,6 +427,7 @@ const en = {
     ],
     "cityRoutesTitle": "Gdańsk Airport taxi price by city",
     "cityRoutesDescription": "Check the current taxi price from Gdańsk Airport to these destinations.",
+    "cityRoutesItem": (destination: string) => `Gdańsk Airport → ${destination}`,
     "faqTitle": "FAQ",
     "faq": [
       {

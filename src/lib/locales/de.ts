@@ -425,6 +425,7 @@ const de = {
     ],
     "cityRoutesTitle": "Taxipreise ab Flughafen Gdańsk",
     "cityRoutesDescription": "Prüfe den aktuellen Preis vom Flughafen Gdańsk zu diesen Orten.",
+    "cityRoutesItem": (destination: string) => `Flughafen Gdańsk → ${destination}`,
     "faqTitle": "FAQ",
     "faq": [
       {

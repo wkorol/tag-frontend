@@ -423,6 +423,7 @@ const fi = {
     ],
     "cityRoutesTitle": "Hinnat: Gdańskin lentoasema taksi",
     "cityRoutesDescription": "Katso ajantasainen hinta Gdańskin lentoasemalta näihin kohteisiin.",
+    "cityRoutesItem": (destination: string) => `Gdańskin lentoasema → ${destination}`,
     "faqTitle": "FAQ",
     "faq": [
       {

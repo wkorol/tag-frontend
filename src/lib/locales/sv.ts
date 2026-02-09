@@ -425,6 +425,7 @@ const sv = {
     ],
     "cityRoutesTitle": "Taxipriser från Gdańsk flygplats",
     "cityRoutesDescription": "Se aktuellt pris från Gdańsk flygplats till dessa orter.",
+    "cityRoutesItem": (destination: string) => `Gdańsk flygplats → ${destination}`,
     "faqTitle": "FAQ",
     "faq": [
       {

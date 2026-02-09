@@ -2175,20 +2175,20 @@ function TaxiGdanskPage() {
 const VehicleTypeSelector = lazy(
   () => import('./assets/VehicleTypeSelector-CAqmTE6l.mjs').then((mod) => ({ default: mod.VehicleTypeSelector }))
 );
-const Pricing = lazy(() => import('./assets/Pricing-D6gWOQdH.mjs').then((mod) => ({ default: mod.Pricing })));
+const Pricing = lazy(() => import('./assets/Pricing-DHkW5UcG.mjs').then((mod) => ({ default: mod.Pricing })));
 const TrustSection = lazy(
   () => import('./assets/TrustSection-wjwr276G.mjs').then((mod) => ({ default: mod.TrustSection }))
 );
 const Footer = lazy(() => Promise.resolve().then(() => Footer$2).then((mod) => ({ default: mod.Footer })));
-const OrderForm = lazy(() => import('./assets/OrderForm-D9qulcyj.mjs').then((mod) => ({ default: mod.OrderForm })));
-const QuoteForm = lazy(() => import('./assets/QuoteForm-B3efjAvR.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
-const ManageOrder = lazy(() => import('./assets/ManageOrder-Ck8XQ8bP.mjs').then((mod) => ({ default: mod.ManageOrder })));
+const OrderForm = lazy(() => import('./assets/OrderForm-Bx4oyaBy.mjs').then((mod) => ({ default: mod.OrderForm })));
+const QuoteForm = lazy(() => import('./assets/QuoteForm-CfzjZuMA.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
+const ManageOrder = lazy(() => import('./assets/ManageOrder-CPv7VFpj.mjs').then((mod) => ({ default: mod.ManageOrder })));
 const RouteLanding = lazy(() => import('./assets/RouteLanding-CFkyNwtE.mjs').then((mod) => ({ default: mod.RouteLanding })));
-const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-BuG9QIiq.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
-const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-BuG9QIiq.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./assets/PricingPage-CHncLLEl.mjs').then((mod) => ({ default: mod.PricingPage })));
-const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-BUrCeOQJ.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
-const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-CX4EhBYw.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
+const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-DuA3fcJQ.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
+const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-DuA3fcJQ.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
+const PricingPage = lazy(() => import('./assets/PricingPage-BW4F1L08.mjs').then((mod) => ({ default: mod.PricingPage })));
+const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-DN0Rl5Dh.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
+const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-DqlqcrYR.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
 const renderCityRouteRoutes = (locale) => getCityRoutes(locale).map((route) => /* @__PURE__ */ jsx(Route, { path: route.slug, element: /* @__PURE__ */ jsx(CityRouteLanding, {}) }, route.slug));
 function Landing() {
@@ -3057,6 +3057,7 @@ const en = {
     ],
     "cityRoutesTitle": "Gdańsk Airport taxi price by city",
     "cityRoutesDescription": "Check the current taxi price from Gdańsk Airport to these destinations.",
+    "cityRoutesItem": (destination) => `Gdańsk Airport → ${destination}`,
     "faqTitle": "FAQ",
     "faq": [
       {
@@ -3920,6 +3921,7 @@ const pl = {
     ],
     "cityRoutesTitle": "Ceny taxi z lotniska Gdańsk",
     "cityRoutesDescription": "Sprawdź cenę przejazdu z lotniska Gdańsk do wybranych miast.",
+    "cityRoutesItem": (destination) => `Lotnisko Gdańsk → ${destination}`,
     "faqTitle": "FAQ",
     "faq": [
       {
@@ -4775,6 +4777,7 @@ const de = {
     ],
     "cityRoutesTitle": "Taxipreise ab Flughafen Gdańsk",
     "cityRoutesDescription": "Prüfe den aktuellen Preis vom Flughafen Gdańsk zu diesen Orten.",
+    "cityRoutesItem": (destination) => `Flughafen Gdańsk → ${destination}`,
     "faqTitle": "FAQ",
     "faq": [
       {
@@ -5628,6 +5631,7 @@ const fi = {
     ],
     "cityRoutesTitle": "Hinnat: Gdańskin lentoasema taksi",
     "cityRoutesDescription": "Katso ajantasainen hinta Gdańskin lentoasemalta näihin kohteisiin.",
+    "cityRoutesItem": (destination) => `Gdańskin lentoasema → ${destination}`,
     "faqTitle": "FAQ",
     "faq": [
       {
@@ -6484,6 +6488,7 @@ const no = {
     ],
     "cityRoutesTitle": "Taxipriser fra Gdańsk lufthavn",
     "cityRoutesDescription": "Sjekk aktuell pris fra Gdańsk lufthavn til disse stedene.",
+    "cityRoutesItem": (destination) => `Gdańsk lufthavn → ${destination}`,
     "faqTitle": "FAQ",
     "faq": [
       {
@@ -7338,6 +7343,7 @@ const sv = {
     ],
     "cityRoutesTitle": "Taxipriser från Gdańsk flygplats",
     "cityRoutesDescription": "Se aktuellt pris från Gdańsk flygplats till dessa orter.",
+    "cityRoutesItem": (destination) => `Gdańsk flygplats → ${destination}`,
     "faqTitle": "FAQ",
     "faq": [
       {
@@ -8192,6 +8198,7 @@ const da = {
     ],
     "cityRoutesTitle": "Taxipriser fra Gdańsk lufthavn",
     "cityRoutesDescription": "Se den aktuelle pris fra Gdańsk lufthavn til disse destinationer.",
+    "cityRoutesItem": (destination) => `Gdańsk lufthavn → ${destination}`,
     "faqTitle": "FAQ",
     "faq": [
       {
