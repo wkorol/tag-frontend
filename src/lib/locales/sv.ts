@@ -199,6 +199,14 @@ const sv = {
     "paymentBody": "Betala kontant eller med kort. Faktura tillgänglig för företag.",
     "comfortBody": "Barnstolar på begäran. Professionella, licensierade förare och dörr-till-dörr-hjälp."
   },
+  "trustBar": {
+    "ariaLabel": "Förtroendesignaler",
+    "instantConfirmation": "Snabb bekräftelse",
+    "meetGreetOptional": "Meet & greet valfritt",
+    "noPrepayment": "Ingen förskottsbetalning",
+    "supportWhatsappEmail": "Support: WhatsApp & e-post",
+    "vatInvoice": "Momsfaktura"
+  },
   "footer": {
     "description": "Professionell flygplatstransfer i Trójmiasto-området. Tillgänglig 24/7.",
     "contactTitle": "Kontakt",

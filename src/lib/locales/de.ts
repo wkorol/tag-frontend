@@ -199,6 +199,14 @@ const de = {
     "paymentBody": "Bar oder mit Karte. Rechnungen (VAT) für Geschäftskunden verfügbar.",
     "comfortBody": "Kindersitze auf Anfrage. Professionelle, lizenzierte Fahrer und Tür-zu-Tür-Service."
   },
+  "trustBar": {
+    "ariaLabel": "Vertrauenssignale",
+    "instantConfirmation": "Schnelle Bestätigung",
+    "meetGreetOptional": "Meet & greet optional",
+    "noPrepayment": "Keine Vorauszahlung",
+    "supportWhatsappEmail": "Support: WhatsApp & E-Mail",
+    "vatInvoice": "MwSt.-Rechnung"
+  },
   "footer": {
     "description": "Professioneller Flughafentransfer in der Dreistadt. Rund um die Uhr verfügbar.",
     "contactTitle": "Kontakt",

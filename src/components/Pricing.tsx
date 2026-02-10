@@ -5,6 +5,7 @@ import { formatEur } from '../lib/currency';
 import { FIXED_PRICES } from '../lib/fixedPricing';
 import { useI18n } from '../lib/i18n';
 import { trackPricingAction, trackPricingRouteSelect, trackVehicleSelect } from '../lib/tracking';
+import { TrustBar } from './TrustBar';
 
 interface PricingProps {
   vehicleType: 'standard' | 'bus';
@@ -120,14 +121,14 @@ export function Pricing({
               <th className="border border-slate-200 px-4 py-3 text-right">
                 <div className="leading-tight text-right">
                   <div>{t.pricing.tableStandardNight}</div>
-                  <div className="text-[10px] font-normal text-slate-500">{t.pricing.sundayNote}</div>
+                  <div className="pricing-sunday-note font-normal text-slate-500">{t.pricing.sundayNote}</div>
                 </div>
               </th>
               <th className="border border-slate-200 px-4 py-3 text-right">{t.pricing.tableBusDay}</th>
               <th className="border border-slate-200 px-4 py-3 text-right">
                 <div className="leading-tight text-right">
                   <div>{t.pricing.tableBusNight}</div>
-                  <div className="text-[10px] font-normal text-slate-500">{t.pricing.sundayNote}</div>
+                  <div className="pricing-sunday-note font-normal text-slate-500">{t.pricing.sundayNote}</div>
                 </div>
               </th>
             </tr>
@@ -313,6 +314,8 @@ export function Pricing({
           <p className="text-gray-600 max-w-2xl mx-auto">
             {t.pricing.description}
           </p>
+          {/* Use custom CSS for spacing (Tailwind output is constrained in this repo). */}
+          <TrustBar className="pricing-trustbar" />
         </div>
 
         {variant === 'landing' ? (

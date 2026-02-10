@@ -205,6 +205,14 @@ const pl = {
     "paymentBody": "Płatność gotówką lub kartą. Faktury VAT dla firm.",
     "comfortBody": "Foteliki dziecięce na życzenie. Profesjonalni, licencjonowani kierowcy i pomoc door-to-door."
   },
+  "trustBar": {
+    "ariaLabel": "Informacje zaufania",
+    "instantConfirmation": "Szybkie potwierdzenie",
+    "meetGreetOptional": "Powitanie na lotnisku opcjonalnie",
+    "noPrepayment": "Bez przedpłaty",
+    "supportWhatsappEmail": "Wsparcie: WhatsApp i e-mail",
+    "vatInvoice": "Faktura VAT"
+  },
   "footer": {
     "description": "Profesjonalny transfer lotniskowy w Trójmieście. Dostępny 24/7.",
     "contactTitle": "Kontakt",

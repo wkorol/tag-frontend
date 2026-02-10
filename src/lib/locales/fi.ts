@@ -199,6 +199,14 @@ const fi = {
     "paymentBody": "Maksa käteisellä tai kortilla. Lasku saatavilla yritysasiakkaille.",
     "comfortBody": "Lastenistuimet pyynnöstä. Ammattitaitoiset, lisensoidut kuljettajat ja ovelta ovelle -palvelu."
   },
+  "trustBar": {
+    "ariaLabel": "Luottamussignaalit",
+    "instantConfirmation": "Nopea vahvistus",
+    "meetGreetOptional": "Meet & greet valinnainen",
+    "noPrepayment": "Ei ennakkomaksua",
+    "supportWhatsappEmail": "Tuki: WhatsApp ja sähköposti",
+    "vatInvoice": "ALV-lasku"
+  },
   "footer": {
     "description": "Ammattimainen lentokenttäkuljetus Tri-City-alueella. Saatavilla 24/7.",
     "contactTitle": "Yhteys",

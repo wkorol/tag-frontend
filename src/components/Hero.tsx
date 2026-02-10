@@ -5,6 +5,7 @@ import logoAvif640 from '../assets/logo-640.avif';
 import { trackContactClick, trackCtaClick } from '../lib/tracking';
 import { useI18n, localeToPath } from '../lib/i18n';
 import { requestScrollTo } from '../lib/scroll';
+import { getRouteSlug } from '../lib/routes';
 
 export function Hero() {
   const { t, locale } = useI18n();
@@ -12,6 +13,13 @@ export function Hero() {
   const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
 
   const heroBgUrl = '/background-960.webp';
+  const quickLinks = [
+    { href: `${basePath}/${getRouteSlug(locale, 'pricing')}`, label: t.navbar.prices },
+    { href: `${basePath}/${getRouteSlug(locale, 'orderAirportGdansk')}`, label: t.routeLanding.orderLinks.airportGdansk },
+    { href: `${basePath}/${getRouteSlug(locale, 'orderAirportSopot')}`, label: t.routeLanding.orderLinks.airportSopot },
+    { href: `${basePath}/${getRouteSlug(locale, 'orderAirportGdynia')}`, label: t.routeLanding.orderLinks.airportGdynia },
+    { href: `${basePath}/${getRouteSlug(locale, 'orderCustom')}`, label: t.routeLanding.orderLinks.custom },
+  ];
 
   return (
     <div id="hero" className="relative overflow-hidden bg-gradient-to-br from-blue-900 to-blue-700 text-white">
@@ -98,6 +106,21 @@ export function Hero() {
             <span className="inline-flex items-center rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-semibold text-white">
               {t.common.noPrepayment}
             </span>
+          </div>
+          <div className="mt-4 flex flex-col items-center px-2 text-xs text-white/80">
+            <span className="mb-2 text-center text-[10px] uppercase tracking-[0.2em] text-white/60">
+              {t.routeLanding.quickLinks}
+            </span>
+            <div className="quick-links">
+              {quickLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
           </div>
           <div className="mt-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-6 py-5 max-w-2xl mx-auto">
             <h1 className="text-xl sm:text-2xl text-blue-100 mb-3">

@@ -1492,7 +1492,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
                   <div className="mt-2 text-xs text-gray-600">
                     {fixedRoute.rateLabel ?? (fixedRoute.isNight ? t.quoteForm.fixedRouteNight : t.quoteForm.fixedRouteDay)}
                     {fixedRoute.isNight && (
-                      <span className="ml-1 text-[10px] text-gray-500">{t.pricing.sundayNote}</span>
+                      <span className="ml-1 pricing-sunday-note text-gray-500">{t.pricing.sundayNote}</span>
                     )}
                   </div>
                 </div>

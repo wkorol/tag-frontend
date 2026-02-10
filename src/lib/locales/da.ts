@@ -199,6 +199,14 @@ const da = {
     "paymentBody": "Betal kontant eller med kort. Faktura til erhvervskunder.",
     "comfortBody": "Barnesæder efter aftale. Professionelle, licenserede chauffører og dør-til-dør-hjælp."
   },
+  "trustBar": {
+    "ariaLabel": "Tillidssignaler",
+    "instantConfirmation": "Hurtig bekræftelse",
+    "meetGreetOptional": "Meet & greet valgfrit",
+    "noPrepayment": "Ingen forudbetaling",
+    "supportWhatsappEmail": "Support: WhatsApp og e-mail",
+    "vatInvoice": "Momsfaktura"
+  },
   "footer": {
     "description": "Professionel lufthavnstransfer i Tri-City-området. Tilgængelig 24/7.",
     "contactTitle": "Kontakt",

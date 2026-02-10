@@ -61,7 +61,8 @@ export const trackPageView = (path: string, title?: string) => {
     page_path: path,
     page_title: pageTitle,
     page_location: pageLocation,
-  });
+  }
+  );
 
   const gtag = (window as { gtag?: (...args: unknown[]) => void }).gtag;
   if (typeof gtag === 'function' && ga4Id) {

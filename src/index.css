@@ -1769,6 +1769,97 @@ html {
   animation: 4.5s ease-in-out infinite geminiGlow;
 }
 
+.quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+/* Fallback when flex-gap is not supported or behaves inconsistently. */
+@supports not (gap: 1rem) {
+  .quick-links {
+    margin: -0.25rem;
+  }
+  .quick-links > a {
+    margin: 0.25rem;
+  }
+}
+
+.quick-links > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.75rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.75rem;
+  line-height: 1;
+  text-decoration: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.quick-links > a:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: rgba(255, 255, 255, 1);
+}
+
+.quick-links > a:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 2px;
+}
+
+.trust-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem 1rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.trust-bar__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.03);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  color: rgba(15, 23, 42, 0.82);
+  font-size: 0.8rem;
+  line-height: 1.1;
+}
+
+.trust-bar__icon {
+  width: 1rem;
+  height: 1rem;
+  color: rgba(22, 163, 74, 0.95);
+  flex-shrink: 0;
+}
+
+.trust-bar__text {
+  white-space: nowrap;
+}
+
+.vehicle-trustbar,
+.pricing-trustbar {
+  margin-top: 1.5rem; /* visible gap above trust pills */
+}
+
+@media (min-width: 48rem) {
+  .vehicle-trustbar,
+  .pricing-trustbar {
+    margin-top: 1.75rem;
+  }
+}
+
 .vehicle-selfmanage-badge {
   height: 2.25rem; /* 36px, matches tailwind h-9 */
   display: flex;
@@ -2005,8 +2096,9 @@ html {
 }
 
 .pricing-sunday-note {
-  font-size: 9px;
+  font-size: 7px;
   line-height: 1;
+  letter-spacing: 0.02em;
 }
 
 .booking-form {
@@ -2071,6 +2163,29 @@ html {
 
 /* Mobile-only sizing for pricing and vehicle cards */
 @media (max-width: 39.9375rem) {
+  .quick-links {
+    gap: 0.35rem;
+  }
+
+  .quick-links > a {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .trust-bar {
+    gap: 0.4rem 0.55rem;
+  }
+
+  .trust-bar__item {
+    padding: 0.3rem 0.55rem;
+    font-size: 0.72rem;
+  }
+
+  .trust-bar__icon {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
   .hero-bg {
     object-fit: cover;
     object-position: center;
@@ -2138,7 +2253,7 @@ html {
   }
 
   .pricing-sunday-note {
-    font-size: 7px;
+    font-size: 6px;
   }
 
   .pricing-custom-title {
@@ -2294,7 +2409,6 @@ html {
 
 .defer-render {
   --defer-height: 720px;
-  min-height: var(--defer-height);
 }
 
 .defer-render-lg {

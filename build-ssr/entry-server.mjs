@@ -388,11 +388,14 @@ const trackPageView = (path, title) => {
   const pageTitle = window.__pageTitle ?? document.title;
   const pageLocation = window.location.href;
   const ga4Id = window.__ga4Id;
-  trackEvent("page_view", {
-    page_path: path,
-    page_title: pageTitle,
-    page_location: pageLocation
-  });
+  trackEvent(
+    "page_view",
+    {
+      page_path: path,
+      page_title: pageTitle,
+      page_location: pageLocation
+    }
+  );
   const gtag = window.gtag;
   if (typeof gtag === "function" && ga4Id) {
     gtag("config", ga4Id, {
@@ -775,6 +778,13 @@ function Hero() {
   const basePath = localeToPath(locale);
   const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
   const heroBgUrl = "/background-960.webp";
+  const quickLinks = [
+    { href: `${basePath}/${getRouteSlug(locale, "pricing")}`, label: t.navbar.prices },
+    { href: `${basePath}/${getRouteSlug(locale, "orderAirportGdansk")}`, label: t.routeLanding.orderLinks.airportGdansk },
+    { href: `${basePath}/${getRouteSlug(locale, "orderAirportSopot")}`, label: t.routeLanding.orderLinks.airportSopot },
+    { href: `${basePath}/${getRouteSlug(locale, "orderAirportGdynia")}`, label: t.routeLanding.orderLinks.airportGdynia },
+    { href: `${basePath}/${getRouteSlug(locale, "orderCustom")}`, label: t.routeLanding.orderLinks.custom }
+  ];
   return /* @__PURE__ */ jsxs("div", { id: "hero", className: "relative overflow-hidden bg-gradient-to-br from-blue-900 to-blue-700 text-white", children: [
     /* @__PURE__ */ jsx(
       "img",
@@ -869,6 +879,17 @@ function Hero() {
           )
         ] }),
         /* @__PURE__ */ jsx("div", { className: "mt-2 flex justify-center", children: /* @__PURE__ */ jsx("span", { className: "inline-flex items-center rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-semibold text-white", children: t.common.noPrepayment }) }),
+        /* @__PURE__ */ jsxs("div", { className: "mt-4 flex flex-col items-center px-2 text-xs text-white/80", children: [
+          /* @__PURE__ */ jsx("span", { className: "mb-2 text-center text-[10px] uppercase tracking-[0.2em] text-white/60", children: t.routeLanding.quickLinks }),
+          /* @__PURE__ */ jsx("div", { className: "quick-links", children: quickLinks.map((link) => /* @__PURE__ */ jsx(
+            "a",
+            {
+              href: link.href,
+              children: link.label
+            },
+            link.href
+          )) })
+        ] }),
         /* @__PURE__ */ jsxs("div", { className: "mt-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-6 py-5 max-w-2xl mx-auto", children: [
           /* @__PURE__ */ jsx("h1", { className: "text-xl sm:text-2xl text-blue-100 mb-3", children: t.hero.headline }),
           /* @__PURE__ */ jsx("p", { className: "text-blue-200", children: t.hero.subheadline })
@@ -1402,8 +1423,38 @@ function PrivacyPolicy() {
   ] }) });
 }
 
+const cityRoutesByLocale = {
+  pl: [
+    { slug: "taxi-lotnisko-gdansk-slupsk", destination: "Słupsk" },
+    { slug: "taxi-lotnisko-gdansk-malbork", destination: "Malbork" },
+    { slug: "taxi-lotnisko-gdansk-olsztyn", destination: "Olsztyn" },
+    { slug: "taxi-lotnisko-gdansk-starogard-gdanski", destination: "Starogard Gdański" },
+    { slug: "taxi-lotnisko-gdansk-wladyslawowo", destination: "Władysławowo" },
+    { slug: "taxi-lotnisko-gdansk-hel", destination: "Hel" },
+    { slug: "taxi-lotnisko-gdansk-ostroda", destination: "Ostróda" },
+    { slug: "taxi-lotnisko-gdansk-wejherowo", destination: "Wejherowo" },
+    { slug: "taxi-lotnisko-gdansk-rumia", destination: "Rumia" },
+    { slug: "taxi-lotnisko-gdansk-reda", destination: "Reda" }
+  ]
+};
+const getCityRoutes = (locale) => cityRoutesByLocale[locale] ?? [];
+const getCityRouteBySlug = (locale, slug) => getCityRoutes(locale).find((route) => route.slug === slug) ?? null;
+Object.fromEntries(
+  Object.entries(cityRoutesByLocale).map(([locale, routes]) => [locale, routes.map((route) => route.slug)])
+);
+
 function Footer$1() {
   const { t, locale } = useI18n();
+  const basePath = localeToPath(locale);
+  const popularPlCitySlugs = [
+    "taxi-lotnisko-gdansk-wejherowo",
+    "taxi-lotnisko-gdansk-rumia",
+    "taxi-lotnisko-gdansk-reda",
+    "taxi-lotnisko-gdansk-malbork",
+    "taxi-lotnisko-gdansk-slupsk",
+    "taxi-lotnisko-gdansk-hel"
+  ];
+  const popularPlCityRoutes = locale === "pl" ? getCityRoutes("pl").filter((route) => popularPlCitySlugs.includes(route.slug)) : [];
   return /* @__PURE__ */ jsx("footer", { className: "bg-gray-900 text-gray-200 py-12", children: /* @__PURE__ */ jsxs("div", { className: "max-w-6xl mx-auto px-4", children: [
     /* @__PURE__ */ jsxs("div", { className: "grid md:grid-cols-4 gap-8", children: [
       /* @__PURE__ */ jsxs("div", { children: [
@@ -1440,6 +1491,52 @@ function Footer$1() {
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx("h4", { className: "text-white mb-4", children: t.footer.routesTitle }),
         /* @__PURE__ */ jsxs("div", { className: "space-y-2 text-sm", children: [
+          /* @__PURE__ */ jsx(
+            "a",
+            {
+              href: getRoutePath(locale, "pricing"),
+              onClick: () => trackNavClick("footer_pricing"),
+              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
+              children: t.navbar.prices
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            "a",
+            {
+              href: getRoutePath(locale, "orderAirportGdansk"),
+              onClick: () => trackNavClick("footer_order_airport_gdansk"),
+              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
+              children: t.routeLanding.orderLinks.airportGdansk
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            "a",
+            {
+              href: getRoutePath(locale, "orderAirportSopot"),
+              onClick: () => trackNavClick("footer_order_airport_sopot"),
+              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
+              children: t.routeLanding.orderLinks.airportSopot
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            "a",
+            {
+              href: getRoutePath(locale, "orderAirportGdynia"),
+              onClick: () => trackNavClick("footer_order_airport_gdynia"),
+              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
+              children: t.routeLanding.orderLinks.airportGdynia
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            "a",
+            {
+              href: getRoutePath(locale, "orderCustom"),
+              onClick: () => trackNavClick("footer_order_custom"),
+              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
+              children: t.routeLanding.orderLinks.custom
+            }
+          ),
+          /* @__PURE__ */ jsx("div", { className: "h-2" }),
           /* @__PURE__ */ jsx(
             "a",
             {
@@ -1484,7 +1581,24 @@ function Footer$1() {
               className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
               children: t.navbar.airportGdynia
             }
-          )
+          ),
+          locale === "pl" && popularPlCityRoutes.length > 0 ? /* @__PURE__ */ jsxs(Fragment, { children: [
+            /* @__PURE__ */ jsx("div", { className: "h-3" }),
+            /* @__PURE__ */ jsx("div", { className: "text-[10px] uppercase tracking-[0.2em] text-gray-400", children: "Popularne trasy (PL)" }),
+            /* @__PURE__ */ jsx("div", { className: "mt-2 grid grid-cols-2 gap-x-4 gap-y-2 text-[13px] leading-snug text-gray-200", children: popularPlCityRoutes.map((route) => /* @__PURE__ */ jsxs(
+              "a",
+              {
+                href: `${basePath}/${route.slug}`,
+                onClick: () => trackNavClick(`footer_city_${route.slug}`),
+                className: "text-white visited:text-white hover:text-gray-200 transition-colors",
+                children: [
+                  "Lotnisko ↔ ",
+                  route.destination
+                ]
+              },
+              route.slug
+            )) })
+          ] }) : null
         ] })
       ] })
     ] }),
@@ -1947,26 +2061,6 @@ function CountryAirportLanding() {
   ] });
 }
 
-const cityRoutesByLocale = {
-  pl: [
-    { slug: "taxi-lotnisko-gdansk-slupsk", destination: "Słupsk" },
-    { slug: "taxi-lotnisko-gdansk-malbork", destination: "Malbork" },
-    { slug: "taxi-lotnisko-gdansk-olsztyn", destination: "Olsztyn" },
-    { slug: "taxi-lotnisko-gdansk-starogard-gdanski", destination: "Starogard Gdański" },
-    { slug: "taxi-lotnisko-gdansk-wladyslawowo", destination: "Władysławowo" },
-    { slug: "taxi-lotnisko-gdansk-hel", destination: "Hel" },
-    { slug: "taxi-lotnisko-gdansk-ostroda", destination: "Ostróda" },
-    { slug: "taxi-lotnisko-gdansk-wejherowo", destination: "Wejherowo" },
-    { slug: "taxi-lotnisko-gdansk-rumia", destination: "Rumia" },
-    { slug: "taxi-lotnisko-gdansk-reda", destination: "Reda" }
-  ]
-};
-const getCityRoutes = (locale) => cityRoutesByLocale[locale] ?? [];
-const getCityRouteBySlug = (locale, slug) => getCityRoutes(locale).find((route) => route.slug === slug) ?? null;
-Object.fromEntries(
-  Object.entries(cityRoutesByLocale).map(([locale, routes]) => [locale, routes.map((route) => route.slug)])
-);
-
 function CityRouteLanding() {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
@@ -2173,20 +2267,20 @@ function TaxiGdanskPage() {
 }
 
 const VehicleTypeSelector = lazy(
-  () => import('./assets/VehicleTypeSelector-CAqmTE6l.mjs').then((mod) => ({ default: mod.VehicleTypeSelector }))
+  () => import('./assets/VehicleTypeSelector-DLguqtCZ.mjs').then((mod) => ({ default: mod.VehicleTypeSelector }))
 );
-const Pricing = lazy(() => import('./assets/Pricing-DHkW5UcG.mjs').then((mod) => ({ default: mod.Pricing })));
+const Pricing = lazy(() => import('./assets/Pricing-OXnvhbpv.mjs').then((mod) => ({ default: mod.Pricing })));
 const TrustSection = lazy(
   () => import('./assets/TrustSection-wjwr276G.mjs').then((mod) => ({ default: mod.TrustSection }))
 );
 const Footer = lazy(() => Promise.resolve().then(() => Footer$2).then((mod) => ({ default: mod.Footer })));
 const OrderForm = lazy(() => import('./assets/OrderForm-Bx4oyaBy.mjs').then((mod) => ({ default: mod.OrderForm })));
-const QuoteForm = lazy(() => import('./assets/QuoteForm-CfzjZuMA.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
+const QuoteForm = lazy(() => import('./assets/QuoteForm-CcRLHH0A.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./assets/ManageOrder-CPv7VFpj.mjs').then((mod) => ({ default: mod.ManageOrder })));
-const RouteLanding = lazy(() => import('./assets/RouteLanding-CFkyNwtE.mjs').then((mod) => ({ default: mod.RouteLanding })));
-const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-DuA3fcJQ.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
-const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-DuA3fcJQ.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./assets/PricingPage-BW4F1L08.mjs').then((mod) => ({ default: mod.PricingPage })));
+const RouteLanding = lazy(() => import('./assets/RouteLanding-DY4PYufx.mjs').then((mod) => ({ default: mod.RouteLanding })));
+const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-De2uFbFr.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
+const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-De2uFbFr.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
+const PricingPage = lazy(() => import('./assets/PricingPage-WNsXSHbw.mjs').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-DN0Rl5Dh.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-DqlqcrYR.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
@@ -2828,6 +2922,14 @@ const en = {
     "comfortTitle": "Comfort & safety",
     "paymentBody": "Pay by cash or card. VAT invoices available for business clients.",
     "comfortBody": "Child seats available on request. Professional, licensed drivers and door-to-door assistance."
+  },
+  "trustBar": {
+    "ariaLabel": "Trust signals",
+    "instantConfirmation": "Instant confirmation",
+    "meetGreetOptional": "Meet & greet optional",
+    "noPrepayment": "No prepayment",
+    "supportWhatsappEmail": "Support: WhatsApp & email",
+    "vatInvoice": "VAT invoice"
   },
   "footer": {
     "description": "Professional airport transfer service in the Tri-City area. Available 24/7.",
@@ -3693,6 +3795,14 @@ const pl = {
     "paymentBody": "Płatność gotówką lub kartą. Faktury VAT dla firm.",
     "comfortBody": "Foteliki dziecięce na życzenie. Profesjonalni, licencjonowani kierowcy i pomoc door-to-door."
   },
+  "trustBar": {
+    "ariaLabel": "Informacje zaufania",
+    "instantConfirmation": "Szybkie potwierdzenie",
+    "meetGreetOptional": "Powitanie na lotnisku opcjonalnie",
+    "noPrepayment": "Bez przedpłaty",
+    "supportWhatsappEmail": "Wsparcie: WhatsApp i e-mail",
+    "vatInvoice": "Faktura VAT"
+  },
   "footer": {
     "description": "Profesjonalny transfer lotniskowy w Trójmieście. Dostępny 24/7.",
     "contactTitle": "Kontakt",
@@ -4551,6 +4661,14 @@ const de = {
     "paymentBody": "Bar oder mit Karte. Rechnungen (VAT) für Geschäftskunden verfügbar.",
     "comfortBody": "Kindersitze auf Anfrage. Professionelle, lizenzierte Fahrer und Tür-zu-Tür-Service."
   },
+  "trustBar": {
+    "ariaLabel": "Vertrauenssignale",
+    "instantConfirmation": "Schnelle Bestätigung",
+    "meetGreetOptional": "Meet & greet optional",
+    "noPrepayment": "Keine Vorauszahlung",
+    "supportWhatsappEmail": "Support: WhatsApp & E-Mail",
+    "vatInvoice": "MwSt.-Rechnung"
+  },
   "footer": {
     "description": "Professioneller Flughafentransfer in der Dreistadt. Rund um die Uhr verfügbar.",
     "contactTitle": "Kontakt",
@@ -5407,6 +5525,14 @@ const fi = {
     "paymentBody": "Maksa käteisellä tai kortilla. Lasku saatavilla yritysasiakkaille.",
     "comfortBody": "Lastenistuimet pyynnöstä. Ammattitaitoiset, lisensoidut kuljettajat ja ovelta ovelle -palvelu."
   },
+  "trustBar": {
+    "ariaLabel": "Luottamussignaalit",
+    "instantConfirmation": "Nopea vahvistus",
+    "meetGreetOptional": "Meet & greet valinnainen",
+    "noPrepayment": "Ei ennakkomaksua",
+    "supportWhatsappEmail": "Tuki: WhatsApp ja sähköposti",
+    "vatInvoice": "ALV-lasku"
+  },
   "footer": {
     "description": "Ammattimainen lentokenttäkuljetus Tri-City-alueella. Saatavilla 24/7.",
     "contactTitle": "Yhteys",
@@ -6260,6 +6386,14 @@ const no = {
     "comfortTitle": "Komfort & sikkerhet",
     "paymentBody": "Betal med kontanter eller kort. Faktura tilgjengelig for bedrifter.",
     "comfortBody": "Barneseter på forespørsel. Profesjonelle, lisensierte sjåfører og dør-til-dør-hjelp."
+  },
+  "trustBar": {
+    "ariaLabel": "Tillitsignaler",
+    "instantConfirmation": "Rask bekreftelse",
+    "meetGreetOptional": "Meet & greet valgfritt",
+    "noPrepayment": "Ingen forhåndsbetaling",
+    "supportWhatsappEmail": "Support: WhatsApp og e-post",
+    "vatInvoice": "MVA-faktura"
   },
   "footer": {
     "description": "Profesjonell flyplasstransport i Tri-City-området. Tilgjengelig 24/7.",
@@ -7117,6 +7251,14 @@ const sv = {
     "paymentBody": "Betala kontant eller med kort. Faktura tillgänglig för företag.",
     "comfortBody": "Barnstolar på begäran. Professionella, licensierade förare och dörr-till-dörr-hjälp."
   },
+  "trustBar": {
+    "ariaLabel": "Förtroendesignaler",
+    "instantConfirmation": "Snabb bekräftelse",
+    "meetGreetOptional": "Meet & greet valfritt",
+    "noPrepayment": "Ingen förskottsbetalning",
+    "supportWhatsappEmail": "Support: WhatsApp & e-post",
+    "vatInvoice": "Momsfaktura"
+  },
   "footer": {
     "description": "Professionell flygplatstransfer i Trójmiasto-området. Tillgänglig 24/7.",
     "contactTitle": "Kontakt",
@@ -7972,6 +8114,14 @@ const da = {
     "comfortTitle": "Komfort & sikkerhed",
     "paymentBody": "Betal kontant eller med kort. Faktura til erhvervskunder.",
     "comfortBody": "Barnesæder efter aftale. Professionelle, licenserede chauffører og dør-til-dør-hjælp."
+  },
+  "trustBar": {
+    "ariaLabel": "Tillidssignaler",
+    "instantConfirmation": "Hurtig bekræftelse",
+    "meetGreetOptional": "Meet & greet valgfrit",
+    "noPrepayment": "Ingen forudbetaling",
+    "supportWhatsappEmail": "Support: WhatsApp og e-mail",
+    "vatInvoice": "Momsfaktura"
   },
   "footer": {
     "description": "Professionel lufthavnstransfer i Tri-City-området. Tilgængelig 24/7.",

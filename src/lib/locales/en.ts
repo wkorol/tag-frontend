@@ -199,6 +199,14 @@ const en = {
     "paymentBody": "Pay by cash or card. VAT invoices available for business clients.",
     "comfortBody": "Child seats available on request. Professional, licensed drivers and door-to-door assistance."
   },
+  "trustBar": {
+    "ariaLabel": "Trust signals",
+    "instantConfirmation": "Instant confirmation",
+    "meetGreetOptional": "Meet & greet optional",
+    "noPrepayment": "No prepayment",
+    "supportWhatsappEmail": "Support: WhatsApp & email",
+    "vatInvoice": "VAT invoice"
+  },
   "footer": {
     "description": "Professional airport transfer service in the Tri-City area. Available 24/7.",
     "contactTitle": "Contact",

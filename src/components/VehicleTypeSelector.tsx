@@ -2,6 +2,7 @@ import { Calculator, Car, Info, Users } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { localeToPath, useI18n } from '../lib/i18n';
 import { getRouteSlug } from '../lib/routes';
+import { TrustBar } from './TrustBar';
 
 interface VehicleTypeSelectorProps {
   onSelectType: (type: 'standard' | 'bus') => void;
@@ -40,6 +41,8 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
           <p className="text-gray-600 max-w-2xl mx-auto">
             {t.vehicle.subtitle}
           </p>
+          {/* Use custom CSS for spacing (Tailwind output is constrained in this repo). */}
+          <TrustBar className="vehicle-trustbar" />
           <div className="mt-6 flex justify-center">
             <a
               href={pricingPath}

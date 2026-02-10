@@ -199,6 +199,14 @@ const no = {
     "paymentBody": "Betal med kontanter eller kort. Faktura tilgjengelig for bedrifter.",
     "comfortBody": "Barneseter på forespørsel. Profesjonelle, lisensierte sjåfører og dør-til-dør-hjelp."
   },
+  "trustBar": {
+    "ariaLabel": "Tillitsignaler",
+    "instantConfirmation": "Rask bekreftelse",
+    "meetGreetOptional": "Meet & greet valgfritt",
+    "noPrepayment": "Ingen forhåndsbetaling",
+    "supportWhatsappEmail": "Support: WhatsApp og e-post",
+    "vatInvoice": "MVA-faktura"
+  },
   "footer": {
     "description": "Profesjonell flyplasstransport i Tri-City-området. Tilgjengelig 24/7.",
     "contactTitle": "Kontakt",

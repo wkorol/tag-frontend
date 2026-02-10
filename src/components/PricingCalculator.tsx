@@ -901,7 +901,7 @@ export function PricingCalculator() {
             <div className="flex items-start justify-between gap-4">
               <span className="text-sm text-gray-600 leading-tight">
                 {t.pricingCalculator.nightRate}{' '}
-                <span className="text-[10px] text-gray-400">{t.pricing.sundayNote}</span>
+                <span className="pricing-sunday-note text-gray-400">{t.pricing.sundayNote}</span>
               </span>
               {renderPrice(night.price)}
             </div>
@@ -945,7 +945,7 @@ export function PricingCalculator() {
                       <td className="px-3 py-2">
                         <div className="leading-tight">
                           <div>{t.pricingCalculator.nightRate}</div>
-                          <div className="text-[10px] text-slate-500">{t.pricing.sundayNote}</div>
+                          <div className="pricing-sunday-note text-slate-500">{t.pricing.sundayNote}</div>
                         </div>
                       </td>
                       <td className="px-3 py-2 text-right">{night.taximeterRate} PLN/km</td>
@@ -991,7 +991,7 @@ export function PricingCalculator() {
                     <div className="text-emerald-700" style={{ fontSize: 'clamp(11px, 2.8vw, 12px)' }}>
                       {t.pricingCalculator.nightRate}
                     </div>
-                    <div className="text-[10px] text-slate-500">{t.pricing.sundayNote}</div>
+                    <div className="pricing-sunday-note text-slate-500">{t.pricing.sundayNote}</div>
                   </div>
                   <div className="mt-1 flex items-center gap-2">
                     {renderPrice(night.proposedPrice)}

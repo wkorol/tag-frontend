@@ -167,7 +167,7 @@ export function RouteLanding({ title, description, route, examples, pricing }: R
                 <div className="rounded-xl bg-white border border-gray-200 p-4">
                   <div className="text-sm text-gray-500 mb-1 leading-tight">
                     {t.routeLanding.nightLabel}{' '}
-                    <span className="text-[10px] text-gray-400">{t.pricing.sundayNote}</span>
+                    <span className="pricing-sunday-note text-gray-400">{t.pricing.sundayNote}</span>
                   </div>
                   <div className="text-2xl text-gray-900 font-semibold">
                     {pricing.night} {t.routeLanding.currency}
