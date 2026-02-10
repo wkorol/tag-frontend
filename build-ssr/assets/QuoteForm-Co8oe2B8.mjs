@@ -243,6 +243,7 @@ function QuoteForm({ onClose, initialVehicleType = "standard" }) {
   const directionsServiceRef = useRef(null);
   const placesLibRef = useRef(null);
   const sessionTokenRef = useRef(null);
+  const lastSignFeeRef = useRef(0);
   const signFee = formData.pickupType === "airport" && formData.signService === "sign" ? 20 : 0;
   const isPhoneValid = !validatePhoneNumber(formData.phone, t.quoteForm.validation);
   const isEmailValid = !validateEmail(formData.email, t.quoteForm.validation.email);
@@ -269,7 +270,21 @@ function QuoteForm({ onClose, initialVehicleType = "standard" }) {
   const signServiceSelf = t.quoteForm.signServiceSelf ?? "Find the driver myself at the parking";
   const fixedTotalPrice = fixedRoute ? fixedRoute.price + signFee : null;
   const eurText = fixedTotalPrice ? formatEur(fixedTotalPrice, eurRate) : null;
+  const proposedPriceNumber = showPriceInput ? Number(formData.proposedPrice) : NaN;
+  const proposedPriceEur = Number.isFinite(proposedPriceNumber) ? formatEur(proposedPriceNumber, eurRate) : null;
   const fieldClass = (base, invalid) => `${base}${invalid ? " border-red-400 bg-red-50 focus:ring-red-200 focus:border-red-500" : ""}`;
+  useEffect(() => {
+    const prev = lastSignFeeRef.current;
+    lastSignFeeRef.current = signFee;
+    if (prev === signFee) return;
+    if (!showPriceInput) return;
+    if (fixedRoute) return;
+    if (longRouteInfo) return;
+    const current = Number(formData.proposedPrice);
+    if (!Number.isFinite(current)) return;
+    const next = Math.max(0, current + (signFee - prev));
+    setFormData((p) => ({ ...p, proposedPrice: String(next) }));
+  }, [signFee, showPriceInput, fixedRoute, longRouteInfo, formData.proposedPrice]);
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -560,11 +575,11 @@ function QuoteForm({ onClose, initialVehicleType = "standard" }) {
     if (!proposedPriceDirtyRef.current) {
       setFormData((prev) => ({
         ...prev,
-        proposedPrice: String(longRouteInfo.proposedPrice)
+        proposedPrice: String(longRouteInfo.proposedPrice + signFee)
       }));
     }
-    lastSuggestedPriceRef.current = longRouteInfo.proposedPrice;
-  }, [longRouteInfo]);
+    lastSuggestedPriceRef.current = longRouteInfo.proposedPrice + signFee;
+  }, [longRouteInfo, signFee]);
   useEffect(() => {
     const pickupReady = formData.pickupType === "airport" || formData.pickupAddress.trim().length >= 3;
     const destinationReady = formData.destinationAddress.trim().length >= 3;
@@ -966,10 +981,14 @@ function QuoteForm({ onClose, initialVehicleType = "standard" }) {
       },
       notes: formData.description.trim()
     });
+    const proposedPriceForPayload = (() => {
+      if (fixedRoute && fixedTotalPrice) return String(fixedTotalPrice);
+      return formData.proposedPrice;
+    })();
     const payload = {
       carType: fixedRoute ? fixedRoute.vehicleType === "bus" ? 1 : 2 : carType,
       pickupAddress: formData.pickupAddress,
-      proposedPrice: fixedRoute && fixedTotalPrice ? String(fixedTotalPrice) : formData.proposedPrice,
+      proposedPrice: proposedPriceForPayload,
       date: formData.date,
       pickupTime: formData.time,
       flightNumber: formData.pickupType === "airport" ? formData.flightNumber : "N/A",
@@ -1310,8 +1329,10 @@ function QuoteForm({ onClose, initialVehicleType = "standard" }) {
               /* @__PURE__ */ jsx("div", { className: "text-xs uppercase tracking-wide text-slate-600 mb-2", children: t.quoteForm.longRouteTitle }),
               /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-700", children: t.quoteForm.longRouteDistance(longRouteInfo.distanceKm) }),
               /* @__PURE__ */ jsxs("div", { className: "mt-3 space-y-1 text-sm text-slate-700", children: [
-                longRouteInfo.proposedPrice <= longRouteInfo.taximeterPrice && /* @__PURE__ */ jsx("div", { children: t.quoteForm.longRouteTaximeter(longRouteInfo.taximeterPrice, longRouteInfo.taximeterRate) }),
-                /* @__PURE__ */ jsx("div", { children: t.quoteForm.longRouteProposed(longRouteInfo.proposedPrice) }),
+                longRouteInfo.proposedPrice <= longRouteInfo.taximeterPrice && /* @__PURE__ */ jsx("div", { children: t.quoteForm.longRouteTaximeter(longRouteInfo.taximeterPrice + signFee, longRouteInfo.taximeterRate) }),
+                /* @__PURE__ */ jsx("div", { children: t.quoteForm.longRouteProposed(
+                  Number.isFinite(proposedPriceNumber) ? proposedPriceNumber : longRouteInfo.proposedPrice + signFee
+                ) }),
                 longRouteInfo.savingsPercent > 0 && /* @__PURE__ */ jsx("div", { children: t.quoteForm.longRouteSavings(longRouteInfo.savingsPercent) })
               ] }),
               /* @__PURE__ */ jsx("div", { className: "mt-2 text-xs text-slate-600", children: t.quoteForm.longRouteNote })
@@ -1669,8 +1690,10 @@ function QuoteForm({ onClose, initialVehicleType = "standard" }) {
                   /* @__PURE__ */ jsx("span", { children: t.orderForm.confirmOrder(fixedTotalPrice) }),
                   eurText && /* @__PURE__ */ jsx("span", { className: "text-[11px] text-blue-100", children: eurText })
                 ] }) : longRouteInfo ? /* @__PURE__ */ jsxs("span", { className: "flex flex-col items-center gap-1", children: [
-                  /* @__PURE__ */ jsx("span", { children: t.orderForm.confirmOrder(longRouteInfo.proposedPrice) }),
-                  formatEur(longRouteInfo.proposedPrice, eurRate) && /* @__PURE__ */ jsx("span", { className: "text-[11px] text-blue-100", children: formatEur(longRouteInfo.proposedPrice, eurRate) })
+                  /* @__PURE__ */ jsx("span", { children: t.orderForm.confirmOrder(
+                    Number.isFinite(proposedPriceNumber) ? proposedPriceNumber : longRouteInfo.proposedPrice + signFee
+                  ) }),
+                  (proposedPriceEur ?? formatEur(longRouteInfo.proposedPrice + signFee, eurRate)) && /* @__PURE__ */ jsx("span", { className: "text-[11px] text-blue-100", children: proposedPriceEur ?? formatEur(longRouteInfo.proposedPrice + signFee, eurRate) })
                 ] }) : t.quoteForm.submit
               }
             )

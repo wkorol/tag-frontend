@@ -280,6 +280,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
     Place: any;
   } | null>(null);
   const sessionTokenRef = useRef<any>(null);
+  const lastSignFeeRef = useRef(0);
   const signFee = formData.pickupType === 'airport' && formData.signService === 'sign' ? 20 : 0;
   const isPhoneValid = !validatePhoneNumber(formData.phone, t.quoteForm.validation);
   const isEmailValid = !validateEmail(formData.email, t.quoteForm.validation.email);
@@ -306,8 +307,27 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
   const signServiceSelf = t.quoteForm.signServiceSelf ?? 'Find the driver myself at the parking';
   const fixedTotalPrice = fixedRoute ? fixedRoute.price + signFee : null;
   const eurText = fixedTotalPrice ? formatEur(fixedTotalPrice, eurRate) : null;
+  const proposedPriceNumber = showPriceInput ? Number(formData.proposedPrice) : NaN;
+  const proposedPriceEur = Number.isFinite(proposedPriceNumber) ? formatEur(proposedPriceNumber, eurRate) : null;
   const fieldClass = (base: string, invalid: boolean) =>
     `${base}${invalid ? ' border-red-400 bg-red-50 focus:ring-red-200 focus:border-red-500' : ''}`;
+
+  useEffect(() => {
+    const prev = lastSignFeeRef.current;
+    lastSignFeeRef.current = signFee;
+
+    // When the user is manually entering a price (no longRouteInfo auto-suggestion),
+    // keep the field representing the final price (including sign fee) by applying the delta.
+    if (prev === signFee) return;
+    if (!showPriceInput) return;
+    if (fixedRoute) return;
+    if (longRouteInfo) return;
+
+    const current = Number(formData.proposedPrice);
+    if (!Number.isFinite(current)) return;
+    const next = Math.max(0, current + (signFee - prev));
+    setFormData((p) => ({ ...p, proposedPrice: String(next) }));
+  }, [signFee, showPriceInput, fixedRoute, longRouteInfo, formData.proposedPrice]);
 
   useEffect(() => {
     if (!GOOGLE_MAPS_KEY) {
@@ -658,11 +678,11 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
     if (!proposedPriceDirtyRef.current) {
       setFormData((prev) => ({
         ...prev,
-        proposedPrice: String(longRouteInfo.proposedPrice),
+        proposedPrice: String(longRouteInfo.proposedPrice + signFee),
       }));
     }
-    lastSuggestedPriceRef.current = longRouteInfo.proposedPrice;
-  }, [longRouteInfo]);
+    lastSuggestedPriceRef.current = longRouteInfo.proposedPrice + signFee;
+  }, [longRouteInfo, signFee]);
 
   useEffect(() => {
     const pickupReady =
@@ -1134,10 +1154,15 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
       notes: formData.description.trim(),
     });
 
+    const proposedPriceForPayload = (() => {
+      if (fixedRoute && fixedTotalPrice) return String(fixedTotalPrice);
+      return formData.proposedPrice; // includes sign fee if applicable (UI keeps it in the field)
+    })();
+
     const payload = {
       carType: fixedRoute ? (fixedRoute.vehicleType === 'bus' ? 1 : 2) : carType,
       pickupAddress: formData.pickupAddress,
-      proposedPrice: fixedRoute && fixedTotalPrice ? String(fixedTotalPrice) : formData.proposedPrice,
+      proposedPrice: proposedPriceForPayload,
       date: formData.date,
       pickupTime: formData.time,
       flightNumber: formData.pickupType === 'airport' ? formData.flightNumber : 'N/A',
@@ -1550,11 +1575,15 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
                   <div className="mt-3 space-y-1 text-sm text-slate-700">
                     {longRouteInfo.proposedPrice <= longRouteInfo.taximeterPrice && (
                       <div>
-                        {t.quoteForm.longRouteTaximeter(longRouteInfo.taximeterPrice, longRouteInfo.taximeterRate)}
+                        {t.quoteForm.longRouteTaximeter(longRouteInfo.taximeterPrice + signFee, longRouteInfo.taximeterRate)}
                       </div>
                     )}
                     <div>
-                      {t.quoteForm.longRouteProposed(longRouteInfo.proposedPrice)}
+                      {t.quoteForm.longRouteProposed(
+                        Number.isFinite(proposedPriceNumber)
+                          ? proposedPriceNumber
+                          : longRouteInfo.proposedPrice + signFee,
+                      )}
                     </div>
                     {longRouteInfo.savingsPercent > 0 && (
                       <div>
@@ -1963,9 +1992,17 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
                   </span>
                 ) : longRouteInfo ? (
                   <span className="flex flex-col items-center gap-1">
-                    <span>{t.orderForm.confirmOrder(longRouteInfo.proposedPrice)}</span>
-                    {formatEur(longRouteInfo.proposedPrice, eurRate) && (
-                      <span className="text-[11px] text-blue-100">{formatEur(longRouteInfo.proposedPrice, eurRate)}</span>
+                    <span>
+                      {t.orderForm.confirmOrder(
+                        Number.isFinite(proposedPriceNumber)
+                          ? proposedPriceNumber
+                          : longRouteInfo.proposedPrice + signFee,
+                      )}
+                    </span>
+                    {(proposedPriceEur ?? formatEur(longRouteInfo.proposedPrice + signFee, eurRate)) && (
+                      <span className="text-[11px] text-blue-100">
+                        {proposedPriceEur ?? formatEur(longRouteInfo.proposedPrice + signFee, eurRate)}
+                      </span>
                     )}
                   </span>
                 ) : (

@@ -4,7 +4,7 @@ import { u as useI18n, l as localeToPath, g as getRouteSlug, r as requestScrollT
 import { Pricing } from './Pricing-Bdh0QAiP.mjs';
 import { useLocation } from 'react-router-dom';
 import { Calculator, MapPin, X, Navigation } from 'lucide-react';
-import { d as distanceKm, i as isPointInsideGeoJson, c as cityPolygons, a as centerPolygons, Q as QuoteForm } from './QuoteForm-BNLOP-Wp.mjs';
+import { d as distanceKm, i as isPointInsideGeoJson, c as cityPolygons, a as centerPolygons, Q as QuoteForm } from './QuoteForm-Co8oe2B8.mjs';
 import { F as FIXED_PRICES } from './fixedPricing-BrEVc9Vy.mjs';
 import { u as useEurRate, p as preloadEurRate, f as formatEur } from './currency-BfL_L89a.mjs';
 import { OrderForm } from './OrderForm-DbjzeHLR.mjs';
