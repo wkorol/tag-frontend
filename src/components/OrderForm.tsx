@@ -9,6 +9,7 @@ import { trackFormClose, trackFormStart, trackFormSubmit, trackFormValidation } 
 import { isAnalyticsEnabled } from '../lib/analytics';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
 import { isPolishPublicHoliday } from '../lib/polishHolidays';
+import { lockBodyScroll, unlockBodyScroll } from '../lib/scrollLock';
 
 interface OrderFormProps {
   route: {
@@ -117,6 +118,11 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     email: '',
     description: '',
   });
+
+  useEffect(() => {
+    lockBodyScroll();
+    return () => unlockBodyScroll();
+  }, []);
 
   // Workaround: browsers/dev HMR sometimes restore <input type="time"> values.
   // Force the time field to start empty.
@@ -785,7 +791,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+    <div className="modal-overlay fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-hidden">
       <div className="bg-white rounded-xl max-w-2xl w-full my-8 max-h-[90vh] flex flex-col relative">
 	        <div className="p-6 border-b flex items-center justify-between flex-shrink-0">
 	          <div>
@@ -818,7 +824,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
 	        >
 	          <div
 	            ref={formScrollRef}
-	            className={`p-6 space-y-6 overflow-y-auto ${
+	            className={`modal-scroll p-6 space-y-6 overflow-y-auto ${
 	              step === 'details' ? 'order-form--details' : ''
 	            }`}
 	          >

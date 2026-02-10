@@ -13,6 +13,7 @@ import { isPolishPublicHoliday } from '../lib/polishHolidays';
 import { trackFormClose, trackFormStart, trackFormSubmit, trackFormValidation } from '../lib/tracking';
 import { isAnalyticsEnabled } from '../lib/analytics';
 import { Locale, localeToPath, useI18n } from '../lib/i18n';
+import { lockBodyScroll, unlockBodyScroll } from '../lib/scrollLock';
 
 const AIRPORT_COORD = { lat: 54.3776, lon: 18.4662 };
 const AIRPORT_RADIUS_KM = 2.5;
@@ -214,6 +215,11 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
     email: '',
     description: '',
   });
+
+  useEffect(() => {
+    lockBodyScroll();
+    return () => unlockBodyScroll();
+  }, []);
 
   // Workaround: browsers/dev HMR sometimes restore <input type="time"> values.
   // Force the time field to start empty.
@@ -1312,7 +1318,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+    <div className="modal-overlay fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-hidden">
       <div className="bg-white rounded-xl max-w-2xl w-full my-8 max-h-[90vh] flex flex-col">
         <div className="p-6 border-b flex items-center justify-between flex-shrink-0">
           <div>
@@ -1336,7 +1342,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
           onSubmit={handleSubmit}
           autoComplete="off"
           noValidate
-          className="booking-form p-6 space-y-6 overflow-y-auto cursor-default"
+          className="modal-scroll booking-form p-6 space-y-6 overflow-y-auto cursor-default"
           onPointerDownCapture={(event) => {
             if (
               showPriceInput

@@ -4,7 +4,7 @@ import { Plane, MapPin, Calendar, FileText, Users, Info, Luggage } from 'lucide-
 import { u as useEurRate, f as formatEur, g as getApiBaseUrl } from './currency-BfL_L89a.mjs';
 import { b as buildAdditionalNotes } from './orderNotes-Bh0j39S6.mjs';
 import { u as useI18n, l as localeToPath, i as trackFormClose, j as trackFormValidation, k as trackFormSubmit, m as trackFormStart, n as isAnalyticsEnabled, o as hasMarketingConsent } from '../entry-server.mjs';
-import { i as isPolishPublicHoliday } from './polishHolidays-bkEd32V0.mjs';
+import { l as lockBodyScroll, u as unlockBodyScroll, i as isPolishPublicHoliday } from './scrollLock-Db1Ed-19.mjs';
 import 'react-dom/server';
 import 'react-router-dom/server.js';
 import 'react-router-dom';
@@ -90,6 +90,10 @@ function OrderForm({ route, onClose }) {
     email: "",
     description: ""
   });
+  useEffect(() => {
+    lockBodyScroll();
+    return () => unlockBodyScroll();
+  }, []);
   useEffect(() => {
     if (typeof window === "undefined") return;
     const timer = window.setTimeout(() => {
@@ -660,7 +664,7 @@ function OrderForm({ route, onClose }) {
       )
     ] }) }) });
   }
-  return /* @__PURE__ */ jsx("div", { className: "fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto", children: /* @__PURE__ */ jsxs("div", { className: "bg-white rounded-xl max-w-2xl w-full my-8 max-h-[90vh] flex flex-col relative", children: [
+  return /* @__PURE__ */ jsx("div", { className: "modal-overlay fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-hidden", children: /* @__PURE__ */ jsxs("div", { className: "bg-white rounded-xl max-w-2xl w-full my-8 max-h-[90vh] flex flex-col relative", children: [
     /* @__PURE__ */ jsxs("div", { className: "p-6 border-b flex items-center justify-between flex-shrink-0", children: [
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx("h3", { className: "text-gray-900", children: t.orderForm.title }),
@@ -695,7 +699,7 @@ function OrderForm({ route, onClose }) {
             "div",
             {
               ref: formScrollRef,
-              className: `p-6 space-y-6 overflow-y-auto ${step === "details" ? "order-form--details" : ""}`,
+              className: `modal-scroll p-6 space-y-6 overflow-y-auto ${step === "details" ? "order-form--details" : ""}`,
               children: [
                 error && /* @__PURE__ */ jsx("div", { className: "bg-red-50 border-2 border-red-500 rounded-lg p-4 text-red-800", children: error }),
                 step === "trip" ? /* @__PURE__ */ jsxs(Fragment, { children: [

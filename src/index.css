@@ -1898,6 +1898,17 @@ html {
   padding-right: 0.85rem !important;
 }
 
+.modal-overlay {
+  overscroll-behavior: contain; /* stop scroll chaining to the page behind */
+  touch-action: none;
+}
+
+.modal-scroll {
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
 @media (max-width: 39.9375rem) {
   .order-actions-footer {
     padding: 0.45rem 0.7rem calc(0.45rem + env(safe-area-inset-bottom));
