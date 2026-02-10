@@ -66,13 +66,6 @@ export function BookingForm() {
       });
       return;
     }
-    if (name === 'time' && formData.date === today && value < nowTime) {
-      setFormData({
-        ...formData,
-        time: nowTime,
-      });
-      return;
-    }
     setFormData({
       ...formData,
       [name]: value,
@@ -298,7 +291,6 @@ export function BookingForm() {
                   name="time"
                   value={formData.time}
                   onChange={handleChange}
-                  min={formData.date === getTodayDateString() ? getCurrentTimeString() : undefined}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />

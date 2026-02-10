@@ -1880,6 +1880,41 @@ html {
   box-sizing: border-box;
 }
 
+.order-form--details {
+  /* Ensure fields can scroll above the sticky action bar. */
+  padding-bottom: calc(7.5rem + env(safe-area-inset-bottom));
+}
+
+.order-actions-footer {
+  flex-shrink: 0;
+  padding: 1.25rem 1.5rem calc(1.25rem + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.96);
+  border-top: 1px solid rgba(15, 23, 42, 0.10);
+  backdrop-filter: blur(10px);
+}
+
+.order-actions-btn {
+  padding-left: 0.85rem !important;
+  padding-right: 0.85rem !important;
+}
+
+@media (max-width: 39.9375rem) {
+  .order-actions-footer {
+    padding: 0.45rem 0.7rem calc(0.45rem + env(safe-area-inset-bottom));
+  }
+
+  .order-actions-btn {
+    min-height: 38px !important;
+    padding-top: 0.4rem !important;
+    padding-bottom: 0.4rem !important;
+    font-size: 0.78rem;
+  }
+
+  .order-actions-eur {
+    font-size: 0.6rem !important;
+  }
+}
+
 @media (min-width: 48rem) {
   .vehicle-selfmanage-badge {
     height: 2.5rem; /* 40px */
@@ -1889,6 +1924,11 @@ html {
   .vehicle-select-cta {
     height: 3rem; /* 48px */
     font-size: 1rem; /* text-base */
+  }
+
+  .order-actions-footer {
+    padding-top: 1.1rem;
+    padding-bottom: 1.1rem;
   }
 }
 

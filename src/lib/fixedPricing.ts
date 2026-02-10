@@ -2,12 +2,12 @@ export const FIXED_PRICES = {
   standard: {
     gdansk: { day: 100, night: 120 },
     sopot: { day: 120, night: 150 },
-    gdynia: { day: 200, night: 250 },
+    gdynia: { day: 150, night: 200 },
   },
   bus: {
     gdansk: { day: 150, night: 180 },
     sopot: { day: 180, night: 225 },
-    gdynia: { day: 300, night: 375 },
+    gdynia: { day: 225, night: 300 },
   },
 } as const;
 

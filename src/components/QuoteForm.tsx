@@ -169,6 +169,16 @@ const getCurrentTimeString = () => {
   return `${hours}:${minutes}`;
 };
 
+const MIN_LEAD_TIME_MINUTES = 40;
+
+const isPickupTooSoon = (date: string, time: string) => {
+  if (!date || !time) return false;
+  const selected = new Date(`${date}T${time}:00`);
+  if (Number.isNaN(selected.getTime())) return false;
+  const minAllowed = new Date(Date.now() + MIN_LEAD_TIME_MINUTES * 60 * 1000);
+  return selected.getTime() < minAllowed.getTime();
+};
+
 const isPastDate = (value: string) => {
   if (!value) return false;
   return value < getTodayDateString();
@@ -205,6 +215,18 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
     description: '',
   });
 
+  // Workaround: browsers/dev HMR sometimes restore <input type="time"> values.
+  // Force the time field to start empty.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const timer = window.setTimeout(() => {
+      setFormData((prev) => ({ ...prev, time: '' }));
+      setTimeTouched(false);
+      setTimeEditing(false);
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   const [submitted, setSubmitted] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [generatedId, setGeneratedId] = useState<string | null>(null);
@@ -234,6 +256,8 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
   const [holidayYear, setHolidayYear] = useState<number | null>(null);
   const formStartedRef = useRef(false);
   const [submitAttempted, setSubmitAttempted] = useState(false);
+  const [timeTouched, setTimeTouched] = useState(false);
+  const [timeEditing, setTimeEditing] = useState(false);
   const lastSuggestedPriceRef = useRef<number | null>(null);
   const suggestedContextRef = useRef<string>('');
   const proposedPriceDirtyRef = useRef(false);
@@ -261,7 +285,9 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
   const signTextError = showValidation && formData.pickupType === 'airport' && formData.signService === 'sign' && !formData.signText.trim();
   const flightNumberError = showValidation && formData.pickupType === 'airport' && !formData.flightNumber.trim();
   const dateError = showValidation && (!formData.date || isPastDate(formData.date));
-  const timeError = showValidation && !formData.time;
+  const isTimeTooSoon = isPickupTooSoon(formData.date, formData.time);
+  const showTimeValidation = submitAttempted || timeTouched;
+  const timeError = showTimeValidation && !timeEditing && (!formData.time || isTimeTooSoon);
   const passengersError = showValidation && !formData.passengers;
   const luggageError = showValidation && !formData.largeLuggage;
   const nameError = showValidation && !formData.name.trim();
@@ -1033,6 +1059,13 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
     if (!formData.time) {
       missingFieldIds.push('time');
     }
+    if (isPickupTooSoon(formData.date, formData.time)) {
+      trackFormValidation('quote', 1, 'time');
+      trackFormSubmit('quote', 'validation_error');
+      setError(t.quoteForm.validation.timeSoon);
+      scrollToField('time');
+      return;
+    }
     if (!formData.passengers) {
       missingFieldIds.push('passengers');
     }
@@ -1146,10 +1179,14 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
     }
     const { name, value } = e.target;
     const today = getTodayDateString();
-    const nowTime = getCurrentTimeString();
     if (name === 'date') {
       const nextDate = value < today ? today : value;
-      const nextTime = nextDate === today && formData.time && formData.time < nowTime ? nowTime : formData.time;
+      const nextTime = formData.time;
+      if (error === t.quoteForm.validation.timeSoon) {
+        if (!isPickupTooSoon(nextDate, nextTime)) {
+          setError(null);
+        }
+      }
       setFormData({
         ...formData,
         date: nextDate,
@@ -1157,12 +1194,9 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
       });
       return;
     }
-    if (name === 'time' && formData.date === today && value < nowTime) {
-      setFormData({
-        ...formData,
-        time: nowTime,
-      });
-      return;
+    if (name === 'time' && error === t.quoteForm.validation.timeSoon) {
+      // Hide the banner error while the user is actively fixing the time.
+      setError(null);
     }
     const nextValue = value;
     if (name === 'proposedPrice') {
@@ -1300,6 +1334,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
 
         <form
           onSubmit={handleSubmit}
+          autoComplete="off"
           noValidate
           className="booking-form p-6 space-y-6 overflow-y-auto cursor-default"
           onPointerDownCapture={(event) => {
@@ -1624,14 +1659,22 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
                     id="time"
                     name="time"
                     value={formData.time}
+                    autoComplete="off"
                     onChange={handleChange}
-                    min={formData.date === getTodayDateString() ? getCurrentTimeString() : undefined}
+                    onFocus={() => setTimeEditing(true)}
+                    onBlur={() => {
+                      setTimeEditing(false);
+                      setTimeTouched(true);
+                    }}
                     className={fieldClass(
                       'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
                       timeError,
                     )}
                     required
                   />
+                  {!timeEditing && showTimeValidation && formData.time && isTimeTooSoon && (
+                    <p className="mt-1 text-sm text-red-600">{t.quoteForm.validation.timeSoon}</p>
+                  )}
                 </div>
               </div>
 

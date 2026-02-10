@@ -461,7 +461,8 @@ const de = {
       "emailRequired": "Bitte geben Sie Ihre E-Mail-Adresse ein.",
       "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
       "datePast": "Bitte wählen Sie ein heutiges oder zukünftiges Datum.",
-      "timePast": "Bitte wählen Sie die aktuelle Uhrzeit oder eine zukünftige Uhrzeit."
+      "timePast": "Bitte wählen Sie die aktuelle Uhrzeit oder eine zukünftige Uhrzeit.",
+      "timeSoon": "Bitte wählen Sie eine Uhrzeit, die mindestens 40 Minuten ab jetzt liegt."
     },
     "rate": {
       "day": "Tagtarif",
@@ -538,7 +539,9 @@ const de = {
       "phoneLetters": "Bitte geben Sie eine gültige Telefonnummer ein (nur Ziffern).",
       "phoneLength": "Bitte geben Sie eine gültige Telefonnummer ein (7–15 Ziffern, optional +).",
       "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-      "datePast": "Bitte wählen Sie ein heutiges oder zukünftiges Datum."
+      "datePast": "Bitte wählen Sie ein heutiges oder zukünftiges Datum.",
+      "timePast": "Bitte wählen Sie die aktuelle Uhrzeit oder eine zukünftige Uhrzeit.",
+      "timeSoon": "Bitte wählen Sie eine Uhrzeit, die mindestens 40 Minuten ab jetzt liegt."
     },
     "submitError": "Angebotsanfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
     "submitNetworkError": "Netzwerkfehler beim Senden der Angebotsanfrage. Bitte versuchen Sie es erneut.",
@@ -851,8 +854,8 @@ const de = {
         "Hotels in Gdynia",
         "Gdynia Orłowo"
       ],
-      "priceDay": 200,
-      "priceNight": 250
+      "priceDay": 150,
+      "priceNight": 200
     }
   }
 } as const;

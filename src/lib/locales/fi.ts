@@ -459,7 +459,8 @@ const fi = {
       "emailRequired": "Syötä sähköpostiosoite.",
       "email": "Syötä kelvollinen sähköpostiosoite.",
       "datePast": "Valitse tämän päivän tai tuleva päivämäärä.",
-      "timePast": "Valitse nykyinen tai tuleva kellonaika."
+      "timePast": "Valitse nykyinen tai tuleva kellonaika.",
+      "timeSoon": "Valitse aika, joka on vähintään 40 minuuttia tästä hetkestä."
     },
     "rate": {
       "day": "Päivätaksa",
@@ -536,7 +537,9 @@ const fi = {
       "phoneLetters": "Syötä kelvollinen puhelinnumero (vain numeroita).",
       "phoneLength": "Syötä kelvollinen puhelinnumero (7–15 numeroa, valinnainen +).",
       "email": "Syötä kelvollinen sähköpostiosoite.",
-      "datePast": "Valitse tämän päivän tai tuleva päivämäärä."
+      "datePast": "Valitse tämän päivän tai tuleva päivämäärä.",
+      "timePast": "Valitse nykyinen tai tuleva kellonaika.",
+      "timeSoon": "Valitse aika, joka on vähintään 40 minuuttia tästä hetkestä."
     },
     "submitError": "Tarjouspyynnön lähetys epäonnistui. Yritä uudelleen.",
     "submitNetworkError": "Verkkovirhe tarjouspyyntöä lähetettäessä. Yritä uudelleen.",
@@ -849,8 +852,8 @@ const fi = {
         "Gdynian hotellit",
         "Gdynia Orłowo"
       ],
-      "priceDay": 200,
-      "priceNight": 250
+      "priceDay": 150,
+      "priceNight": 200
     }
   }
 } as const;

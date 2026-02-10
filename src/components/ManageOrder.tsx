@@ -266,13 +266,6 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
       });
       return;
     }
-    if (name === 'time' && formData.date === today && value < nowTime) {
-      setFormData({
-        ...formData,
-        time: nowTime,
-      });
-      return;
-    }
     setFormData({
       ...formData,
       [name]: value,
@@ -759,7 +752,6 @@ export function ManageOrder({ orderId }: ManageOrderProps) {
                     name="time"
                     value={formData.time}
                     onChange={handleChange}
-                    min={formData.date === getTodayDateString() ? getCurrentTimeString() : undefined}
                     disabled={!isFieldEditable('time')}
                     className={inputClass('time', isFieldEditable('time'))}
                   />

@@ -463,7 +463,8 @@ const en = {
       "emailRequired": "Please enter your email address.",
       "email": "Please enter a valid email address.",
       "datePast": "Please select today or a future date.",
-      "timePast": "Please select the current time or a future time."
+      "timePast": "Please select the current time or a future time.",
+      "timeSoon": "Please select a time at least 40 minutes from now."
     },
     "rate": {
       "day": "Day rate",
@@ -540,7 +541,9 @@ const en = {
       "phoneLetters": "Please enter a valid phone number (digits only).",
       "phoneLength": "Please enter a valid phone number (7–15 digits, optional +).",
       "email": "Please enter a valid email address.",
-      "datePast": "Please select today or a future date."
+      "datePast": "Please select today or a future date.",
+      "timePast": "Please select the current time or a future time.",
+      "timeSoon": "Please select a time at least 40 minutes from now."
     },
     "submitError": "Failed to submit quote request. Please try again.",
     "submitNetworkError": "Network error while submitting the quote request. Please try again.",
@@ -853,8 +856,8 @@ const en = {
         "Gdynia Hotels",
         "Gdynia Orłowo"
       ],
-      "priceDay": 200,
-      "priceNight": 250
+      "priceDay": 150,
+      "priceNight": 200
     }
   }
 } as const;

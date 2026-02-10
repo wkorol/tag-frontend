@@ -21,6 +21,10 @@ interface OrderFormProps {
   onClose: () => void;
 }
 
+const GOOGLE_MAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY as string | undefined;
+const GDANSK_BIAS = { lat: 54.3520, lon: 18.6466 };
+const GDANSK_RADIUS_METERS = 60000;
+
 const getTodayDateString = () => {
   const now = new Date();
   const year = now.getFullYear();
@@ -34,6 +38,29 @@ const getCurrentTimeString = () => {
   const hours = String(now.getHours()).padStart(2, '0');
   const minutes = String(now.getMinutes()).padStart(2, '0');
   return `${hours}:${minutes}`;
+};
+
+const normalizeSuggestionQuery = (value: string) => value.trim();
+
+const getLocationBounds = (center: { lat: number; lon: number }, radiusMeters: number) => {
+  const latDelta = radiusMeters / 111320;
+  const lonDelta = radiusMeters / (111320 * Math.cos((center.lat * Math.PI) / 180));
+  return {
+    north: center.lat + latDelta,
+    south: center.lat - latDelta,
+    east: center.lon + lonDelta,
+    west: center.lon - lonDelta,
+  };
+};
+
+const MIN_LEAD_TIME_MINUTES = 40;
+
+const isPickupTooSoon = (date: string, time: string) => {
+  if (!date || !time) return false;
+  const selected = new Date(`${date}T${time}:00`);
+  if (Number.isNaN(selected.getTime())) return false;
+  const minAllowed = new Date(Date.now() + MIN_LEAD_TIME_MINUTES * 60 * 1000);
+  return selected.getTime() < minAllowed.getTime();
 };
 
 const isPastDate = (value: string) => {
@@ -67,6 +94,11 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const { t, locale } = useI18n();
   const emailLocale: Locale = locale === 'pl' ? 'pl' : 'en';
   const basePath = localeToPath(locale);
+  const [googleReady, setGoogleReady] = useState(false);
+  const placesLibRef = useRef<any>(null);
+  const sessionTokenRef = useRef<any>(null);
+  const [addressSuggestions, setAddressSuggestions] = useState<Array<{ label: string; placeId: string }>>([]);
+  const [addressFocused, setAddressFocused] = useState(false);
   const [step, setStep] = useState<'trip' | 'details'>('trip');
   const [stepAttempted, setStepAttempted] = useState(false);
   const [formData, setFormData] = useState({
@@ -85,6 +117,74 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     email: '',
     description: '',
   });
+
+  // Workaround: browsers/dev HMR sometimes restore <input type="time"> values.
+  // Force the time field to start empty.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const timer = window.setTimeout(() => {
+      setFormData((prev) => ({ ...prev, time: '' }));
+      setTimeTouched(false);
+      setTimeEditing(false);
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!GOOGLE_MAPS_KEY) {
+      return;
+    }
+    if (typeof window === 'undefined') {
+      return;
+    }
+    if ((window as any).google?.maps) {
+      setGoogleReady(true);
+      return;
+    }
+    const existing = document.querySelector('script[data-google-maps="true"]');
+    if (existing) {
+      existing.addEventListener('load', () => setGoogleReady(true), { once: true });
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(GOOGLE_MAPS_KEY)}&loading=async&v=weekly`;
+    script.async = true;
+    script.defer = true;
+    script.dataset.googleMaps = 'true';
+    script.addEventListener('load', () => setGoogleReady(true));
+    document.head.appendChild(script);
+  }, []);
+
+  const ensurePlacesLibrary = async () => {
+    if (!googleReady) {
+      return null;
+    }
+    const google = (window as any).google;
+    if (!google?.maps?.importLibrary) {
+      return null;
+    }
+    if (placesLibRef.current) {
+      return placesLibRef.current;
+    }
+    const lib = await google.maps.importLibrary('places');
+    placesLibRef.current = lib;
+    return lib;
+  };
+
+  const getSessionToken = async () => {
+    const lib = await ensurePlacesLibrary();
+    if (!lib) {
+      return null;
+    }
+    if (!sessionTokenRef.current) {
+      sessionTokenRef.current = new lib.AutocompleteSessionToken();
+    }
+    return sessionTokenRef.current;
+  };
+
+  const resetSessionToken = () => {
+    sessionTokenRef.current = null;
+  };
 
   const handlePhoneBlur = () => {
     const phoneError = validatePhoneNumber(formData.phone, t.orderForm.validation);
@@ -112,6 +212,8 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const eurRate = useEurRate();
   const formStartedRef = useRef(false);
   const [submitAttempted, setSubmitAttempted] = useState(false);
+  const [timeTouched, setTimeTouched] = useState(false);
+  const [timeEditing, setTimeEditing] = useState(false);
   const signFee = formData.pickupType === 'airport' && formData.signService === 'sign' ? 20 : 0;
   const totalPrice = currentPrice + signFee;
   const eurText = formatEur(totalPrice, eurRate);
@@ -156,7 +258,9 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     !formData.flightUnknown &&
     !formData.flightNumber.trim();
   const dateError = showValidation && (!formData.date || isPastDate(formData.date));
-  const timeError = showValidation && !formData.time;
+  const isTimeTooSoon = isPickupTooSoon(formData.date, formData.time);
+  const showTimeValidation = (step === 'trip' ? stepAttempted : submitAttempted) || timeTouched;
+  const timeError = showTimeValidation && !timeEditing && (!formData.time || isTimeTooSoon);
   const nameError = showValidation && !formData.name.trim();
   const phoneErrorState = showValidation && (!formData.phone.trim() || !isPhoneValid);
   const emailErrorState = showValidation && (!formData.email.trim() || !isEmailValid);
@@ -166,7 +270,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
 
   const remainingFields = useMemo(() => {
     const isDateOk = Boolean(formData.date) && !isPastDate(formData.date);
-    const isTimeOk = Boolean(formData.time);
+    const isTimeOk = Boolean(formData.time) && !isPickupTooSoon(formData.date, formData.time);
     const isPickupOk = Boolean(formData.pickupType);
     const isAddressOk = formData.pickupType === 'address' ? Boolean(formData.address.trim()) : true;
     const isFlightOk =
@@ -237,6 +341,65 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       currency: 'PLN',
     });
   };
+
+  useEffect(() => {
+    if (formData.pickupType !== 'address') {
+      setAddressSuggestions([]);
+      return;
+    }
+    const query = normalizeSuggestionQuery(formData.address);
+    if (query.length < 3) {
+      setAddressSuggestions([]);
+      return;
+    }
+
+    let active = true;
+    const timer = window.setTimeout(async () => {
+      try {
+        if (!GOOGLE_MAPS_KEY) {
+          setAddressSuggestions([]);
+          return;
+        }
+        const lib = await ensurePlacesLibrary();
+        if (!lib) {
+          setAddressSuggestions([]);
+          return;
+        }
+        const sessionToken = await getSessionToken();
+        const request: any = {
+          input: query,
+          region: 'pl',
+          language: locale,
+          locationBias: getLocationBounds(GDANSK_BIAS, GDANSK_RADIUS_METERS),
+          sessionToken: sessionToken ?? undefined,
+        };
+        const { suggestions } = await lib.AutocompleteSuggestion.fetchAutocompleteSuggestions(request);
+        const results = (Array.isArray(suggestions) ? suggestions : [])
+          .map((suggestion: any) => suggestion.placePrediction)
+          .filter((prediction: any) => prediction?.placeId)
+          .map((prediction: any) => {
+            const label = typeof prediction?.text?.text === 'string'
+              ? prediction.text.text
+              : prediction?.text?.toString?.() ?? '';
+            return {
+              label,
+              placeId: String(prediction.placeId ?? ''),
+            };
+          })
+          .filter((item: any) => item.label && item.placeId);
+        if (!active) return;
+        setAddressSuggestions(results);
+      } catch {
+        if (!active) return;
+        setAddressSuggestions([]);
+      }
+    }, 350);
+
+    return () => {
+      active = false;
+      window.clearTimeout(timer);
+    };
+  }, [formData.address, formData.pickupType, locale, googleReady]);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -375,12 +538,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       scrollToField(missingFieldIds[0]);
       return;
     }
-    const today = getTodayDateString();
-    const nowTime = getCurrentTimeString();
-    if (formData.date === today && formData.time < nowTime) {
+    if (isPickupTooSoon(formData.date, formData.time)) {
       trackFormValidation('order', 1, 'time');
       trackFormSubmit('order', 'validation_error');
-      setError(t.orderForm.validation.timePast);
+      setError(t.orderForm.validation.timeSoon);
       scrollToField('time');
       return;
     }
@@ -489,12 +650,11 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       trackFormStart('order');
     }
     const { name, value } = e.target;
+    const today = getTodayDateString();
     if (name === 'pickupType') {
       setStep('trip');
       setStepAttempted(false);
     }
-    const today = getTodayDateString();
-    const nowTime = getCurrentTimeString();
     if (name === 'date' && value < today) {
       setFormData({
         ...formData,
@@ -504,13 +664,22 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     }
     if (name === 'date') {
       const nextDate = value < today ? today : value;
-      const nextTime = nextDate === today && formData.time && formData.time < nowTime ? nowTime : formData.time;
+      const nextTime = formData.time;
+      if (error === t.orderForm.validation.timeSoon) {
+        if (!isPickupTooSoon(nextDate, nextTime)) {
+          setError(null);
+        }
+      }
       setFormData({
         ...formData,
         date: nextDate,
         time: nextTime,
       });
       return;
+    }
+    if (name === 'time' && error === t.orderForm.validation.timeSoon) {
+      // Hide the banner error while the user is actively fixing the time.
+      setError(null);
     }
     setFormData({
       ...formData,
@@ -530,7 +699,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     }));
   };
 
-  const formScrollRef = useRef<HTMLFormElement | null>(null);
+  const formScrollRef = useRef<HTMLDivElement | null>(null);
 
   const handleContinue = () => {
     setStepAttempted(true);
@@ -546,10 +715,8 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       scrollToField('time');
       return;
     }
-    const today = getTodayDateString();
-    const nowTime = getCurrentTimeString();
-    if (formData.date === today && formData.time < nowTime) {
-      setError(t.orderForm.validation.timePast);
+    if (isPickupTooSoon(formData.date, formData.time)) {
+      setError(t.orderForm.validation.timeSoon);
       scrollToField('time');
       return;
     }
@@ -645,18 +812,24 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
 
 	        <form
 	          onSubmit={handleSubmit}
+	          autoComplete="off"
 	          noValidate
-	          ref={formScrollRef}
-	          className="booking-form p-6 space-y-6 overflow-y-auto cursor-default"
+	          className="booking-form flex-1 flex flex-col overflow-hidden cursor-default"
 	        >
-	          {error && (
-	            <div className="bg-red-50 border-2 border-red-500 rounded-lg p-4 text-red-800">
-	              {error}
-	            </div>
-	          )}
+	          <div
+	            ref={formScrollRef}
+	            className={`p-6 space-y-6 overflow-y-auto ${
+	              step === 'details' ? 'order-form--details' : ''
+	            }`}
+	          >
+	            {error && (
+	              <div className="bg-red-50 border-2 border-red-500 rounded-lg p-4 text-red-800">
+	                {error}
+	              </div>
+	            )}
 
-	          {step === 'trip' ? (
-	            <>
+	            {step === 'trip' ? (
+	              <>
 	              {/* Pickup Type */}
 	              <div id="pickupType" tabIndex={-1}>
 	                <label className="block text-gray-700 mb-2">
@@ -751,46 +924,48 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
 	                        id="time"
 	                        name="time"
 	                        value={formData.time}
+	                        autoComplete="off"
 	                        onChange={handleChange}
-	                        min={formData.date === getTodayDateString() ? getCurrentTimeString() : undefined}
+	                        onFocus={() => setTimeEditing(true)}
+	                        onBlur={(event) => {
+	                          setTimeEditing(false);
+	                          setTimeTouched(true);
+	                          if (event.currentTarget.value && isPickupTooSoon(formData.date, event.currentTarget.value)) {
+	                            setError(t.orderForm.validation.timeSoon);
+	                          }
+	                        }}
 	                        className={fieldClass(
 	                          'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
 	                          timeError,
 	                        )}
 	                        required
 	                      />
+	                      {!timeEditing && showTimeValidation && formData.time && isTimeTooSoon && (
+	                        <p className="mt-1 text-sm text-red-600">{t.orderForm.validation.timeSoon}</p>
+	                      )}
 	                    </div>
 	                  </div>
 
-	                  <button
-	                    type="button"
-	                    onClick={handleContinue}
-	                    className="w-full rounded-lg px-5 py-3 bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-	                  >
-	                    {t.common.continue}
-	                  </button>
-	                  <p className="text-xs text-center text-gray-500">
-	                    {t.orderForm.reassurance}
-	                  </p>
+	                  {/* Actions moved to footer panel */}
 	                </>
 	              )}
-	            </>
-	          ) : (
-	            <>
-		              <div className="flex items-center justify-between">
-		                <button
-		                  type="button"
-		                  onClick={() => {
-		                    setStep('trip');
-		                    window.requestAnimationFrame(() => {
-		                      formScrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-		                    });
-		                  }}
-		                  className="text-sm text-gray-600 hover:text-gray-800 underline"
-		                >
-		                  {t.common.back}
-		                </button>
-		              </div>
+	              </>
+	            ) : (
+	              <>
+	              <div className="flex items-center justify-between">
+	                <button
+	                  type="button"
+	                  onClick={() => {
+	                    setStep('trip');
+	                    window.requestAnimationFrame(() => {
+	                      formScrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+	                    });
+	                  }}
+	                  className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+	                >
+	                  {t.common.back}
+	                </button>
+	              </div>
 
 	              {/* Price Display */}
 	              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
@@ -938,19 +1113,47 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
 	                    <MapPin className="w-4 h-4 inline mr-2" />
 	                    {t.orderForm.pickupAddress}
 	                  </label>
-	                  <textarea
-	                    id="address"
-	                    name="address"
-	                    value={formData.address}
-	                    onChange={handleChange}
-	                    placeholder={t.orderForm.pickupPlaceholder}
-	                    rows={3}
-	                    className={fieldClass(
-	                      'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-	                      pickupAddressError,
+	                  <div className="relative">
+	                    <input
+	                      type="text"
+	                      id="address"
+	                      name="address"
+	                      value={formData.address}
+	                      onChange={handleChange}
+	                      onFocus={() => setAddressFocused(true)}
+	                      onBlur={() => {
+	                        window.setTimeout(() => setAddressFocused(false), 150);
+	                      }}
+	                      placeholder={t.orderForm.pickupPlaceholder}
+	                      autoComplete="street-address"
+	                      className={fieldClass(
+	                        'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+	                        pickupAddressError,
+	                      )}
+	                      required
+	                    />
+
+	                    {addressFocused && addressSuggestions.length > 0 && (
+	                      <div className="absolute z-50 mt-2 w-full rounded-xl border border-slate-200 bg-white shadow-lg overflow-hidden">
+	                        {addressSuggestions.slice(0, 6).map((item) => (
+	                          <button
+	                            key={item.placeId}
+	                            type="button"
+	                            className="block w-full px-4 py-3 text-left text-sm text-slate-800 hover:bg-slate-50 focus:outline-none focus:bg-slate-50"
+	                            onMouseDown={(event) => {
+	                              event.preventDefault();
+	                              setFormData((prev) => ({ ...prev, address: item.label }));
+	                              setAddressSuggestions([]);
+	                              setAddressFocused(false);
+	                              resetSessionToken();
+	                            }}
+	                          >
+	                            {item.label}
+	                          </button>
+	                        ))}
+	                      </div>
 	                    )}
-	                    required
-	                  />
+	                  </div>
 	                </div>
 	              )}
 
@@ -1102,33 +1305,80 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
 	                  </details>
 	                </div>
 	              </div>
+	            </>
+	          )}
+	          </div>
 
-	              {/* Submit Button */}
-	              <button
-	                type="submit"
-	                className={`w-full py-4 rounded-lg transition-colors ${
-	                  submitting
-	                    ? 'bg-slate-200 text-slate-700 border border-slate-300 shadow-inner cursor-not-allowed'
-	                    : 'bg-blue-600 text-white hover:bg-blue-700'
-	                }`}
-	                disabled={submitting}
-	              >
-	                {submitting ? (
-	                  t.orderForm.submitting
-	                ) : (
-	                  <span className="flex flex-col items-center gap-1">
-	                    <span>{t.orderForm.confirmOrder(totalPrice)}</span>
-	                    {eurText && (
-	                      <span className="text-[11px] text-blue-100">{eurText}</span>
-	                    )}
-	                  </span>
-	                )}
-	              </button>
+	          <div className="order-actions-footer">
+	            {step === 'trip' ? (
+	              <>
+	                <button
+	                  type="button"
+	                  onClick={handleContinue}
+	                  className={`order-actions-btn w-full py-4 rounded-lg transition-colors ${
+	                    submitting
+	                      ? 'bg-slate-200 text-slate-700 border border-slate-300 shadow-inner cursor-not-allowed'
+	                      : 'bg-blue-600 text-white hover:bg-blue-700'
+	                  }`}
+	                  disabled={submitting}
+	                  style={{ minHeight: '56px' }}
+	                >
+	                  {t.common.continue}
+	                </button>
+	                <p className="text-xs text-center text-gray-500 mt-2">
+	                  {t.orderForm.reassurance}
+	                </p>
+	              </>
+	            ) : (
+	              <>
+	              <div className="order-actions-grid grid grid-cols-2 gap-2 sm:gap-3">
+	                <button
+	                  type="button"
+	                  onClick={() => {
+	                    setStep('trip');
+	                    window.requestAnimationFrame(() => {
+	                      formScrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+	                    });
+	                  }}
+	                  className={`order-actions-btn w-full py-4 rounded-lg transition-colors ${
+	                    submitting
+	                      ? 'bg-slate-200 text-slate-700 border border-slate-300 shadow-inner cursor-not-allowed'
+	                      : 'bg-blue-600 text-white hover:bg-blue-700'
+	                  }`}
+	                  disabled={submitting}
+	                  style={{ minHeight: '56px' }}
+	                >
+	                  {t.common.back}
+	                </button>
+
+	                <button
+	                  type="submit"
+	                  className={`order-actions-btn w-full py-4 rounded-lg transition-colors ${
+	                    submitting
+	                      ? 'bg-slate-200 text-slate-700 border border-slate-300 shadow-inner cursor-not-allowed'
+	                      : 'bg-blue-600 text-white hover:bg-blue-700'
+	                  }`}
+	                  disabled={submitting}
+	                  style={{ minHeight: '56px' }}
+	                >
+	                  {submitting ? (
+	                    t.orderForm.submitting
+	                  ) : (
+	                    <span className="flex flex-col items-center gap-1">
+	                      <span>{t.orderForm.confirmOrder(totalPrice)}</span>
+	                      {eurText && (
+	                        <span className="order-actions-eur text-[11px] text-blue-100">{eurText}</span>
+	                      )}
+	                    </span>
+	                  )}
+	                </button>
+	              </div>
 	              <p className="text-xs text-center text-gray-500 mt-2">
 	                {t.orderForm.reassurance}
 	              </p>
-	            </>
-	          )}
+	              </>
+	            )}
+	          </div>
 	        </form>
 	      </div>
 	    </div>

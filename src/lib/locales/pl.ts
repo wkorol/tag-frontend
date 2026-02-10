@@ -469,7 +469,8 @@ const pl = {
       "emailRequired": "Podaj adres e-mail.",
       "email": "Wpisz poprawny adres e-mail.",
       "datePast": "Wybierz dzisiejszą lub przyszłą datę.",
-      "timePast": "Wybierz obecną lub przyszłą godzinę."
+      "timePast": "Wybierz obecną lub przyszłą godzinę.",
+      "timeSoon": "Wybierz godzinę co najmniej 40 minut od teraz."
     },
     "rate": {
       "day": "Taryfa dzienna",
@@ -546,7 +547,9 @@ const pl = {
       "phoneLetters": "Wpisz poprawny numer telefonu (tylko cyfry).",
       "phoneLength": "Wpisz poprawny numer telefonu (7–15 cyfr, opcjonalnie +).",
       "email": "Wpisz poprawny adres e-mail.",
-      "datePast": "Wybierz dzisiejszą lub przyszłą datę."
+      "datePast": "Wybierz dzisiejszą lub przyszłą datę.",
+      "timePast": "Wybierz obecną lub przyszłą godzinę.",
+      "timeSoon": "Wybierz godzinę co najmniej 40 minut od teraz."
     },
     "submitError": "Nie udało się wysłać zapytania o wycenę. Spróbuj ponownie.",
     "submitNetworkError": "Błąd sieci podczas wysyłania zapytania o wycenę. Spróbuj ponownie.",
@@ -859,8 +862,8 @@ const pl = {
         "Hotele w Gdyni",
         "Gdynia Orłowo"
       ],
-      "priceDay": 200,
-      "priceNight": 250
+      "priceDay": 150,
+      "priceNight": 200
     }
   }
 } as const;

@@ -461,7 +461,8 @@ const sv = {
       "emailRequired": "Ange din e-postadress.",
       "email": "Ange en giltig e-postadress.",
       "datePast": "Välj dagens datum eller ett framtida datum.",
-      "timePast": "Välj nuvarande tid eller en framtida tid."
+      "timePast": "Välj nuvarande tid eller en framtida tid.",
+      "timeSoon": "Välj en tid som är minst 40 minuter från nu."
     },
     "rate": {
       "day": "Dagpris",
@@ -538,7 +539,9 @@ const sv = {
       "phoneLetters": "Ange ett giltigt telefonnummer (endast siffror).",
       "phoneLength": "Ange ett giltigt telefonnummer (7–15 siffror, valfri +).",
       "email": "Ange en giltig e-postadress.",
-      "datePast": "Välj dagens datum eller ett framtida datum."
+      "datePast": "Välj dagens datum eller ett framtida datum.",
+      "timePast": "Välj nuvarande tid eller en framtida tid.",
+      "timeSoon": "Välj en tid som är minst 40 minuter från nu."
     },
     "submitError": "Det gick inte att skicka offertförfrågan. Försök igen.",
     "submitNetworkError": "Nätverksfel vid skickandet. Försök igen.",
@@ -851,8 +854,8 @@ const sv = {
         "Gdynia hotell",
         "Gdynia Orłowo"
       ],
-      "priceDay": 200,
-      "priceNight": 250
+      "priceDay": 150,
+      "priceNight": 200
     }
   }
 } as const;

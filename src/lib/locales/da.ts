@@ -460,7 +460,8 @@ const da = {
       "emailRequired": "Indtast din e-mailadresse.",
       "email": "Indtast venligst en gyldig e-mailadresse.",
       "datePast": "Vælg dagens dato eller en fremtidig dato.",
-      "timePast": "Vælg nuværende tidspunkt eller et fremtidigt tidspunkt."
+      "timePast": "Vælg nuværende tidspunkt eller et fremtidigt tidspunkt.",
+      "timeSoon": "Vælg et tidspunkt som er mindst 40 minutter fra nu."
     },
     "rate": {
       "day": "Dagpris",
@@ -537,7 +538,9 @@ const da = {
       "phoneLetters": "Indtast venligst et gyldigt telefonnummer (kun tal).",
       "phoneLength": "Indtast venligst et gyldigt telefonnummer (7–15 cifre, valgfri +).",
       "email": "Indtast venligst en gyldig e-mailadresse.",
-      "datePast": "Vælg dagens dato eller en fremtidig dato."
+      "datePast": "Vælg dagens dato eller en fremtidig dato.",
+      "timePast": "Vælg nuværende tidspunkt eller et fremtidigt tidspunkt.",
+      "timeSoon": "Vælg et tidspunkt som er mindst 40 minutter fra nu."
     },
     "submitError": "Kunne ikke sende tilbudsanmodning. Prøv igen.",
     "submitNetworkError": "Netværksfejl ved afsendelse af tilbudsanmodning. Prøv igen.",
@@ -850,8 +853,8 @@ const da = {
         "Gdynia hoteller",
         "Gdynia Orłowo"
       ],
-      "priceDay": 200,
-      "priceNight": 250
+      "priceDay": 150,
+      "priceNight": 200
     }
   }
 } as const;

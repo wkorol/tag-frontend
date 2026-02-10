@@ -2269,18 +2269,18 @@ function TaxiGdanskPage() {
 const VehicleTypeSelector = lazy(
   () => import('./assets/VehicleTypeSelector-DLguqtCZ.mjs').then((mod) => ({ default: mod.VehicleTypeSelector }))
 );
-const Pricing = lazy(() => import('./assets/Pricing-OXnvhbpv.mjs').then((mod) => ({ default: mod.Pricing })));
+const Pricing = lazy(() => import('./assets/Pricing-Bdh0QAiP.mjs').then((mod) => ({ default: mod.Pricing })));
 const TrustSection = lazy(
   () => import('./assets/TrustSection-wjwr276G.mjs').then((mod) => ({ default: mod.TrustSection }))
 );
 const Footer = lazy(() => Promise.resolve().then(() => Footer$2).then((mod) => ({ default: mod.Footer })));
-const OrderForm = lazy(() => import('./assets/OrderForm-Bx4oyaBy.mjs').then((mod) => ({ default: mod.OrderForm })));
-const QuoteForm = lazy(() => import('./assets/QuoteForm-CcRLHH0A.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
-const ManageOrder = lazy(() => import('./assets/ManageOrder-CPv7VFpj.mjs').then((mod) => ({ default: mod.ManageOrder })));
+const OrderForm = lazy(() => import('./assets/OrderForm-BEpx5_Fs.mjs').then((mod) => ({ default: mod.OrderForm })));
+const QuoteForm = lazy(() => import('./assets/QuoteForm-k235K_V9.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
+const ManageOrder = lazy(() => import('./assets/ManageOrder-DVOaNQ-H.mjs').then((mod) => ({ default: mod.ManageOrder })));
 const RouteLanding = lazy(() => import('./assets/RouteLanding-DY4PYufx.mjs').then((mod) => ({ default: mod.RouteLanding })));
-const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-De2uFbFr.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
-const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-De2uFbFr.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./assets/PricingPage-WNsXSHbw.mjs').then((mod) => ({ default: mod.PricingPage })));
+const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-Dwp6sPfJ.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
+const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-Dwp6sPfJ.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
+const PricingPage = lazy(() => import('./assets/PricingPage-DUuqOQdB.mjs').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-DN0Rl5Dh.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-DqlqcrYR.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
@@ -3187,7 +3187,8 @@ const en = {
       "emailRequired": "Please enter your email address.",
       "email": "Please enter a valid email address.",
       "datePast": "Please select today or a future date.",
-      "timePast": "Please select the current time or a future time."
+      "timePast": "Please select the current time or a future time.",
+      "timeSoon": "Please select a time at least 40 minutes from now."
     },
     "rate": {
       "day": "Day rate",
@@ -3264,7 +3265,9 @@ const en = {
       "phoneLetters": "Please enter a valid phone number (digits only).",
       "phoneLength": "Please enter a valid phone number (7–15 digits, optional +).",
       "email": "Please enter a valid email address.",
-      "datePast": "Please select today or a future date."
+      "datePast": "Please select today or a future date.",
+      "timePast": "Please select the current time or a future time.",
+      "timeSoon": "Please select a time at least 40 minutes from now."
     },
     "submitError": "Failed to submit quote request. Please try again.",
     "submitNetworkError": "Network error while submitting the quote request. Please try again.",
@@ -3577,8 +3580,8 @@ const en = {
         "Gdynia Hotels",
         "Gdynia Orłowo"
       ],
-      "priceDay": 200,
-      "priceNight": 250
+      "priceDay": 150,
+      "priceNight": 200
     }
   }
 };
@@ -4059,7 +4062,8 @@ const pl = {
       "emailRequired": "Podaj adres e-mail.",
       "email": "Wpisz poprawny adres e-mail.",
       "datePast": "Wybierz dzisiejszą lub przyszłą datę.",
-      "timePast": "Wybierz obecną lub przyszłą godzinę."
+      "timePast": "Wybierz obecną lub przyszłą godzinę.",
+      "timeSoon": "Wybierz godzinę co najmniej 40 minut od teraz."
     },
     "rate": {
       "day": "Taryfa dzienna",
@@ -4136,7 +4140,9 @@ const pl = {
       "phoneLetters": "Wpisz poprawny numer telefonu (tylko cyfry).",
       "phoneLength": "Wpisz poprawny numer telefonu (7–15 cyfr, opcjonalnie +).",
       "email": "Wpisz poprawny adres e-mail.",
-      "datePast": "Wybierz dzisiejszą lub przyszłą datę."
+      "datePast": "Wybierz dzisiejszą lub przyszłą datę.",
+      "timePast": "Wybierz obecną lub przyszłą godzinę.",
+      "timeSoon": "Wybierz godzinę co najmniej 40 minut od teraz."
     },
     "submitError": "Nie udało się wysłać zapytania o wycenę. Spróbuj ponownie.",
     "submitNetworkError": "Błąd sieci podczas wysyłania zapytania o wycenę. Spróbuj ponownie.",
@@ -4449,8 +4455,8 @@ const pl = {
         "Hotele w Gdyni",
         "Gdynia Orłowo"
       ],
-      "priceDay": 200,
-      "priceNight": 250
+      "priceDay": 150,
+      "priceNight": 200
     }
   }
 };
@@ -4923,7 +4929,8 @@ const de = {
       "emailRequired": "Bitte geben Sie Ihre E-Mail-Adresse ein.",
       "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
       "datePast": "Bitte wählen Sie ein heutiges oder zukünftiges Datum.",
-      "timePast": "Bitte wählen Sie die aktuelle Uhrzeit oder eine zukünftige Uhrzeit."
+      "timePast": "Bitte wählen Sie die aktuelle Uhrzeit oder eine zukünftige Uhrzeit.",
+      "timeSoon": "Bitte wählen Sie eine Uhrzeit, die mindestens 40 Minuten ab jetzt liegt."
     },
     "rate": {
       "day": "Tagtarif",
@@ -5000,7 +5007,9 @@ const de = {
       "phoneLetters": "Bitte geben Sie eine gültige Telefonnummer ein (nur Ziffern).",
       "phoneLength": "Bitte geben Sie eine gültige Telefonnummer ein (7–15 Ziffern, optional +).",
       "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-      "datePast": "Bitte wählen Sie ein heutiges oder zukünftiges Datum."
+      "datePast": "Bitte wählen Sie ein heutiges oder zukünftiges Datum.",
+      "timePast": "Bitte wählen Sie die aktuelle Uhrzeit oder eine zukünftige Uhrzeit.",
+      "timeSoon": "Bitte wählen Sie eine Uhrzeit, die mindestens 40 Minuten ab jetzt liegt."
     },
     "submitError": "Angebotsanfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
     "submitNetworkError": "Netzwerkfehler beim Senden der Angebotsanfrage. Bitte versuchen Sie es erneut.",
@@ -5313,8 +5322,8 @@ const de = {
         "Hotels in Gdynia",
         "Gdynia Orłowo"
       ],
-      "priceDay": 200,
-      "priceNight": 250
+      "priceDay": 150,
+      "priceNight": 200
     }
   }
 };
@@ -5785,7 +5794,8 @@ const fi = {
       "emailRequired": "Syötä sähköpostiosoite.",
       "email": "Syötä kelvollinen sähköpostiosoite.",
       "datePast": "Valitse tämän päivän tai tuleva päivämäärä.",
-      "timePast": "Valitse nykyinen tai tuleva kellonaika."
+      "timePast": "Valitse nykyinen tai tuleva kellonaika.",
+      "timeSoon": "Valitse aika, joka on vähintään 40 minuuttia tästä hetkestä."
     },
     "rate": {
       "day": "Päivätaksa",
@@ -5862,7 +5872,9 @@ const fi = {
       "phoneLetters": "Syötä kelvollinen puhelinnumero (vain numeroita).",
       "phoneLength": "Syötä kelvollinen puhelinnumero (7–15 numeroa, valinnainen +).",
       "email": "Syötä kelvollinen sähköpostiosoite.",
-      "datePast": "Valitse tämän päivän tai tuleva päivämäärä."
+      "datePast": "Valitse tämän päivän tai tuleva päivämäärä.",
+      "timePast": "Valitse nykyinen tai tuleva kellonaika.",
+      "timeSoon": "Valitse aika, joka on vähintään 40 minuuttia tästä hetkestä."
     },
     "submitError": "Tarjouspyynnön lähetys epäonnistui. Yritä uudelleen.",
     "submitNetworkError": "Verkkovirhe tarjouspyyntöä lähetettäessä. Yritä uudelleen.",
@@ -6175,8 +6187,8 @@ const fi = {
         "Gdynian hotellit",
         "Gdynia Orłowo"
       ],
-      "priceDay": 200,
-      "priceNight": 250
+      "priceDay": 150,
+      "priceNight": 200
     }
   }
 };
@@ -6650,7 +6662,8 @@ const no = {
       "emailRequired": "Vennligst oppgi e-postadressen din.",
       "email": "Vennligst oppgi en gyldig e-postadresse.",
       "datePast": "Velg dagens dato eller en fremtidig dato.",
-      "timePast": "Velg nåværende tidspunkt eller et fremtidig tidspunkt."
+      "timePast": "Velg nåværende tidspunkt eller et fremtidig tidspunkt.",
+      "timeSoon": "Velg et tidspunkt som er minst 40 minutter fra nå."
     },
     "rate": {
       "day": "Dagpris",
@@ -6727,7 +6740,9 @@ const no = {
       "phoneLetters": "Vennligst oppgi et gyldig telefonnummer (kun tall).",
       "phoneLength": "Vennligst oppgi et gyldig telefonnummer (7–15 sifre, valgfri +).",
       "email": "Vennligst oppgi en gyldig e-postadresse.",
-      "datePast": "Velg dagens dato eller en fremtidig dato."
+      "datePast": "Velg dagens dato eller en fremtidig dato.",
+      "timePast": "Velg nåværende tidspunkt eller et fremtidig tidspunkt.",
+      "timeSoon": "Velg et tidspunkt som er minst 40 minutter fra nå."
     },
     "submitError": "Kunne ikke sende tilbudsforespørsel. Prøv igjen.",
     "submitNetworkError": "Nettverksfeil ved innsending av tilbudsforespørsel. Prøv igjen.",
@@ -7039,8 +7054,8 @@ const no = {
         "Gdynia hoteller",
         "Gdynia Orłowo"
       ],
-      "priceDay": 200,
-      "priceNight": 250
+      "priceDay": 150,
+      "priceNight": 200
     }
   }
 };
@@ -7513,7 +7528,8 @@ const sv = {
       "emailRequired": "Ange din e-postadress.",
       "email": "Ange en giltig e-postadress.",
       "datePast": "Välj dagens datum eller ett framtida datum.",
-      "timePast": "Välj nuvarande tid eller en framtida tid."
+      "timePast": "Välj nuvarande tid eller en framtida tid.",
+      "timeSoon": "Välj en tid som är minst 40 minuter från nu."
     },
     "rate": {
       "day": "Dagpris",
@@ -7590,7 +7606,9 @@ const sv = {
       "phoneLetters": "Ange ett giltigt telefonnummer (endast siffror).",
       "phoneLength": "Ange ett giltigt telefonnummer (7–15 siffror, valfri +).",
       "email": "Ange en giltig e-postadress.",
-      "datePast": "Välj dagens datum eller ett framtida datum."
+      "datePast": "Välj dagens datum eller ett framtida datum.",
+      "timePast": "Välj nuvarande tid eller en framtida tid.",
+      "timeSoon": "Välj en tid som är minst 40 minuter från nu."
     },
     "submitError": "Det gick inte att skicka offertförfrågan. Försök igen.",
     "submitNetworkError": "Nätverksfel vid skickandet. Försök igen.",
@@ -7903,8 +7921,8 @@ const sv = {
         "Gdynia hotell",
         "Gdynia Orłowo"
       ],
-      "priceDay": 200,
-      "priceNight": 250
+      "priceDay": 150,
+      "priceNight": 200
     }
   }
 };
@@ -8376,7 +8394,8 @@ const da = {
       "emailRequired": "Indtast din e-mailadresse.",
       "email": "Indtast venligst en gyldig e-mailadresse.",
       "datePast": "Vælg dagens dato eller en fremtidig dato.",
-      "timePast": "Vælg nuværende tidspunkt eller et fremtidigt tidspunkt."
+      "timePast": "Vælg nuværende tidspunkt eller et fremtidigt tidspunkt.",
+      "timeSoon": "Vælg et tidspunkt som er mindst 40 minutter fra nu."
     },
     "rate": {
       "day": "Dagpris",
@@ -8453,7 +8472,9 @@ const da = {
       "phoneLetters": "Indtast venligst et gyldigt telefonnummer (kun tal).",
       "phoneLength": "Indtast venligst et gyldigt telefonnummer (7–15 cifre, valgfri +).",
       "email": "Indtast venligst en gyldig e-mailadresse.",
-      "datePast": "Vælg dagens dato eller en fremtidig dato."
+      "datePast": "Vælg dagens dato eller en fremtidig dato.",
+      "timePast": "Vælg nuværende tidspunkt eller et fremtidigt tidspunkt.",
+      "timeSoon": "Vælg et tidspunkt som er mindst 40 minutter fra nu."
     },
     "submitError": "Kunne ikke sende tilbudsanmodning. Prøv igen.",
     "submitNetworkError": "Netværksfejl ved afsendelse af tilbudsanmodning. Prøv igen.",
@@ -8766,8 +8787,8 @@ const da = {
         "Gdynia hoteller",
         "Gdynia Orłowo"
       ],
-      "priceDay": 200,
-      "priceNight": 250
+      "priceDay": 150,
+      "priceNight": 200
     }
   }
 };
