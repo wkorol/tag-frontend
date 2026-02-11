@@ -781,13 +781,17 @@ function Navbar() {
   ] }) });
 }
 
-const logo = "/assets/9bf12920b9f211a57ac7e4ff94480c867662dafa-CWhB1rIk.png";
-
 const logoAvif384 = "/assets/logo-384-COhi4wbC.avif";
 
 const logoAvif512 = "/assets/logo-512-C7NN0-XG.avif";
 
 const logoAvif640 = "/assets/logo-640-TuzORujL.avif";
+
+const logoWebp384 = "/assets/logo-384-Df-vORHz.webp";
+
+const logoWebp512 = "/assets/logo-512-lglwYzTZ.webp";
+
+const logoWebp640 = "/assets/logo-640-G9r6Lrv6.webp";
 
 function Hero() {
   const { t, locale } = useI18n();
@@ -836,9 +840,17 @@ function Hero() {
             }
           ),
           /* @__PURE__ */ jsx(
+            "source",
+            {
+              srcSet: `${logoWebp384} 384w, ${logoWebp512} 512w, ${logoWebp640} 640w`,
+              type: "image/webp",
+              sizes: "(max-width: 640px) 68vw, 22rem"
+            }
+          ),
+          /* @__PURE__ */ jsx(
             "img",
             {
-              src: logo,
+              src: logoWebp640,
               alt: t.hero.logoAlt,
               className: "h-auto",
               style: { width: "min(22rem, 68vw)" },
@@ -2321,12 +2333,18 @@ function Landing() {
     trackVehicleSelect(type);
     setVehicleType(type);
     setStep("pricing");
-    window.requestAnimationFrame(() => {
-      document.getElementById("vehicle-selection")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-    });
+    const scrollToPricingTop = (attempt = 0) => {
+      const target = document.getElementById("vehicle-selection");
+      if (!target) {
+        if (attempt < 10) {
+          window.setTimeout(() => scrollToPricingTop(attempt + 1), 90);
+        }
+        return;
+      }
+      const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - 80);
+      window.scrollTo({ top, behavior: "smooth" });
+    };
+    window.setTimeout(() => scrollToPricingTop(0), 0);
   };
   const handleBackToVehicleSelection = () => {
     setStep("vehicle");

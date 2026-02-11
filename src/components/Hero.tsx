@@ -1,7 +1,9 @@
-import logo from 'figma:asset/9bf12920b9f211a57ac7e4ff94480c867662dafa.png';
 import logoAvif384 from '../assets/logo-384.avif';
 import logoAvif512 from '../assets/logo-512.avif';
 import logoAvif640 from '../assets/logo-640.avif';
+import logoWebp384 from '../assets/logo-384.webp';
+import logoWebp512 from '../assets/logo-512.webp';
+import logoWebp640 from '../assets/logo-640.webp';
 import { trackContactClick, trackCtaClick } from '../lib/tracking';
 import { useI18n, localeToPath } from '../lib/i18n';
 import { requestScrollTo } from '../lib/scroll';
@@ -54,8 +56,13 @@ export function Hero() {
                   type="image/avif"
                   sizes="(max-width: 640px) 68vw, 22rem"
                 />
+                <source
+                  srcSet={`${logoWebp384} 384w, ${logoWebp512} 512w, ${logoWebp640} 640w`}
+                  type="image/webp"
+                  sizes="(max-width: 640px) 68vw, 22rem"
+                />
                 <img
-                  src={logo}
+                  src={logoWebp640}
                   alt={t.hero.logoAlt}
                   className="h-auto"
                   style={{ width: 'min(22rem, 68vw)' }}

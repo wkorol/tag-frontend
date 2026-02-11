@@ -133,14 +133,6 @@ const entries = [];
 
 const homeLastmod = await getRouteLastmod('home');
 
-addEntry(entries, {
-  loc: `${SITE_URL}/`,
-  lastmod: homeLastmod,
-  changefreq: 'weekly',
-  priority: '0.9',
-  alternates: buildAlternateSetForRoute('home'),
-});
-
 for (const locale of locales) {
   addEntry(entries, {
     loc: `${SITE_URL}/${locale}/`,
@@ -152,8 +144,17 @@ for (const locale of locales) {
 }
 
 const routeKeys = Object.keys(routeSlugs.en);
+const excludedRouteKeys = new Set([
+  'orderAirportGdansk',
+  'orderAirportSopot',
+  'orderAirportGdynia',
+  'orderCustom',
+]);
 for (const routeKey of routeKeys) {
   if (routeKey === 'home') {
+    continue;
+  }
+  if (excludedRouteKeys.has(routeKey)) {
     continue;
   }
   const lastmod = await getRouteLastmod(routeKey);

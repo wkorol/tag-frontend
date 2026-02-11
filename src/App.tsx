@@ -87,12 +87,18 @@ function Landing() {
     trackVehicleSelect(type);
     setVehicleType(type);
     setStep('pricing');
-    window.requestAnimationFrame(() => {
-      document.getElementById('vehicle-selection')?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    });
+    const scrollToPricingTop = (attempt = 0) => {
+      const target = document.getElementById('vehicle-selection');
+      if (!target) {
+        if (attempt < 10) {
+          window.setTimeout(() => scrollToPricingTop(attempt + 1), 90);
+        }
+        return;
+      }
+      const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - 80);
+      window.scrollTo({ top, behavior: 'smooth' });
+    };
+    window.setTimeout(() => scrollToPricingTop(0), 0);
   };
 
   const handleBackToVehicleSelection = () => {
