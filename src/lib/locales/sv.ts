@@ -95,6 +95,8 @@ const sv = {
     "titleStandard": "Standardbil (1-4 passagerare)",
     "titleBus": "BUS Service (5-8 passagerare)",
     "description": "Fasta priser åt båda håll (till och från flygplatsen). Inga dolda avgifter. Nattaxa gäller 22–6 samt söndagar och helgdagar.",
+    "directionFromAirport": "Från flygplatsen",
+    "directionToAirport": "Till flygplatsen",
     "dayRate": "Dagpris",
     "nightRate": "Nattpris",
     "sundayNote": "(Söndagar och helgdagar)",

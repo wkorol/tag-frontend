@@ -1,5 +1,5 @@
 import { Moon, Sun, MapPin, Calculator, ChevronLeft } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { preloadEurRate, useEurRate } from '../lib/useEurRate';
 import { formatEur } from '../lib/currency';
 import { FIXED_PRICES } from '../lib/fixedPricing';
@@ -9,7 +9,14 @@ import { TrustBar } from './TrustBar';
 
 interface PricingProps {
   vehicleType: 'standard' | 'bus';
-  onOrderRoute: (route: { from: string; to: string; priceDay: number; priceNight: number; type: 'standard' | 'bus' }) => void;
+  onOrderRoute: (route: {
+    from: string;
+    to: string;
+    priceDay: number;
+    priceNight: number;
+    type: 'standard' | 'bus';
+    pickupTypeDefault?: 'airport' | 'address';
+  }) => void;
   onRequestQuote: () => void;
   onBack: () => void;
   showBack?: boolean;
@@ -27,6 +34,7 @@ export function Pricing({
   onVehicleTypeChange,
 }: PricingProps) {
   const { t } = useI18n();
+  const [direction, setDirection] = useState<'fromAirport' | 'toAirport'>('fromAirport');
   const routes = [
     {
       key: 'airport_gdansk',
@@ -79,7 +87,13 @@ export function Pricing({
       type: 'bus' as const,
     },
   ];
-  const displayRoutes = vehicleType === 'bus' ? busRoutes : routes;
+  const applyDirection = <T extends { from: string; to: string }>(route: T): T =>
+    direction === 'fromAirport'
+      ? route
+      : ({ ...route, from: route.to, to: route.from });
+  const displayStandardRoutes = routes.map(applyDirection);
+  const displayBusRoutes = busRoutes.map(applyDirection);
+  const displayRoutes = vehicleType === 'bus' ? displayBusRoutes : displayStandardRoutes;
   const title = vehicleType === 'bus' ? t.pricing.titleBus : t.pricing.titleStandard;
   const eurRate = useEurRate();
   const eurText = (pln: number) => formatEur(pln, eurRate);
@@ -134,15 +148,15 @@ export function Pricing({
             </tr>
           </thead>
           <tbody>
-            {routes.map((route, index) => (
+            {displayStandardRoutes.map((route, index) => (
               <tr key={`${route.to}-${index}`} className="odd:bg-white even:bg-slate-50">
                 <td className="border border-slate-200 px-4 py-3">
                   {route.from} ↔ {route.to}
                 </td>
                 <td className="border border-slate-200 px-4 py-3 text-right">{renderPriceWithEur(route.priceDay)}</td>
                 <td className="border border-slate-200 px-4 py-3 text-right">{renderPriceWithEur(route.priceNight)}</td>
-                <td className="border border-slate-200 px-4 py-3 text-right">{renderPriceWithEur(busRoutes[index]?.priceDay)}</td>
-                <td className="border border-slate-200 px-4 py-3 text-right">{renderPriceWithEur(busRoutes[index]?.priceNight)}</td>
+                <td className="border border-slate-200 px-4 py-3 text-right">{renderPriceWithEur(displayBusRoutes[index]?.priceDay)}</td>
+                <td className="border border-slate-200 px-4 py-3 text-right">{renderPriceWithEur(displayBusRoutes[index]?.priceNight)}</td>
               </tr>
             ))}
           </tbody>
@@ -150,7 +164,7 @@ export function Pricing({
       </div>
 
       <div className="mt-6 space-y-4 sm:hidden">
-        {routes.map((route, index) => (
+        {displayStandardRoutes.map((route, index) => (
           <div key={`${route.to}-mobile-${index}`} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
             <div className="text-sm font-semibold text-gray-900">
               {route.from} ↔ {route.to}
@@ -167,12 +181,12 @@ export function Pricing({
 	              </div>
               <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
                 <div className="text-[10px] uppercase tracking-wide text-slate-500">{t.pricing.tableBusDay}</div>
-                {renderPriceWithEur(busRoutes[index]?.priceDay, 'mt-1 text-sm font-semibold text-gray-900')}
+                {renderPriceWithEur(displayBusRoutes[index]?.priceDay, 'mt-1 text-sm font-semibold text-gray-900')}
               </div>
               <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
                 <div className="text-[10px] uppercase tracking-wide text-slate-500">{t.pricing.tableBusNight}</div>
 	                <div className="pricing-sunday-note mt-0.5 text-slate-400">{t.pricing.sundayNote}</div>
-	                {renderPriceWithEur(busRoutes[index]?.priceNight, 'mt-1 text-sm font-semibold text-gray-900')}
+	                {renderPriceWithEur(displayBusRoutes[index]?.priceNight, 'mt-1 text-sm font-semibold text-gray-900')}
 	              </div>
             </div>
           </div>
@@ -248,7 +262,10 @@ export function Pricing({
           <button
             onClick={() => {
               trackPricingRouteSelect(route.key, vehicleType);
-              onOrderRoute(route);
+              onOrderRoute({
+                ...route,
+                pickupTypeDefault: direction === 'fromAirport' ? 'airport' : 'address',
+              });
             }}
             className="pricing-cta w-full mt-4 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors text-sm"
           >
@@ -316,6 +333,26 @@ export function Pricing({
           </p>
           {/* Use custom CSS for spacing (Tailwind output is constrained in this repo). */}
           <TrustBar className="pricing-trustbar" />
+          <div className="mt-6 inline-flex items-center rounded-full border border-slate-200 bg-white p-1 shadow-sm">
+            <button
+              type="button"
+              onClick={() => setDirection('fromAirport')}
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                direction === 'fromAirport' ? 'bg-blue-600 text-white' : 'text-slate-700 hover:bg-blue-50'
+              }`}
+            >
+              {t.pricing.directionFromAirport}
+            </button>
+            <button
+              type="button"
+              onClick={() => setDirection('toAirport')}
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                direction === 'toAirport' ? 'bg-blue-600 text-white' : 'text-slate-700 hover:bg-blue-50'
+              }`}
+            >
+              {t.pricing.directionToAirport}
+            </button>
+          </div>
         </div>
 
         {variant === 'landing' ? (
@@ -326,38 +363,60 @@ export function Pricing({
             <div id="pricing-booking" className="mt-12 text-center">
               <h3 className="text-2xl text-gray-900">{t.pricing.bookingTitle}</h3>
               <p className="text-gray-600 mt-2">{t.pricing.bookingSubtitle}</p>
-              {onVehicleTypeChange && (
-                <div className="mt-8 inline-flex flex-wrap items-center gap-4 bg-white border border-gray-200 rounded-full px-4 py-3 shadow-sm">
+              <div className="mt-8 flex flex-col items-center gap-4">
+                {onVehicleTypeChange && (
+                  <div className="flex flex-wrap items-center justify-center gap-4 bg-white border border-gray-200 rounded-full px-4 py-3 shadow-sm">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        trackVehicleSelect('standard');
+                        onVehicleTypeChange('standard');
+                      }}
+                      className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                        vehicleType === 'standard'
+                          ? 'bg-blue-600 text-white'
+                          : 'text-gray-700 hover:bg-blue-50'
+                      }`}
+                    >
+                      {t.vehicle.standardTitle}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        trackVehicleSelect('bus');
+                        onVehicleTypeChange('bus');
+                      }}
+                      className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                        vehicleType === 'bus'
+                          ? 'bg-blue-600 text-white'
+                          : 'text-gray-700 hover:bg-blue-50'
+                      }`}
+                    >
+                      {t.vehicle.busTitle}
+                    </button>
+                  </div>
+                )}
+                <div className="flex flex-wrap items-center justify-center gap-4 bg-white border border-gray-200 rounded-full px-4 py-3 shadow-sm">
                   <button
                     type="button"
-                    onClick={() => {
-                      trackVehicleSelect('standard');
-                      onVehicleTypeChange('standard');
-                    }}
+                    onClick={() => setDirection('fromAirport')}
                     className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-                      vehicleType === 'standard'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-700 hover:bg-blue-50'
+                      direction === 'fromAirport' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-blue-50'
                     }`}
                   >
-                    {t.vehicle.standardTitle}
+                    {t.pricing.directionFromAirport}
                   </button>
                   <button
                     type="button"
-                    onClick={() => {
-                      trackVehicleSelect('bus');
-                      onVehicleTypeChange('bus');
-                    }}
+                    onClick={() => setDirection('toAirport')}
                     className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-                      vehicleType === 'bus'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-700 hover:bg-blue-50'
+                      direction === 'toAirport' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-blue-50'
                     }`}
                   >
-                    {t.vehicle.busTitle}
+                    {t.pricing.directionToAirport}
                   </button>
                 </div>
-              )}
+              </div>
             </div>
             <div className="mt-14" style={{ marginTop: '3.5rem' }}>
               {pricingCards}

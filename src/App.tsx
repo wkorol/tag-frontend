@@ -60,7 +60,14 @@ function Landing() {
   usePageTitle(t.hero.headline);
   const [step, setStep] = useState<'vehicle' | 'pricing'>('vehicle');
   const [vehicleType, setVehicleType] = useState<'standard' | 'bus'>('standard');
-  const [selectedRoute, setSelectedRoute] = useState<{ from: string; to: string; priceDay: number; priceNight: number; type: 'standard' | 'bus' } | null>(null);
+  const [selectedRoute, setSelectedRoute] = useState<{
+    from: string;
+    to: string;
+    priceDay: number;
+    priceNight: number;
+    type: 'standard' | 'bus';
+    pickupTypeDefault?: 'airport' | 'address';
+  } | null>(null);
   const [showQuoteForm, setShowQuoteForm] = useState(false);
   const [pricingTracked, setPricingTracked] = useState(false);
   
@@ -92,7 +99,14 @@ function Landing() {
     setStep('vehicle');
   };
 
-  const handleOrderRoute = (route: { from: string; to: string; priceDay: number; priceNight: number; type: 'standard' | 'bus' }) => {
+  const handleOrderRoute = (route: {
+    from: string;
+    to: string;
+    priceDay: number;
+    priceNight: number;
+    type: 'standard' | 'bus';
+    pickupTypeDefault?: 'airport' | 'address';
+  }) => {
     trackFormOpen('order');
     setSelectedRoute(route);
   };

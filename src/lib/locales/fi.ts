@@ -95,6 +95,8 @@ const fi = {
     "titleStandard": "Perusauto (1-4 matkustajaa)",
     "titleBus": "BUS-palvelu (5-8 matkustajaa)",
     "description": "Kiinteät hinnat molempiin suuntiin (kentälle ja kentältä). Ei piilokuluja. Yötaksa klo 22–6 sekä sunnuntaisin ja pyhäpäivinä.",
+    "directionFromAirport": "Lentoasemalta",
+    "directionToAirport": "Lentoasemalle",
     "dayRate": "Päivätaksa",
     "nightRate": "Yötaksa",
     "sundayNote": "(Sunnuntai & pyhäpäivät)",

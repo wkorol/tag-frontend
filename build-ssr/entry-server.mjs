@@ -259,13 +259,29 @@ const getRouteKeyFromSlug = (locale, slug) => {
 };
 
 const SCROLL_TARGET_KEY = "scroll-target";
+const getHeaderOffset = () => {
+  const header = document.querySelector("header");
+  const headerHeight = header ? header.getBoundingClientRect().height : 0;
+  return Math.max(0, Math.ceil(headerHeight) + 12);
+};
+const scrollToElement = (element) => {
+  const offset = getHeaderOffset();
+  const top = Math.max(0, element.getBoundingClientRect().top + window.scrollY - offset);
+  window.scrollTo({ top, behavior: "smooth" });
+  window.setTimeout(() => {
+    const correctedTop = Math.max(0, element.getBoundingClientRect().top + window.scrollY - offset);
+    if (Math.abs(window.scrollY - correctedTop) > 10) {
+      window.scrollTo({ top: correctedTop, behavior: "smooth" });
+    }
+  }, 260);
+};
 const requestScrollTo = (targetId) => {
   if (typeof window === "undefined") {
     return false;
   }
   const element = document.getElementById(targetId);
   if (element) {
-    element.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToElement(element);
     return true;
   }
   window.sessionStorage.setItem(SCROLL_TARGET_KEY, targetId);
@@ -289,7 +305,7 @@ const scrollToId = (targetId) => {
   if (!element) {
     return false;
   }
-  element.scrollIntoView({ behavior: "smooth", block: "start" });
+  scrollToElement(element);
   return true;
 };
 
@@ -843,7 +859,10 @@ function Hero() {
               onClick: (event) => {
                 event.preventDefault();
                 trackCtaClick("hero_order_online");
-                requestScrollTo("vehicle-selection");
+                const scrolled = requestScrollTo("vehicle-selection");
+                if (!scrolled) {
+                  window.location.href = `${basePath}/#vehicle-selection`;
+                }
               },
               className: "inline-flex items-center gap-2 bg-orange-800 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-700 transition-colors animate-pulse-glow",
               children: t.common.orderOnlineNow
@@ -2269,18 +2288,18 @@ function TaxiGdanskPage() {
 const VehicleTypeSelector = lazy(
   () => import('./assets/VehicleTypeSelector-DLguqtCZ.mjs').then((mod) => ({ default: mod.VehicleTypeSelector }))
 );
-const Pricing = lazy(() => import('./assets/Pricing-Bdh0QAiP.mjs').then((mod) => ({ default: mod.Pricing })));
+const Pricing = lazy(() => import('./assets/Pricing-BUWTjn2I.mjs').then((mod) => ({ default: mod.Pricing })));
 const TrustSection = lazy(
   () => import('./assets/TrustSection-wjwr276G.mjs').then((mod) => ({ default: mod.TrustSection }))
 );
 const Footer = lazy(() => Promise.resolve().then(() => Footer$2).then((mod) => ({ default: mod.Footer })));
-const OrderForm = lazy(() => import('./assets/OrderForm-DbjzeHLR.mjs').then((mod) => ({ default: mod.OrderForm })));
+const OrderForm = lazy(() => import('./assets/OrderForm-DhrwYX4U.mjs').then((mod) => ({ default: mod.OrderForm })));
 const QuoteForm = lazy(() => import('./assets/QuoteForm-Co8oe2B8.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./assets/ManageOrder-DVOaNQ-H.mjs').then((mod) => ({ default: mod.ManageOrder })));
 const RouteLanding = lazy(() => import('./assets/RouteLanding-DY4PYufx.mjs').then((mod) => ({ default: mod.RouteLanding })));
-const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-WYIQGOu0.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
-const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-WYIQGOu0.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./assets/PricingPage-C4cw7mf9.mjs').then((mod) => ({ default: mod.PricingPage })));
+const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-BOz_88Pl.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
+const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-BOz_88Pl.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
+const PricingPage = lazy(() => import('./assets/PricingPage-Bqp1mN-G.mjs').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-DN0Rl5Dh.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-DqlqcrYR.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
@@ -2819,6 +2838,8 @@ const en = {
     "titleStandard": "Standard Car (1-4 passengers)",
     "titleBus": "BUS Service (5-8 passengers)",
     "description": "Fixed prices both ways (to and from the airport). No hidden fees. Night rate applies from 10 PM to 6 AM and on Sundays & public holidays.",
+    "directionFromAirport": "From airport",
+    "directionToAirport": "To airport",
     "dayRate": "Day rate",
     "nightRate": "Night rate",
     "sundayNote": "(Sundays & Holidays)",
@@ -3694,6 +3715,8 @@ const pl = {
     "titleStandard": "Samochód standard (1–4 pasażerów)",
     "titleBus": "BUS (5–8 pasażerów)",
     "description": "Stałe ceny w obie strony (na i z lotniska). Bez ukrytych opłat. Taryfa nocna obowiązuje od 22:00 do 6:00 oraz w niedziele i święta.",
+    "directionFromAirport": "Z lotniska",
+    "directionToAirport": "Na lotnisko",
     "dayRate": "Taryfa dzienna",
     "nightRate": "Taryfa nocna",
     "sundayNote": "(niedziele i święta)",
@@ -4563,6 +4586,8 @@ const de = {
     "titleStandard": "Standardwagen (1-4 Passagiere)",
     "titleBus": "BUS Service (5-8 Passagiere)",
     "description": "Festpreise in beide Richtungen (zum und vom Flughafen). Keine versteckten Gebühren. Nachttarif gilt von 22–6 Uhr sowie an Sonntagen und Feiertagen.",
+    "directionFromAirport": "Vom Flughafen",
+    "directionToAirport": "Zum Flughafen",
     "dayRate": "Tagtarif",
     "nightRate": "Nachttarif",
     "sundayNote": "(Sonntage & Feiertage)",
@@ -5430,6 +5455,8 @@ const fi = {
     "titleStandard": "Perusauto (1-4 matkustajaa)",
     "titleBus": "BUS-palvelu (5-8 matkustajaa)",
     "description": "Kiinteät hinnat molempiin suuntiin (kentälle ja kentältä). Ei piilokuluja. Yötaksa klo 22–6 sekä sunnuntaisin ja pyhäpäivinä.",
+    "directionFromAirport": "Lentoasemalta",
+    "directionToAirport": "Lentoasemalle",
     "dayRate": "Päivätaksa",
     "nightRate": "Yötaksa",
     "sundayNote": "(Sunnuntai & pyhäpäivät)",
@@ -6295,6 +6322,8 @@ const no = {
     "titleStandard": "Standardbil (1-4 passasjerer)",
     "titleBus": "BUS Service (5-8 passasjerer)",
     "description": "Faste priser begge veier (til og fra flyplassen). Ingen skjulte gebyrer. Nattpris gjelder 22–6 samt søndager og helligdager.",
+    "directionFromAirport": "Fra flyplassen",
+    "directionToAirport": "Til flyplassen",
     "dayRate": "Dagpris",
     "nightRate": "Nattpris",
     "sundayNote": "(Søndager og helligdager)",
@@ -7162,6 +7191,8 @@ const sv = {
     "titleStandard": "Standardbil (1-4 passagerare)",
     "titleBus": "BUS Service (5-8 passagerare)",
     "description": "Fasta priser åt båda håll (till och från flygplatsen). Inga dolda avgifter. Nattaxa gäller 22–6 samt söndagar och helgdagar.",
+    "directionFromAirport": "Från flygplatsen",
+    "directionToAirport": "Till flygplatsen",
     "dayRate": "Dagpris",
     "nightRate": "Nattpris",
     "sundayNote": "(Söndagar och helgdagar)",
@@ -8029,6 +8060,8 @@ const da = {
     "titleStandard": "Standardbil (1-4 passagerer)",
     "titleBus": "BUS Service (5-8 passagerer)",
     "description": "Faste priser begge veje (til og fra lufthavnen). Ingen skjulte gebyrer. Nattakst gælder 22–6 samt søndage og helligdage.",
+    "directionFromAirport": "Fra lufthavnen",
+    "directionToAirport": "Til lufthavnen",
     "dayRate": "Dagpris",
     "nightRate": "Natpris",
     "sundayNote": "(Søndage & helligdage)",

@@ -95,6 +95,8 @@ const da = {
     "titleStandard": "Standardbil (1-4 passagerer)",
     "titleBus": "BUS Service (5-8 passagerer)",
     "description": "Faste priser begge veje (til og fra lufthavnen). Ingen skjulte gebyrer. Nattakst gælder 22–6 samt søndage og helligdage.",
+    "directionFromAirport": "Fra lufthavnen",
+    "directionToAirport": "Til lufthavnen",
     "dayRate": "Dagpris",
     "nightRate": "Natpris",
     "sundayNote": "(Søndage & helligdage)",

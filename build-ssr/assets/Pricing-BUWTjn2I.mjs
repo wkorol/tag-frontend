@@ -1,6 +1,6 @@
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
 import { MapPin, Sun, Moon, Calculator, ChevronLeft } from 'lucide-react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { u as useEurRate, p as preloadEurRate, f as formatEur } from './currency-BfL_L89a.mjs';
 import { F as FIXED_PRICES } from './fixedPricing-BrEVc9Vy.mjs';
 import { u as useI18n, e as trackPricingRouteSelect, f as trackPricingAction, h as trackVehicleSelect } from '../entry-server.mjs';
@@ -20,6 +20,7 @@ function Pricing({
   onVehicleTypeChange
 }) {
   const { t } = useI18n();
+  const [direction, setDirection] = useState("fromAirport");
   const routes = [
     {
       key: "airport_gdansk",
@@ -72,7 +73,10 @@ function Pricing({
       type: "bus"
     }
   ];
-  const displayRoutes = vehicleType === "bus" ? busRoutes : routes;
+  const applyDirection = (route) => direction === "fromAirport" ? route : { ...route, from: route.to, to: route.from };
+  const displayStandardRoutes = routes.map(applyDirection);
+  const displayBusRoutes = busRoutes.map(applyDirection);
+  const displayRoutes = vehicleType === "bus" ? displayBusRoutes : displayStandardRoutes;
   const title = vehicleType === "bus" ? t.pricing.titleBus : t.pricing.titleStandard;
   const eurRate = useEurRate();
   const eurText = (pln) => formatEur(pln, eurRate);
@@ -111,7 +115,7 @@ function Pricing({
           /* @__PURE__ */ jsx("div", { className: "pricing-sunday-note font-normal text-slate-500", children: t.pricing.sundayNote })
         ] }) })
       ] }) }),
-      /* @__PURE__ */ jsx("tbody", { children: routes.map((route, index) => /* @__PURE__ */ jsxs("tr", { className: "odd:bg-white even:bg-slate-50", children: [
+      /* @__PURE__ */ jsx("tbody", { children: displayStandardRoutes.map((route, index) => /* @__PURE__ */ jsxs("tr", { className: "odd:bg-white even:bg-slate-50", children: [
         /* @__PURE__ */ jsxs("td", { className: "border border-slate-200 px-4 py-3", children: [
           route.from,
           " ↔ ",
@@ -119,11 +123,11 @@ function Pricing({
         ] }),
         /* @__PURE__ */ jsx("td", { className: "border border-slate-200 px-4 py-3 text-right", children: renderPriceWithEur(route.priceDay) }),
         /* @__PURE__ */ jsx("td", { className: "border border-slate-200 px-4 py-3 text-right", children: renderPriceWithEur(route.priceNight) }),
-        /* @__PURE__ */ jsx("td", { className: "border border-slate-200 px-4 py-3 text-right", children: renderPriceWithEur(busRoutes[index]?.priceDay) }),
-        /* @__PURE__ */ jsx("td", { className: "border border-slate-200 px-4 py-3 text-right", children: renderPriceWithEur(busRoutes[index]?.priceNight) })
+        /* @__PURE__ */ jsx("td", { className: "border border-slate-200 px-4 py-3 text-right", children: renderPriceWithEur(displayBusRoutes[index]?.priceDay) }),
+        /* @__PURE__ */ jsx("td", { className: "border border-slate-200 px-4 py-3 text-right", children: renderPriceWithEur(displayBusRoutes[index]?.priceNight) })
       ] }, `${route.to}-${index}`)) })
     ] }) }),
-    /* @__PURE__ */ jsx("div", { className: "mt-6 space-y-4 sm:hidden", children: routes.map((route, index) => /* @__PURE__ */ jsxs("div", { className: "rounded-2xl border border-slate-200 bg-white p-4 shadow-sm", children: [
+    /* @__PURE__ */ jsx("div", { className: "mt-6 space-y-4 sm:hidden", children: displayStandardRoutes.map((route, index) => /* @__PURE__ */ jsxs("div", { className: "rounded-2xl border border-slate-200 bg-white p-4 shadow-sm", children: [
       /* @__PURE__ */ jsxs("div", { className: "text-sm font-semibold text-gray-900", children: [
         route.from,
         " ↔ ",
@@ -141,12 +145,12 @@ function Pricing({
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "rounded-lg border border-slate-200 bg-slate-50 p-3", children: [
           /* @__PURE__ */ jsx("div", { className: "text-[10px] uppercase tracking-wide text-slate-500", children: t.pricing.tableBusDay }),
-          renderPriceWithEur(busRoutes[index]?.priceDay, "mt-1 text-sm font-semibold text-gray-900")
+          renderPriceWithEur(displayBusRoutes[index]?.priceDay, "mt-1 text-sm font-semibold text-gray-900")
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "rounded-lg border border-slate-200 bg-slate-50 p-3", children: [
           /* @__PURE__ */ jsx("div", { className: "text-[10px] uppercase tracking-wide text-slate-500", children: t.pricing.tableBusNight }),
           /* @__PURE__ */ jsx("div", { className: "pricing-sunday-note mt-0.5 text-slate-400", children: t.pricing.sundayNote }),
-          renderPriceWithEur(busRoutes[index]?.priceNight, "mt-1 text-sm font-semibold text-gray-900")
+          renderPriceWithEur(displayBusRoutes[index]?.priceNight, "mt-1 text-sm font-semibold text-gray-900")
         ] })
       ] })
     ] }, `${route.to}-mobile-${index}`)) })
@@ -201,7 +205,10 @@ function Pricing({
             {
               onClick: () => {
                 trackPricingRouteSelect(route.key, vehicleType);
-                onOrderRoute(route);
+                onOrderRoute({
+                  ...route,
+                  pickupTypeDefault: direction === "fromAirport" ? "airport" : "address"
+                });
               },
               className: "pricing-cta w-full mt-4 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors text-sm",
               children: t.common.orderNow
@@ -257,38 +264,80 @@ function Pricing({
     /* @__PURE__ */ jsxs("div", { className: "text-center mb-12", children: [
       /* @__PURE__ */ jsx("h2", { className: "text-gray-900 mb-2", children: title }),
       /* @__PURE__ */ jsx("p", { className: "text-gray-600 max-w-2xl mx-auto", children: t.pricing.description }),
-      /* @__PURE__ */ jsx(TrustBar, { className: "pricing-trustbar" })
+      /* @__PURE__ */ jsx(TrustBar, { className: "pricing-trustbar" }),
+      /* @__PURE__ */ jsxs("div", { className: "mt-6 inline-flex items-center rounded-full border border-slate-200 bg-white p-1 shadow-sm", children: [
+        /* @__PURE__ */ jsx(
+          "button",
+          {
+            type: "button",
+            onClick: () => setDirection("fromAirport"),
+            className: `px-4 py-2 rounded-full text-sm font-semibold transition-colors ${direction === "fromAirport" ? "bg-blue-600 text-white" : "text-slate-700 hover:bg-blue-50"}`,
+            children: t.pricing.directionFromAirport
+          }
+        ),
+        /* @__PURE__ */ jsx(
+          "button",
+          {
+            type: "button",
+            onClick: () => setDirection("toAirport"),
+            className: `px-4 py-2 rounded-full text-sm font-semibold transition-colors ${direction === "toAirport" ? "bg-blue-600 text-white" : "text-slate-700 hover:bg-blue-50"}`,
+            children: t.pricing.directionToAirport
+          }
+        )
+      ] })
     ] }),
     variant === "landing" ? /* @__PURE__ */ jsxs(Fragment, { children: [
       /* @__PURE__ */ jsx("div", { id: "pricing-table", className: "mt-12", children: pricingTable }),
       /* @__PURE__ */ jsxs("div", { id: "pricing-booking", className: "mt-12 text-center", children: [
         /* @__PURE__ */ jsx("h3", { className: "text-2xl text-gray-900", children: t.pricing.bookingTitle }),
         /* @__PURE__ */ jsx("p", { className: "text-gray-600 mt-2", children: t.pricing.bookingSubtitle }),
-        onVehicleTypeChange && /* @__PURE__ */ jsxs("div", { className: "mt-8 inline-flex flex-wrap items-center gap-4 bg-white border border-gray-200 rounded-full px-4 py-3 shadow-sm", children: [
-          /* @__PURE__ */ jsx(
-            "button",
-            {
-              type: "button",
-              onClick: () => {
-                trackVehicleSelect("standard");
-                onVehicleTypeChange("standard");
-              },
-              className: `px-4 py-2 rounded-full text-sm font-semibold transition-colors ${vehicleType === "standard" ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-blue-50"}`,
-              children: t.vehicle.standardTitle
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            "button",
-            {
-              type: "button",
-              onClick: () => {
-                trackVehicleSelect("bus");
-                onVehicleTypeChange("bus");
-              },
-              className: `px-4 py-2 rounded-full text-sm font-semibold transition-colors ${vehicleType === "bus" ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-blue-50"}`,
-              children: t.vehicle.busTitle
-            }
-          )
+        /* @__PURE__ */ jsxs("div", { className: "mt-8 flex flex-col items-center gap-4", children: [
+          onVehicleTypeChange && /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap items-center justify-center gap-4 bg-white border border-gray-200 rounded-full px-4 py-3 shadow-sm", children: [
+            /* @__PURE__ */ jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => {
+                  trackVehicleSelect("standard");
+                  onVehicleTypeChange("standard");
+                },
+                className: `px-4 py-2 rounded-full text-sm font-semibold transition-colors ${vehicleType === "standard" ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-blue-50"}`,
+                children: t.vehicle.standardTitle
+              }
+            ),
+            /* @__PURE__ */ jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => {
+                  trackVehicleSelect("bus");
+                  onVehicleTypeChange("bus");
+                },
+                className: `px-4 py-2 rounded-full text-sm font-semibold transition-colors ${vehicleType === "bus" ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-blue-50"}`,
+                children: t.vehicle.busTitle
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap items-center justify-center gap-4 bg-white border border-gray-200 rounded-full px-4 py-3 shadow-sm", children: [
+            /* @__PURE__ */ jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => setDirection("fromAirport"),
+                className: `px-4 py-2 rounded-full text-sm font-semibold transition-colors ${direction === "fromAirport" ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-blue-50"}`,
+                children: t.pricing.directionFromAirport
+              }
+            ),
+            /* @__PURE__ */ jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => setDirection("toAirport"),
+                className: `px-4 py-2 rounded-full text-sm font-semibold transition-colors ${direction === "toAirport" ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-blue-50"}`,
+                children: t.pricing.directionToAirport
+              }
+            )
+          ] })
         ] })
       ] }),
       /* @__PURE__ */ jsx("div", { className: "mt-14", style: { marginTop: "3.5rem" }, children: pricingCards })

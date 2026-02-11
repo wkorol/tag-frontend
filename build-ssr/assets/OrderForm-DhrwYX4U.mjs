@@ -1,5 +1,5 @@
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useMemo, useState, useRef, useEffect } from 'react';
 import { Plane, MapPin, Calendar, FileText, Users, Info, Luggage } from 'lucide-react';
 import { u as useEurRate, f as formatEur, g as getApiBaseUrl } from './currency-BfL_L89a.mjs';
 import { b as buildAdditionalNotes } from './orderNotes-Bh0j39S6.mjs';
@@ -67,6 +67,18 @@ function OrderForm({ route, onClose }) {
   const { t, locale } = useI18n();
   const emailLocale = locale === "pl" ? "pl" : "en";
   const basePath = localeToPath(locale);
+  const defaultPickupType = useMemo(() => {
+    if (route.pickupTypeDefault) {
+      return route.pickupTypeDefault;
+    }
+    if (route.from === t.pricing.routes.airport) {
+      return "airport";
+    }
+    if (route.to === t.pricing.routes.airport) {
+      return "address";
+    }
+    return "";
+  }, [route.pickupTypeDefault, route.from, route.to, t.pricing.routes.airport]);
   const [googleReady, setGoogleReady] = useState(false);
   const placesLibRef = useRef(null);
   const sessionTokenRef = useRef(null);
@@ -75,7 +87,7 @@ function OrderForm({ route, onClose }) {
   const [step, setStep] = useState("trip");
   const [stepAttempted, setStepAttempted] = useState(false);
   const [formData, setFormData] = useState({
-    pickupType: "",
+    pickupType: defaultPickupType,
     signService: "self",
     signText: "",
     flightNumber: "",
@@ -182,7 +194,9 @@ function OrderForm({ route, onClose }) {
   const signFee = formData.pickupType === "airport" && formData.signService === "sign" ? 20 : 0;
   const totalPrice = currentPrice + signFee;
   const eurText = formatEur(totalPrice, eurRate);
-  const displayRoute = formData.pickupType === "address" ? { from: route.to, to: route.from, type: route.type } : route;
+  const routeStartsAtAirport = defaultPickupType ? defaultPickupType === "airport" : route.from === t.pricing.routes.airport;
+  const shouldSwapRoute = formData.pickupType === "airport" ? !routeStartsAtAirport : formData.pickupType === "address" ? routeStartsAtAirport : false;
+  const displayRoute = shouldSwapRoute ? { from: route.to, to: route.from, type: route.type } : { from: route.from, to: route.to, type: route.type };
   const signServiceTitle = t.orderForm.signServiceTitle ?? "Airport pickup options";
   const signServiceSign = t.orderForm.signServiceSign ?? "Meet with a name sign";
   const signServiceFee = t.orderForm.signServiceFee ?? "+20 PLN added to final price";
@@ -487,7 +501,7 @@ function OrderForm({ route, onClose }) {
     });
     const payload = {
       carType: route.type === "bus" ? 1 : 2,
-      pickupAddress: formData.pickupType === "address" ? formData.address : route.from,
+      pickupAddress: formData.pickupType === "address" ? formData.address : displayRoute.from,
       proposedPrice: String(totalPrice),
       date: formData.date,
       pickupTime: formData.time,

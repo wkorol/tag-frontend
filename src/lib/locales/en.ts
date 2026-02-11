@@ -95,6 +95,8 @@ const en = {
     "titleStandard": "Standard Car (1-4 passengers)",
     "titleBus": "BUS Service (5-8 passengers)",
     "description": "Fixed prices both ways (to and from the airport). No hidden fees. Night rate applies from 10 PM to 6 AM and on Sundays & public holidays.",
+    "directionFromAirport": "From airport",
+    "directionToAirport": "To airport",
     "dayRate": "Day rate",
     "nightRate": "Night rate",
     "sundayNote": "(Sundays & Holidays)",

@@ -95,6 +95,8 @@ const de = {
     "titleStandard": "Standardwagen (1-4 Passagiere)",
     "titleBus": "BUS Service (5-8 Passagiere)",
     "description": "Festpreise in beide Richtungen (zum und vom Flughafen). Keine versteckten Gebühren. Nachttarif gilt von 22–6 Uhr sowie an Sonntagen und Feiertagen.",
+    "directionFromAirport": "Vom Flughafen",
+    "directionToAirport": "Zum Flughafen",
     "dayRate": "Tagtarif",
     "nightRate": "Nachttarif",
     "sundayNote": "(Sonntage & Feiertage)",

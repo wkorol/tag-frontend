@@ -25,6 +25,7 @@ export function PricingPage() {
     priceDay: number;
     priceNight: number;
     type: 'standard' | 'bus';
+    pickupTypeDefault?: 'airport' | 'address';
   } | null>(null);
   const [showQuoteForm, setShowQuoteForm] = useState(false);
   const orderLinks = [

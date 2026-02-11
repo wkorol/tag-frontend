@@ -101,6 +101,8 @@ const pl = {
     "titleStandard": "Samochód standard (1–4 pasażerów)",
     "titleBus": "BUS (5–8 pasażerów)",
     "description": "Stałe ceny w obie strony (na i z lotniska). Bez ukrytych opłat. Taryfa nocna obowiązuje od 22:00 do 6:00 oraz w niedziele i święta.",
+    "directionFromAirport": "Z lotniska",
+    "directionToAirport": "Na lotnisko",
     "dayRate": "Taryfa dzienna",
     "nightRate": "Taryfa nocna",
     "sundayNote": "(niedziele i święta)",

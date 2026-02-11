@@ -75,7 +75,10 @@ export function Hero() {
                 onClick={(event) => {
                   event.preventDefault();
                   trackCtaClick('hero_order_online');
-                  requestScrollTo('vehicle-selection');
+                  const scrolled = requestScrollTo('vehicle-selection');
+                  if (!scrolled) {
+                    window.location.href = `${basePath}/#vehicle-selection`;
+                  }
                 }}
                 className="inline-flex items-center gap-2 bg-orange-800 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-700 transition-colors animate-pulse-glow"
             >
