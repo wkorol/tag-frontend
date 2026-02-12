@@ -24,10 +24,10 @@ const DEFAULT_CSP = [
   "base-uri 'self'",
   "object-src 'none'",
   "frame-ancestors 'self'",
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://maps.googleapis.com https://maps.gstatic.com https://www.jscache.com https://www.tripadvisor.com",
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://maps.googleapis.com https://maps.gstatic.com https://www.jscache.com https://www.tripadvisor.com https://static.tacdn.com",
   "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://stats.g.doubleclick.net https://www.googletagmanager.com https://www.google.com https://pagead2.googlesyndication.com https://maps.googleapis.com https://maps.gstatic.com https://places.googleapis.com",
-  "img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://maps.gstatic.com https://maps.googleapis.com https://www.tripadvisor.com",
-  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://maps.gstatic.com https://maps.googleapis.com https://www.tripadvisor.com https://static.tacdn.com",
+  "style-src 'self' 'unsafe-inline' https://static.tacdn.com",
   "font-src 'self' data:",
 ].join('; ');
 
