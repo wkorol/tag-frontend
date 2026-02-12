@@ -1068,6 +1068,16 @@ function CookieBanner() {
       const existing = getConsentStatus();
       if (existing) {
         updateGtagConsent(existing);
+        if (existing === "accepted" && typeof window !== "undefined") {
+          const loadGtag = window.__loadGtag;
+          if (typeof loadGtag === "function") {
+            loadGtag();
+          }
+          const gtag = window.gtag;
+          if (typeof gtag === "function") {
+            gtag("event", "page_view");
+          }
+        }
         setVisible(existing !== "accepted");
         return;
       }
