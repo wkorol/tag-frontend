@@ -193,6 +193,15 @@ const proxyGtagJs = (req, res, requestUrl) =>
       return;
     }
 
+    // GA4 is intentionally disabled in this project right now.
+    // If stale/cached pages still request G- IDs, return empty success to avoid 404 noise.
+    if (/^G-[A-Z0-9]+$/i.test(id)) {
+      res.writeHead(204, { 'Cache-Control': 'no-store' });
+      res.end();
+      resolve();
+      return;
+    }
+
     const upstreamUrl = new URL('https://www.googletagmanager.com/gtag/js');
     upstreamUrl.search = requestUrl.searchParams.toString();
 
