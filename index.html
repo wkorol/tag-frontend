@@ -62,7 +62,7 @@
             gtagLoaded = true;
             var script = document.createElement('script');
             script.async = true;
-            script.src = '/gtag/js?id=' + encodeURIComponent(ids[0] || adsId);
+            script.src = '/gtag/js?id=' + encodeURIComponent(adsId);
             script.onload = function() {
               window.__gtagLoaded = true;
               if (window.__updateGtagDebug) {
