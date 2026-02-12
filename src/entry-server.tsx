@@ -37,5 +37,6 @@ export function render(url: string) {
   return {
     appHtml,
     initialLocale,
+    initialTranslations,
   };
 }

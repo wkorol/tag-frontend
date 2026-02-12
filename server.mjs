@@ -25,7 +25,7 @@ const DEFAULT_CSP = [
   "object-src 'none'",
   "frame-ancestors 'self'",
   "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://maps.googleapis.com https://maps.gstatic.com https://www.jscache.com https://www.tripadvisor.com",
-  "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://stats.g.doubleclick.net https://www.googletagmanager.com https://maps.googleapis.com https://maps.gstatic.com https://places.googleapis.com",
+  "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://stats.g.doubleclick.net https://www.googletagmanager.com https://www.google.com https://pagead2.googlesyndication.com https://maps.googleapis.com https://maps.gstatic.com https://places.googleapis.com",
   "img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://maps.gstatic.com https://maps.googleapis.com https://www.tripadvisor.com",
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
@@ -247,7 +247,8 @@ const server = createServer(async (req, res) => {
     const rendered = render(urlPath);
     const appHtml = typeof rendered === 'string' ? rendered : rendered.appHtml;
     const locale = typeof rendered === 'string' ? 'en' : rendered.initialLocale;
-    const hydrationScript = `<script>window.__I18N_LOCALE__=${escapeInlineJson(locale)};</script>`;
+    const translations = typeof rendered === 'string' ? null : rendered.initialTranslations ?? null;
+    const hydrationScript = `<script>window.__I18N_LOCALE__=${escapeInlineJson(locale)};window.__I18N_TRANSLATIONS__=${escapeInlineJson(translations)};</script>`;
     const html = template.replace(
       '<div id="root"></div>',
       `${hydrationScript}<div id="root">${appHtml}</div>`

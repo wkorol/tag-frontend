@@ -8895,7 +8895,8 @@ function render(url) {
   );
   return {
     appHtml,
-    initialLocale
+    initialLocale,
+    initialTranslations
   };
 }
 

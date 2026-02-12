@@ -8,6 +8,7 @@ import { I18nProvider, getLocaleFromPathname, getTranslations, type Locale, type
 declare global {
   interface Window {
     __I18N_LOCALE__?: Locale;
+    __I18N_TRANSLATIONS__?: Translation | null;
   }
 }
 
@@ -16,7 +17,11 @@ const rootElement = document.getElementById("root")!;
 const bootstrap = async () => {
   const initialLocale =
     window.__I18N_LOCALE__ ?? getLocaleFromPathname(window.location.pathname) ?? "en";
-  const initialTranslations: Translation = await getTranslations(initialLocale);
+  const initialTranslations: Translation =
+    (window.__I18N_TRANSLATIONS__ as Translation | null | undefined) ??
+    (await getTranslations(initialLocale));
+  // Reduce memory footprint after hydration.
+  window.__I18N_TRANSLATIONS__ = null;
 
   const app = (
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
