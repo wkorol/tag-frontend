@@ -15,6 +15,24 @@ const ssrEntryCandidates = [
 
 const port = Number(process.env.PORT || 3000);
 
+// CSP note:
+// This app loads 3rd party scripts (Google Ads/Analytics, Google Maps, TripAdvisor).
+// Some hosting providers ship a strict default CSP that blocks these.
+// Setting an explicit CSP here makes behavior predictable.
+const DEFAULT_CSP = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'self'",
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://maps.googleapis.com https://maps.gstatic.com https://www.jscache.com https://www.tripadvisor.com",
+  "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://stats.g.doubleclick.net https://www.googletagmanager.com https://maps.googleapis.com https://maps.gstatic.com https://places.googleapis.com",
+  "img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://maps.gstatic.com https://maps.googleapis.com https://www.tripadvisor.com",
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self' data:",
+].join('; ');
+
+const CSP = (process.env.CONTENT_SECURITY_POLICY || DEFAULT_CSP).trim();
+
 const contentTypes = {
   '.js': 'text/javascript',
   '.css': 'text/css',
@@ -166,6 +184,15 @@ const server = createServer(async (req, res) => {
     res.writeHead(400);
     res.end();
     return;
+  }
+
+  // Security headers.
+  try {
+    res.setHeader('Content-Security-Policy', CSP);
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  } catch {
+    // ignore header set errors
   }
 
   const requestUrl = new URL(req.url, `http://${req.headers.host}`);
