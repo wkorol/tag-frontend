@@ -348,7 +348,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     });
   };
 
-  const trackConversion = () => {
+  const trackConversion = (transactionId?: string | null) => {
     if (typeof window === 'undefined' || !isAnalyticsEnabled()) {
       return;
     }
@@ -361,11 +361,13 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
       return;
     }
 
-    gtag('event', 'conversion', {
-      send_to: 'AW-17848598074/JQ0kCLvpq9sbELr8775C',
-      value: 1.0,
-      currency: 'PLN',
-    });
+    const payload: Record<string, unknown> = {
+      send_to: 'AW-17948664296/MWNwCK_nz_cbEOjDy-5C',
+    };
+    if (transactionId) {
+      payload.transaction_id = transactionId;
+    }
+    gtag('event', 'conversion', payload);
   };
 
   useEffect(() => {
@@ -641,11 +643,12 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
         return;
       }
 
-      setOrderId(data?.id ?? null);
+      const createdId = (data?.id ?? null) as string | null;
+      setOrderId(createdId);
       setGeneratedId(data?.generatedId ?? null);
       setSubmitted(true);
       trackFormSubmit('order', 'success');
-      trackConversion();
+      trackConversion(createdId);
     } catch (submitError) {
       trackFormSubmit('order', 'error', 'network');
       setError(t.orderForm.submitNetworkError);

@@ -14,7 +14,7 @@ export const trackContactClick = (type: 'whatsapp' | 'call' | 'email') => {
     });
     if (type === 'whatsapp' && hasMarketingConsent()) {
       gtag('event', 'conversion', {
-        send_to: 'AW-17848598074/5v3jCOfcyPMbELr8775C',
+        send_to: 'AW-17948664296/MOjJCMyiwvcbEOjDy-5C',
       });
     }
   }

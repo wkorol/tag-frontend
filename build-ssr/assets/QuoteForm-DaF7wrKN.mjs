@@ -382,7 +382,7 @@ function QuoteForm({ onClose, initialVehicleType = "standard" }) {
       }
     });
   };
-  const trackConversion = () => {
+  const trackConversion = (transactionId) => {
     if (typeof window === "undefined" || !isAnalyticsEnabled()) {
       return;
     }
@@ -393,11 +393,13 @@ function QuoteForm({ onClose, initialVehicleType = "standard" }) {
     if (!hasMarketingConsent()) {
       return;
     }
-    gtag("event", "conversion", {
-      send_to: "AW-17848598074/JQ0kCLvpq9sbELr8775C",
-      value: 1,
-      currency: "PLN"
-    });
+    const payload = {
+      send_to: "AW-17948664296/MWNwCK_nz_cbEOjDy-5C"
+    };
+    if (transactionId) {
+      payload.transaction_id = transactionId;
+    }
+    gtag("event", "conversion", payload);
   };
   const getIsNightRate = () => {
     let isNight = false;
@@ -1013,11 +1015,12 @@ function QuoteForm({ onClose, initialVehicleType = "standard" }) {
         setError(data?.error ?? t.quoteForm.submitError);
         return;
       }
-      setOrderId(data?.id ?? null);
+      const createdId = data?.id ?? null;
+      setOrderId(createdId);
       setGeneratedId(data?.generatedId ?? null);
       setSubmitted(true);
       trackFormSubmit("quote", "success");
-      trackConversion();
+      trackConversion(createdId);
     } catch {
       trackFormSubmit("quote", "error", "network");
       setError(t.quoteForm.submitNetworkError);

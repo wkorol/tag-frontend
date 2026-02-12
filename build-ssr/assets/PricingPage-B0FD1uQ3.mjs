@@ -4,10 +4,10 @@ import { u as useI18n, l as localeToPath, g as getRouteSlug, r as requestScrollT
 import { Pricing } from './Pricing-C7vI9B5l.mjs';
 import { useLocation } from 'react-router-dom';
 import { Calculator, MapPin, X, Navigation } from 'lucide-react';
-import { d as distanceKm, i as isPointInsideGeoJson, c as cityPolygons, a as centerPolygons, Q as QuoteForm } from './QuoteForm-CfNa6CN0.mjs';
+import { d as distanceKm, i as isPointInsideGeoJson, c as cityPolygons, a as centerPolygons, Q as QuoteForm } from './QuoteForm-DaF7wrKN.mjs';
 import { F as FIXED_PRICES } from './fixedPricing-BrEVc9Vy.mjs';
 import { u as useEurRate, p as preloadEurRate, f as formatEur } from './currency-BfL_L89a.mjs';
-import { OrderForm } from './OrderForm-PBO9BI4u.mjs';
+import { OrderForm } from './OrderForm-wlUKPHGo.mjs';
 import 'react-dom/server';
 import 'react-router-dom/server.js';
 import 'react-dom';
