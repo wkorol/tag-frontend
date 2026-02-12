@@ -1,10 +1,10 @@
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
-import { createContext, useContext, useState, useEffect, useMemo, lazy, Suspense, StrictMode } from 'react';
+import { createContext, useContext, useState, useEffect, useMemo, useRef, lazy, Suspense, StrictMode } from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server.js';
 import { useLocation, useNavigate, Link, useParams, Routes, Route, Navigate, useSearchParams, Outlet } from 'react-router-dom';
+import { CheckCircle2, Calculator, Car, Users, Info, Mail, MapPin } from 'lucide-react';
 import { createPortal } from 'react-dom';
-import { Mail, MapPin } from 'lucide-react';
 
 const STORAGE_KEY$1 = "tag_locale";
 const DEFAULT_LOCALE = "en";
@@ -818,7 +818,7 @@ function Hero() {
       "img",
       {
         src: heroBgUrl,
-        srcSet: "/background-480.webp 480w, /background-640.webp 640w, /background-960.webp 960w, /background-1280.webp 1280w, /background-1600.webp 1600w",
+        srcSet: "/background-400.webp 400w, /background-480.webp 480w, /background-640.webp 640w, /background-960.webp 960w, /background-1280.webp 1280w, /background-1600.webp 1600w",
         sizes: "(max-width: 640px) 75vw, (max-width: 1024px) 90vw, 1600px",
         alt: "Taxi Airport Gdansk hero background",
         className: "hero-bg absolute inset-0 -z-10 h-full w-full object-cover opacity-20 pointer-events-none",
@@ -844,7 +844,7 @@ function Hero() {
             {
               srcSet: `${logoAvif384} 384w, ${logoAvif512} 512w, ${logoAvif640} 640w`,
               type: "image/avif",
-              sizes: "(max-width: 640px) 68vw, 22rem"
+              sizes: "(max-width: 640px) 68vw, 17.5rem"
             }
           ),
           /* @__PURE__ */ jsx(
@@ -852,22 +852,22 @@ function Hero() {
             {
               srcSet: `${logoWebp384} 384w, ${logoWebp512} 512w, ${logoWebp640} 640w`,
               type: "image/webp",
-              sizes: "(max-width: 640px) 68vw, 22rem"
+              sizes: "(max-width: 640px) 68vw, 17.5rem"
             }
           ),
           /* @__PURE__ */ jsx(
             "img",
             {
-              src: logoWebp640,
+              src: logoWebp384,
               alt: t.hero.logoAlt,
               className: "h-auto",
-              style: { width: "min(22rem, 68vw)" },
-              width: 768,
-              height: 768,
+              style: { width: "min(17.5rem, 68vw)" },
+              width: 512,
+              height: 512,
               decoding: "async",
               loading: "eager",
               fetchpriority: "low",
-              sizes: "(max-width: 640px) 68vw, 22rem"
+              sizes: "(max-width: 640px) 68vw, 17.5rem"
             }
           )
         ] }) }),
@@ -1056,6 +1056,377 @@ function Hero() {
       ] }) })
     ] })
   ] });
+}
+
+function TrustBar({ className }) {
+  const { t } = useI18n();
+  const items = [
+    t.trustBar.instantConfirmation,
+    t.trustBar.meetGreetOptional,
+    t.trustBar.noPrepayment,
+    t.trustBar.supportWhatsappEmail,
+    t.trustBar.vatInvoice
+  ];
+  return /* @__PURE__ */ jsx("div", { className, children: /* @__PURE__ */ jsx("ul", { className: "trust-bar", "aria-label": t.trustBar.ariaLabel, children: items.map((label) => /* @__PURE__ */ jsxs("li", { className: "trust-bar__item", children: [
+    /* @__PURE__ */ jsx(CheckCircle2, { className: "trust-bar__icon", "aria-hidden": "true" }),
+    /* @__PURE__ */ jsx("span", { className: "trust-bar__text", children: label })
+  ] }, label)) }) });
+}
+
+function VehicleTypeSelector({ onSelectType }) {
+  const { t, locale } = useI18n();
+  const sectionRef = useRef(null);
+  const pricingPath = `${localeToPath(locale)}/${getRouteSlug(locale, "pricing")}#pricing-calculator`;
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const element = sectionRef.current;
+    if (!element) {
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+  return /* @__PURE__ */ jsx("section", { id: "vehicle-selection", ref: sectionRef, className: "py-16 bg-white", children: /* @__PURE__ */ jsxs("div", { className: "max-w-4xl mx-auto px-4", children: [
+    /* @__PURE__ */ jsxs("div", { className: "text-center mb-12", children: [
+      /* @__PURE__ */ jsx("h2", { className: "text-gray-900 mb-4", children: t.vehicle.title }),
+      /* @__PURE__ */ jsx("p", { className: "text-gray-600 max-w-2xl mx-auto", children: t.vehicle.subtitle }),
+      /* @__PURE__ */ jsx(TrustBar, { className: "vehicle-trustbar" }),
+      /* @__PURE__ */ jsx("div", { className: "mt-6 flex justify-center", children: /* @__PURE__ */ jsxs(
+        "a",
+        {
+          href: pricingPath,
+          className: "gemini-cta inline-flex w-full items-center justify-center gap-3 rounded-full px-12 py-4 text-base font-semibold text-blue-800 shadow-sm transition-colors hover:bg-blue-50 sm:w-auto",
+          children: [
+            /* @__PURE__ */ jsx(Calculator, { className: "h-4 w-4" }),
+            t.pricingCalculator.title
+          ]
+        }
+      ) })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "vehicle-grid-mobile grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch", children: [
+      /* @__PURE__ */ jsxs(
+        "button",
+        {
+          onClick: () => onSelectType("standard"),
+          className: "vehicle-card-mobile group self-stretch min-h-[22rem] md:min-h-[26rem] bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 border-3 border-gray-300 hover:border-blue-500 hover:shadow-xl transition-all text-left flex h-full flex-col",
+          children: [
+            /* @__PURE__ */ jsx("div", { className: "flex justify-center mb-6", children: /* @__PURE__ */ jsx("div", { className: "vehicle-card__icon w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-colors", children: /* @__PURE__ */ jsx(Car, { className: "vehicle-card__icon-svg w-12 h-12 text-blue-600" }) }) }),
+            /* @__PURE__ */ jsx("h3", { className: "vehicle-card__title text-gray-900 text-center mb-3 text-base", children: t.vehicle.standardTitle }),
+            /* @__PURE__ */ jsxs("div", { className: "vehicle-card__info flex flex-1 flex-col gap-3", children: [
+              /* @__PURE__ */ jsxs("div", { className: "vehicle-card__meta flex items-center justify-center gap-2 text-gray-700 text-base", children: [
+                /* @__PURE__ */ jsx(Users, { className: "vehicle-card__meta-icon w-5 h-5 text-blue-600" }),
+                /* @__PURE__ */ jsx("span", { className: "vehicle-card__text", children: t.vehicle.standardPassengers })
+              ] }),
+              /* @__PURE__ */ jsx("p", { className: "vehicle-card__desc text-center text-gray-600 text-sm", children: t.vehicle.standardDescription })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "mt-auto pt-6 grid gap-2", children: [
+              /* @__PURE__ */ jsxs("div", { className: "vehicle-selfmanage-badge rounded-xl bg-blue-50/90 px-3 text-slate-700 shadow-sm ring-1 ring-inset ring-blue-200/80", children: [
+                /* @__PURE__ */ jsx("span", { className: "inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full bg-blue-600/10 ring-1 ring-inset ring-blue-200/70", children: /* @__PURE__ */ jsx(Info, { className: "h-3 w-3 text-blue-700" }) }),
+                /* @__PURE__ */ jsx("span", { className: "ml-2 min-w-0 text-center overflow-hidden text-ellipsis whitespace-nowrap", children: t.vehicle.selfManageBadge })
+              ] }),
+              /* @__PURE__ */ jsx(
+                "div",
+                {
+                  className: "vehicle-select-cta gemini-cta w-full px-6 rounded-lg text-center font-semibold text-blue-800 transition-colors whitespace-nowrap overflow-hidden",
+                  style: { ["--cta-bg"]: "#ffffff" },
+                  children: /* @__PURE__ */ jsx("span", { className: "max-w-full truncate", children: t.vehicle.selectStandard })
+                }
+              )
+            ] })
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxs(
+        "button",
+        {
+          onClick: () => onSelectType("bus"),
+          className: "vehicle-card-mobile group self-stretch min-h-[22rem] md:min-h-[26rem] bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border-3 border-blue-300 hover:border-blue-500 hover:shadow-xl transition-all text-left flex h-full flex-col",
+          children: [
+            /* @__PURE__ */ jsx("div", { className: "flex justify-center mb-6", children: /* @__PURE__ */ jsx("div", { className: "vehicle-card__icon w-24 h-24 bg-blue-200 rounded-full flex items-center justify-center group-hover:bg-blue-300 transition-colors", children: /* @__PURE__ */ jsx(Users, { className: "vehicle-card__icon-svg w-12 h-12 text-blue-700" }) }) }),
+            /* @__PURE__ */ jsx("h3", { className: "vehicle-card__title text-gray-900 text-center mb-3 text-base", children: t.vehicle.busTitle }),
+            /* @__PURE__ */ jsxs("div", { className: "vehicle-card__info flex flex-1 flex-col gap-3", children: [
+              /* @__PURE__ */ jsxs("div", { className: "vehicle-card__meta flex items-center justify-center gap-2 text-gray-700 text-base", children: [
+                /* @__PURE__ */ jsx(Users, { className: "vehicle-card__meta-icon w-5 h-5 text-blue-600" }),
+                /* @__PURE__ */ jsx("span", { className: "vehicle-card__text", children: t.vehicle.busPassengers })
+              ] }),
+              /* @__PURE__ */ jsx("p", { className: "vehicle-card__desc text-center text-gray-600 text-sm", children: t.vehicle.busDescription })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "mt-auto pt-6 grid gap-2", children: [
+              /* @__PURE__ */ jsxs("div", { className: "vehicle-selfmanage-badge rounded-xl bg-blue-50/90 px-3 text-slate-700 shadow-sm ring-1 ring-inset ring-blue-200/80", children: [
+                /* @__PURE__ */ jsx("span", { className: "inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full bg-blue-600/10 ring-1 ring-inset ring-blue-200/70", children: /* @__PURE__ */ jsx(Info, { className: "h-3 w-3 text-blue-700" }) }),
+                /* @__PURE__ */ jsx("span", { className: "ml-2 min-w-0 text-center overflow-hidden text-ellipsis whitespace-nowrap", children: t.vehicle.selfManageBadge })
+              ] }),
+              /* @__PURE__ */ jsx(
+                "div",
+                {
+                  className: "vehicle-select-cta gemini-cta w-full px-6 rounded-lg text-center font-semibold text-blue-800 transition-colors whitespace-nowrap overflow-hidden",
+                  style: { ["--cta-bg"]: "#ffffff" },
+                  children: /* @__PURE__ */ jsx("span", { className: "max-w-full truncate", children: t.vehicle.selectBus })
+                }
+              )
+            ] })
+          ]
+        }
+      )
+    ] })
+  ] }) });
+}
+
+const localeToTripadvisorLang = {
+  en: "en_US",
+  pl: "pl_PL",
+  de: "de_DE",
+  fi: "fi_FI",
+  no: "nb_NO",
+  sv: "sv_SE",
+  da: "da_DK"
+};
+function TripadvisorWidget({
+  locationId: locationIdProp,
+  uniq: uniqProp,
+  href: hrefProp,
+  requireConsent = true,
+  wtype: wtypeProp,
+  border: borderProp,
+  shadow: shadowProp,
+  backgroundColor: backgroundColorProp,
+  ulId: ulIdProp,
+  ulClassName: ulClassNameProp,
+  liId: liIdProp,
+  liClassName: liClassNameProp
+}) {
+  const { locale } = useI18n();
+  const [canLoad, setCanLoad] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+    return requireConsent ? hasMarketingConsent() : true;
+  });
+  const locationId = locationIdProp || undefined                                             || "34104207";
+  const uniq = uniqProp || undefined                                      || "444";
+  const href = hrefProp || undefined                                     || "https://www.tripadvisor.com/Attraction_Review-g274725-d34104207-Reviews-Taxi_Airport_Gdansk-Gdansk_Pomerania_Province_Northern_Poland.html";
+  const wtype = wtypeProp || undefined                                       || "cdsratingsonlywide";
+  const border = borderProp ?? ("true") === "true";
+  const shadow = typeof shadowProp === "boolean" ? shadowProp : null;
+  const backgroundColor = backgroundColorProp || undefined                                                  || null;
+  const lang = localeToTripadvisorLang[locale] || "en_US";
+  const containerId = useMemo(() => `TA_${wtype}${uniq}`, [uniq, wtype]);
+  const ulId = useMemo(() => ulIdProp || `TA_links_${uniq}`, [ulIdProp, uniq]);
+  const ulClassName = useMemo(() => ulClassNameProp || "TA_links", [ulClassNameProp]);
+  const liId = useMemo(() => liIdProp || void 0, [liIdProp]);
+  const liClassName = useMemo(() => liClassNameProp || void 0, [liClassNameProp]);
+  const markupRef = useRef(null);
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    if (!requireConsent) {
+      setCanLoad(true);
+      return;
+    }
+    const update = () => setCanLoad(hasMarketingConsent());
+    update();
+    const onCustom = () => update();
+    const onStorage = (e) => {
+      if (e.key === "cookie-consent") {
+        update();
+      }
+    };
+    window.addEventListener("cookie-consent", onCustom);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener("cookie-consent", onCustom);
+      window.removeEventListener("storage", onStorage);
+    };
+  }, [requireConsent]);
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    if (!canLoad) {
+      return;
+    }
+    if (markupRef.current) {
+      const safeLiId = liId ? ` id="${liId}"` : "";
+      const safeLiClass = liClassName ? ` class="${liClassName}"` : "";
+      markupRef.current.innerHTML = `
+        <div id="${containerId}" class="TA_${wtype}">
+          <ul id="${ulId}" class="${ulClassName}">
+            <li${safeLiId}${safeLiClass}>
+              <a target="_blank" rel="noopener noreferrer" href="${href}">
+                <img src="https://www.tripadvisor.com/img/cdsi/img2/branding/v2/Tripadvisor_lockup_horizontal_secondary_registered-18034-2.svg" alt="TripAdvisor" />
+              </a>
+            </li>
+          </ul>
+        </div>
+      `.trim();
+    }
+    const scriptId = `tripadvisor-widget-script-${uniq}`;
+    const existing = document.getElementById(scriptId);
+    if (existing && existing.src.includes(`lang=${encodeURIComponent(lang)}`)) {
+      return;
+    }
+    if (existing) {
+      existing.remove();
+    }
+    const script = document.createElement("script");
+    script.id = scriptId;
+    script.async = true;
+    const params = new URLSearchParams();
+    params.set("wtype", wtype);
+    params.set("uniq", uniq);
+    params.set("locationId", locationId);
+    params.set("lang", lang);
+    params.set("border", border ? "true" : "false");
+    if (shadow !== null) {
+      params.set("shadow", shadow ? "true" : "false");
+    }
+    if (backgroundColor) {
+      params.set("backgroundColor", backgroundColor);
+    }
+    params.set("display_version", "2");
+    script.src = `https://www.jscache.com/wejs?${params.toString()}`;
+    script.setAttribute("data-loadtrk", "");
+    script.onload = () => {
+      script.loadtrk = true;
+    };
+    const containerEl = document.getElementById(containerId);
+    if (containerEl && typeof containerEl.insertAdjacentElement === "function") {
+      containerEl.insertAdjacentElement("afterend", script);
+    } else {
+      document.body.appendChild(script);
+    }
+    return () => {
+    };
+  }, [backgroundColor, border, canLoad, lang, locationId, shadow, uniq, wtype]);
+  return /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("div", { ref: markupRef }) });
+}
+
+function StarIcon({ className }) {
+  return /* @__PURE__ */ jsx(
+    "svg",
+    {
+      viewBox: "0 0 24 24",
+      "aria-hidden": "true",
+      className,
+      fill: "currentColor",
+      children: /* @__PURE__ */ jsx("path", { d: "M12 17.27l5.18 3.04-1.64-5.81 4.46-3.86-5.88-.5L12 4.5 9.88 10.14l-5.88.5 4.46 3.86-1.64 5.81L12 17.27z" })
+    }
+  );
+}
+function TrustSection() {
+  const { t } = useI18n();
+  const reviewsUrl = "https://maps.app.goo.gl/bG8hYPYhdD6cT394A";
+  const ratingRaw = Number(undefined                                          );
+  const rating = Number.isFinite(ratingRaw) && ratingRaw > 0 ? ratingRaw : null;
+  const countRaw = Number(undefined                                         );
+  const count = Number.isFinite(countRaw) && countRaw > 0 ? Math.round(countRaw) : null;
+  const ratingText = rating ? rating.toFixed(1) : null;
+  return /* @__PURE__ */ jsx("section", { className: "bg-slate-50 border-t border-slate-200 py-12", children: /* @__PURE__ */ jsxs("div", { className: "max-w-6xl mx-auto px-4", children: [
+    /* @__PURE__ */ jsxs("div", { className: "mb-8 grid gap-4 md:grid-cols-2", children: [
+      /* @__PURE__ */ jsxs(
+        "a",
+        {
+          href: reviewsUrl,
+          target: "_blank",
+          rel: "noopener noreferrer",
+          className: "group flex h-full flex-col rounded-2xl border border-slate-200 bg-white px-4 py-4 sm:px-5 sm:py-5 shadow-sm hover:shadow-md transition-shadow text-center",
+          children: [
+            /* @__PURE__ */ jsxs("div", { className: "flex-1 min-w-0 flex w-full flex-col items-center px-2 sm:px-3", children: [
+              /* @__PURE__ */ jsx("div", { className: "text-gray-900 font-semibold text-lg", children: t.trust.googleReviewsTitle }),
+              /* @__PURE__ */ jsx("div", { className: "mt-3 w-full rounded-xl bg-slate-50 px-3 py-3", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center justify-center gap-2", children: [
+                /* @__PURE__ */ jsx("div", { className: "flex items-center justify-center gap-1 text-amber-500", children: Array.from({ length: 5 }).map((_, idx) => /* @__PURE__ */ jsx(
+                  StarIcon,
+                  {
+                    className: [
+                      "h-5 w-5 sm:h-6 sm:w-6",
+                      rating && rating >= idx + 1 ? "opacity-100" : "opacity-30"
+                    ].join(" ")
+                  },
+                  idx
+                )) }),
+                ratingText && /* @__PURE__ */ jsxs("span", { className: "text-base sm:text-lg text-gray-900 whitespace-nowrap", children: [
+                  ratingText,
+                  "/5"
+                ] }),
+                count && /* @__PURE__ */ jsxs("span", { className: "text-sm sm:text-base text-gray-500 whitespace-nowrap", children: [
+                  "(",
+                  count,
+                  " ",
+                  t.trust.googleReviewsCountLabel,
+                  ")"
+                ] })
+              ] }) })
+            ] }),
+            /* @__PURE__ */ jsx("div", { className: "pt-5 px-2 sm:px-3", children: /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-blue-600/25 group-hover:bg-blue-700 group-hover:shadow-blue-600/35 transition", children: [
+              t.trust.googleReviewsCta,
+              /* @__PURE__ */ jsxs(
+                "svg",
+                {
+                  viewBox: "0 0 24 24",
+                  "aria-hidden": "true",
+                  className: "h-4 w-4 sm:h-5 sm:w-5 opacity-90",
+                  fill: "none",
+                  stroke: "currentColor",
+                  strokeWidth: "2",
+                  strokeLinecap: "round",
+                  strokeLinejoin: "round",
+                  children: [
+                    /* @__PURE__ */ jsx("path", { d: "M7 17L17 7" }),
+                    /* @__PURE__ */ jsx("path", { d: "M9 7h8v8" })
+                  ]
+                }
+              )
+            ] }) })
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsx("div", { className: "rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm h-full flex items-center justify-center", children: /* @__PURE__ */ jsx(
+        TripadvisorWidget,
+        {
+          requireConsent: false,
+          wtype: "cdsratingsonlynarrow",
+          uniq: "18",
+          border: true,
+          backgroundColor: "gray",
+          ulId: "26DzK4vLpG",
+          ulClassName: "TA_links zxoY1N7DGTdr",
+          liId: "8Elkc7FwaL0",
+          liClassName: "jv6ugdR"
+        }
+      ) })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "grid gap-8 md:grid-cols-3", children: [
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("h3", { className: "text-gray-900 mb-2", children: t.trust.companyTitle }),
+        /* @__PURE__ */ jsxs("p", { className: "text-sm text-gray-600", children: [
+          "WK DRIVE",
+          /* @__PURE__ */ jsx("br", {}),
+          "VAT ID (NIP): 5862330063",
+          /* @__PURE__ */ jsx("br", {}),
+          "Gdańsk, Poland"
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("h3", { className: "text-gray-900 mb-2", children: t.trust.paymentTitle }),
+        /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-600", children: t.trust.paymentBody })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("h3", { className: "text-gray-900 mb-2", children: t.trust.comfortTitle }),
+        /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-600", children: t.trust.comfortBody })
+      ] })
+    ] })
+  ] }) });
 }
 
 function CookieBanner() {
@@ -2315,22 +2686,16 @@ function TaxiGdanskPage() {
   ] });
 }
 
-const VehicleTypeSelector = lazy(
-  () => import('./assets/VehicleTypeSelector-DLguqtCZ.mjs').then((mod) => ({ default: mod.VehicleTypeSelector }))
-);
-const Pricing = lazy(() => import('./assets/Pricing-C7vI9B5l.mjs').then((mod) => ({ default: mod.Pricing })));
-const TrustSection = lazy(
-  () => import('./assets/TrustSection-CJ2QBA3D.mjs').then((mod) => ({ default: mod.TrustSection }))
-);
+const Pricing = lazy(() => import('./assets/Pricing-CvnJBbh5.mjs').then((mod) => ({ default: mod.Pricing })));
 const Footer = lazy(() => Promise.resolve().then(() => Footer$2).then((mod) => ({ default: mod.Footer })));
-const OrderForm = lazy(() => import('./assets/OrderForm-wlUKPHGo.mjs').then((mod) => ({ default: mod.OrderForm })));
-const QuoteForm = lazy(() => import('./assets/QuoteForm-DaF7wrKN.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
+const OrderForm = lazy(() => import('./assets/OrderForm-B6Q1Hrxn.mjs').then((mod) => ({ default: mod.OrderForm })));
+const QuoteForm = lazy(() => import('./assets/QuoteForm-yCDM8bAf.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./assets/ManageOrder-DVOaNQ-H.mjs').then((mod) => ({ default: mod.ManageOrder })));
-const RouteLanding = lazy(() => import('./assets/RouteLanding-DY4PYufx.mjs').then((mod) => ({ default: mod.RouteLanding })));
-const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-BbzpIX2K.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
-const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-BbzpIX2K.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./assets/PricingPage-B0FD1uQ3.mjs').then((mod) => ({ default: mod.PricingPage })));
-const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-DN0Rl5Dh.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
+const RouteLanding = lazy(() => import('./assets/RouteLanding-CaGbVt7Q.mjs').then((mod) => ({ default: mod.RouteLanding })));
+const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-CM_9BY0S.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
+const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-CM_9BY0S.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
+const PricingPage = lazy(() => import('./assets/PricingPage-BlRBdCvw.mjs').then((mod) => ({ default: mod.PricingPage })));
+const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-B5Sc155s.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-DqlqcrYR.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
 const renderCityRouteRoutes = (locale) => getCityRoutes(locale).map((route) => /* @__PURE__ */ jsx(Route, { path: route.slug, element: /* @__PURE__ */ jsx(CityRouteLanding, {}) }, route.slug));
@@ -2423,7 +2788,7 @@ function Landing() {
     /* @__PURE__ */ jsx(Navbar, {}),
     /* @__PURE__ */ jsxs("main", { children: [
       /* @__PURE__ */ jsx(Hero, {}),
-      /* @__PURE__ */ jsx("div", { className: "defer-render defer-render-lg", children: /* @__PURE__ */ jsx(Suspense, { fallback: null, children: step === "vehicle" ? /* @__PURE__ */ jsx(VehicleTypeSelector, { onSelectType: handleVehicleSelect }) : /* @__PURE__ */ jsx(
+      /* @__PURE__ */ jsx("div", { className: "defer-render defer-render-lg", children: step === "vehicle" ? /* @__PURE__ */ jsx(VehicleTypeSelector, { onSelectType: handleVehicleSelect }) : /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(
         Pricing,
         {
           vehicleType,
@@ -2432,7 +2797,7 @@ function Landing() {
           onBack: handleBackToVehicleSelection
         }
       ) }) }),
-      /* @__PURE__ */ jsx("div", { className: "defer-render defer-render-md", children: /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(TrustSection, {}) }) })
+      /* @__PURE__ */ jsx("div", { className: "defer-render defer-render-md", children: /* @__PURE__ */ jsx(TrustSection, {}) })
     ] }),
     /* @__PURE__ */ jsx("div", { className: "defer-render defer-render-sm", children: /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(Footer, {}) }) }),
     selectedRoute && /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(
@@ -8910,4 +9275,4 @@ function render(url) {
   };
 }
 
-export { Breadcrumbs as B, Footer$1 as F, Navbar as N, usePageTitle as a, trackNavClick as b, FloatingActions as c, trackFormOpen as d, trackPricingRouteSelect as e, trackPricingAction as f, getRouteSlug as g, hasMarketingConsent as h, trackVehicleSelect as i, trackFormClose as j, trackFormValidation as k, localeToPath as l, trackFormSubmit as m, trackFormStart as n, isAnalyticsEnabled as o, requestScrollTo as r, render, scrollToId as s, trackCtaClick as t, useI18n as u };
+export { Breadcrumbs as B, Footer$1 as F, Navbar as N, TrustBar as T, usePageTitle as a, trackNavClick as b, FloatingActions as c, trackFormOpen as d, trackPricingRouteSelect as e, trackPricingAction as f, getRouteSlug as g, trackVehicleSelect as h, trackFormClose as i, trackFormValidation as j, trackFormSubmit as k, localeToPath as l, trackFormStart as m, isAnalyticsEnabled as n, hasMarketingConsent as o, requestScrollTo as r, render, scrollToId as s, trackCtaClick as t, useI18n as u };

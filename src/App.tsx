@@ -2,6 +2,8 @@ import { Suspense, lazy, useEffect, useState } from 'react';
 import { Navigate, Outlet, Route, Routes, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { VehicleTypeSelector } from './components/VehicleTypeSelector';
+import { TrustSection } from './components/TrustSection';
 import { CookieBanner } from './components/CookieBanner';
 import { FloatingActions } from './components/FloatingActions';
 import { CookiesPage } from './pages/CookiesPage';
@@ -11,13 +13,7 @@ import { CountryLanding } from './pages/CountryLanding';
 import { CountryAirportLanding } from './pages/CountryAirportLanding';
 import { CityRouteLanding } from './pages/CityRouteLanding';
 import { TaxiGdanskPage } from './pages/TaxiGdanskPage';
-const VehicleTypeSelector = lazy(() =>
-  import('./components/VehicleTypeSelector').then((mod) => ({ default: mod.VehicleTypeSelector }))
-);
 const Pricing = lazy(() => import('./components/Pricing').then((mod) => ({ default: mod.Pricing })));
-const TrustSection = lazy(() =>
-  import('./components/TrustSection').then((mod) => ({ default: mod.TrustSection }))
-);
 const Footer = lazy(() => import('./components/Footer').then((mod) => ({ default: mod.Footer })));
 const OrderForm = lazy(() => import('./components/OrderForm').then((mod) => ({ default: mod.OrderForm })));
 const QuoteForm = lazy(() => import('./components/QuoteForm').then((mod) => ({ default: mod.QuoteForm })));
@@ -177,24 +173,22 @@ function Landing() {
         <Hero />
         
         <div className="defer-render defer-render-lg">
-          <Suspense fallback={null}>
-            {step === 'vehicle' ? (
-              <VehicleTypeSelector onSelectType={handleVehicleSelect} />
-            ) : (
+          {step === 'vehicle' ? (
+            <VehicleTypeSelector onSelectType={handleVehicleSelect} />
+          ) : (
+            <Suspense fallback={null}>
               <Pricing
                 vehicleType={vehicleType}
                 onOrderRoute={handleOrderRoute}
                 onRequestQuote={handleRequestQuote}
                 onBack={handleBackToVehicleSelection}
               />
-            )}
-          </Suspense>
+            </Suspense>
+          )}
         </div>
 
         <div className="defer-render defer-render-md">
-          <Suspense fallback={null}>
-            <TrustSection />
-          </Suspense>
+          <TrustSection />
         </div>
       </main>
 

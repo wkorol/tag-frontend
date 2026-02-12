@@ -3,7 +3,7 @@ import { useMemo, useState, useRef, useEffect } from 'react';
 import { Plane, MapPin, Calendar, FileText, Users, Info, Luggage } from 'lucide-react';
 import { u as useEurRate, f as formatEur, g as getApiBaseUrl } from './currency-BfL_L89a.mjs';
 import { b as buildAdditionalNotes } from './orderNotes-Bh0j39S6.mjs';
-import { u as useI18n, l as localeToPath, j as trackFormClose, k as trackFormValidation, m as trackFormSubmit, n as trackFormStart, o as isAnalyticsEnabled, h as hasMarketingConsent } from '../entry-server.mjs';
+import { u as useI18n, l as localeToPath, i as trackFormClose, j as trackFormValidation, k as trackFormSubmit, m as trackFormStart, n as isAnalyticsEnabled, o as hasMarketingConsent } from '../entry-server.mjs';
 import { l as lockBodyScroll, u as unlockBodyScroll, i as isPolishPublicHoliday } from './scrollLock-Db1Ed-19.mjs';
 import 'react-dom/server';
 import 'react-router-dom/server.js';

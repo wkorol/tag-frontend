@@ -5,8 +5,8 @@ import { u as useEurRate, p as preloadEurRate, g as getApiBaseUrl, f as formatEu
 import { u as useI18n, a as usePageTitle, l as localeToPath } from '../entry-server.mjs';
 import 'react-dom/server';
 import 'react-router-dom/server.js';
-import 'react-dom';
 import 'lucide-react';
+import 'react-dom';
 
 const statusStyles = {
   pending: "bg-yellow-100 text-yellow-800",

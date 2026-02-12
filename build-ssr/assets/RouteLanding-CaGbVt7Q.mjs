@@ -4,8 +4,8 @@ import 'react';
 import 'react-dom/server';
 import 'react-router-dom/server.js';
 import 'react-router-dom';
-import 'react-dom';
 import 'lucide-react';
+import 'react-dom';
 
 function RouteLanding({ title, description, route, examples, pricing }) {
   const { t, locale } = useI18n();

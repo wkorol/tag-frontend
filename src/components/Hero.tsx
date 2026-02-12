@@ -27,7 +27,7 @@ export function Hero() {
     <div id="hero" className="relative overflow-hidden bg-gradient-to-br from-blue-900 to-blue-700 text-white">
         <img
           src={heroBgUrl}
-          srcSet="/background-480.webp 480w, /background-640.webp 640w, /background-960.webp 960w, /background-1280.webp 1280w, /background-1600.webp 1600w"
+          srcSet="/background-400.webp 400w, /background-480.webp 480w, /background-640.webp 640w, /background-960.webp 960w, /background-1280.webp 1280w, /background-1600.webp 1600w"
           sizes="(max-width: 640px) 75vw, (max-width: 1024px) 90vw, 1600px"
         alt="Taxi Airport Gdansk hero background"
         className="hero-bg absolute inset-0 -z-10 h-full w-full object-cover opacity-20 pointer-events-none"
@@ -54,24 +54,24 @@ export function Hero() {
                 <source
                   srcSet={`${logoAvif384} 384w, ${logoAvif512} 512w, ${logoAvif640} 640w`}
                   type="image/avif"
-                  sizes="(max-width: 640px) 68vw, 22rem"
+                  sizes="(max-width: 640px) 68vw, 17.5rem"
                 />
                 <source
                   srcSet={`${logoWebp384} 384w, ${logoWebp512} 512w, ${logoWebp640} 640w`}
                   type="image/webp"
-                  sizes="(max-width: 640px) 68vw, 22rem"
+                  sizes="(max-width: 640px) 68vw, 17.5rem"
                 />
                 <img
-                  src={logoWebp640}
+                  src={logoWebp384}
                   alt={t.hero.logoAlt}
                   className="h-auto"
-                  style={{ width: 'min(22rem, 68vw)' }}
-                  width={768}
-                  height={768}
+                  style={{ width: 'min(17.5rem, 68vw)' }}
+                  width={512}
+                  height={512}
                   decoding="async"
                   loading="eager"
                   fetchpriority="low"
-                  sizes="(max-width: 640px) 68vw, 22rem"
+                  sizes="(max-width: 640px) 68vw, 17.5rem"
                 />
               </picture>
             </div>
