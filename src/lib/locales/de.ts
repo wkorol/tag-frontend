@@ -195,6 +195,9 @@ const de = {
     "note": "Preise sind fest. Sie können im Formular für eine andere Strecke einen anderen Preis vorschlagen."
   },
   "trust": {
+    "googleReviewsTitle": "Google-Bewertungen",
+    "googleReviewsCta": "Bewertungen ansehen",
+    "googleReviewsCountLabel": "Bewertungen",
     "companyTitle": "Unternehmensdaten",
     "paymentTitle": "Zahlung & Rechnungen",
     "comfortTitle": "Komfort & Sicherheit",

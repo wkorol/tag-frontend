@@ -201,6 +201,9 @@ const pl = {
     "note": "Ceny są stałe, możesz zaproponować inną cenę w formularzu do zamawiania innej trasy."
   },
   "trust": {
+    "googleReviewsTitle": "Opinie Google",
+    "googleReviewsCta": "Zobacz opinie",
+    "googleReviewsCountLabel": "opinii",
     "companyTitle": "Dane firmy",
     "paymentTitle": "Płatność i faktury",
     "comfortTitle": "Komfort i bezpieczeństwo",

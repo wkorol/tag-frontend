@@ -195,6 +195,9 @@ const no = {
     "note": "Prisene er faste. Du kan foreslå en annen pris i bestillingsskjemaet for en annen rute."
   },
   "trust": {
+    "googleReviewsTitle": "Google-anmeldelser",
+    "googleReviewsCta": "Se anmeldelser",
+    "googleReviewsCountLabel": "anmeldelser",
     "companyTitle": "Firmadetaljer",
     "paymentTitle": "Betaling & faktura",
     "comfortTitle": "Komfort & sikkerhet",

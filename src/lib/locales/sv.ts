@@ -195,6 +195,9 @@ const sv = {
     "note": "Priserna är fasta. Du kan föreslå ett annat pris i beställningsformuläret för en annan rutt."
   },
   "trust": {
+    "googleReviewsTitle": "Google-recensioner",
+    "googleReviewsCta": "Se recensioner",
+    "googleReviewsCountLabel": "recensioner",
     "companyTitle": "Företagsuppgifter",
     "paymentTitle": "Betalning & faktura",
     "comfortTitle": "Komfort & säkerhet",

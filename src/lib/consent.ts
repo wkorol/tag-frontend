@@ -23,6 +23,17 @@ export const setConsentStatus = (status: Exclude<ConsentStatus, null>): void => 
   }
 
   window.localStorage.setItem(STORAGE_KEY, status);
+
+  // Let UI react immediately (e.g. load 3rd party widgets) without requiring a refresh.
+  try {
+    window.dispatchEvent(
+      new CustomEvent('cookie-consent', {
+        detail: { status },
+      })
+    );
+  } catch {
+    // Ignore if CustomEvent is unavailable for some reason.
+  }
 };
 
 export const hasMarketingConsent = (): boolean => getConsentStatus() === 'accepted';

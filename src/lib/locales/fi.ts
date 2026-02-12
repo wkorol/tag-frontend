@@ -195,6 +195,9 @@ const fi = {
     "note": "Hinnat ovat kiinteät. Voit ehdottaa toista hintaa toisen reitin tilauslomakkeessa."
   },
   "trust": {
+    "googleReviewsTitle": "Google-arvostelut",
+    "googleReviewsCta": "Katso arvostelut",
+    "googleReviewsCountLabel": "arvostelua",
     "companyTitle": "Yritystiedot",
     "paymentTitle": "Maksu & laskut",
     "comfortTitle": "Mukavuus & turvallisuus",

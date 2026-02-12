@@ -336,6 +336,14 @@ const setConsentStatus = (status) => {
     return;
   }
   window.localStorage.setItem(STORAGE_KEY, status);
+  try {
+    window.dispatchEvent(
+      new CustomEvent("cookie-consent", {
+        detail: { status }
+      })
+    );
+  } catch {
+  }
 };
 const hasMarketingConsent = () => getConsentStatus() === "accepted";
 const updateGtagConsent = (status) => {
@@ -2300,18 +2308,18 @@ function TaxiGdanskPage() {
 const VehicleTypeSelector = lazy(
   () => import('./assets/VehicleTypeSelector-DLguqtCZ.mjs').then((mod) => ({ default: mod.VehicleTypeSelector }))
 );
-const Pricing = lazy(() => import('./assets/Pricing-BUWTjn2I.mjs').then((mod) => ({ default: mod.Pricing })));
+const Pricing = lazy(() => import('./assets/Pricing-C7vI9B5l.mjs').then((mod) => ({ default: mod.Pricing })));
 const TrustSection = lazy(
-  () => import('./assets/TrustSection-wjwr276G.mjs').then((mod) => ({ default: mod.TrustSection }))
+  () => import('./assets/TrustSection-CJ2QBA3D.mjs').then((mod) => ({ default: mod.TrustSection }))
 );
 const Footer = lazy(() => Promise.resolve().then(() => Footer$2).then((mod) => ({ default: mod.Footer })));
-const OrderForm = lazy(() => import('./assets/OrderForm-DhrwYX4U.mjs').then((mod) => ({ default: mod.OrderForm })));
-const QuoteForm = lazy(() => import('./assets/QuoteForm-Co8oe2B8.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
+const OrderForm = lazy(() => import('./assets/OrderForm-PBO9BI4u.mjs').then((mod) => ({ default: mod.OrderForm })));
+const QuoteForm = lazy(() => import('./assets/QuoteForm-CfNa6CN0.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./assets/ManageOrder-DVOaNQ-H.mjs').then((mod) => ({ default: mod.ManageOrder })));
 const RouteLanding = lazy(() => import('./assets/RouteLanding-DY4PYufx.mjs').then((mod) => ({ default: mod.RouteLanding })));
-const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-BOz_88Pl.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
-const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-BOz_88Pl.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./assets/PricingPage-Bqp1mN-G.mjs').then((mod) => ({ default: mod.PricingPage })));
+const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-D633gsEF.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
+const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-D633gsEF.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
+const PricingPage = lazy(() => import('./assets/PricingPage-vnn5qJg6.mjs').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-DN0Rl5Dh.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-DqlqcrYR.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
@@ -2956,6 +2964,9 @@ const en = {
     "note": "Prices are fixed. You can propose a different price in the custom route order form."
   },
   "trust": {
+    "googleReviewsTitle": "Google reviews",
+    "googleReviewsCta": "See reviews",
+    "googleReviewsCountLabel": "reviews",
     "companyTitle": "Company details",
     "paymentTitle": "Payment & invoices",
     "comfortTitle": "Comfort & safety",
@@ -3833,6 +3844,9 @@ const pl = {
     "note": "Ceny są stałe, możesz zaproponować inną cenę w formularzu do zamawiania innej trasy."
   },
   "trust": {
+    "googleReviewsTitle": "Opinie Google",
+    "googleReviewsCta": "Zobacz opinie",
+    "googleReviewsCountLabel": "opinii",
     "companyTitle": "Dane firmy",
     "paymentTitle": "Płatność i faktury",
     "comfortTitle": "Komfort i bezpieczeństwo",
@@ -4704,6 +4718,9 @@ const de = {
     "note": "Preise sind fest. Sie können im Formular für eine andere Strecke einen anderen Preis vorschlagen."
   },
   "trust": {
+    "googleReviewsTitle": "Google-Bewertungen",
+    "googleReviewsCta": "Bewertungen ansehen",
+    "googleReviewsCountLabel": "Bewertungen",
     "companyTitle": "Unternehmensdaten",
     "paymentTitle": "Zahlung & Rechnungen",
     "comfortTitle": "Komfort & Sicherheit",
@@ -5573,6 +5590,9 @@ const fi = {
     "note": "Hinnat ovat kiinteät. Voit ehdottaa toista hintaa toisen reitin tilauslomakkeessa."
   },
   "trust": {
+    "googleReviewsTitle": "Google-arvostelut",
+    "googleReviewsCta": "Katso arvostelut",
+    "googleReviewsCountLabel": "arvostelua",
     "companyTitle": "Yritystiedot",
     "paymentTitle": "Maksu & laskut",
     "comfortTitle": "Mukavuus & turvallisuus",
@@ -6440,6 +6460,9 @@ const no = {
     "note": "Prisene er faste. Du kan foreslå en annen pris i bestillingsskjemaet for en annen rute."
   },
   "trust": {
+    "googleReviewsTitle": "Google-anmeldelser",
+    "googleReviewsCta": "Se anmeldelser",
+    "googleReviewsCountLabel": "anmeldelser",
     "companyTitle": "Firmadetaljer",
     "paymentTitle": "Betaling & faktura",
     "comfortTitle": "Komfort & sikkerhet",
@@ -7309,6 +7332,9 @@ const sv = {
     "note": "Priserna är fasta. Du kan föreslå ett annat pris i beställningsformuläret för en annan rutt."
   },
   "trust": {
+    "googleReviewsTitle": "Google-recensioner",
+    "googleReviewsCta": "Se recensioner",
+    "googleReviewsCountLabel": "recensioner",
     "companyTitle": "Företagsuppgifter",
     "paymentTitle": "Betalning & faktura",
     "comfortTitle": "Komfort & säkerhet",
@@ -8178,6 +8204,9 @@ const da = {
     "note": "Priserne er faste. Du kan foreslå en anden pris i bestillingsformularen for en anden rute."
   },
   "trust": {
+    "googleReviewsTitle": "Google-anmeldelser",
+    "googleReviewsCta": "Se anmeldelser",
+    "googleReviewsCountLabel": "anmeldelser",
     "companyTitle": "Virksomhedsoplysninger",
     "paymentTitle": "Betaling & faktura",
     "comfortTitle": "Komfort & sikkerhed",
@@ -8870,4 +8899,4 @@ function render(url) {
   };
 }
 
-export { Breadcrumbs as B, Footer$1 as F, Navbar as N, usePageTitle as a, trackNavClick as b, FloatingActions as c, trackFormOpen as d, trackPricingRouteSelect as e, trackPricingAction as f, getRouteSlug as g, trackVehicleSelect as h, trackFormClose as i, trackFormValidation as j, trackFormSubmit as k, localeToPath as l, trackFormStart as m, isAnalyticsEnabled as n, hasMarketingConsent as o, requestScrollTo as r, render, scrollToId as s, trackCtaClick as t, useI18n as u };
+export { Breadcrumbs as B, Footer$1 as F, Navbar as N, usePageTitle as a, trackNavClick as b, FloatingActions as c, trackFormOpen as d, trackPricingRouteSelect as e, trackPricingAction as f, getRouteSlug as g, hasMarketingConsent as h, trackVehicleSelect as i, trackFormClose as j, trackFormValidation as k, localeToPath as l, trackFormSubmit as m, trackFormStart as n, isAnalyticsEnabled as o, requestScrollTo as r, render, scrollToId as s, trackCtaClick as t, useI18n as u };

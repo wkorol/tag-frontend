@@ -195,6 +195,9 @@ const en = {
     "note": "Prices are fixed. You can propose a different price in the custom route order form."
   },
   "trust": {
+    "googleReviewsTitle": "Google reviews",
+    "googleReviewsCta": "See reviews",
+    "googleReviewsCountLabel": "reviews",
     "companyTitle": "Company details",
     "paymentTitle": "Payment & invoices",
     "comfortTitle": "Comfort & safety",
