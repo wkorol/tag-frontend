@@ -1,4 +1,5 @@
-import { createServer } from 'node:http';
+import { createServer, request as httpRequest } from 'node:http';
+import { request as httpsRequest } from 'node:https';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -182,6 +183,53 @@ const serveFile = async (res, filePath, cacheControl) => {
   }
 };
 
+const proxyGtagJs = (req, res, requestUrl) =>
+  new Promise((resolve) => {
+    const id = requestUrl.searchParams.get('id');
+    if (!id) {
+      res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end('Missing id parameter');
+      resolve();
+      return;
+    }
+
+    const upstreamUrl = new URL('https://www.googletagmanager.com/gtag/js');
+    upstreamUrl.search = requestUrl.searchParams.toString();
+
+    const client = upstreamUrl.protocol === 'https:' ? httpsRequest : httpRequest;
+    const upstreamReq = client(
+      upstreamUrl,
+      {
+        method: 'GET',
+        headers: {
+          'User-Agent': req.headers['user-agent'] || 'tag-frontend-proxy',
+          'Accept': req.headers.accept || '*/*',
+          'Accept-Language': req.headers['accept-language'] || 'en',
+        },
+      },
+      (upstreamRes) => {
+        const status = upstreamRes.statusCode || 502;
+        const contentType = upstreamRes.headers['content-type'] || 'application/javascript; charset=utf-8';
+        const cacheControl = upstreamRes.headers['cache-control'] || 'public, max-age=3600';
+
+        res.writeHead(status, {
+          'Content-Type': contentType,
+          'Cache-Control': cacheControl,
+        });
+        upstreamRes.pipe(res);
+        upstreamRes.on('end', resolve);
+      }
+    );
+
+    upstreamReq.on('error', () => {
+      res.writeHead(502, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end('GTM proxy upstream error');
+      resolve();
+    });
+
+    upstreamReq.end();
+  });
+
 const server = createServer(async (req, res) => {
   if (!req.url) {
     res.writeHead(400);
@@ -200,6 +248,11 @@ const server = createServer(async (req, res) => {
 
   const requestUrl = new URL(req.url, `http://${req.headers.host}`);
   const urlPath = requestUrl.pathname;
+
+  if (urlPath === '/gtag/js') {
+    await proxyGtagJs(req, res, requestUrl);
+    return;
+  }
 
   // Root is a legacy entry-point; redirect to the best locale so we don't index duplicate content.
   if (urlPath === '/') {

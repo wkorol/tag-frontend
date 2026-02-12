@@ -41,14 +41,13 @@
             return;
           }
 
-          // GA4 disabled for now; Ads account was migrated and only Ads tracking is required.
-          var ga4Id = '';
+          var ga4Id = 'G-SGV8S5XKSE';
           var adsId = 'AW-17948664296';
           var isGa4Id = function(value) { return /^G-[A-Z0-9]+$/i.test(value); };
           var isAdsId = function(value) { return /^AW-\d+$/.test(value); };
           var ids = [];
-          if (isAdsId(adsId)) ids.push(adsId);
           if (isGa4Id(ga4Id)) ids.push(ga4Id);
+          if (isAdsId(adsId)) ids.push(adsId);
           window.__ga4Id = isGa4Id(ga4Id) ? ga4Id : null;
           var debugMode = false;
           try {
@@ -64,7 +63,7 @@
             gtagLoaded = true;
             var script = document.createElement('script');
             script.async = true;
-            script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(ids[0] || adsId);
+            script.src = '/gtag/js?id=' + encodeURIComponent(ids[0] || adsId);
             script.onload = function() {
               window.__gtagLoaded = true;
               if (window.__updateGtagDebug) {
