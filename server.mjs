@@ -171,6 +171,17 @@ const server = createServer(async (req, res) => {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`);
   const urlPath = requestUrl.pathname;
 
+  // Root is a legacy entry-point; redirect to the best locale so we don't index duplicate content.
+  if (urlPath === '/') {
+    const preferred = detectPreferredLocale(req.headers['accept-language']);
+    res.writeHead(302, {
+      Location: `/${preferred}/${requestUrl.search}`,
+      Vary: 'Accept-Language',
+    });
+    res.end();
+    return;
+  }
+
   if (isFileRequest(urlPath)) {
     const filePath = path.join(clientDir, urlPath);
     const ext = path.extname(urlPath);

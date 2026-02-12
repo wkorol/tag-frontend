@@ -105,7 +105,7 @@ const buildLocalizedUrl = (locale, routeKey) => {
 
 const addXDefault = (alternates) => [
   ...alternates,
-  { hreflang: 'x-default', href: `${SITE_URL}/` },
+  { hreflang: 'x-default', href: `${SITE_URL}/${DEFAULT_LOCALE}/` },
 ];
 
 const addEntry = (entries, entry) => {

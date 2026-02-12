@@ -1229,7 +1229,7 @@ export const buildSeoTags = (urlPath) => {
                 })
                 .join('');
 
-    const xDefault = `<link rel="alternate" hreflang="x-default" href="${site.url}/">`;
+    const xDefault = `<link rel="alternate" hreflang="x-default" href="${site.url}/${defaultLocale}/">`;
     const robots = isIndexablePath(urlPath) ? 'index,follow' : 'noindex,nofollow';
 
   const ogLocale = (localeHreflangMap[locale] ?? [locale])[0] ?? locale;
