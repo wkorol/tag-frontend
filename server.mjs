@@ -30,8 +30,8 @@ const DEFAULT_CSP = [
   "frame-src 'self' https://www.googletagmanager.com https://www.google.com https://*.google.com https://www.tripadvisor.com https://*.tripadvisor.com",
   "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://stats.g.doubleclick.net https://www.googletagmanager.com https://www.google.com https://pagead2.googlesyndication.com https://maps.googleapis.com https://maps.gstatic.com https://places.googleapis.com",
   "img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://maps.gstatic.com https://maps.googleapis.com https://www.tripadvisor.com https://*.tripadvisor.com https://static.tacdn.com https://fonts.gstatic.com",
-  "style-src 'self' 'unsafe-inline' https://static.tacdn.com",
-  "style-src-elem 'self' 'unsafe-inline' https://static.tacdn.com",
+  "style-src 'self' 'unsafe-inline' https://static.tacdn.com https://www.googletagmanager.com https://fonts.googleapis.com",
+  "style-src-elem 'self' 'unsafe-inline' https://static.tacdn.com https://www.googletagmanager.com https://fonts.googleapis.com",
   "font-src 'self' data: https://static.tacdn.com https://fonts.gstatic.com",
 ].join('; ');
 
