@@ -56,21 +56,40 @@
           } catch {}
 
           var gtagLoaded = false;
+          var gtagLoading = false;
           var loadGtag = function() {
-            if (gtagLoaded) {
+            if (gtagLoaded || gtagLoading) {
               return;
             }
-            gtagLoaded = true;
-            var script = document.createElement('script');
-            script.async = true;
-            script.src = '/gtag/js?id=' + encodeURIComponent(ids[0] || adsId);
-            script.onload = function() {
-              window.__gtagLoaded = true;
-              if (window.__updateGtagDebug) {
-                window.__updateGtagDebug();
+            gtagLoading = true;
+            var tagId = encodeURIComponent(ids[0] || adsId);
+            var sources = [
+              '/gtag/js?id=' + tagId,
+              'https://www.googletagmanager.com/gtag/js?id=' + tagId
+            ];
+            var trySource = function(index) {
+              if (index >= sources.length) {
+                gtagLoading = false;
+                return;
               }
+              var script = document.createElement('script');
+              script.async = true;
+              script.src = sources[index];
+              script.onload = function() {
+                gtagLoaded = true;
+                gtagLoading = false;
+                window.__gtagLoaded = true;
+                if (window.__updateGtagDebug) {
+                  window.__updateGtagDebug();
+                }
+              };
+              script.onerror = function() {
+                script.remove();
+                trySource(index + 1);
+              };
+              document.head.appendChild(script);
             };
-            document.head.appendChild(script);
+            trySource(0);
           };
           window.__loadGtag = loadGtag;
 
