@@ -31,6 +31,10 @@ taxiairportgdansk.com {
     redir /pl/gdansk-airport-to-gdynia /pl/lotnisko-gdansk-gdynia 301
     redir /pl/cookies /pl/polityka-cookies 301
     redir /pl/privacy /pl/polityka-prywatnosci 301
+    @gtag path /gtag/js
+    reverse_proxy @gtag https://www.googletagmanager.com {
+        header_up Host www.googletagmanager.com
+    }
     reverse_proxy /api/* host.docker.internal:8000
     reverse_proxy /* frontend:3000
 }
