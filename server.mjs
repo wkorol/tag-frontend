@@ -31,7 +31,7 @@ const DEFAULT_CSP = [
   "img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://maps.gstatic.com https://maps.googleapis.com https://www.tripadvisor.com https://*.tripadvisor.com https://static.tacdn.com https://fonts.gstatic.com",
   "style-src 'self' 'unsafe-inline' https://static.tacdn.com",
   "style-src-elem 'self' 'unsafe-inline' https://static.tacdn.com",
-  "font-src 'self' data:",
+  "font-src 'self' data: https://static.tacdn.com https://fonts.gstatic.com",
 ].join('; ');
 
 const CSP = (process.env.CONTENT_SECURITY_POLICY || DEFAULT_CSP).trim();
