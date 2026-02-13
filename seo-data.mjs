@@ -1163,7 +1163,6 @@ const isIndexablePath = (urlPath) => {
     'orderAirportGdansk',
     'orderAirportSopot',
     'orderAirportGdynia',
-    'orderCustom',
   ]);
   const pathParts = urlPath.replace(/\/$/, '').split('/').filter(Boolean);
   const localeFromPath = getLocaleFromPath(urlPath);

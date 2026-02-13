@@ -148,7 +148,6 @@ const excludedRouteKeys = new Set([
   'orderAirportGdansk',
   'orderAirportSopot',
   'orderAirportGdynia',
-  'orderCustom',
 ]);
 for (const routeKey of routeKeys) {
   if (routeKey === 'home') {
