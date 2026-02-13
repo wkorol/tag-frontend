@@ -1433,6 +1433,25 @@ function CookieBanner() {
   const { t, locale } = useI18n();
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
+  const getAttributionLandingUrl = () => {
+    if (typeof window === "undefined") {
+      return void 0;
+    }
+    try {
+      const used = window.sessionStorage.getItem("tag_attribution_landing_used");
+      if (used === "1") {
+        return void 0;
+      }
+      const url = window.sessionStorage.getItem("tag_attribution_landing_url");
+      if (!url) {
+        return void 0;
+      }
+      window.sessionStorage.setItem("tag_attribution_landing_used", "1");
+      return url;
+    } catch {
+      return void 0;
+    }
+  };
   useEffect(() => {
     setMounted(true);
     try {
@@ -1446,7 +1465,12 @@ function CookieBanner() {
           }
           const gtag = window.gtag;
           if (typeof gtag === "function") {
-            gtag("event", "page_view");
+            const pageLocation = getAttributionLandingUrl();
+            if (pageLocation) {
+              gtag("event", "page_view", { page_location: pageLocation });
+            } else {
+              gtag("event", "page_view");
+            }
           }
         }
         setVisible(existing !== "accepted");
@@ -1467,7 +1491,12 @@ function CookieBanner() {
       }
       const gtag = window.gtag;
       if (typeof gtag === "function") {
-        gtag("event", "page_view");
+        const pageLocation = getAttributionLandingUrl();
+        if (pageLocation) {
+          gtag("event", "page_view", { page_location: pageLocation });
+        } else {
+          gtag("event", "page_view");
+        }
       }
     }
     setVisible(false);
