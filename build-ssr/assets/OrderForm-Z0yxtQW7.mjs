@@ -266,7 +266,15 @@ function OrderForm({ route, onClose }) {
     isPhoneValid,
     isEmailValid
   ]);
-  const remainingFieldsLabel = typeof t.common.remainingFields === "function" ? t.common.remainingFields(remainingFields) : `Remaining fields: ${remainingFields}`;
+  const remainingFieldsLabel = typeof t.common.remainingFields === "function" ? t.common.remainingFields(remainingFields) : {
+    pl: `Pozostało pól: ${remainingFields}`,
+    de: `Verbleibende Felder: ${remainingFields}`,
+    fi: `Jäljellä olevat kentät: ${remainingFields}`,
+    no: `Gjenstående felt: ${remainingFields}`,
+    sv: `Återstående fält: ${remainingFields}`,
+    da: `Resterende felter: ${remainingFields}`,
+    en: `Remaining fields: ${remainingFields}`
+  }[locale] ?? `Remaining fields: ${remainingFields}`;
   const scrollToField = (fieldId) => {
     if (typeof window === "undefined") {
       return;

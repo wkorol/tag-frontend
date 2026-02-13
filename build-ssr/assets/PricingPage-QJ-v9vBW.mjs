@@ -7,7 +7,7 @@ import { Calculator, MapPin, X, Navigation } from 'lucide-react';
 import { d as distanceKm, i as isPointInsideGeoJson, c as cityPolygons, a as centerPolygons, Q as QuoteForm } from './QuoteForm-BB9f8ybG.mjs';
 import { F as FIXED_PRICES } from './fixedPricing-BrEVc9Vy.mjs';
 import { u as useEurRate, p as preloadEurRate, f as formatEur } from './currency-BfL_L89a.mjs';
-import { OrderForm } from './OrderForm-B0ym8K9Q.mjs';
+import { OrderForm } from './OrderForm-Z0yxtQW7.mjs';
 import 'react-dom/server';
 import 'react-router-dom/server.js';
 import 'react-dom';

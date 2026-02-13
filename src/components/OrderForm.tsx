@@ -339,7 +339,17 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const remainingFieldsLabel =
     typeof t.common.remainingFields === 'function'
       ? t.common.remainingFields(remainingFields)
-      : `Remaining fields: ${remainingFields}`;
+      : (
+          {
+            pl: `Pozostało pól: ${remainingFields}`,
+            de: `Verbleibende Felder: ${remainingFields}`,
+            fi: `Jäljellä olevat kentät: ${remainingFields}`,
+            no: `Gjenstående felt: ${remainingFields}`,
+            sv: `Återstående fält: ${remainingFields}`,
+            da: `Resterende felter: ${remainingFields}`,
+            en: `Remaining fields: ${remainingFields}`,
+          }[locale] ?? `Remaining fields: ${remainingFields}`
+        );
 
   const scrollToField = (fieldId: string) => {
     if (typeof window === 'undefined') {
