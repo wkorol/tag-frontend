@@ -265,6 +265,7 @@ function OrderForm({ route, onClose }) {
     isPhoneValid,
     isEmailValid
   ]);
+  const remainingFieldsLabel = typeof t.common.remainingFields === "function" ? t.common.remainingFields(remainingFields) : `Remaining fields: ${remainingFields}`;
   const scrollToField = (fieldId) => {
     if (typeof window === "undefined") {
       return;
@@ -690,7 +691,7 @@ function OrderForm({ route, onClose }) {
           " ↔ ",
           displayRoute.to
         ] }),
-        remainingFields > 0 && /* @__PURE__ */ jsx("p", { className: "text-[11px] text-gray-600 mt-3", children: t.common.remainingFields(remainingFields) })
+        remainingFields > 0 && /* @__PURE__ */ jsx("p", { className: "text-[11px] text-gray-600 mt-3", children: remainingFieldsLabel })
       ] }),
       /* @__PURE__ */ jsx(
         "button",

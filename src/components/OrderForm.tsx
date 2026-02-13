@@ -332,6 +332,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
     isPhoneValid,
     isEmailValid,
   ]);
+  const remainingFieldsLabel =
+    typeof t.common.remainingFields === 'function'
+      ? t.common.remainingFields(remainingFields)
+      : `Remaining fields: ${remainingFields}`;
 
   const scrollToField = (fieldId: string) => {
     if (typeof window === 'undefined') {
@@ -822,7 +826,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
 	            <p className="text-gray-600 text-sm mt-1">{displayRoute.from} ↔ {displayRoute.to}</p>
               {remainingFields > 0 && (
                 <p className="text-[11px] text-gray-600 mt-3">
-                  {t.common.remainingFields(remainingFields)}
+                  {remainingFieldsLabel}
                 </p>
               )}
 	          </div>
