@@ -1159,11 +1159,7 @@ export const buildRootUrl = (routeKey) => {
 const isIndexablePath = (urlPath) => {
   if (urlPath.includes('/admin')) return false;
   if (urlPath === '/') return false;
-  const nonIndexableRouteKeys = new Set([
-    'orderAirportGdansk',
-    'orderAirportSopot',
-    'orderAirportGdynia',
-  ]);
+  const nonIndexableRouteKeys = new Set([]);
   const pathParts = urlPath.replace(/\/$/, '').split('/').filter(Boolean);
   const localeFromPath = getLocaleFromPath(urlPath);
   const locale = localeFromPath ?? defaultLocale;

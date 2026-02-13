@@ -144,11 +144,7 @@ for (const locale of locales) {
 }
 
 const routeKeys = Object.keys(routeSlugs.en);
-const excludedRouteKeys = new Set([
-  'orderAirportGdansk',
-  'orderAirportSopot',
-  'orderAirportGdynia',
-]);
+const excludedRouteKeys = new Set([]);
 for (const routeKey of routeKeys) {
   if (routeKey === 'home') {
     continue;
