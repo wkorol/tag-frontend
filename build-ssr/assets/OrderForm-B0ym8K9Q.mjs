@@ -211,6 +211,7 @@ function OrderForm({ route, onClose }) {
       toastTimeoutRef.current = null;
     }
   };
+  const formatRateBanner = (label, price, reason) => typeof t.orderForm.rate?.banner === "function" ? t.orderForm.rate.banner(label, price, reason) : `${label}: ${price} PLN (${reason})`;
   const renderRateBanner = () => {
     if (!rateBanner) {
       return null;
@@ -409,12 +410,12 @@ function OrderForm({ route, onClose }) {
     }
     if (lastRatePriceRef.current === null) {
       lastRatePriceRef.current = rateContext.price;
-      showRateBanner(t.orderForm.rate.banner(rateContext.label, rateContext.price, rateContext.reason));
+      showRateBanner(formatRateBanner(rateContext.label, rateContext.price, rateContext.reason));
       return;
     }
     if (lastRatePriceRef.current !== rateContext.price) {
       lastRatePriceRef.current = rateContext.price;
-      showRateBanner(t.orderForm.rate.banner(rateContext.label, rateContext.price, rateContext.reason));
+      showRateBanner(formatRateBanner(rateContext.label, rateContext.price, rateContext.reason));
     }
   }, [rateContext.price, rateContext.label, rateContext.reason, formData.time, formData.date, t]);
   const handleSubmit = async (e) => {
