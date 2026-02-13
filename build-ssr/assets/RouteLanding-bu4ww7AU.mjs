@@ -1,5 +1,5 @@
 import { jsxs, jsx } from 'react/jsx-runtime';
-import { u as useI18n, a as usePageTitle, l as localeToPath, g as getRouteSlug, N as Navbar, B as Breadcrumbs, t as trackCtaClick, r as requestScrollTo, b as trackNavClick, F as Footer, c as FloatingActions } from '../entry-server.mjs';
+import { u as useI18n, a as usePageTitle, l as localeToPath, g as getRouteSlug, N as Navbar, B as Breadcrumbs, t as trackCtaClick, r as requestScrollTo, b as trackNavClick, T as TrustSection, F as Footer, c as FloatingActions } from '../entry-server.mjs';
 import 'react';
 import 'react-dom/server';
 import 'react-router-dom/server.js';
@@ -154,6 +154,7 @@ function RouteLanding({ title, description, route, examples, pricing }) {
         ] }, entry.question)) })
       ] }) })
     ] }),
+    /* @__PURE__ */ jsx(TrustSection, {}),
     /* @__PURE__ */ jsx(Footer, {}),
     /* @__PURE__ */ jsx(FloatingActions, {})
   ] });

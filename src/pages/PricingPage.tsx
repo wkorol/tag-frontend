@@ -1,4 +1,5 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { Footer } from '../components/Footer';
 import { FloatingActions } from '../components/FloatingActions';
@@ -7,6 +8,7 @@ import { Pricing } from '../components/Pricing';
 import { PricingCalculator } from '../components/PricingCalculator';
 import { OrderForm } from '../components/OrderForm';
 import { QuoteForm } from '../components/QuoteForm';
+import { TrustSection } from '../components/TrustSection';
 import { getRouteSlug } from '../lib/routes';
 import { localeToPath, useI18n } from '../lib/i18n';
 import { Calculator } from 'lucide-react';
@@ -16,8 +18,10 @@ import { usePageTitle } from '../lib/usePageTitle';
 
 export function PricingPage() {
   const { t, locale } = useI18n();
+  const navigate = useNavigate();
   const basePath = localeToPath(locale);
   usePageTitle(t.pricingLanding.title);
+  const isDirectEntryRef = useRef(false);
   const [vehicleType, setVehicleType] = useState<'standard' | 'bus'>('standard');
   const [selectedRoute, setSelectedRoute] = useState<{
     from: string;
@@ -48,10 +52,35 @@ export function PricingPage() {
   ];
 
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    const referrer = document.referrer;
+    if (!referrer) {
+      isDirectEntryRef.current = true;
+      return;
+    }
+    try {
+      const referrerOrigin = new URL(referrer).origin;
+      isDirectEntryRef.current = referrerOrigin !== window.location.origin;
+    } catch {
+      isDirectEntryRef.current = true;
+    }
+  }, []);
+
+  useEffect(() => {
     if (showQuoteForm) {
       trackFormOpen('quote');
     }
   }, [showQuoteForm]);
+
+  const handleCloseModal = (close: () => void) => {
+    if (isDirectEntryRef.current) {
+      navigate(`${basePath}/`, { replace: true });
+      return;
+    }
+    close();
+  };
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -191,18 +220,19 @@ export function PricingPage() {
           </div>
         </section>
       </main>
+      <TrustSection />
       <Footer />
       <FloatingActions orderTargetId="pricing-booking" hide={Boolean(selectedRoute || showQuoteForm)} />
 
       {selectedRoute && (
         <Suspense fallback={null}>
-          <OrderForm route={selectedRoute} onClose={() => setSelectedRoute(null)} />
+          <OrderForm route={selectedRoute} onClose={() => handleCloseModal(() => setSelectedRoute(null))} />
         </Suspense>
       )}
 
       {showQuoteForm && (
         <Suspense fallback={null}>
-          <QuoteForm onClose={() => setShowQuoteForm(false)} initialVehicleType={vehicleType} />
+          <QuoteForm onClose={() => handleCloseModal(() => setShowQuoteForm(false))} initialVehicleType={vehicleType} />
         </Suspense>
       )}
     </div>

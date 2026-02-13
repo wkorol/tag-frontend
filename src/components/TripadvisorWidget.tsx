@@ -147,7 +147,7 @@ export function TripadvisorWidget({
           <ul id="${ulId}" class="${ulClassName}">
             <li${safeLiId}${safeLiClass}>
               <a target="_blank" rel="noopener noreferrer" href="${href}">
-                <img src="https://www.tripadvisor.com/img/cdsi/img2/branding/v2/Tripadvisor_lockup_horizontal_secondary_registered-18034-2.svg" alt="TripAdvisor" />
+                <img src="https://www.tripadvisor.com/img/cdsi/img2/branding/v2/Tripadvisor_lockup_horizontal_secondary_registered-18034-2.svg" alt="TripAdvisor" width="180" height="28" decoding="async" />
               </a>
             </li>
           </ul>

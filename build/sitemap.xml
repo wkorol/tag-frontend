@@ -883,6 +883,153 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/en/" />
   </url>
   <url>
+    <loc>https://taxiairportgdansk.com/en/book-custom-transfer</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/book-custom-transfer" />
+    <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/book-custom-transfer" />
+    <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/rezerwacja-niestandardowa" />
+    <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/rezerwacja-niestandardowa" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://taxiairportgdansk.com/de/buchung-individuell" />
+    <xhtml:link rel="alternate" hreflang="de-DE" href="https://taxiairportgdansk.com/de/buchung-individuell" />
+    <xhtml:link rel="alternate" hreflang="fi" href="https://taxiairportgdansk.com/fi/varaus-mukautettu" />
+    <xhtml:link rel="alternate" hreflang="fi-FI" href="https://taxiairportgdansk.com/fi/varaus-mukautettu" />
+    <xhtml:link rel="alternate" hreflang="no" href="https://taxiairportgdansk.com/no/bestilling-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="nb-NO" href="https://taxiairportgdansk.com/no/bestilling-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="sv" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
+    <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
+    <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/en/" />
+  </url>
+  <url>
+    <loc>https://taxiairportgdansk.com/pl/rezerwacja-niestandardowa</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/book-custom-transfer" />
+    <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/book-custom-transfer" />
+    <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/rezerwacja-niestandardowa" />
+    <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/rezerwacja-niestandardowa" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://taxiairportgdansk.com/de/buchung-individuell" />
+    <xhtml:link rel="alternate" hreflang="de-DE" href="https://taxiairportgdansk.com/de/buchung-individuell" />
+    <xhtml:link rel="alternate" hreflang="fi" href="https://taxiairportgdansk.com/fi/varaus-mukautettu" />
+    <xhtml:link rel="alternate" hreflang="fi-FI" href="https://taxiairportgdansk.com/fi/varaus-mukautettu" />
+    <xhtml:link rel="alternate" hreflang="no" href="https://taxiairportgdansk.com/no/bestilling-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="nb-NO" href="https://taxiairportgdansk.com/no/bestilling-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="sv" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
+    <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
+    <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/en/" />
+  </url>
+  <url>
+    <loc>https://taxiairportgdansk.com/de/buchung-individuell</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/book-custom-transfer" />
+    <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/book-custom-transfer" />
+    <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/rezerwacja-niestandardowa" />
+    <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/rezerwacja-niestandardowa" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://taxiairportgdansk.com/de/buchung-individuell" />
+    <xhtml:link rel="alternate" hreflang="de-DE" href="https://taxiairportgdansk.com/de/buchung-individuell" />
+    <xhtml:link rel="alternate" hreflang="fi" href="https://taxiairportgdansk.com/fi/varaus-mukautettu" />
+    <xhtml:link rel="alternate" hreflang="fi-FI" href="https://taxiairportgdansk.com/fi/varaus-mukautettu" />
+    <xhtml:link rel="alternate" hreflang="no" href="https://taxiairportgdansk.com/no/bestilling-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="nb-NO" href="https://taxiairportgdansk.com/no/bestilling-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="sv" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
+    <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
+    <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/en/" />
+  </url>
+  <url>
+    <loc>https://taxiairportgdansk.com/fi/varaus-mukautettu</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/book-custom-transfer" />
+    <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/book-custom-transfer" />
+    <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/rezerwacja-niestandardowa" />
+    <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/rezerwacja-niestandardowa" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://taxiairportgdansk.com/de/buchung-individuell" />
+    <xhtml:link rel="alternate" hreflang="de-DE" href="https://taxiairportgdansk.com/de/buchung-individuell" />
+    <xhtml:link rel="alternate" hreflang="fi" href="https://taxiairportgdansk.com/fi/varaus-mukautettu" />
+    <xhtml:link rel="alternate" hreflang="fi-FI" href="https://taxiairportgdansk.com/fi/varaus-mukautettu" />
+    <xhtml:link rel="alternate" hreflang="no" href="https://taxiairportgdansk.com/no/bestilling-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="nb-NO" href="https://taxiairportgdansk.com/no/bestilling-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="sv" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
+    <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
+    <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/en/" />
+  </url>
+  <url>
+    <loc>https://taxiairportgdansk.com/no/bestilling-tilpasset</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/book-custom-transfer" />
+    <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/book-custom-transfer" />
+    <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/rezerwacja-niestandardowa" />
+    <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/rezerwacja-niestandardowa" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://taxiairportgdansk.com/de/buchung-individuell" />
+    <xhtml:link rel="alternate" hreflang="de-DE" href="https://taxiairportgdansk.com/de/buchung-individuell" />
+    <xhtml:link rel="alternate" hreflang="fi" href="https://taxiairportgdansk.com/fi/varaus-mukautettu" />
+    <xhtml:link rel="alternate" hreflang="fi-FI" href="https://taxiairportgdansk.com/fi/varaus-mukautettu" />
+    <xhtml:link rel="alternate" hreflang="no" href="https://taxiairportgdansk.com/no/bestilling-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="nb-NO" href="https://taxiairportgdansk.com/no/bestilling-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="sv" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
+    <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
+    <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/en/" />
+  </url>
+  <url>
+    <loc>https://taxiairportgdansk.com/sv/bokning-anpassad</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/book-custom-transfer" />
+    <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/book-custom-transfer" />
+    <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/rezerwacja-niestandardowa" />
+    <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/rezerwacja-niestandardowa" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://taxiairportgdansk.com/de/buchung-individuell" />
+    <xhtml:link rel="alternate" hreflang="de-DE" href="https://taxiairportgdansk.com/de/buchung-individuell" />
+    <xhtml:link rel="alternate" hreflang="fi" href="https://taxiairportgdansk.com/fi/varaus-mukautettu" />
+    <xhtml:link rel="alternate" hreflang="fi-FI" href="https://taxiairportgdansk.com/fi/varaus-mukautettu" />
+    <xhtml:link rel="alternate" hreflang="no" href="https://taxiairportgdansk.com/no/bestilling-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="nb-NO" href="https://taxiairportgdansk.com/no/bestilling-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="sv" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
+    <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
+    <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/en/" />
+  </url>
+  <url>
+    <loc>https://taxiairportgdansk.com/da/booking-tilpasset</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://taxiairportgdansk.com/en/book-custom-transfer" />
+    <xhtml:link rel="alternate" hreflang="en-GB" href="https://taxiairportgdansk.com/en/book-custom-transfer" />
+    <xhtml:link rel="alternate" hreflang="pl" href="https://taxiairportgdansk.com/pl/rezerwacja-niestandardowa" />
+    <xhtml:link rel="alternate" hreflang="pl-PL" href="https://taxiairportgdansk.com/pl/rezerwacja-niestandardowa" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://taxiairportgdansk.com/de/buchung-individuell" />
+    <xhtml:link rel="alternate" hreflang="de-DE" href="https://taxiairportgdansk.com/de/buchung-individuell" />
+    <xhtml:link rel="alternate" hreflang="fi" href="https://taxiairportgdansk.com/fi/varaus-mukautettu" />
+    <xhtml:link rel="alternate" hreflang="fi-FI" href="https://taxiairportgdansk.com/fi/varaus-mukautettu" />
+    <xhtml:link rel="alternate" hreflang="no" href="https://taxiairportgdansk.com/no/bestilling-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="nb-NO" href="https://taxiairportgdansk.com/no/bestilling-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="sv" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
+    <xhtml:link rel="alternate" hreflang="sv-SE" href="https://taxiairportgdansk.com/sv/bokning-anpassad" />
+    <xhtml:link rel="alternate" hreflang="da" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="da-DK" href="https://taxiairportgdansk.com/da/booking-tilpasset" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taxiairportgdansk.com/en/" />
+  </url>
+  <url>
     <loc>https://taxiairportgdansk.com/en/pricing</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>

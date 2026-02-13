@@ -149,7 +149,7 @@ export function Footer() {
                         key={route.slug}
                         href={`${basePath}/${route.slug}`}
                         onClick={() => trackNavClick(`footer_city_${route.slug}`)}
-                        className="text-white visited:text-white hover:text-gray-200 transition-colors"
+                        className="block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors"
                       >
                         Lotnisko ↔ {route.destination}
                       </a>

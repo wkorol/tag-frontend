@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Footer } from '../components/Footer';
 import { Navbar } from '../components/Navbar';
+import { TrustSection } from '../components/TrustSection';
 import { getRoutePath } from '../lib/routes';
 import { localeToRootPath, useI18n } from '../lib/i18n';
 import { usePageTitle } from '../lib/usePageTitle';
@@ -73,6 +74,7 @@ export function NotFoundPage() {
           </div>
         </div>
       </main>
+      <TrustSection />
       <Footer />
     </div>
   );

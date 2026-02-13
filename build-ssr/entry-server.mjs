@@ -1264,7 +1264,7 @@ function TripadvisorWidget({
           <ul id="${ulId}" class="${ulClassName}">
             <li${safeLiId}${safeLiClass}>
               <a target="_blank" rel="noopener noreferrer" href="${href}">
-                <img src="https://www.tripadvisor.com/img/cdsi/img2/branding/v2/Tripadvisor_lockup_horizontal_secondary_registered-18034-2.svg" alt="TripAdvisor" />
+                <img src="https://www.tripadvisor.com/img/cdsi/img2/branding/v2/Tripadvisor_lockup_horizontal_secondary_registered-18034-2.svg" alt="TripAdvisor" width="180" height="28" decoding="async" />
               </a>
             </li>
           </ul>
@@ -2039,7 +2039,7 @@ function Footer$1() {
               {
                 href: `${basePath}/${route.slug}`,
                 onClick: () => trackNavClick(`footer_city_${route.slug}`),
-                className: "text-white visited:text-white hover:text-gray-200 transition-colors",
+                className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
                 children: [
                   "Lotnisko ↔ ",
                   route.destination
@@ -2119,6 +2119,7 @@ function CookiesPage() {
       /* @__PURE__ */ jsx(CookiePolicy, {}),
       /* @__PURE__ */ jsx(PrivacyPolicy, {})
     ] }),
+    /* @__PURE__ */ jsx(TrustSection, {}),
     /* @__PURE__ */ jsx(Footer$1, {}),
     /* @__PURE__ */ jsx(FloatingActions, {})
   ] });
@@ -2142,6 +2143,7 @@ function PrivacyPage() {
       ) }),
       /* @__PURE__ */ jsx(PrivacyPolicy, {})
     ] }),
+    /* @__PURE__ */ jsx(TrustSection, {}),
     /* @__PURE__ */ jsx(Footer$1, {}),
     /* @__PURE__ */ jsx(FloatingActions, {})
   ] });
@@ -2205,6 +2207,7 @@ function NotFoundPage() {
         ] })
       ] })
     ] }),
+    /* @__PURE__ */ jsx(TrustSection, {}),
     /* @__PURE__ */ jsx(Footer$1, {})
   ] });
 }
@@ -2366,6 +2369,7 @@ function CountryLanding() {
         ] }, entry.question)) })
       ] }) })
     ] }),
+    /* @__PURE__ */ jsx(TrustSection, {}),
     /* @__PURE__ */ jsx(Footer$1, {}),
     /* @__PURE__ */ jsx(FloatingActions, {})
   ] });
@@ -2505,6 +2509,7 @@ function CountryAirportLanding() {
         ] }, entry.question)) })
       ] }) })
     ] }),
+    /* @__PURE__ */ jsx(TrustSection, {}),
     /* @__PURE__ */ jsx(Footer$1, {}),
     /* @__PURE__ */ jsx(FloatingActions, {})
   ] });
@@ -2619,6 +2624,7 @@ function CityRouteLanding() {
         )) })
       ] }) })
     ] }),
+    /* @__PURE__ */ jsx(TrustSection, {}),
     /* @__PURE__ */ jsx(Footer$1, {}),
     /* @__PURE__ */ jsx(FloatingActions, {})
   ] });
@@ -2710,20 +2716,21 @@ function TaxiGdanskPage() {
         ] }, entry.question)) })
       ] }) })
     ] }),
+    /* @__PURE__ */ jsx(TrustSection, {}),
     /* @__PURE__ */ jsx(Footer$1, {}),
     /* @__PURE__ */ jsx(FloatingActions, {})
   ] });
 }
 
-const Pricing = lazy(() => import('./assets/Pricing-CvnJBbh5.mjs').then((mod) => ({ default: mod.Pricing })));
+const Pricing = lazy(() => import('./assets/Pricing-BxciKOQA.mjs').then((mod) => ({ default: mod.Pricing })));
 const Footer = lazy(() => Promise.resolve().then(() => Footer$2).then((mod) => ({ default: mod.Footer })));
-const OrderForm = lazy(() => import('./assets/OrderForm-B6Q1Hrxn.mjs').then((mod) => ({ default: mod.OrderForm })));
-const QuoteForm = lazy(() => import('./assets/QuoteForm-yCDM8bAf.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
+const OrderForm = lazy(() => import('./assets/OrderForm-BoL_9a10.mjs').then((mod) => ({ default: mod.OrderForm })));
+const QuoteForm = lazy(() => import('./assets/QuoteForm-BB9f8ybG.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./assets/ManageOrder-DVOaNQ-H.mjs').then((mod) => ({ default: mod.ManageOrder })));
-const RouteLanding = lazy(() => import('./assets/RouteLanding-CaGbVt7Q.mjs').then((mod) => ({ default: mod.RouteLanding })));
-const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-Vm3fqUxA.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
-const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-Vm3fqUxA.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./assets/PricingPage-BlRBdCvw.mjs').then((mod) => ({ default: mod.PricingPage })));
+const RouteLanding = lazy(() => import('./assets/RouteLanding-bu4ww7AU.mjs').then((mod) => ({ default: mod.RouteLanding })));
+const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-XpaMStjc.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
+const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-XpaMStjc.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
+const PricingPage = lazy(() => import('./assets/PricingPage-BBlXcb_1.mjs').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-B5Sc155s.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-DqlqcrYR.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
@@ -9304,4 +9311,4 @@ function render(url) {
   };
 }
 
-export { Breadcrumbs as B, Footer$1 as F, Navbar as N, TrustBar as T, usePageTitle as a, trackNavClick as b, FloatingActions as c, trackFormOpen as d, trackPricingRouteSelect as e, trackPricingAction as f, getRouteSlug as g, trackVehicleSelect as h, trackFormClose as i, trackFormValidation as j, trackFormSubmit as k, localeToPath as l, trackFormStart as m, isAnalyticsEnabled as n, hasMarketingConsent as o, requestScrollTo as r, render, scrollToId as s, trackCtaClick as t, useI18n as u };
+export { Breadcrumbs as B, Footer$1 as F, Navbar as N, TrustSection as T, usePageTitle as a, trackNavClick as b, FloatingActions as c, trackFormOpen as d, trackPricingRouteSelect as e, trackPricingAction as f, getRouteSlug as g, TrustBar as h, trackVehicleSelect as i, trackFormClose as j, trackFormValidation as k, localeToPath as l, trackFormSubmit as m, trackFormStart as n, isAnalyticsEnabled as o, hasMarketingConsent as p, requestScrollTo as r, render, scrollToId as s, trackCtaClick as t, useI18n as u };

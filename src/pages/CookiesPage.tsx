@@ -4,6 +4,7 @@ import { PrivacyPolicy } from '../components/PrivacyPolicy';
 import { Footer } from '../components/Footer';
 import { FloatingActions } from '../components/FloatingActions';
 import { Navbar } from '../components/Navbar';
+import { TrustSection } from '../components/TrustSection';
 import { localeToPath, useI18n } from '../lib/i18n';
 import { usePageTitle } from '../lib/usePageTitle';
 
@@ -27,6 +28,7 @@ export function CookiesPage() {
         <CookiePolicy />
         <PrivacyPolicy />
       </main>
+      <TrustSection />
       <Footer />
       <FloatingActions />
     </div>

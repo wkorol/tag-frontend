@@ -1,13 +1,13 @@
 import { jsx, jsxs } from 'react/jsx-runtime';
 import { useState, useRef, useEffect, Suspense } from 'react';
-import { u as useI18n, l as localeToPath, g as getRouteSlug, r as requestScrollTo, a as usePageTitle, d as trackFormOpen, N as Navbar, B as Breadcrumbs, t as trackCtaClick, b as trackNavClick, F as Footer, c as FloatingActions, s as scrollToId } from '../entry-server.mjs';
-import { Pricing } from './Pricing-CvnJBbh5.mjs';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { u as useI18n, l as localeToPath, g as getRouteSlug, r as requestScrollTo, a as usePageTitle, d as trackFormOpen, N as Navbar, B as Breadcrumbs, t as trackCtaClick, b as trackNavClick, T as TrustSection, F as Footer, c as FloatingActions, s as scrollToId } from '../entry-server.mjs';
+import { Pricing } from './Pricing-BxciKOQA.mjs';
 import { Calculator, MapPin, X, Navigation } from 'lucide-react';
-import { d as distanceKm, i as isPointInsideGeoJson, c as cityPolygons, a as centerPolygons, Q as QuoteForm } from './QuoteForm-yCDM8bAf.mjs';
+import { d as distanceKm, i as isPointInsideGeoJson, c as cityPolygons, a as centerPolygons, Q as QuoteForm } from './QuoteForm-BB9f8ybG.mjs';
 import { F as FIXED_PRICES } from './fixedPricing-BrEVc9Vy.mjs';
 import { u as useEurRate, p as preloadEurRate, f as formatEur } from './currency-BfL_L89a.mjs';
-import { OrderForm } from './OrderForm-B6Q1Hrxn.mjs';
+import { OrderForm } from './OrderForm-BoL_9a10.mjs';
 import 'react-dom/server';
 import 'react-router-dom/server.js';
 import 'react-dom';
@@ -1128,8 +1128,10 @@ function PricingCalculator() {
 
 function PricingPage() {
   const { t, locale } = useI18n();
+  const navigate = useNavigate();
   const basePath = localeToPath(locale);
   usePageTitle(t.pricingLanding.title);
+  const isDirectEntryRef = useRef(false);
   const [vehicleType, setVehicleType] = useState("standard");
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [showQuoteForm, setShowQuoteForm] = useState(false);
@@ -1152,10 +1154,33 @@ function PricingPage() {
     }
   ];
   useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const referrer = document.referrer;
+    if (!referrer) {
+      isDirectEntryRef.current = true;
+      return;
+    }
+    try {
+      const referrerOrigin = new URL(referrer).origin;
+      isDirectEntryRef.current = referrerOrigin !== window.location.origin;
+    } catch {
+      isDirectEntryRef.current = true;
+    }
+  }, []);
+  useEffect(() => {
     if (showQuoteForm) {
       trackFormOpen("quote");
     }
   }, [showQuoteForm]);
+  const handleCloseModal = (close) => {
+    if (isDirectEntryRef.current) {
+      navigate(`${basePath}/`, { replace: true });
+      return;
+    }
+    close();
+  };
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -1284,10 +1309,11 @@ function PricingPage() {
         ] }, entry.question)) })
       ] }) })
     ] }),
+    /* @__PURE__ */ jsx(TrustSection, {}),
     /* @__PURE__ */ jsx(Footer, {}),
     /* @__PURE__ */ jsx(FloatingActions, { orderTargetId: "pricing-booking", hide: Boolean(selectedRoute || showQuoteForm) }),
-    selectedRoute && /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(OrderForm, { route: selectedRoute, onClose: () => setSelectedRoute(null) }) }),
-    showQuoteForm && /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(QuoteForm, { onClose: () => setShowQuoteForm(false), initialVehicleType: vehicleType }) })
+    selectedRoute && /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(OrderForm, { route: selectedRoute, onClose: () => handleCloseModal(() => setSelectedRoute(null)) }) }),
+    showQuoteForm && /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(QuoteForm, { onClose: () => handleCloseModal(() => setShowQuoteForm(false)), initialVehicleType: vehicleType }) })
   ] });
 }
 

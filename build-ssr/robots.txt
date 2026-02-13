@@ -2,5 +2,19 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /admin/
+Disallow: /en/admin
+Disallow: /en/admin/
+Disallow: /pl/admin
+Disallow: /pl/admin/
+Disallow: /de/admin
+Disallow: /de/admin/
+Disallow: /fi/admin
+Disallow: /fi/admin/
+Disallow: /no/admin
+Disallow: /no/admin/
+Disallow: /sv/admin
+Disallow: /sv/admin/
+Disallow: /da/admin
+Disallow: /da/admin/
 
 Sitemap: https://taxiairportgdansk.com/sitemap.xml

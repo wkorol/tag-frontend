@@ -2,6 +2,7 @@ import { Breadcrumbs } from '../components/Breadcrumbs';
 import { Footer } from '../components/Footer';
 import { FloatingActions } from '../components/FloatingActions';
 import { Navbar } from '../components/Navbar';
+import { TrustSection } from '../components/TrustSection';
 import { localeToPath, useI18n } from '../lib/i18n';
 import { getRouteSlug } from '../lib/routes';
 import { trackCtaClick, trackNavClick } from '../lib/tracking';
@@ -194,6 +195,7 @@ export function RouteLanding({ title, description, route, examples, pricing }: R
         </section>
       </main>
 
+      <TrustSection />
       <Footer />
       <FloatingActions />
     </div>
