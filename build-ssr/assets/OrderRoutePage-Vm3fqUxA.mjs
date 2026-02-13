@@ -1,6 +1,6 @@
 import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
 import { useMemo, useEffect, Suspense } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { u as useI18n, a as usePageTitle, d as trackFormOpen, l as localeToPath, c as FloatingActions } from '../entry-server.mjs';
 import { OrderForm } from './OrderForm-B6Q1Hrxn.mjs';
 import { Q as QuoteForm } from './QuoteForm-yCDM8bAf.mjs';
@@ -63,13 +63,16 @@ function OrderRoutePage({ routeKey }) {
 function CustomOrderPage() {
   const { t, locale } = useI18n();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const basePath = localeToPath(locale);
   usePageTitle(t.routeLanding.orderLinks.custom);
+  const vehicleParam = searchParams.get("vehicle");
+  const initialVehicleType = vehicleParam === "bus" ? "bus" : "standard";
   useEffect(() => {
     trackFormOpen("quote");
   }, []);
   return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(QuoteForm, { onClose: () => navigate(`${basePath}/`, { replace: true }), initialVehicleType: "standard" }) }),
+    /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(QuoteForm, { onClose: () => navigate(`${basePath}/`, { replace: true }), initialVehicleType }) }),
     /* @__PURE__ */ jsx(FloatingActions, { hide: true })
   ] });
 }

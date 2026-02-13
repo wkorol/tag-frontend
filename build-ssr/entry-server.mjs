@@ -2721,8 +2721,8 @@ const OrderForm = lazy(() => import('./assets/OrderForm-B6Q1Hrxn.mjs').then((mod
 const QuoteForm = lazy(() => import('./assets/QuoteForm-yCDM8bAf.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./assets/ManageOrder-DVOaNQ-H.mjs').then((mod) => ({ default: mod.ManageOrder })));
 const RouteLanding = lazy(() => import('./assets/RouteLanding-CaGbVt7Q.mjs').then((mod) => ({ default: mod.RouteLanding })));
-const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-CM_9BY0S.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
-const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-CM_9BY0S.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
+const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-Vm3fqUxA.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
+const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-Vm3fqUxA.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
 const PricingPage = lazy(() => import('./assets/PricingPage-BlRBdCvw.mjs').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-B5Sc155s.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-DqlqcrYR.mjs').then((mod) => ({ default: mod.AdminOrderPage })));

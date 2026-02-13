@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FloatingActions } from '../components/FloatingActions';
 import { OrderForm } from '../components/OrderForm';
 import { QuoteForm } from '../components/QuoteForm';
@@ -73,8 +73,11 @@ export function OrderRoutePage({ routeKey }: OrderRoutePageProps) {
 export function CustomOrderPage() {
   const { t, locale } = useI18n();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const basePath = localeToPath(locale);
   usePageTitle(t.routeLanding.orderLinks.custom);
+  const vehicleParam = searchParams.get('vehicle');
+  const initialVehicleType = vehicleParam === 'bus' ? 'bus' : 'standard';
 
   useEffect(() => {
     trackFormOpen('quote');
@@ -83,7 +86,7 @@ export function CustomOrderPage() {
   return (
     <>
       <Suspense fallback={null}>
-        <QuoteForm onClose={() => navigate(`${basePath}/`, { replace: true })} initialVehicleType="standard" />
+        <QuoteForm onClose={() => navigate(`${basePath}/`, { replace: true })} initialVehicleType={initialVehicleType} />
       </Suspense>
       <FloatingActions hide />
     </>
