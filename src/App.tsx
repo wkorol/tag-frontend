@@ -300,6 +300,30 @@ export default function App() {
   }, [location.pathname, location.search]);
 
   useEffect(() => {
+    if (typeof document === 'undefined') {
+      return;
+    }
+    const head = document.head;
+    if (!head) {
+      return;
+    }
+    let canonical = head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.rel = 'canonical';
+      head.appendChild(canonical);
+    }
+    try {
+      const nextUrl = new URL(window.location.href);
+      nextUrl.search = '';
+      nextUrl.hash = '';
+      canonical.href = nextUrl.toString();
+    } catch {
+      // noop: keep any existing canonical if URL parsing fails
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
     if (typeof window === 'undefined') {
       return;
     }
