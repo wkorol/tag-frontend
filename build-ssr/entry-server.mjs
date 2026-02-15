@@ -3,7 +3,7 @@ import { createContext, useContext, useState, useEffect, useMemo, useRef, lazy, 
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server.js';
 import { useLocation, Routes, Route, Navigate, useParams, useSearchParams, Outlet } from 'react-router-dom';
-import { CheckCircle2, Calculator, Car, Users, Info, Mail, MapPin } from 'lucide-react';
+import { CheckCircle2, Calculator, Car, Users, Info } from 'lucide-react';
 import { createPortal } from 'react-dom';
 
 const STORAGE_KEY$1 = "tag_locale";
@@ -1196,7 +1196,7 @@ function LandingTrustSection() {
   const count = Number.isFinite(countRaw) && countRaw > 0 ? Math.round(countRaw) : null;
   const ratingText = rating ? rating.toFixed(1) : null;
   return /* @__PURE__ */ jsx("section", { className: "bg-slate-50 border-t border-slate-200 py-12", children: /* @__PURE__ */ jsx("div", { className: "max-w-6xl mx-auto px-4", children: /* @__PURE__ */ jsxs("div", { className: "mb-8 grid gap-4 md:grid-cols-2", children: [
-    /* @__PURE__ */ jsx("div", { className: "rounded-2xl border border-slate-200 bg-white px-5 py-6 shadow-sm", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center gap-3 text-center", children: [
+    /* @__PURE__ */ jsx("div", { className: "rounded-2xl border border-slate-200 bg-white px-5 py-14 sm:py-16 shadow-sm", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center gap-3 py-2 text-center", children: [
       /* @__PURE__ */ jsx("div", { className: "text-gray-900 font-semibold text-lg", children: t.trust.googleReviewsTitle }),
       /* @__PURE__ */ jsx("div", { className: "flex items-center justify-center gap-1 text-amber-500", children: Array.from({ length: 5 }).map((_, idx) => /* @__PURE__ */ jsx(
         StarIcon,
@@ -1247,100 +1247,6 @@ function LandingTrustSection() {
       }
     ) }) })
   ] }) }) });
-}
-
-function LandingFooter() {
-  const { t, locale } = useI18n();
-  const basePath = localeToPath(locale);
-  return /* @__PURE__ */ jsx("footer", { className: "bg-gray-900 text-gray-200 py-10", children: /* @__PURE__ */ jsxs("div", { className: "max-w-6xl mx-auto px-4", children: [
-    /* @__PURE__ */ jsxs("div", { className: "grid gap-8 md:grid-cols-3", children: [
-      /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("h3", { className: "text-white mb-3", children: "Taxi Airport Gdańsk" }),
-        /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-200", children: t.footer.description })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("h4", { className: "text-white mb-3", children: t.footer.contactTitle }),
-        /* @__PURE__ */ jsxs("div", { className: "space-y-2 text-sm text-gray-200", children: [
-          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-            /* @__PURE__ */ jsx(Mail, { className: "w-4 h-4" }),
-            /* @__PURE__ */ jsx(
-              "a",
-              {
-                href: "mailto:booking@taxiairportgdansk.com",
-                onClick: () => trackContactClick("email"),
-                className: "inline-flex min-h-11 items-center py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
-                children: "booking@taxiairportgdansk.com"
-              }
-            )
-          ] }),
-          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-            /* @__PURE__ */ jsx(MapPin, { className: "w-4 h-4" }),
-            /* @__PURE__ */ jsx("span", { children: t.footer.location })
-          ] })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("h4", { className: "text-white mb-3", children: t.footer.routesTitle }),
-        /* @__PURE__ */ jsxs("div", { className: "space-y-1 text-sm", children: [
-          /* @__PURE__ */ jsx(
-            "a",
-            {
-              href: getRoutePath(locale, "pricing"),
-              onClick: () => trackNavClick("landing_footer_pricing"),
-              className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
-              children: t.navbar.prices
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            "a",
-            {
-              href: `${basePath}/#vehicle-selection`,
-              onClick: () => trackNavClick("landing_footer_book"),
-              className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
-              children: t.common.orderOnlineNow
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            "a",
-            {
-              href: getRoutePath(locale, "orderCustom"),
-              onClick: () => trackNavClick("landing_footer_custom"),
-              className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
-              children: t.routeLanding.orderLinks.custom
-            }
-          )
-        ] })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsx("div", { className: "border-t border-gray-600 mt-8 pt-6 text-center text-sm text-gray-200", children: /* @__PURE__ */ jsxs("p", { children: [
-      "© ",
-      (/* @__PURE__ */ new Date()).getFullYear(),
-      " Taxi Airport Gdańsk. ",
-      t.footer.rights,
-      " ",
-      /* @__PURE__ */ jsx(
-        "a",
-        {
-          href: getRoutePath(locale, "cookies"),
-          onClick: () => trackNavClick("landing_footer_cookies"),
-          className: "text-white visited:text-white hover:text-gray-200 underline",
-          children: t.footer.cookiePolicy
-        }
-      ),
-      " ",
-      /* @__PURE__ */ jsx("span", { className: "text-gray-300", children: "|" }),
-      " ",
-      /* @__PURE__ */ jsx(
-        "a",
-        {
-          href: getRoutePath(locale, "privacy"),
-          onClick: () => trackNavClick("landing_footer_privacy"),
-          className: "text-white visited:text-white hover:text-gray-200 underline",
-          children: t.footer.privacyPolicy
-        }
-      )
-    ] }) })
-  ] }) });
 }
 
 function CookieBanner() {
@@ -1772,22 +1678,23 @@ function usePageTitle(title) {
 }
 
 const Pricing = lazy(() => import('./assets/Pricing-69vRmyr3.mjs').then((mod) => ({ default: mod.Pricing })));
+const Footer = lazy(() => import('./assets/Footer-oWcLPJwG.mjs').then((mod) => ({ default: mod.Footer })));
 const OrderForm = lazy(() => import('./assets/OrderForm-B2tWzKbJ.mjs').then((mod) => ({ default: mod.OrderForm })));
 const QuoteForm = lazy(() => import('./assets/QuoteForm-DWWhKbcm.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./assets/ManageOrder-DVOaNQ-H.mjs').then((mod) => ({ default: mod.ManageOrder })));
-const RouteLanding = lazy(() => import('./assets/RouteLanding-CkMFtGaG.mjs').then((mod) => ({ default: mod.RouteLanding })));
+const RouteLanding = lazy(() => import('./assets/RouteLanding-mpANUfxI.mjs').then((mod) => ({ default: mod.RouteLanding })));
 const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-DJ3CvM0s.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
 const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-DJ3CvM0s.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./assets/PricingPage-BRs4b0hp.mjs').then((mod) => ({ default: mod.PricingPage })));
+const PricingPage = lazy(() => import('./assets/PricingPage-BFnY1P37.mjs').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-B5Sc155s.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-DqlqcrYR.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
-const CookiesPage = lazy(() => import('./assets/CookiesPage-Lekubm9c.mjs').then((mod) => ({ default: mod.CookiesPage })));
-const PrivacyPage = lazy(() => import('./assets/PrivacyPage-DtjNGYG8.mjs').then((mod) => ({ default: mod.PrivacyPage })));
-const NotFoundPage = lazy(() => import('./assets/NotFoundPage-BBHKr_iu.mjs').then((mod) => ({ default: mod.NotFoundPage })));
-const CountryLanding = lazy(() => import('./assets/CountryLanding-CyXNT7TJ.mjs').then((mod) => ({ default: mod.CountryLanding })));
-const CountryAirportLanding = lazy(() => import('./assets/CountryAirportLanding-Cg_hljyd.mjs').then((mod) => ({ default: mod.CountryAirportLanding })));
-const CityRouteLanding = lazy(() => import('./assets/CityRouteLanding-2yY38MPY.mjs').then((mod) => ({ default: mod.CityRouteLanding })));
-const TaxiGdanskPage = lazy(() => import('./assets/TaxiGdanskPage-C9KNdBuB.mjs').then((mod) => ({ default: mod.TaxiGdanskPage })));
+const CookiesPage = lazy(() => import('./assets/CookiesPage-FGOKbdlp.mjs').then((mod) => ({ default: mod.CookiesPage })));
+const PrivacyPage = lazy(() => import('./assets/PrivacyPage-BlVfauS4.mjs').then((mod) => ({ default: mod.PrivacyPage })));
+const NotFoundPage = lazy(() => import('./assets/NotFoundPage-BSK6xfke.mjs').then((mod) => ({ default: mod.NotFoundPage })));
+const CountryLanding = lazy(() => import('./assets/CountryLanding-C6p1ToG_.mjs').then((mod) => ({ default: mod.CountryLanding })));
+const CountryAirportLanding = lazy(() => import('./assets/CountryAirportLanding-bHey7iHP.mjs').then((mod) => ({ default: mod.CountryAirportLanding })));
+const CityRouteLanding = lazy(() => import('./assets/CityRouteLanding-YmS5kyug.mjs').then((mod) => ({ default: mod.CityRouteLanding })));
+const TaxiGdanskPage = lazy(() => import('./assets/TaxiGdanskPage-DjZN4RkK.mjs').then((mod) => ({ default: mod.TaxiGdanskPage })));
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
 const renderCityRouteRoutes = (locale) => getCityRoutes(locale).map((route) => /* @__PURE__ */ jsx(Route, { path: route.slug, element: /* @__PURE__ */ jsx(CityRouteLanding, {}) }, route.slug));
 function Landing() {
@@ -1890,7 +1797,7 @@ function Landing() {
       ) }) }),
       /* @__PURE__ */ jsx(LazyMount, { className: "defer-render defer-render-md", rootMargin: "300px 0px", minHeight: 760, children: /* @__PURE__ */ jsx(LandingTrustSection, {}) })
     ] }),
-    /* @__PURE__ */ jsx(LazyMount, { className: "defer-render defer-render-sm", rootMargin: "240px 0px", minHeight: 420, children: /* @__PURE__ */ jsx(LandingFooter, {}) }),
+    /* @__PURE__ */ jsx(LazyMount, { className: "defer-render defer-render-sm", rootMargin: "240px 0px", minHeight: 420, children: /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(Footer, {}) }) }),
     selectedRoute && /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(
       OrderForm,
       {

@@ -5,10 +5,10 @@ import { Hero } from './components/Hero';
 import { VehicleTypeSelector } from './components/VehicleTypeSelector';
 import { LazyMount } from './components/LazyMount';
 import { LandingTrustSection } from './components/LandingTrustSection';
-import { LandingFooter } from './components/LandingFooter';
 import { CookieBanner } from './components/CookieBanner';
 import { FloatingActions } from './components/FloatingActions';
 const Pricing = lazy(() => import('./components/Pricing').then((mod) => ({ default: mod.Pricing })));
+const Footer = lazy(() => import('./components/Footer').then((mod) => ({ default: mod.Footer })));
 const OrderForm = lazy(() => import('./components/OrderForm').then((mod) => ({ default: mod.OrderForm })));
 const QuoteForm = lazy(() => import('./components/QuoteForm').then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./components/ManageOrder').then((mod) => ({ default: mod.ManageOrder })));
@@ -194,7 +194,9 @@ function Landing() {
       </main>
 
       <LazyMount className="defer-render defer-render-sm" rootMargin="240px 0px" minHeight={420}>
-        <LandingFooter />
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
       </LazyMount>
 
       {selectedRoute && (
