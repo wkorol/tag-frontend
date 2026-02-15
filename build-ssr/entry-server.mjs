@@ -1204,7 +1204,7 @@ function LandingTrustSection() {
   const count = Number.isFinite(countRaw) && countRaw > 0 ? Math.round(countRaw) : null;
   const ratingText = rating ? rating.toFixed(1) : null;
   return /* @__PURE__ */ jsx("section", { className: "bg-slate-50 border-t border-slate-200 py-12", children: /* @__PURE__ */ jsx("div", { className: "max-w-6xl mx-auto px-4", children: /* @__PURE__ */ jsxs("div", { className: "mb-8 grid gap-4 md:grid-cols-2", children: [
-    /* @__PURE__ */ jsx("div", { className: "rounded-2xl border border-slate-200 bg-white px-5 py-14 sm:py-16 shadow-sm", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center gap-3 py-2 text-center", children: [
+    /* @__PURE__ */ jsx("div", { className: "rounded-2xl border border-slate-200 bg-white px-5 pt-14 pb-16 sm:pt-16 sm:pb-20 shadow-sm", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center gap-3 py-2 text-center", children: [
       /* @__PURE__ */ jsx("div", { className: "text-gray-900 font-semibold text-lg", children: t.trust.googleReviewsTitle }),
       /* @__PURE__ */ jsx("div", { className: "flex items-center justify-center gap-1 text-amber-500", children: Array.from({ length: 5 }).map((_, idx) => /* @__PURE__ */ jsx(
         StarIcon,
@@ -1364,19 +1364,19 @@ const FloatingActions = lazy(() => import('./assets/FloatingActions-BmVj2zkN.mjs
 const OrderForm = lazy(() => import('./assets/OrderForm-BGjRu8fU.mjs').then((mod) => ({ default: mod.OrderForm })));
 const QuoteForm = lazy(() => import('./assets/QuoteForm-sT0ZyZBb.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./assets/ManageOrder-Be9OEJDV.mjs').then((mod) => ({ default: mod.ManageOrder })));
-const RouteLanding = lazy(() => import('./assets/RouteLanding-DKH4TEKE.mjs').then((mod) => ({ default: mod.RouteLanding })));
+const RouteLanding = lazy(() => import('./assets/RouteLanding-Czh0qaGC.mjs').then((mod) => ({ default: mod.RouteLanding })));
 const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-CLFEjXLc.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
 const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-CLFEjXLc.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./assets/PricingPage-CbFtuCYt.mjs').then((mod) => ({ default: mod.PricingPage })));
+const PricingPage = lazy(() => import('./assets/PricingPage-DjtlIMlh.mjs').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-CaDjKx27.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-C-tkmzwq.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
-const CookiesPage = lazy(() => import('./assets/CookiesPage-DwxfykH0.mjs').then((mod) => ({ default: mod.CookiesPage })));
-const PrivacyPage = lazy(() => import('./assets/PrivacyPage-BWeZM_ey.mjs').then((mod) => ({ default: mod.PrivacyPage })));
-const NotFoundPage = lazy(() => import('./assets/NotFoundPage-BWc9rg-y.mjs').then((mod) => ({ default: mod.NotFoundPage })));
-const CountryLanding = lazy(() => import('./assets/CountryLanding-mVPBPjZj.mjs').then((mod) => ({ default: mod.CountryLanding })));
-const CountryAirportLanding = lazy(() => import('./assets/CountryAirportLanding-N62ZNhce.mjs').then((mod) => ({ default: mod.CountryAirportLanding })));
-const CityRouteLanding = lazy(() => import('./assets/CityRouteLanding-Bz9Z6uNG.mjs').then((mod) => ({ default: mod.CityRouteLanding })));
-const TaxiGdanskPage = lazy(() => import('./assets/TaxiGdanskPage-Csc56hpT.mjs').then((mod) => ({ default: mod.TaxiGdanskPage })));
+const CookiesPage = lazy(() => import('./assets/CookiesPage-CgvWUwtA.mjs').then((mod) => ({ default: mod.CookiesPage })));
+const PrivacyPage = lazy(() => import('./assets/PrivacyPage-BLxV3hWM.mjs').then((mod) => ({ default: mod.PrivacyPage })));
+const NotFoundPage = lazy(() => import('./assets/NotFoundPage-DVDLBjqQ.mjs').then((mod) => ({ default: mod.NotFoundPage })));
+const CountryLanding = lazy(() => import('./assets/CountryLanding-CJHLyIbE.mjs').then((mod) => ({ default: mod.CountryLanding })));
+const CountryAirportLanding = lazy(() => import('./assets/CountryAirportLanding-D6D3Y0sp.mjs').then((mod) => ({ default: mod.CountryAirportLanding })));
+const CityRouteLanding = lazy(() => import('./assets/CityRouteLanding-Dr-QrnT3.mjs').then((mod) => ({ default: mod.CityRouteLanding })));
+const TaxiGdanskPage = lazy(() => import('./assets/TaxiGdanskPage-CB1kM5xz.mjs').then((mod) => ({ default: mod.TaxiGdanskPage })));
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
 const renderCityRouteRoutes = (locale) => getCityRoutes(locale).map((route) => /* @__PURE__ */ jsx(Route, { path: route.slug, element: /* @__PURE__ */ jsx(CityRouteLanding, {}) }, route.slug));
 function Landing() {
@@ -1387,6 +1387,7 @@ function Landing() {
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [showQuoteForm, setShowQuoteForm] = useState(false);
   const [pricingTracked, setPricingTracked] = useState(false);
+  const [floatingActionsReady, setFloatingActionsReady] = useState(false);
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get("orderId");
   if (orderId) {
@@ -1468,6 +1469,41 @@ function Landing() {
     };
     tryScroll();
   }, [step]);
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    let timeoutId = null;
+    let idleId = null;
+    const enable = () => setFloatingActionsReady(true);
+    const onFirstInteraction = () => {
+      enable();
+      cleanupListeners();
+    };
+    const cleanupListeners = () => {
+      window.removeEventListener("scroll", onFirstInteraction);
+      window.removeEventListener("pointerdown", onFirstInteraction);
+      window.removeEventListener("touchstart", onFirstInteraction);
+      window.removeEventListener("keydown", onFirstInteraction);
+    };
+    timeoutId = window.setTimeout(enable, 2500);
+    if ("requestIdleCallback" in window) {
+      idleId = window.requestIdleCallback(enable, { timeout: 2200 });
+    }
+    window.addEventListener("scroll", onFirstInteraction, { passive: true });
+    window.addEventListener("pointerdown", onFirstInteraction, { passive: true });
+    window.addEventListener("touchstart", onFirstInteraction, { passive: true });
+    window.addEventListener("keydown", onFirstInteraction);
+    return () => {
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+      }
+      if (idleId !== null && "cancelIdleCallback" in window) {
+        window.cancelIdleCallback(idleId);
+      }
+      cleanupListeners();
+    };
+  }, []);
   return /* @__PURE__ */ jsxs("div", { className: "min-h-screen bg-gray-50 pb-32 sm:pb-0", children: [
     /* @__PURE__ */ jsx(LandingNavbar, {}),
     /* @__PURE__ */ jsxs("main", { children: [
@@ -1500,7 +1536,7 @@ function Landing() {
         initialVehicleType: vehicleType
       }
     ) }),
-    /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(FloatingActions, { hide: Boolean(selectedRoute || showQuoteForm) }) })
+    floatingActionsReady ? /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(FloatingActions, { hide: Boolean(selectedRoute || showQuoteForm) }) }) : null
   ] });
 }
 const renderLocalizedRoutes = (locale, t) => {
@@ -1582,6 +1618,7 @@ function App() {
   const { t } = useI18n();
   const location = useLocation();
   const [trackingReady, setTrackingReady] = useState(false);
+  const [cookieBannerReady, setCookieBannerReady] = useState(false);
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -1601,6 +1638,26 @@ function App() {
     }
     return () => {
       cancelled = true;
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+      }
+      if (idleId !== null && "cancelIdleCallback" in window) {
+        window.cancelIdleCallback(idleId);
+      }
+    };
+  }, []);
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    let timeoutId = null;
+    let idleId = null;
+    const enable = () => setCookieBannerReady(true);
+    timeoutId = window.setTimeout(enable, 1800);
+    if ("requestIdleCallback" in window) {
+      idleId = window.requestIdleCallback(enable, { timeout: 2e3 });
+    }
+    return () => {
       if (timeoutId !== null) {
         window.clearTimeout(timeoutId);
       }
@@ -1759,7 +1816,7 @@ function App() {
       /* @__PURE__ */ jsx(Route, { path: "/polityka-prywatnosci", element: /* @__PURE__ */ jsx(LegacyRedirectToRoute, { routeKey: "privacy" }) }),
       /* @__PURE__ */ jsx(Route, { path: "*", element: /* @__PURE__ */ jsx(NotFoundPage, {}) })
     ] }) }),
-    /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(CookieBanner, {}) })
+    cookieBannerReady ? /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(CookieBanner, {}) }) : null
   ] });
 }
 function LocalizedShell({ locale }) {

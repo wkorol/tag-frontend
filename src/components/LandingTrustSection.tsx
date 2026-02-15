@@ -32,7 +32,7 @@ export function LandingTrustSection() {
     <section className="bg-slate-50 border-t border-slate-200 py-12">
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-8 grid gap-4 md:grid-cols-2">
-          <div className="rounded-2xl border border-slate-200 bg-white px-5 py-14 sm:py-16 shadow-sm">
+          <div className="rounded-2xl border border-slate-200 bg-white px-5 pt-14 pb-16 sm:pt-16 sm:pb-20 shadow-sm">
             <div className="flex flex-col items-center gap-3 py-2 text-center">
               <div className="text-gray-900 font-semibold text-lg">
                 {t.trust.googleReviewsTitle}

@@ -33,62 +33,36 @@ export function TrustSection() {
     <section className="bg-slate-50 border-t border-slate-200 py-12">
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-8 grid gap-4 md:grid-cols-2">
-          <a
-            href={reviewsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white px-5 py-8 sm:px-6 sm:py-10 shadow-sm hover:shadow-md transition-shadow text-center"
-          >
-            <div className="flex-1 min-w-0 flex w-full flex-col items-center px-2 py-2 sm:px-3">
+          <div className="rounded-2xl border border-slate-200 bg-white px-5 pt-14 pb-16 sm:pt-16 sm:pb-20 shadow-sm">
+            <div className="flex flex-col items-center gap-3 py-2 text-center">
               <div className="text-gray-900 font-semibold text-lg">
                 {t.trust.googleReviewsTitle}
               </div>
-              <div className="mt-3 w-full rounded-xl bg-slate-50 px-3 py-3">
-                <div className="flex flex-col items-center justify-center gap-2">
-                  <div className="flex items-center justify-center gap-1 text-amber-500">
-                  {Array.from({ length: 5 }).map((_, idx) => (
-                    <StarIcon
-                      key={idx}
-                      className={[
-                        'h-5 w-5 sm:h-6 sm:w-6',
-                        rating && rating >= idx + 1 ? 'opacity-100' : 'opacity-30',
-                      ].join(' ')}
-                    />
-                  ))}
-                </div>
-                {ratingText && (
-                    <span className="text-base sm:text-lg text-gray-900 whitespace-nowrap">
-                    {ratingText}/5
-                  </span>
-                )}
-                {count && (
-                  <span className="text-sm sm:text-base text-gray-500 whitespace-nowrap">
-                    ({count} {t.trust.googleReviewsCountLabel})
-                  </span>
-                )}
+              <div className="flex items-center justify-center gap-1 text-amber-500">
+                {Array.from({ length: 5 }).map((_, idx) => (
+                  <StarIcon
+                    key={idx}
+                    className={[
+                      'h-5 w-5 sm:h-6 sm:w-6',
+                      rating && rating >= idx + 1 ? 'opacity-100' : 'opacity-30',
+                    ].join(' ')}
+                  />
+                ))}
               </div>
+              <div className="flex items-center justify-center gap-2 text-gray-700">
+                {ratingText && <span className="text-base sm:text-lg">{ratingText}/5</span>}
+                {count && <span className="text-sm sm:text-base text-gray-500">({count} {t.trust.googleReviewsCountLabel})</span>}
               </div>
-            </div>
-
-            <div className="pt-5 px-2 sm:px-3">
-              <span className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-blue-600/25 group-hover:bg-blue-700 group-hover:shadow-blue-600/35 transition">
+              <a
+                href={reviewsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-blue-600/25 hover:bg-blue-700 transition"
+              >
                 {t.trust.googleReviewsCta}
-                <svg
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                  className="h-4 w-4 sm:h-5 sm:w-5 opacity-90"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M7 17L17 7" />
-                  <path d="M9 7h8v8" />
-                </svg>
-              </span>
+              </a>
             </div>
-          </a>
+          </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm h-full flex items-center justify-center">
             <TripadvisorWidget

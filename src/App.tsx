@@ -67,6 +67,7 @@ function Landing() {
   } | null>(null);
   const [showQuoteForm, setShowQuoteForm] = useState(false);
   const [pricingTracked, setPricingTracked] = useState(false);
+  const [floatingActionsReady, setFloatingActionsReady] = useState(false);
   
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get('orderId');
@@ -170,6 +171,48 @@ function Landing() {
     tryScroll();
   }, [step]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    let timeoutId: number | null = null;
+    let idleId: number | null = null;
+
+    const enable = () => setFloatingActionsReady(true);
+    const onFirstInteraction = () => {
+      enable();
+      cleanupListeners();
+    };
+    const cleanupListeners = () => {
+      window.removeEventListener('scroll', onFirstInteraction);
+      window.removeEventListener('pointerdown', onFirstInteraction);
+      window.removeEventListener('touchstart', onFirstInteraction);
+      window.removeEventListener('keydown', onFirstInteraction);
+    };
+
+    timeoutId = window.setTimeout(enable, 2500);
+    if ('requestIdleCallback' in window) {
+      idleId = (window as Window & { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number })
+        .requestIdleCallback(enable, { timeout: 2200 });
+    }
+
+    window.addEventListener('scroll', onFirstInteraction, { passive: true });
+    window.addEventListener('pointerdown', onFirstInteraction, { passive: true });
+    window.addEventListener('touchstart', onFirstInteraction, { passive: true });
+    window.addEventListener('keydown', onFirstInteraction);
+
+    return () => {
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+      }
+      if (idleId !== null && 'cancelIdleCallback' in window) {
+        (window as Window & { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(idleId);
+      }
+      cleanupListeners();
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 pb-32 sm:pb-0">
       <LandingNavbar />
@@ -221,9 +264,11 @@ function Landing() {
           />
         </Suspense>
       )}
-      <Suspense fallback={null}>
-        <FloatingActions hide={Boolean(selectedRoute || showQuoteForm)} />
-      </Suspense>
+      {floatingActionsReady ? (
+        <Suspense fallback={null}>
+          <FloatingActions hide={Boolean(selectedRoute || showQuoteForm)} />
+        </Suspense>
+      ) : null}
     </div>
   );
 }
@@ -301,6 +346,7 @@ export default function App() {
   const { t } = useI18n();
   const location = useLocation();
   const [trackingReady, setTrackingReady] = useState(false);
+  const [cookieBannerReady, setCookieBannerReady] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -325,6 +371,32 @@ export default function App() {
 
     return () => {
       cancelled = true;
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+      }
+      if (idleId !== null && 'cancelIdleCallback' in window) {
+        (window as Window & { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(idleId);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    let timeoutId: number | null = null;
+    let idleId: number | null = null;
+
+    const enable = () => setCookieBannerReady(true);
+
+    timeoutId = window.setTimeout(enable, 1800);
+    if ('requestIdleCallback' in window) {
+      idleId = (window as Window & { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number })
+        .requestIdleCallback(enable, { timeout: 2000 });
+    }
+
+    return () => {
       if (timeoutId !== null) {
         window.clearTimeout(timeoutId);
       }
@@ -495,9 +567,11 @@ export default function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
-      <Suspense fallback={null}>
-        <CookieBanner />
-      </Suspense>
+      {cookieBannerReady ? (
+        <Suspense fallback={null}>
+          <CookieBanner />
+        </Suspense>
+      ) : null}
     </>
   );
 }
