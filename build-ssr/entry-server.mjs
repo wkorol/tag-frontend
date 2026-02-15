@@ -4,7 +4,6 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server.js';
 import { useLocation, Routes, Route, Navigate, useParams, useSearchParams, Outlet } from 'react-router-dom';
 import { CheckCircle2, Calculator, Car, Users, Info } from 'lucide-react';
-import { createPortal } from 'react-dom';
 
 const STORAGE_KEY$1 = "tag_locale";
 const DEFAULT_LOCALE = "en";
@@ -564,7 +563,16 @@ function LandingNavbar() {
           onClick: (event) => handleSectionNav(event, "hero", "landing_logo"),
           className: "flex items-center gap-3",
           children: [
-            /* @__PURE__ */ jsx("img", { src: favicon, alt: "Taxi Airport Gdansk logo", className: "h-8 w-8 rounded-md" }),
+            /* @__PURE__ */ jsx(
+              "img",
+              {
+                src: favicon,
+                alt: "Taxi Airport Gdansk logo",
+                className: "h-8 w-8 rounded-md",
+                width: 32,
+                height: 32
+              }
+            ),
             /* @__PURE__ */ jsxs("span", { className: "leading-tight text-sm font-semibold text-gray-900", children: [
               /* @__PURE__ */ jsx("span", { className: "block text-base tracking-wide", children: "Taxi Airport" }),
               /* @__PURE__ */ jsx("span", { className: "block text-xs font-semibold text-blue-700", children: "Gdańsk" })
@@ -1182,7 +1190,7 @@ function LazyMount({
 }
 
 const TripadvisorWidget = lazy(
-  () => import('./assets/TripadvisorWidget-BVBwrnhD.mjs').then((mod) => ({ default: mod.TripadvisorWidget }))
+  () => import('./assets/TripadvisorWidget-DqBnXr23.mjs').then((mod) => ({ default: mod.TripadvisorWidget }))
 );
 function StarIcon({ className }) {
   return /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", "aria-hidden": "true", className, fill: "currentColor", children: /* @__PURE__ */ jsx("path", { d: "M12 17.27l5.18 3.04-1.64-5.81 4.46-3.86-5.88-.5L12 4.5 9.88 10.14l-5.88.5 4.46 3.86-1.64 5.81L12 17.27z" }) });
@@ -1247,334 +1255,6 @@ function LandingTrustSection() {
       }
     ) }) })
   ] }) }) });
-}
-
-function CookieBanner() {
-  const { t, locale } = useI18n();
-  const [mounted, setMounted] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const getAttributionLandingUrl = () => {
-    if (typeof window === "undefined") {
-      return void 0;
-    }
-    try {
-      const used = window.sessionStorage.getItem("tag_attribution_landing_used");
-      if (used === "1") {
-        return void 0;
-      }
-      const url = window.sessionStorage.getItem("tag_attribution_landing_url");
-      if (!url) {
-        return void 0;
-      }
-      window.sessionStorage.setItem("tag_attribution_landing_used", "1");
-      return url;
-    } catch {
-      return void 0;
-    }
-  };
-  useEffect(() => {
-    setMounted(true);
-    try {
-      const existing = getConsentStatus();
-      if (existing) {
-        updateGtagConsent(existing);
-        if (existing === "accepted" && typeof window !== "undefined") {
-          const loadGtag = window.__loadGtag;
-          if (typeof loadGtag === "function") {
-            loadGtag();
-          }
-          const gtag = window.gtag;
-          if (typeof gtag === "function") {
-            const pageLocation = getAttributionLandingUrl();
-            if (pageLocation) {
-              gtag("event", "page_view", { page_location: pageLocation });
-            } else {
-              gtag("event", "page_view");
-            }
-          }
-        }
-        setVisible(existing !== "accepted");
-        return;
-      }
-      setVisible(true);
-    } catch {
-      setVisible(true);
-    }
-  }, []);
-  const accept = () => {
-    setConsentStatus("accepted");
-    updateGtagConsent("accepted");
-    if (typeof window !== "undefined") {
-      const loadGtag = window.__loadGtag;
-      if (typeof loadGtag === "function") {
-        loadGtag();
-      }
-      const gtag = window.gtag;
-      if (typeof gtag === "function") {
-        const pageLocation = getAttributionLandingUrl();
-        if (pageLocation) {
-          gtag("event", "page_view", { page_location: pageLocation });
-        } else {
-          gtag("event", "page_view");
-        }
-      }
-    }
-    setVisible(false);
-  };
-  const reject = () => {
-    setConsentStatus("rejected");
-    updateGtagConsent("rejected");
-    setVisible(false);
-  };
-  if (!visible || !mounted) {
-    return null;
-  }
-  return createPortal(
-    /* @__PURE__ */ jsx(
-      "div",
-      {
-        className: "px-4",
-        style: { position: "fixed", left: 0, right: 0, bottom: 16, zIndex: 2147483647 },
-        "data-cookie-banner": true,
-        "aria-live": "polite",
-        children: /* @__PURE__ */ jsxs(
-          "div",
-          {
-            className: "mx-auto max-w-3xl overflow-hidden rounded-3xl text-white border border-slate-800 shadow-[0_20px_60px_rgba(0,0,0,0.55)]",
-            style: { backgroundColor: "#0b0f1a" },
-            children: [
-              /* @__PURE__ */ jsx("div", { className: "p-6 sm:p-7", children: /* @__PURE__ */ jsxs("div", { className: "space-y-2", children: [
-                /* @__PURE__ */ jsx("p", { className: "text-base font-semibold tracking-wide", children: t.cookieBanner.title }),
-                /* @__PURE__ */ jsx("p", { className: "text-sm text-slate-200 leading-relaxed", children: t.cookieBanner.body }),
-                /* @__PURE__ */ jsx(
-                  "a",
-                  {
-                    href: getRoutePath(locale, "cookies"),
-                    className: "inline-block text-sm text-blue-300 hover:text-blue-200 underline",
-                    children: t.cookieBanner.readPolicy
-                  }
-                )
-              ] }) }),
-              /* @__PURE__ */ jsx("div", { className: "border-t border-white/10 bg-slate-900/60 px-6 py-4 sm:px-7", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4", children: [
-                /* @__PURE__ */ jsx(
-                  "button",
-                  {
-                    type: "button",
-                    onClick: reject,
-                    className: "w-full sm:w-auto border border-white/25 text-white text-base font-semibold px-7 py-3 rounded-full hover:border-white/60 transition",
-                    children: t.cookieBanner.decline
-                  }
-                ),
-                /* @__PURE__ */ jsx(
-                  "button",
-                  {
-                    type: "button",
-                    onClick: accept,
-                    className: "w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold px-8 py-3 rounded-lg shadow-lg shadow-blue-600/30 transition",
-                    children: t.cookieBanner.accept
-                  }
-                )
-              ] }) })
-            ]
-          }
-        )
-      }
-    ),
-    document.body
-  );
-}
-
-function FloatingActions({ orderTargetId = "vehicle-selection", hide = false }) {
-  const { t, locale } = useI18n();
-  const basePath = localeToPath(locale);
-  const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
-  const [cookieBannerOffset, setCookieBannerOffset] = useState(0);
-  const [isCookieBannerVisible, setIsCookieBannerVisible] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isTargetVisible, setIsTargetVisible] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-    let resizeObserver = null;
-    const updateOffset = () => {
-      const banner = document.querySelector("[data-cookie-banner]");
-      if (!banner) {
-        setCookieBannerOffset(0);
-        setIsCookieBannerVisible(false);
-        if (resizeObserver) {
-          resizeObserver.disconnect();
-          resizeObserver = null;
-        }
-        return;
-      }
-      setIsCookieBannerVisible(true);
-      const height = banner.getBoundingClientRect().height;
-      setCookieBannerOffset(Math.ceil(height) + 12);
-      if (!resizeObserver && "ResizeObserver" in window) {
-        resizeObserver = new ResizeObserver(() => {
-          const nextHeight = banner.getBoundingClientRect().height;
-          setCookieBannerOffset(Math.ceil(nextHeight) + 12);
-        });
-        resizeObserver.observe(banner);
-      }
-    };
-    updateOffset();
-    const observer = new MutationObserver(updateOffset);
-    observer.observe(document.body, { childList: true, subtree: true });
-    return () => {
-      observer.disconnect();
-      if (resizeObserver) {
-        resizeObserver.disconnect();
-      }
-    };
-  }, []);
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-    if (!("IntersectionObserver" in window)) {
-      return;
-    }
-    let observer = null;
-    const observed = /* @__PURE__ */ new Set();
-    const connect = () => {
-      const targets = [
-        document.getElementById(orderTargetId),
-        document.getElementById("pricing-booking")
-      ].filter(Boolean);
-      if (targets.length === 0) {
-        setIsTargetVisible(false);
-        return;
-      }
-      if (!observer) {
-        observer = new IntersectionObserver(
-          (entries) => {
-            setIsTargetVisible(entries.some((entry) => entry.isIntersecting));
-          },
-          {
-            root: null,
-            threshold: 0.2
-          }
-        );
-      }
-      targets.forEach((target) => {
-        if (!observed.has(target)) {
-          observer.observe(target);
-          observed.add(target);
-        }
-      });
-    };
-    connect();
-    const mutationObserver = new MutationObserver(connect);
-    mutationObserver.observe(document.body, { childList: true, subtree: true });
-    return () => {
-      mutationObserver.disconnect();
-      if (observer) {
-        observer.disconnect();
-      }
-    };
-  }, [orderTargetId]);
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-    const updateVisibility = () => {
-      const topVisible = window.scrollY <= 120;
-      const bottomVisible = window.innerHeight + window.scrollY >= document.body.scrollHeight - 120;
-      setIsVisible(!topVisible && !bottomVisible);
-    };
-    updateVisibility();
-    window.addEventListener("scroll", updateVisibility, { passive: true });
-    window.addEventListener("resize", updateVisibility);
-    return () => {
-      window.removeEventListener("scroll", updateVisibility);
-      window.removeEventListener("resize", updateVisibility);
-    };
-  }, []);
-  if (hide || !isVisible || isCookieBannerVisible || isTargetVisible) {
-    return null;
-  }
-  return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsxs(
-      "div",
-      {
-        className: "fixed right-6 bottom-6 z-50 hidden sm:flex flex-col gap-3",
-        style: { bottom: cookieBannerOffset + 24 },
-        children: [
-          /* @__PURE__ */ jsx(
-            "a",
-            {
-              href: whatsappLink,
-              onClick: () => trackContactClick("whatsapp"),
-              className: "rounded-full px-5 py-3 text-gray-900 shadow-lg flex items-center justify-center gap-2",
-              style: { backgroundColor: "#25D366" },
-              children: t.common.whatsapp
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            "a",
-            {
-              href: `${basePath}/`,
-              onClick: (event) => {
-                event.preventDefault();
-                trackCtaClick("floating_order_online");
-                const scrolled = requestScrollTo(orderTargetId);
-                if (!scrolled) {
-                  window.location.href = `${basePath}/`;
-                }
-              },
-              className: "rounded-full px-5 py-3 text-white shadow-lg text-center",
-              style: { backgroundColor: "#c2410c" },
-              children: t.common.orderOnlineNow
-            }
-          )
-        ]
-      }
-    ),
-    /* @__PURE__ */ jsx(
-      "div",
-      {
-        className: "fixed left-0 right-0 z-50 sm:hidden border-t border-slate-200 bg-white/95 px-4 py-3 backdrop-blur",
-        style: { bottom: cookieBannerOffset },
-        children: /* @__PURE__ */ jsxs("div", { className: "flex gap-3", children: [
-          /* @__PURE__ */ jsxs(
-            "a",
-            {
-              href: whatsappLink,
-              onClick: () => trackContactClick("whatsapp"),
-              className: "flex-1 rounded-full px-4 py-3 text-center text-gray-900 shadow-sm flex items-center justify-center gap-2",
-              style: { backgroundColor: "#25D366" },
-              children: [
-                /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 32 32", "aria-hidden": "true", className: "h-5 w-5 fill-current", children: [
-                  /* @__PURE__ */ jsx("path", { d: "M19.11 17.72c-.26-.13-1.52-.75-1.75-.84-.24-.09-.41-.13-.58.13-.17.26-.67.84-.82 1.02-.15.17-.3.2-.56.07-.26-.13-1.1-.4-2.09-1.28-.77-.69-1.29-1.54-1.44-1.8-.15-.26-.02-.4.11-.53.12-.12.26-.3.39-.45.13-.15.17-.26.26-.43.09-.17.04-.32-.02-.45-.06-.13-.58-1.4-.79-1.92-.21-.5-.43-.43-.58-.44-.15-.01-.32-.01-.49-.01-.17 0-.45.06-.68.32-.24.26-.9.88-.9 2.15s.92 2.49 1.05 2.66c.13.17 1.81 2.76 4.4 3.87.62.27 1.1.43 1.48.55.62.2 1.18.17 1.63.1.5-.07 1.52-.62 1.74-1.22.21-.6.21-1.12.15-1.22-.06-.1-.24-.17-.5-.3z" }),
-                  /* @__PURE__ */ jsx("path", { d: "M26.67 5.33A14.9 14.9 0 0016.03 1.5C8.12 1.5 1.5 8.13 1.5 16.03c0 2.4.63 4.76 1.83 6.85L1.5 30.5l7.81-1.79a14.93 14.93 0 006.72 1.61h.01c7.9 0 14.53-6.63 14.53-14.53 0-3.88-1.52-7.53-4.4-10.46zm-10.64 22.3h-.01a12.4 12.4 0 01-6.32-1.73l-.45-.27-4.64 1.06 1.24-4.52-.3-.46a12.45 12.45 0 01-2-6.68c0-6.86 5.58-12.44 12.45-12.44 3.32 0 6.43 1.3 8.77 3.65a12.33 12.33 0 013.64 8.79c0 6.86-5.59 12.44-12.38 12.44z" })
-                ] }),
-                t.common.whatsapp
-              ]
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            "a",
-            {
-              href: `${basePath}/`,
-              onClick: (event) => {
-                event.preventDefault();
-                trackCtaClick("sticky_order_online");
-                const scrolled = requestScrollTo(orderTargetId);
-                if (!scrolled) {
-                  window.location.href = `${basePath}/`;
-                }
-              },
-              className: "flex-1 rounded-full px-4 py-3 text-center text-white shadow-sm",
-              style: { backgroundColor: "#c2410c" },
-              children: t.common.orderOnlineNow
-            }
-          )
-        ] })
-      }
-    )
-  ] });
 }
 
 const countryAirportsByLocale = {
@@ -1677,24 +1357,26 @@ function usePageTitle(title) {
   }, [title]);
 }
 
-const Pricing = lazy(() => import('./assets/Pricing-69vRmyr3.mjs').then((mod) => ({ default: mod.Pricing })));
-const Footer = lazy(() => import('./assets/Footer-oWcLPJwG.mjs').then((mod) => ({ default: mod.Footer })));
-const OrderForm = lazy(() => import('./assets/OrderForm-B2tWzKbJ.mjs').then((mod) => ({ default: mod.OrderForm })));
-const QuoteForm = lazy(() => import('./assets/QuoteForm-DWWhKbcm.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
-const ManageOrder = lazy(() => import('./assets/ManageOrder-DVOaNQ-H.mjs').then((mod) => ({ default: mod.ManageOrder })));
-const RouteLanding = lazy(() => import('./assets/RouteLanding-mpANUfxI.mjs').then((mod) => ({ default: mod.RouteLanding })));
-const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-DJ3CvM0s.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
-const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-DJ3CvM0s.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./assets/PricingPage-BFnY1P37.mjs').then((mod) => ({ default: mod.PricingPage })));
-const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-B5Sc155s.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
-const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-DqlqcrYR.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
-const CookiesPage = lazy(() => import('./assets/CookiesPage-FGOKbdlp.mjs').then((mod) => ({ default: mod.CookiesPage })));
-const PrivacyPage = lazy(() => import('./assets/PrivacyPage-BlVfauS4.mjs').then((mod) => ({ default: mod.PrivacyPage })));
-const NotFoundPage = lazy(() => import('./assets/NotFoundPage-BSK6xfke.mjs').then((mod) => ({ default: mod.NotFoundPage })));
-const CountryLanding = lazy(() => import('./assets/CountryLanding-C6p1ToG_.mjs').then((mod) => ({ default: mod.CountryLanding })));
-const CountryAirportLanding = lazy(() => import('./assets/CountryAirportLanding-bHey7iHP.mjs').then((mod) => ({ default: mod.CountryAirportLanding })));
-const CityRouteLanding = lazy(() => import('./assets/CityRouteLanding-YmS5kyug.mjs').then((mod) => ({ default: mod.CityRouteLanding })));
-const TaxiGdanskPage = lazy(() => import('./assets/TaxiGdanskPage-DjZN4RkK.mjs').then((mod) => ({ default: mod.TaxiGdanskPage })));
+const Pricing = lazy(() => import('./assets/Pricing-BDDzADts.mjs').then((mod) => ({ default: mod.Pricing })));
+const Footer = lazy(() => import('./assets/Footer-BpSYvjMW.mjs').then((mod) => ({ default: mod.Footer })));
+const CookieBanner = lazy(() => import('./assets/CookieBanner-Dh820bF4.mjs').then((mod) => ({ default: mod.CookieBanner })));
+const FloatingActions = lazy(() => import('./assets/FloatingActions-BmVj2zkN.mjs').then((mod) => ({ default: mod.FloatingActions })));
+const OrderForm = lazy(() => import('./assets/OrderForm-BGjRu8fU.mjs').then((mod) => ({ default: mod.OrderForm })));
+const QuoteForm = lazy(() => import('./assets/QuoteForm-sT0ZyZBb.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
+const ManageOrder = lazy(() => import('./assets/ManageOrder-Be9OEJDV.mjs').then((mod) => ({ default: mod.ManageOrder })));
+const RouteLanding = lazy(() => import('./assets/RouteLanding-DKH4TEKE.mjs').then((mod) => ({ default: mod.RouteLanding })));
+const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-CLFEjXLc.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
+const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-CLFEjXLc.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
+const PricingPage = lazy(() => import('./assets/PricingPage-CbFtuCYt.mjs').then((mod) => ({ default: mod.PricingPage })));
+const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-CaDjKx27.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
+const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-C-tkmzwq.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
+const CookiesPage = lazy(() => import('./assets/CookiesPage-DwxfykH0.mjs').then((mod) => ({ default: mod.CookiesPage })));
+const PrivacyPage = lazy(() => import('./assets/PrivacyPage-BWeZM_ey.mjs').then((mod) => ({ default: mod.PrivacyPage })));
+const NotFoundPage = lazy(() => import('./assets/NotFoundPage-BWc9rg-y.mjs').then((mod) => ({ default: mod.NotFoundPage })));
+const CountryLanding = lazy(() => import('./assets/CountryLanding-mVPBPjZj.mjs').then((mod) => ({ default: mod.CountryLanding })));
+const CountryAirportLanding = lazy(() => import('./assets/CountryAirportLanding-N62ZNhce.mjs').then((mod) => ({ default: mod.CountryAirportLanding })));
+const CityRouteLanding = lazy(() => import('./assets/CityRouteLanding-Bz9Z6uNG.mjs').then((mod) => ({ default: mod.CityRouteLanding })));
+const TaxiGdanskPage = lazy(() => import('./assets/TaxiGdanskPage-Csc56hpT.mjs').then((mod) => ({ default: mod.TaxiGdanskPage })));
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
 const renderCityRouteRoutes = (locale) => getCityRoutes(locale).map((route) => /* @__PURE__ */ jsx(Route, { path: route.slug, element: /* @__PURE__ */ jsx(CityRouteLanding, {}) }, route.slug));
 function Landing() {
@@ -1739,25 +1421,29 @@ function Landing() {
     setShowQuoteForm(true);
   };
   useEffect(() => {
-    const updateVisibility = () => {
-      const target = document.getElementById("vehicle-selection");
-      if (!target) {
-        return;
+    if (typeof window === "undefined" || !("IntersectionObserver" in window) || pricingTracked) {
+      return;
+    }
+    const target = document.getElementById("vehicle-selection");
+    if (!target) {
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setPricingTracked(true);
+          trackSectionView("vehicle_selection");
+          observer.disconnect();
+        }
+      },
+      {
+        root: null,
+        threshold: 0.2,
+        rootMargin: "120px 0px 0px 0px"
       }
-      const targetTop = target.getBoundingClientRect().top + window.scrollY;
-      const reached = window.scrollY >= targetTop - 120;
-      if (reached && !pricingTracked) {
-        setPricingTracked(true);
-        trackSectionView("vehicle_selection");
-      }
-    };
-    updateVisibility();
-    window.addEventListener("scroll", updateVisibility, { passive: true });
-    window.addEventListener("resize", updateVisibility);
-    return () => {
-      window.removeEventListener("scroll", updateVisibility);
-      window.removeEventListener("resize", updateVisibility);
-    };
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
   }, [pricingTracked]);
   useEffect(() => {
     const hash = window.location.hash;
@@ -1786,7 +1472,7 @@ function Landing() {
     /* @__PURE__ */ jsx(LandingNavbar, {}),
     /* @__PURE__ */ jsxs("main", { children: [
       /* @__PURE__ */ jsx(Hero, {}),
-      /* @__PURE__ */ jsx("div", { className: "defer-render defer-render-lg", children: step === "vehicle" ? /* @__PURE__ */ jsx(VehicleTypeSelector, { onSelectType: handleVehicleSelect }) : /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(
+      /* @__PURE__ */ jsx("div", { children: step === "vehicle" ? /* @__PURE__ */ jsx(VehicleTypeSelector, { onSelectType: handleVehicleSelect }) : /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(
         Pricing,
         {
           vehicleType,
@@ -1814,7 +1500,7 @@ function Landing() {
         initialVehicleType: vehicleType
       }
     ) }),
-    /* @__PURE__ */ jsx(FloatingActions, { hide: Boolean(selectedRoute || showQuoteForm) })
+    /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(FloatingActions, { hide: Boolean(selectedRoute || showQuoteForm) }) })
   ] });
 }
 const renderLocalizedRoutes = (locale, t) => {
@@ -2073,7 +1759,7 @@ function App() {
       /* @__PURE__ */ jsx(Route, { path: "/polityka-prywatnosci", element: /* @__PURE__ */ jsx(LegacyRedirectToRoute, { routeKey: "privacy" }) }),
       /* @__PURE__ */ jsx(Route, { path: "*", element: /* @__PURE__ */ jsx(NotFoundPage, {}) })
     ] }) }),
-    /* @__PURE__ */ jsx(CookieBanner, {})
+    /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(CookieBanner, {}) })
   ] });
 }
 function LocalizedShell({ locale }) {
@@ -8335,4 +8021,4 @@ function render(url) {
   };
 }
 
-export { getRouteKeyFromSlug as A, favicon as B, trackLocaleChange as C, FloatingActions as F, TrustBar as T, usePageTitle as a, trackNavClick as b, trackFormOpen as c, trackPricingRouteSelect as d, trackPricingAction as e, trackVehicleSelect as f, getRouteSlug as g, trackFormClose as h, trackFormValidation as i, trackFormSubmit as j, trackFormStart as k, localeToPath as l, isAnalyticsEnabled as m, hasMarketingConsent as n, trackContactClick as o, getCountryAirports as p, getCountryAirportBySlug as q, requestScrollTo as r, render, scrollToId as s, trackCtaClick as t, useI18n as u, getCountryAirportCountry as v, getCityRouteBySlug as w, getCityRoutes as x, getRoutePath as y, localeToRootPath as z };
+export { getCityRouteBySlug as A, getCityRoutes as B, localeToRootPath as C, getRouteKeyFromSlug as D, favicon as E, trackLocaleChange as F, TrustBar as T, updateGtagConsent as a, getRoutePath as b, usePageTitle as c, getRouteSlug as d, trackNavClick as e, trackFormOpen as f, getConsentStatus as g, scrollToId as h, trackPricingRouteSelect as i, trackPricingAction as j, trackVehicleSelect as k, localeToPath as l, trackFormClose as m, trackFormValidation as n, trackFormSubmit as o, trackFormStart as p, isAnalyticsEnabled as q, requestScrollTo as r, render, setConsentStatus as s, trackCtaClick as t, useI18n as u, hasMarketingConsent as v, trackContactClick as w, getCountryAirports as x, getCountryAirportBySlug as y, getCountryAirportCountry as z };

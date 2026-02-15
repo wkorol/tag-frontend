@@ -35,7 +35,13 @@ export function LandingNavbar() {
             onClick={(event) => handleSectionNav(event, 'hero', 'landing_logo')}
             className="flex items-center gap-3"
           >
-            <img src={favicon} alt="Taxi Airport Gdansk logo" className="h-8 w-8 rounded-md" />
+            <img
+              src={favicon}
+              alt="Taxi Airport Gdansk logo"
+              className="h-8 w-8 rounded-md"
+              width={32}
+              height={32}
+            />
             <span className="leading-tight text-sm font-semibold text-gray-900">
               <span className="block text-base tracking-wide">Taxi Airport</span>
               <span className="block text-xs font-semibold text-blue-700">Gdańsk</span>

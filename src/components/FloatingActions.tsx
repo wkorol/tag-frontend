@@ -119,17 +119,42 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
     if (typeof window === 'undefined') {
       return;
     }
+    const doc = document.documentElement;
+    let pageHeight = Math.max(doc.scrollHeight, document.body.scrollHeight);
+    let rafId: number | null = null;
+
     const updateVisibility = () => {
       const topVisible = window.scrollY <= 120;
-      const bottomVisible = window.innerHeight + window.scrollY >= document.body.scrollHeight - 120;
+      const bottomVisible = window.innerHeight + window.scrollY >= pageHeight - 120;
       setIsVisible(!topVisible && !bottomVisible);
+      rafId = null;
     };
+
+    const requestUpdate = () => {
+      if (rafId !== null) {
+        return;
+      }
+      rafId = window.requestAnimationFrame(updateVisibility);
+    };
+
+    const refreshPageHeight = () => {
+      pageHeight = Math.max(doc.scrollHeight, document.body.scrollHeight);
+      requestUpdate();
+    };
+
+    const mutationObserver = new MutationObserver(refreshPageHeight);
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
+
     updateVisibility();
-    window.addEventListener('scroll', updateVisibility, { passive: true });
-    window.addEventListener('resize', updateVisibility);
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', refreshPageHeight);
     return () => {
-      window.removeEventListener('scroll', updateVisibility);
-      window.removeEventListener('resize', updateVisibility);
+      mutationObserver.disconnect();
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+      window.removeEventListener('scroll', requestUpdate);
+      window.removeEventListener('resize', refreshPageHeight);
     };
   }, []);
 

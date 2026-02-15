@@ -53,20 +53,8 @@ const contentTypes = {
   '.txt': 'text/plain',
 };
 
-const deferStylesheetLinks = (html) =>
-  html.replace(/<link\s+rel="stylesheet"([^>]*)>/g, (fullTag, attrs = '') => {
-    const hrefMatch = attrs.match(/\shref="([^"]+\.css)"/i);
-    if (!hrefMatch) {
-      return fullTag;
-    }
-
-    const preloadAttrs = attrs.replace(/\srel="stylesheet"/gi, '');
-    return `<link rel="preload" as="style"${preloadAttrs} onload="this.onload=null;this.rel='stylesheet'"><noscript>${fullTag}</noscript>`;
-  });
-
 const templatePath = path.join(clientDir, 'index.html');
 let template = await fs.readFile(templatePath, 'utf-8');
-template = deferStylesheetLinks(template);
 let render;
 for (const candidate of ssrEntryCandidates) {
   try {
@@ -176,6 +164,7 @@ const detectPreferredLocale = (acceptLanguage) => {
 
 const isKnownPath = (urlPath) =>
   urlPath === '/' ||
+  localeRoots.has(urlPath) ||
   localeRootsWithSlash.has(urlPath) ||
   localizedRouteSet.has(urlPath) ||
   isAdminPath(urlPath);
@@ -287,12 +276,6 @@ const server = createServer(async (req, res) => {
       ? 'public, max-age=31536000, immutable'
       : 'public, max-age=3600';
     await serveFile(res, filePath, cacheControl);
-    return;
-  }
-
-  if (localeRoots.has(urlPath)) {
-    res.writeHead(301, { Location: `${urlPath}/${requestUrl.search}` });
-    res.end();
     return;
   }
 

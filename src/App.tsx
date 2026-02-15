@@ -5,10 +5,10 @@ import { Hero } from './components/Hero';
 import { VehicleTypeSelector } from './components/VehicleTypeSelector';
 import { LazyMount } from './components/LazyMount';
 import { LandingTrustSection } from './components/LandingTrustSection';
-import { CookieBanner } from './components/CookieBanner';
-import { FloatingActions } from './components/FloatingActions';
 const Pricing = lazy(() => import('./components/Pricing').then((mod) => ({ default: mod.Pricing })));
 const Footer = lazy(() => import('./components/Footer').then((mod) => ({ default: mod.Footer })));
+const CookieBanner = lazy(() => import('./components/CookieBanner').then((mod) => ({ default: mod.CookieBanner })));
+const FloatingActions = lazy(() => import('./components/FloatingActions').then((mod) => ({ default: mod.FloatingActions })));
 const OrderForm = lazy(() => import('./components/OrderForm').then((mod) => ({ default: mod.OrderForm })));
 const QuoteForm = lazy(() => import('./components/QuoteForm').then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./components/ManageOrder').then((mod) => ({ default: mod.ManageOrder })));
@@ -120,26 +120,29 @@ function Landing() {
   };
 
   useEffect(() => {
-    const updateVisibility = () => {
-      const target = document.getElementById('vehicle-selection');
-      if (!target) {
-        return;
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window) || pricingTracked) {
+      return;
+    }
+    const target = document.getElementById('vehicle-selection');
+    if (!target) {
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setPricingTracked(true);
+          trackSectionView('vehicle_selection');
+          observer.disconnect();
+        }
+      },
+      {
+        root: null,
+        threshold: 0.2,
+        rootMargin: '120px 0px 0px 0px',
       }
-      const targetTop = target.getBoundingClientRect().top + window.scrollY;
-      const reached = window.scrollY >= targetTop - 120;
-      if (reached && !pricingTracked) {
-        setPricingTracked(true);
-        trackSectionView('vehicle_selection');
-      }
-    };
-
-    updateVisibility();
-    window.addEventListener('scroll', updateVisibility, { passive: true });
-    window.addEventListener('resize', updateVisibility);
-    return () => {
-      window.removeEventListener('scroll', updateVisibility);
-      window.removeEventListener('resize', updateVisibility);
-    };
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
   }, [pricingTracked]);
 
   useEffect(() => {
@@ -173,7 +176,7 @@ function Landing() {
       <main>
         <Hero />
         
-        <div className="defer-render defer-render-lg">
+        <div>
           {step === 'vehicle' ? (
             <VehicleTypeSelector onSelectType={handleVehicleSelect} />
           ) : (
@@ -218,7 +221,9 @@ function Landing() {
           />
         </Suspense>
       )}
-      <FloatingActions hide={Boolean(selectedRoute || showQuoteForm)} />
+      <Suspense fallback={null}>
+        <FloatingActions hide={Boolean(selectedRoute || showQuoteForm)} />
+      </Suspense>
     </div>
   );
 }
@@ -490,7 +495,9 @@ export default function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
-      <CookieBanner />
+      <Suspense fallback={null}>
+        <CookieBanner />
+      </Suspense>
     </>
   );
 }
