@@ -805,7 +805,7 @@ function Hero() {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
   const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
-  const heroBgUrl = "/background-960.webp";
+  const heroBgUrl = "/background-640.webp";
   const quickLinks = [
     { href: `${basePath}/${getRouteSlug(locale, "pricing")}`, label: t.navbar.prices },
     { href: `${basePath}/${getRouteSlug(locale, "orderAirportGdansk")}`, label: t.routeLanding.orderLinks.airportGdansk },
@@ -819,7 +819,7 @@ function Hero() {
       {
         src: heroBgUrl,
         srcSet: "/background-400.webp 400w, /background-480.webp 480w, /background-640.webp 640w, /background-960.webp 960w, /background-1280.webp 1280w, /background-1600.webp 1600w",
-        sizes: "(max-width: 640px) 75vw, (max-width: 1024px) 90vw, 1600px",
+        sizes: "(max-width: 640px) 68vw, (max-width: 1024px) 85vw, 1400px",
         alt: "Taxi Airport Gdansk hero background",
         className: "hero-bg absolute inset-0 -z-10 h-full w-full object-cover opacity-20 pointer-events-none",
         loading: "eager",
@@ -844,7 +844,7 @@ function Hero() {
             {
               srcSet: `${logoAvif384} 384w, ${logoAvif512} 512w, ${logoAvif640} 640w`,
               type: "image/avif",
-              sizes: "(max-width: 640px) 68vw, 17.5rem"
+              sizes: "(max-width: 640px) 62vw, 16rem"
             }
           ),
           /* @__PURE__ */ jsx(
@@ -852,7 +852,7 @@ function Hero() {
             {
               srcSet: `${logoWebp384} 384w, ${logoWebp512} 512w, ${logoWebp640} 640w`,
               type: "image/webp",
-              sizes: "(max-width: 640px) 68vw, 17.5rem"
+              sizes: "(max-width: 640px) 62vw, 16rem"
             }
           ),
           /* @__PURE__ */ jsx(
@@ -861,13 +861,12 @@ function Hero() {
               src: logoWebp384,
               alt: t.hero.logoAlt,
               className: "h-auto",
-              style: { width: "min(17.5rem, 68vw)" },
-              width: 512,
-              height: 512,
+              style: { width: "min(16rem, 62vw)" },
+              width: 384,
+              height: 384,
               decoding: "async",
               loading: "eager",
-              fetchpriority: "low",
-              sizes: "(max-width: 640px) 68vw, 17.5rem"
+              sizes: "(max-width: 640px) 62vw, 16rem"
             }
           )
         ] }) }),
@@ -1182,149 +1181,53 @@ function VehicleTypeSelector({ onSelectType }) {
   ] }) });
 }
 
-const localeToTripadvisorLang = {
-  en: "en_US",
-  pl: "pl_PL",
-  de: "de_DE",
-  fi: "fi_FI",
-  no: "nb_NO",
-  sv: "sv_SE",
-  da: "da_DK"
-};
-function TripadvisorWidget({
-  locationId: locationIdProp,
-  uniq: uniqProp,
-  href: hrefProp,
-  requireConsent = true,
-  wtype: wtypeProp,
-  border: borderProp,
-  shadow: shadowProp,
-  backgroundColor: backgroundColorProp,
-  ulId: ulIdProp,
-  ulClassName: ulClassNameProp,
-  liId: liIdProp,
-  liClassName: liClassNameProp
+function LazyMount({
+  children,
+  className,
+  rootMargin = "200px 0px",
+  minHeight = 1
 }) {
-  const { locale } = useI18n();
-  const [canLoad, setCanLoad] = useState(() => {
-    if (typeof window === "undefined") {
-      return false;
-    }
-    return requireConsent ? hasMarketingConsent() : true;
-  });
-  const locationId = locationIdProp || undefined                                             || "34104207";
-  const uniq = uniqProp || undefined                                      || "444";
-  const href = hrefProp || undefined                                     || "https://www.tripadvisor.com/Attraction_Review-g274725-d34104207-Reviews-Taxi_Airport_Gdansk-Gdansk_Pomerania_Province_Northern_Poland.html";
-  const wtype = wtypeProp || undefined                                       || "cdsratingsonlywide";
-  const border = borderProp ?? ("true") === "true";
-  const shadow = typeof shadowProp === "boolean" ? shadowProp : null;
-  const backgroundColor = backgroundColorProp || undefined                                                  || null;
-  const lang = localeToTripadvisorLang[locale] || "en_US";
-  const containerId = useMemo(() => `TA_${wtype}${uniq}`, [uniq, wtype]);
-  const ulId = useMemo(() => ulIdProp || `TA_links_${uniq}`, [ulIdProp, uniq]);
-  const ulClassName = useMemo(() => ulClassNameProp || "TA_links", [ulClassNameProp]);
-  const liId = useMemo(() => liIdProp || void 0, [liIdProp]);
-  const liClassName = useMemo(() => liClassNameProp || void 0, [liClassNameProp]);
-  const markupRef = useRef(null);
+  const hostRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
-    if (typeof window === "undefined") {
+    if (isVisible) {
       return;
     }
-    if (!requireConsent) {
-      setCanLoad(true);
+    const node = hostRef.current;
+    if (!node) {
       return;
     }
-    const update = () => setCanLoad(hasMarketingConsent());
-    update();
-    const onCustom = () => update();
-    const onStorage = (e) => {
-      if (e.key === "cookie-consent") {
-        update();
-      }
-    };
-    window.addEventListener("cookie-consent", onCustom);
-    window.addEventListener("storage", onStorage);
-    return () => {
-      window.removeEventListener("cookie-consent", onCustom);
-      window.removeEventListener("storage", onStorage);
-    };
-  }, [requireConsent]);
-  useEffect(() => {
-    if (typeof window === "undefined") {
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
+      setIsVisible(true);
       return;
     }
-    if (!canLoad) {
-      return;
-    }
-    if (markupRef.current) {
-      const safeLiId = liId ? ` id="${liId}"` : "";
-      const safeLiClass = liClassName ? ` class="${liClassName}"` : "";
-      markupRef.current.innerHTML = `
-        <div id="${containerId}" class="TA_${wtype}">
-          <ul id="${ulId}" class="${ulClassName}">
-            <li${safeLiId}${safeLiClass}>
-              <a target="_blank" rel="noopener noreferrer" href="${href}">
-                <img src="https://www.tripadvisor.com/img/cdsi/img2/branding/v2/Tripadvisor_lockup_horizontal_secondary_registered-18034-2.svg" alt="TripAdvisor" width="180" height="28" decoding="async" />
-              </a>
-            </li>
-          </ul>
-        </div>
-      `.trim();
-    }
-    const scriptId = `tripadvisor-widget-script-${uniq}`;
-    const existing = document.getElementById(scriptId);
-    if (existing && existing.src.includes(`lang=${encodeURIComponent(lang)}`)) {
-      return;
-    }
-    if (existing) {
-      existing.remove();
-    }
-    const script = document.createElement("script");
-    script.id = scriptId;
-    script.async = true;
-    const params = new URLSearchParams();
-    params.set("wtype", wtype);
-    params.set("uniq", uniq);
-    params.set("locationId", locationId);
-    params.set("lang", lang);
-    params.set("border", border ? "true" : "false");
-    if (shadow !== null) {
-      params.set("shadow", shadow ? "true" : "false");
-    }
-    if (backgroundColor) {
-      params.set("backgroundColor", backgroundColor);
-    }
-    params.set("display_version", "2");
-    script.src = `https://www.jscache.com/wejs?${params.toString()}`;
-    script.setAttribute("data-loadtrk", "");
-    script.onload = () => {
-      script.loadtrk = true;
-    };
-    const containerEl = document.getElementById(containerId);
-    if (containerEl && typeof containerEl.insertAdjacentElement === "function") {
-      containerEl.insertAdjacentElement("afterend", script);
-    } else {
-      document.body.appendChild(script);
-    }
-    return () => {
-    };
-  }, [backgroundColor, border, canLoad, lang, locationId, shadow, uniq, wtype]);
-  return /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("div", { ref: markupRef }) });
-}
-
-function StarIcon({ className }) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [isVisible, rootMargin]);
   return /* @__PURE__ */ jsx(
-    "svg",
+    "div",
     {
-      viewBox: "0 0 24 24",
-      "aria-hidden": "true",
+      ref: hostRef,
       className,
-      fill: "currentColor",
-      children: /* @__PURE__ */ jsx("path", { d: "M12 17.27l5.18 3.04-1.64-5.81 4.46-3.86-5.88-.5L12 4.5 9.88 10.14l-5.88.5 4.46 3.86-1.64 5.81L12 17.27z" })
+      style: !isVisible ? { minHeight } : void 0,
+      children: isVisible ? children : null
     }
   );
 }
-function TrustSection() {
+
+function StarIcon$1({ className }) {
+  return /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", "aria-hidden": "true", className, fill: "currentColor", children: /* @__PURE__ */ jsx("path", { d: "M12 17.27l5.18 3.04-1.64-5.81 4.46-3.86-5.88-.5L12 4.5 9.88 10.14l-5.88.5 4.46 3.86-1.64 5.81L12 17.27z" }) });
+}
+function LandingTrustSection() {
   const { t } = useI18n();
   const reviewsUrl = "https://maps.app.goo.gl/bG8hYPYhdD6cT394A";
   const ratingRaw = Number(undefined                                          );
@@ -1332,100 +1235,135 @@ function TrustSection() {
   const countRaw = Number(undefined                                         );
   const count = Number.isFinite(countRaw) && countRaw > 0 ? Math.round(countRaw) : null;
   const ratingText = rating ? rating.toFixed(1) : null;
-  return /* @__PURE__ */ jsx("section", { className: "bg-slate-50 border-t border-slate-200 py-12", children: /* @__PURE__ */ jsxs("div", { className: "max-w-6xl mx-auto px-4", children: [
-    /* @__PURE__ */ jsxs("div", { className: "mb-8 grid gap-4 md:grid-cols-2", children: [
-      /* @__PURE__ */ jsxs(
-        "a",
-        {
-          href: reviewsUrl,
-          target: "_blank",
-          rel: "noopener noreferrer",
-          className: "group flex h-full flex-col rounded-2xl border border-slate-200 bg-white px-4 py-4 sm:px-5 sm:py-5 shadow-sm hover:shadow-md transition-shadow text-center",
-          children: [
-            /* @__PURE__ */ jsxs("div", { className: "flex-1 min-w-0 flex w-full flex-col items-center px-2 sm:px-3", children: [
-              /* @__PURE__ */ jsx("div", { className: "text-gray-900 font-semibold text-lg", children: t.trust.googleReviewsTitle }),
-              /* @__PURE__ */ jsx("div", { className: "mt-3 w-full rounded-xl bg-slate-50 px-3 py-3", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center justify-center gap-2", children: [
-                /* @__PURE__ */ jsx("div", { className: "flex items-center justify-center gap-1 text-amber-500", children: Array.from({ length: 5 }).map((_, idx) => /* @__PURE__ */ jsx(
-                  StarIcon,
-                  {
-                    className: [
-                      "h-5 w-5 sm:h-6 sm:w-6",
-                      rating && rating >= idx + 1 ? "opacity-100" : "opacity-30"
-                    ].join(" ")
-                  },
-                  idx
-                )) }),
-                ratingText && /* @__PURE__ */ jsxs("span", { className: "text-base sm:text-lg text-gray-900 whitespace-nowrap", children: [
-                  ratingText,
-                  "/5"
-                ] }),
-                count && /* @__PURE__ */ jsxs("span", { className: "text-sm sm:text-base text-gray-500 whitespace-nowrap", children: [
-                  "(",
-                  count,
-                  " ",
-                  t.trust.googleReviewsCountLabel,
-                  ")"
-                ] })
-              ] }) })
-            ] }),
-            /* @__PURE__ */ jsx("div", { className: "pt-5 px-2 sm:px-3", children: /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-blue-600/25 group-hover:bg-blue-700 group-hover:shadow-blue-600/35 transition", children: [
-              t.trust.googleReviewsCta,
-              /* @__PURE__ */ jsxs(
-                "svg",
-                {
-                  viewBox: "0 0 24 24",
-                  "aria-hidden": "true",
-                  className: "h-4 w-4 sm:h-5 sm:w-5 opacity-90",
-                  fill: "none",
-                  stroke: "currentColor",
-                  strokeWidth: "2",
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                  children: [
-                    /* @__PURE__ */ jsx("path", { d: "M7 17L17 7" }),
-                    /* @__PURE__ */ jsx("path", { d: "M9 7h8v8" })
-                  ]
-                }
-              )
-            ] }) })
-          ]
-        }
-      ),
-      /* @__PURE__ */ jsx("div", { className: "rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm h-full flex items-center justify-center", children: /* @__PURE__ */ jsx(
-        TripadvisorWidget,
-        {
-          requireConsent: false,
-          wtype: "cdsratingsonlynarrow",
-          uniq: "18",
-          border: true,
-          backgroundColor: "gray",
-          ulId: "26DzK4vLpG",
-          ulClassName: "TA_links zxoY1N7DGTdr",
-          liId: "8Elkc7FwaL0",
-          liClassName: "jv6ugdR"
-        }
-      ) })
+  return /* @__PURE__ */ jsx("section", { className: "bg-slate-50 border-t border-slate-200 py-12", children: /* @__PURE__ */ jsx("div", { className: "max-w-6xl mx-auto px-4", children: /* @__PURE__ */ jsx("div", { className: "mb-8 rounded-2xl border border-slate-200 bg-white px-5 py-6 shadow-sm", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center gap-3 text-center", children: [
+    /* @__PURE__ */ jsx("div", { className: "text-gray-900 font-semibold text-lg", children: t.trust.googleReviewsTitle }),
+    /* @__PURE__ */ jsx("div", { className: "flex items-center justify-center gap-1 text-amber-500", children: Array.from({ length: 5 }).map((_, idx) => /* @__PURE__ */ jsx(
+      StarIcon$1,
+      {
+        className: [
+          "h-5 w-5 sm:h-6 sm:w-6",
+          rating && rating >= idx + 1 ? "opacity-100" : "opacity-30"
+        ].join(" ")
+      },
+      idx
+    )) }),
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2 text-gray-700", children: [
+      ratingText && /* @__PURE__ */ jsxs("span", { className: "text-base sm:text-lg", children: [
+        ratingText,
+        "/5"
+      ] }),
+      count && /* @__PURE__ */ jsxs("span", { className: "text-sm sm:text-base text-gray-500", children: [
+        "(",
+        count,
+        " ",
+        t.trust.googleReviewsCountLabel,
+        ")"
+      ] })
     ] }),
+    /* @__PURE__ */ jsx(
+      "a",
+      {
+        href: reviewsUrl,
+        target: "_blank",
+        rel: "noopener noreferrer",
+        className: "inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-blue-600/25 hover:bg-blue-700 transition",
+        children: t.trust.googleReviewsCta
+      }
+    )
+  ] }) }) }) });
+}
+
+function LandingFooter() {
+  const { t, locale } = useI18n();
+  const basePath = localeToPath(locale);
+  return /* @__PURE__ */ jsx("footer", { className: "bg-gray-900 text-gray-200 py-10", children: /* @__PURE__ */ jsxs("div", { className: "max-w-6xl mx-auto px-4", children: [
     /* @__PURE__ */ jsxs("div", { className: "grid gap-8 md:grid-cols-3", children: [
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("h3", { className: "text-gray-900 mb-2", children: t.trust.companyTitle }),
-        /* @__PURE__ */ jsxs("p", { className: "text-sm text-gray-600", children: [
-          "WK DRIVE",
-          /* @__PURE__ */ jsx("br", {}),
-          "VAT ID (NIP): 5862330063",
-          /* @__PURE__ */ jsx("br", {}),
-          "Gdańsk, Poland"
+        /* @__PURE__ */ jsx("h3", { className: "text-white mb-3", children: "Taxi Airport Gdańsk" }),
+        /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-200", children: t.footer.description })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("h4", { className: "text-white mb-3", children: t.footer.contactTitle }),
+        /* @__PURE__ */ jsxs("div", { className: "space-y-2 text-sm text-gray-200", children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+            /* @__PURE__ */ jsx(Mail, { className: "w-4 h-4" }),
+            /* @__PURE__ */ jsx(
+              "a",
+              {
+                href: "mailto:booking@taxiairportgdansk.com",
+                onClick: () => trackContactClick("email"),
+                className: "inline-flex min-h-11 items-center py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
+                children: "booking@taxiairportgdansk.com"
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+            /* @__PURE__ */ jsx(MapPin, { className: "w-4 h-4" }),
+            /* @__PURE__ */ jsx("span", { children: t.footer.location })
+          ] })
         ] })
       ] }),
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("h3", { className: "text-gray-900 mb-2", children: t.trust.paymentTitle }),
-        /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-600", children: t.trust.paymentBody })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("h3", { className: "text-gray-900 mb-2", children: t.trust.comfortTitle }),
-        /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-600", children: t.trust.comfortBody })
+        /* @__PURE__ */ jsx("h4", { className: "text-white mb-3", children: t.footer.routesTitle }),
+        /* @__PURE__ */ jsxs("div", { className: "space-y-1 text-sm", children: [
+          /* @__PURE__ */ jsx(
+            "a",
+            {
+              href: getRoutePath(locale, "pricing"),
+              onClick: () => trackNavClick("landing_footer_pricing"),
+              className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
+              children: t.navbar.prices
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            "a",
+            {
+              href: `${basePath}/#vehicle-selection`,
+              onClick: () => trackNavClick("landing_footer_book"),
+              className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
+              children: t.common.orderOnlineNow
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            "a",
+            {
+              href: getRoutePath(locale, "orderCustom"),
+              onClick: () => trackNavClick("landing_footer_custom"),
+              className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
+              children: t.routeLanding.orderLinks.custom
+            }
+          )
+        ] })
       ] })
-    ] })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "border-t border-gray-600 mt-8 pt-6 text-center text-sm text-gray-200", children: /* @__PURE__ */ jsxs("p", { children: [
+      "© ",
+      (/* @__PURE__ */ new Date()).getFullYear(),
+      " Taxi Airport Gdańsk. ",
+      t.footer.rights,
+      " ",
+      /* @__PURE__ */ jsx(
+        "a",
+        {
+          href: getRoutePath(locale, "cookies"),
+          onClick: () => trackNavClick("landing_footer_cookies"),
+          className: "text-white visited:text-white hover:text-gray-200 underline",
+          children: t.footer.cookiePolicy
+        }
+      ),
+      " ",
+      /* @__PURE__ */ jsx("span", { className: "text-gray-300", children: "|" }),
+      " ",
+      /* @__PURE__ */ jsx(
+        "a",
+        {
+          href: getRoutePath(locale, "privacy"),
+          onClick: () => trackNavClick("landing_footer_privacy"),
+          className: "text-white visited:text-white hover:text-gray-200 underline",
+          children: t.footer.privacyPolicy
+        }
+      )
+    ] }) })
   ] }) });
 }
 
@@ -1892,7 +1830,7 @@ Object.fromEntries(
   Object.entries(cityRoutesByLocale).map(([locale, routes]) => [locale, routes.map((route) => route.slug)])
 );
 
-function Footer$1() {
+function Footer() {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
   const popularPlCitySlugs = [
@@ -1920,7 +1858,7 @@ function Footer$1() {
               {
                 href: "mailto:booking@taxiairportgdansk.com",
                 onClick: () => trackContactClick("email"),
-                className: "text-white visited:text-white hover:text-gray-200 transition-colors",
+                className: "inline-flex min-h-11 items-center py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
                 children: "booking@taxiairportgdansk.com"
               }
             )
@@ -1945,7 +1883,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "pricing"),
               onClick: () => trackNavClick("footer_pricing"),
-              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
+              className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
               children: t.navbar.prices
             }
           ),
@@ -1954,7 +1892,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "orderAirportGdansk"),
               onClick: () => trackNavClick("footer_order_airport_gdansk"),
-              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
+              className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
               children: t.routeLanding.orderLinks.airportGdansk
             }
           ),
@@ -1963,7 +1901,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "orderAirportSopot"),
               onClick: () => trackNavClick("footer_order_airport_sopot"),
-              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
+              className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
               children: t.routeLanding.orderLinks.airportSopot
             }
           ),
@@ -1972,7 +1910,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "orderAirportGdynia"),
               onClick: () => trackNavClick("footer_order_airport_gdynia"),
-              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
+              className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
               children: t.routeLanding.orderLinks.airportGdynia
             }
           ),
@@ -1981,7 +1919,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "orderCustom"),
               onClick: () => trackNavClick("footer_order_custom"),
-              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
+              className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
               children: t.routeLanding.orderLinks.custom
             }
           ),
@@ -1991,7 +1929,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "countryLanding"),
               onClick: () => trackNavClick("footer_country_landing"),
-              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
+              className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
               children: t.countryLanding?.title ?? t.navbar.airportTaxi
             }
           ),
@@ -2000,7 +1938,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "taxiGdanskCity"),
               onClick: () => trackNavClick("footer_taxi_gdansk"),
-              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
+              className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
               children: t.cityTaxi?.title ?? "Taxi Gdańsk"
             }
           ),
@@ -2009,7 +1947,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "airportTaxi"),
               onClick: () => trackNavClick("footer_airport_taxi"),
-              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
+              className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
               children: t.navbar.airportTaxi
             }
           ),
@@ -2018,7 +1956,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "airportSopot"),
               onClick: () => trackNavClick("footer_airport_sopot"),
-              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
+              className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
               children: t.navbar.airportSopot
             }
           ),
@@ -2027,7 +1965,7 @@ function Footer$1() {
             {
               href: getRoutePath(locale, "airportGdynia"),
               onClick: () => trackNavClick("footer_airport_gdynia"),
-              className: "block text-white visited:text-white hover:text-gray-200 transition-colors",
+              className: "block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors",
               children: t.navbar.airportGdynia
             }
           ),
@@ -2082,10 +2020,281 @@ function Footer$1() {
   ] }) });
 }
 
-const Footer$2 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  Footer: Footer$1
-}, Symbol.toStringTag, { value: 'Module' }));
+const localeToTripadvisorLang = {
+  en: "en_US",
+  pl: "pl_PL",
+  de: "de_DE",
+  fi: "fi_FI",
+  no: "nb_NO",
+  sv: "sv_SE",
+  da: "da_DK"
+};
+function TripadvisorWidget({
+  locationId: locationIdProp,
+  uniq: uniqProp,
+  href: hrefProp,
+  requireConsent = true,
+  wtype: wtypeProp,
+  border: borderProp,
+  shadow: shadowProp,
+  backgroundColor: backgroundColorProp,
+  ulId: ulIdProp,
+  ulClassName: ulClassNameProp,
+  liId: liIdProp,
+  liClassName: liClassNameProp
+}) {
+  const { locale } = useI18n();
+  const hostRef = useRef(null);
+  const [isInViewport, setIsInViewport] = useState(false);
+  const [canLoad, setCanLoad] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+    return requireConsent ? hasMarketingConsent() : true;
+  });
+  const locationId = locationIdProp || undefined                                             || "34104207";
+  const uniq = uniqProp || undefined                                      || "444";
+  const href = hrefProp || undefined                                     || "https://www.tripadvisor.com/Attraction_Review-g274725-d34104207-Reviews-Taxi_Airport_Gdansk-Gdansk_Pomerania_Province_Northern_Poland.html";
+  const wtype = wtypeProp || undefined                                       || "cdsratingsonlywide";
+  const border = borderProp ?? ("true") === "true";
+  const shadow = typeof shadowProp === "boolean" ? shadowProp : null;
+  const backgroundColor = backgroundColorProp || undefined                                                  || null;
+  const lang = localeToTripadvisorLang[locale] || "en_US";
+  const containerId = useMemo(() => `TA_${wtype}${uniq}`, [uniq, wtype]);
+  const ulId = useMemo(() => ulIdProp || `TA_links_${uniq}`, [ulIdProp, uniq]);
+  const ulClassName = useMemo(() => ulClassNameProp || "TA_links", [ulClassNameProp]);
+  const liId = useMemo(() => liIdProp || void 0, [liIdProp]);
+  const liClassName = useMemo(() => liClassNameProp || void 0, [liClassNameProp]);
+  const markupRef = useRef(null);
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    if (isInViewport) {
+      return;
+    }
+    const node = hostRef.current;
+    if (!node) {
+      return;
+    }
+    if (!("IntersectionObserver" in window)) {
+      setIsInViewport(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setIsInViewport(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "250px 0px" }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [isInViewport]);
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    if (!requireConsent) {
+      setCanLoad(true);
+      return;
+    }
+    const update = () => setCanLoad(hasMarketingConsent());
+    update();
+    const onCustom = () => update();
+    const onStorage = (e) => {
+      if (e.key === "cookie-consent") {
+        update();
+      }
+    };
+    window.addEventListener("cookie-consent", onCustom);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener("cookie-consent", onCustom);
+      window.removeEventListener("storage", onStorage);
+    };
+  }, [requireConsent]);
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    if (!canLoad || !isInViewport) {
+      return;
+    }
+    if (markupRef.current) {
+      const safeLiId = liId ? ` id="${liId}"` : "";
+      const safeLiClass = liClassName ? ` class="${liClassName}"` : "";
+      markupRef.current.innerHTML = `
+        <div id="${containerId}" class="TA_${wtype}">
+          <ul id="${ulId}" class="${ulClassName}">
+            <li${safeLiId}${safeLiClass}>
+              <a target="_blank" rel="noopener noreferrer" href="${href}">
+                <img src="https://www.tripadvisor.com/img/cdsi/img2/branding/v2/Tripadvisor_lockup_horizontal_secondary_registered-18034-2.svg" alt="TripAdvisor" width="180" height="28" decoding="async" />
+              </a>
+            </li>
+          </ul>
+        </div>
+      `.trim();
+    }
+    const scriptId = `tripadvisor-widget-script-${uniq}`;
+    const existing = document.getElementById(scriptId);
+    if (existing && existing.src.includes(`lang=${encodeURIComponent(lang)}`)) {
+      return;
+    }
+    if (existing) {
+      existing.remove();
+    }
+    const script = document.createElement("script");
+    script.id = scriptId;
+    script.async = true;
+    const params = new URLSearchParams();
+    params.set("wtype", wtype);
+    params.set("uniq", uniq);
+    params.set("locationId", locationId);
+    params.set("lang", lang);
+    params.set("border", border ? "true" : "false");
+    if (shadow !== null) {
+      params.set("shadow", shadow ? "true" : "false");
+    }
+    if (backgroundColor) {
+      params.set("backgroundColor", backgroundColor);
+    }
+    params.set("display_version", "2");
+    script.src = `https://www.jscache.com/wejs?${params.toString()}`;
+    script.setAttribute("data-loadtrk", "");
+    script.onload = () => {
+      script.loadtrk = true;
+    };
+    const containerEl = document.getElementById(containerId);
+    if (containerEl && typeof containerEl.insertAdjacentElement === "function") {
+      containerEl.insertAdjacentElement("afterend", script);
+    } else {
+      document.body.appendChild(script);
+    }
+    return () => {
+    };
+  }, [backgroundColor, border, canLoad, isInViewport, lang, locationId, shadow, uniq, wtype]);
+  return /* @__PURE__ */ jsx("div", { ref: hostRef, children: /* @__PURE__ */ jsx("div", { ref: markupRef }) });
+}
+
+function StarIcon({ className }) {
+  return /* @__PURE__ */ jsx(
+    "svg",
+    {
+      viewBox: "0 0 24 24",
+      "aria-hidden": "true",
+      className,
+      fill: "currentColor",
+      children: /* @__PURE__ */ jsx("path", { d: "M12 17.27l5.18 3.04-1.64-5.81 4.46-3.86-5.88-.5L12 4.5 9.88 10.14l-5.88.5 4.46 3.86-1.64 5.81L12 17.27z" })
+    }
+  );
+}
+function TrustSection() {
+  const { t } = useI18n();
+  const reviewsUrl = "https://maps.app.goo.gl/bG8hYPYhdD6cT394A";
+  const ratingRaw = Number(undefined                                          );
+  const rating = Number.isFinite(ratingRaw) && ratingRaw > 0 ? ratingRaw : null;
+  const countRaw = Number(undefined                                         );
+  const count = Number.isFinite(countRaw) && countRaw > 0 ? Math.round(countRaw) : null;
+  const ratingText = rating ? rating.toFixed(1) : null;
+  return /* @__PURE__ */ jsx("section", { className: "bg-slate-50 border-t border-slate-200 py-12", children: /* @__PURE__ */ jsxs("div", { className: "max-w-6xl mx-auto px-4", children: [
+    /* @__PURE__ */ jsxs("div", { className: "mb-8 grid gap-4 md:grid-cols-2", children: [
+      /* @__PURE__ */ jsxs(
+        "a",
+        {
+          href: reviewsUrl,
+          target: "_blank",
+          rel: "noopener noreferrer",
+          className: "group flex h-full flex-col rounded-2xl border border-slate-200 bg-white px-4 py-4 sm:px-5 sm:py-5 shadow-sm hover:shadow-md transition-shadow text-center",
+          children: [
+            /* @__PURE__ */ jsxs("div", { className: "flex-1 min-w-0 flex w-full flex-col items-center px-2 sm:px-3", children: [
+              /* @__PURE__ */ jsx("div", { className: "text-gray-900 font-semibold text-lg", children: t.trust.googleReviewsTitle }),
+              /* @__PURE__ */ jsx("div", { className: "mt-3 w-full rounded-xl bg-slate-50 px-3 py-3", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center justify-center gap-2", children: [
+                /* @__PURE__ */ jsx("div", { className: "flex items-center justify-center gap-1 text-amber-500", children: Array.from({ length: 5 }).map((_, idx) => /* @__PURE__ */ jsx(
+                  StarIcon,
+                  {
+                    className: [
+                      "h-5 w-5 sm:h-6 sm:w-6",
+                      rating && rating >= idx + 1 ? "opacity-100" : "opacity-30"
+                    ].join(" ")
+                  },
+                  idx
+                )) }),
+                ratingText && /* @__PURE__ */ jsxs("span", { className: "text-base sm:text-lg text-gray-900 whitespace-nowrap", children: [
+                  ratingText,
+                  "/5"
+                ] }),
+                count && /* @__PURE__ */ jsxs("span", { className: "text-sm sm:text-base text-gray-500 whitespace-nowrap", children: [
+                  "(",
+                  count,
+                  " ",
+                  t.trust.googleReviewsCountLabel,
+                  ")"
+                ] })
+              ] }) })
+            ] }),
+            /* @__PURE__ */ jsx("div", { className: "pt-5 px-2 sm:px-3", children: /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-blue-600/25 group-hover:bg-blue-700 group-hover:shadow-blue-600/35 transition", children: [
+              t.trust.googleReviewsCta,
+              /* @__PURE__ */ jsxs(
+                "svg",
+                {
+                  viewBox: "0 0 24 24",
+                  "aria-hidden": "true",
+                  className: "h-4 w-4 sm:h-5 sm:w-5 opacity-90",
+                  fill: "none",
+                  stroke: "currentColor",
+                  strokeWidth: "2",
+                  strokeLinecap: "round",
+                  strokeLinejoin: "round",
+                  children: [
+                    /* @__PURE__ */ jsx("path", { d: "M7 17L17 7" }),
+                    /* @__PURE__ */ jsx("path", { d: "M9 7h8v8" })
+                  ]
+                }
+              )
+            ] }) })
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsx("div", { className: "rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm h-full flex items-center justify-center", children: /* @__PURE__ */ jsx(
+        TripadvisorWidget,
+        {
+          requireConsent: false,
+          wtype: "cdsratingsonlynarrow",
+          uniq: "18",
+          border: true,
+          backgroundColor: "gray",
+          ulId: "26DzK4vLpG",
+          ulClassName: "TA_links zxoY1N7DGTdr",
+          liId: "8Elkc7FwaL0",
+          liClassName: "jv6ugdR"
+        }
+      ) })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "grid gap-8 md:grid-cols-3", children: [
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("h3", { className: "text-gray-900 mb-2", children: t.trust.companyTitle }),
+        /* @__PURE__ */ jsxs("p", { className: "text-sm text-gray-600", children: [
+          "WK DRIVE",
+          /* @__PURE__ */ jsx("br", {}),
+          "VAT ID (NIP): 5862330063",
+          /* @__PURE__ */ jsx("br", {}),
+          "Gdańsk, Poland"
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("h3", { className: "text-gray-900 mb-2", children: t.trust.paymentTitle }),
+        /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-600", children: t.trust.paymentBody })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("h3", { className: "text-gray-900 mb-2", children: t.trust.comfortTitle }),
+        /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-600", children: t.trust.comfortBody })
+      ] })
+    ] })
+  ] }) });
+}
 
 const BRAND_TITLE = "Taxi Airport Gdańsk";
 function usePageTitle(title) {
@@ -2120,7 +2329,7 @@ function CookiesPage() {
       /* @__PURE__ */ jsx(PrivacyPolicy, {})
     ] }),
     /* @__PURE__ */ jsx(TrustSection, {}),
-    /* @__PURE__ */ jsx(Footer$1, {}),
+    /* @__PURE__ */ jsx(Footer, {}),
     /* @__PURE__ */ jsx(FloatingActions, {})
   ] });
 }
@@ -2144,7 +2353,7 @@ function PrivacyPage() {
       /* @__PURE__ */ jsx(PrivacyPolicy, {})
     ] }),
     /* @__PURE__ */ jsx(TrustSection, {}),
-    /* @__PURE__ */ jsx(Footer$1, {}),
+    /* @__PURE__ */ jsx(Footer, {}),
     /* @__PURE__ */ jsx(FloatingActions, {})
   ] });
 }
@@ -2208,7 +2417,7 @@ function NotFoundPage() {
       ] })
     ] }),
     /* @__PURE__ */ jsx(TrustSection, {}),
-    /* @__PURE__ */ jsx(Footer$1, {})
+    /* @__PURE__ */ jsx(Footer, {})
   ] });
 }
 
@@ -2370,7 +2579,7 @@ function CountryLanding() {
       ] }) })
     ] }),
     /* @__PURE__ */ jsx(TrustSection, {}),
-    /* @__PURE__ */ jsx(Footer$1, {}),
+    /* @__PURE__ */ jsx(Footer, {}),
     /* @__PURE__ */ jsx(FloatingActions, {})
   ] });
 }
@@ -2510,7 +2719,7 @@ function CountryAirportLanding() {
       ] }) })
     ] }),
     /* @__PURE__ */ jsx(TrustSection, {}),
-    /* @__PURE__ */ jsx(Footer$1, {}),
+    /* @__PURE__ */ jsx(Footer, {}),
     /* @__PURE__ */ jsx(FloatingActions, {})
   ] });
 }
@@ -2626,7 +2835,7 @@ function CityRouteLanding() {
       ] }) })
     ] }),
     /* @__PURE__ */ jsx(TrustSection, {}),
-    /* @__PURE__ */ jsx(Footer$1, {}),
+    /* @__PURE__ */ jsx(Footer, {}),
     /* @__PURE__ */ jsx(FloatingActions, {})
   ] });
 }
@@ -2719,13 +2928,12 @@ function TaxiGdanskPage() {
       ] }) })
     ] }),
     /* @__PURE__ */ jsx(TrustSection, {}),
-    /* @__PURE__ */ jsx(Footer$1, {}),
+    /* @__PURE__ */ jsx(Footer, {}),
     /* @__PURE__ */ jsx(FloatingActions, {})
   ] });
 }
 
 const Pricing = lazy(() => import('./assets/Pricing-BxciKOQA.mjs').then((mod) => ({ default: mod.Pricing })));
-const Footer = lazy(() => Promise.resolve().then(() => Footer$2).then((mod) => ({ default: mod.Footer })));
 const OrderForm = lazy(() => import('./assets/OrderForm-Z0yxtQW7.mjs').then((mod) => ({ default: mod.OrderForm })));
 const QuoteForm = lazy(() => import('./assets/QuoteForm-BB9f8ybG.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./assets/ManageOrder-DVOaNQ-H.mjs').then((mod) => ({ default: mod.ManageOrder })));
@@ -2835,9 +3043,9 @@ function Landing() {
           onBack: handleBackToVehicleSelection
         }
       ) }) }),
-      /* @__PURE__ */ jsx("div", { className: "defer-render defer-render-md", children: /* @__PURE__ */ jsx(TrustSection, {}) })
+      /* @__PURE__ */ jsx(LazyMount, { className: "defer-render defer-render-md", rootMargin: "300px 0px", minHeight: 760, children: /* @__PURE__ */ jsx(LandingTrustSection, {}) })
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "defer-render defer-render-sm", children: /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(Footer, {}) }) }),
+    /* @__PURE__ */ jsx(LazyMount, { className: "defer-render defer-render-sm", rootMargin: "240px 0px", minHeight: 420, children: /* @__PURE__ */ jsx(LandingFooter, {}) }),
     selectedRoute && /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(
       OrderForm,
       {
@@ -9335,4 +9543,4 @@ function render(url) {
   };
 }
 
-export { Breadcrumbs as B, Footer$1 as F, Navbar as N, TrustSection as T, usePageTitle as a, trackNavClick as b, FloatingActions as c, trackFormOpen as d, trackPricingRouteSelect as e, trackPricingAction as f, getRouteSlug as g, TrustBar as h, trackVehicleSelect as i, trackFormClose as j, trackFormValidation as k, localeToPath as l, trackFormSubmit as m, trackFormStart as n, isAnalyticsEnabled as o, hasMarketingConsent as p, requestScrollTo as r, render, scrollToId as s, trackCtaClick as t, useI18n as u };
+export { Breadcrumbs as B, Footer as F, Navbar as N, TrustSection as T, usePageTitle as a, trackNavClick as b, FloatingActions as c, trackFormOpen as d, trackPricingRouteSelect as e, trackPricingAction as f, getRouteSlug as g, TrustBar as h, trackVehicleSelect as i, trackFormClose as j, trackFormValidation as k, localeToPath as l, trackFormSubmit as m, trackFormStart as n, isAnalyticsEnabled as o, hasMarketingConsent as p, requestScrollTo as r, render, scrollToId as s, trackCtaClick as t, useI18n as u };

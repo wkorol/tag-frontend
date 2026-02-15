@@ -3,7 +3,9 @@ import { Navigate, Outlet, Route, Routes, useLocation, useParams, useSearchParam
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { VehicleTypeSelector } from './components/VehicleTypeSelector';
-import { TrustSection } from './components/TrustSection';
+import { LazyMount } from './components/LazyMount';
+import { LandingTrustSection } from './components/LandingTrustSection';
+import { LandingFooter } from './components/LandingFooter';
 import { CookieBanner } from './components/CookieBanner';
 import { FloatingActions } from './components/FloatingActions';
 import { CookiesPage } from './pages/CookiesPage';
@@ -14,7 +16,6 @@ import { CountryAirportLanding } from './pages/CountryAirportLanding';
 import { CityRouteLanding } from './pages/CityRouteLanding';
 import { TaxiGdanskPage } from './pages/TaxiGdanskPage';
 const Pricing = lazy(() => import('./components/Pricing').then((mod) => ({ default: mod.Pricing })));
-const Footer = lazy(() => import('./components/Footer').then((mod) => ({ default: mod.Footer })));
 const OrderForm = lazy(() => import('./components/OrderForm').then((mod) => ({ default: mod.OrderForm })));
 const QuoteForm = lazy(() => import('./components/QuoteForm').then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./components/ManageOrder').then((mod) => ({ default: mod.ManageOrder })));
@@ -187,16 +188,14 @@ function Landing() {
           )}
         </div>
 
-        <div className="defer-render defer-render-md">
-          <TrustSection />
-        </div>
+        <LazyMount className="defer-render defer-render-md" rootMargin="300px 0px" minHeight={760}>
+          <LandingTrustSection />
+        </LazyMount>
       </main>
 
-      <div className="defer-render defer-render-sm">
-        <Suspense fallback={null}>
-          <Footer />
-        </Suspense>
-      </div>
+      <LazyMount className="defer-render defer-render-sm" rootMargin="240px 0px" minHeight={420}>
+        <LandingFooter />
+      </LazyMount>
 
       {selectedRoute && (
         <Suspense fallback={null}>

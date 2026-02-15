@@ -39,7 +39,7 @@ export function Footer() {
                 <a
                   href="mailto:booking@taxiairportgdansk.com"
                   onClick={() => trackContactClick('email')}
-                  className="text-white visited:text-white hover:text-gray-200 transition-colors"
+                  className="inline-flex min-h-11 items-center py-1 text-white visited:text-white hover:text-gray-200 transition-colors"
                 >
                   booking@taxiairportgdansk.com
                 </a>
@@ -68,35 +68,35 @@ export function Footer() {
               <a
                 href={getRoutePath(locale, 'pricing')}
                 onClick={() => trackNavClick('footer_pricing')}
-                className="block text-white visited:text-white hover:text-gray-200 transition-colors"
+                className="block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors"
               >
                 {t.navbar.prices}
               </a>
               <a
                 href={getRoutePath(locale, 'orderAirportGdansk')}
                 onClick={() => trackNavClick('footer_order_airport_gdansk')}
-                className="block text-white visited:text-white hover:text-gray-200 transition-colors"
+                className="block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors"
               >
                 {t.routeLanding.orderLinks.airportGdansk}
               </a>
               <a
                 href={getRoutePath(locale, 'orderAirportSopot')}
                 onClick={() => trackNavClick('footer_order_airport_sopot')}
-                className="block text-white visited:text-white hover:text-gray-200 transition-colors"
+                className="block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors"
               >
                 {t.routeLanding.orderLinks.airportSopot}
               </a>
               <a
                 href={getRoutePath(locale, 'orderAirportGdynia')}
                 onClick={() => trackNavClick('footer_order_airport_gdynia')}
-                className="block text-white visited:text-white hover:text-gray-200 transition-colors"
+                className="block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors"
               >
                 {t.routeLanding.orderLinks.airportGdynia}
               </a>
               <a
                 href={getRoutePath(locale, 'orderCustom')}
                 onClick={() => trackNavClick('footer_order_custom')}
-                className="block text-white visited:text-white hover:text-gray-200 transition-colors"
+                className="block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors"
               >
                 {t.routeLanding.orderLinks.custom}
               </a>
@@ -104,35 +104,35 @@ export function Footer() {
               <a
                 href={getRoutePath(locale, 'countryLanding')}
                 onClick={() => trackNavClick('footer_country_landing')}
-                className="block text-white visited:text-white hover:text-gray-200 transition-colors"
+                className="block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors"
               >
                 {t.countryLanding?.title ?? t.navbar.airportTaxi}
               </a>
               <a
                 href={getRoutePath(locale, 'taxiGdanskCity')}
                 onClick={() => trackNavClick('footer_taxi_gdansk')}
-                className="block text-white visited:text-white hover:text-gray-200 transition-colors"
+                className="block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors"
               >
                 {t.cityTaxi?.title ?? 'Taxi Gdańsk'}
               </a>
               <a
                 href={getRoutePath(locale, 'airportTaxi')}
                 onClick={() => trackNavClick('footer_airport_taxi')}
-                className="block text-white visited:text-white hover:text-gray-200 transition-colors"
+                className="block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors"
               >
                 {t.navbar.airportTaxi}
               </a>
               <a
                 href={getRoutePath(locale, 'airportSopot')}
                 onClick={() => trackNavClick('footer_airport_sopot')}
-                className="block text-white visited:text-white hover:text-gray-200 transition-colors"
+                className="block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors"
               >
                 {t.navbar.airportSopot}
               </a>
               <a
                 href={getRoutePath(locale, 'airportGdynia')}
                 onClick={() => trackNavClick('footer_airport_gdynia')}
-                className="block text-white visited:text-white hover:text-gray-200 transition-colors"
+                className="block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors"
               >
                 {t.navbar.airportGdynia}
               </a>

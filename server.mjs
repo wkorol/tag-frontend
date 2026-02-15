@@ -53,8 +53,20 @@ const contentTypes = {
   '.txt': 'text/plain',
 };
 
+const deferStylesheetLinks = (html) =>
+  html.replace(/<link\s+rel="stylesheet"([^>]*)>/g, (fullTag, attrs = '') => {
+    const hrefMatch = attrs.match(/\shref="([^"]+\.css)"/i);
+    if (!hrefMatch) {
+      return fullTag;
+    }
+
+    const preloadAttrs = attrs.replace(/\srel="stylesheet"/gi, '');
+    return `<link rel="preload" as="style"${preloadAttrs} onload="this.onload=null;this.rel='stylesheet'"><noscript>${fullTag}</noscript>`;
+  });
+
 const templatePath = path.join(clientDir, 'index.html');
 let template = await fs.readFile(templatePath, 'utf-8');
+template = deferStylesheetLinks(template);
 let render;
 for (const candidate of ssrEntryCandidates) {
   try {

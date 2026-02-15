@@ -42,6 +42,8 @@ export function TripadvisorWidget({
   liClassName: liClassNameProp,
 }: TripadvisorWidgetProps) {
   const { locale } = useI18n();
+  const hostRef = useRef<HTMLDivElement | null>(null);
+  const [isInViewport, setIsInViewport] = useState(false);
   const [canLoad, setCanLoad] = useState(() => {
     if (typeof window === 'undefined') {
       return false;
@@ -105,6 +107,39 @@ export function TripadvisorWidget({
       return;
     }
 
+    if (isInViewport) {
+      return;
+    }
+
+    const node = hostRef.current;
+    if (!node) {
+      return;
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      setIsInViewport(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setIsInViewport(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '250px 0px' }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [isInViewport]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     if (!requireConsent) {
       setCanLoad(true);
       return;
@@ -134,7 +169,7 @@ export function TripadvisorWidget({
       return;
     }
 
-    if (!canLoad) {
+    if (!canLoad || !isInViewport) {
       return;
     }
 
@@ -204,10 +239,10 @@ export function TripadvisorWidget({
       // If you want strict cleanup, uncomment:
       // script.remove();
     };
-  }, [backgroundColor, border, canLoad, lang, locationId, shadow, uniq, wtype]);
+  }, [backgroundColor, border, canLoad, isInViewport, lang, locationId, shadow, uniq, wtype]);
 
   return (
-    <div>
+    <div ref={hostRef}>
       <div ref={markupRef} />
     </div>
   );
