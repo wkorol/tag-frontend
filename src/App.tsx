@@ -1,6 +1,6 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { Navigate, Outlet, Route, Routes, useLocation, useParams, useSearchParams } from 'react-router-dom';
-import { Navbar } from './components/Navbar';
+import { LandingNavbar } from './components/LandingNavbar';
 import { Hero } from './components/Hero';
 import { VehicleTypeSelector } from './components/VehicleTypeSelector';
 import { LazyMount } from './components/LazyMount';
@@ -8,13 +8,6 @@ import { LandingTrustSection } from './components/LandingTrustSection';
 import { LandingFooter } from './components/LandingFooter';
 import { CookieBanner } from './components/CookieBanner';
 import { FloatingActions } from './components/FloatingActions';
-import { CookiesPage } from './pages/CookiesPage';
-import { PrivacyPage } from './pages/PrivacyPage';
-import { NotFoundPage } from './pages/NotFoundPage';
-import { CountryLanding } from './pages/CountryLanding';
-import { CountryAirportLanding } from './pages/CountryAirportLanding';
-import { CityRouteLanding } from './pages/CityRouteLanding';
-import { TaxiGdanskPage } from './pages/TaxiGdanskPage';
 const Pricing = lazy(() => import('./components/Pricing').then((mod) => ({ default: mod.Pricing })));
 const OrderForm = lazy(() => import('./components/OrderForm').then((mod) => ({ default: mod.OrderForm })));
 const QuoteForm = lazy(() => import('./components/QuoteForm').then((mod) => ({ default: mod.QuoteForm })));
@@ -25,6 +18,13 @@ const CustomOrderPage = lazy(() => import('./pages/OrderRoutePage').then((mod) =
 const PricingPage = lazy(() => import('./pages/PricingPage').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./pages/AdminOrdersPage').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./pages/AdminOrderPage').then((mod) => ({ default: mod.AdminOrderPage })));
+const CookiesPage = lazy(() => import('./pages/CookiesPage').then((mod) => ({ default: mod.CookiesPage })));
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage').then((mod) => ({ default: mod.PrivacyPage })));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then((mod) => ({ default: mod.NotFoundPage })));
+const CountryLanding = lazy(() => import('./pages/CountryLanding').then((mod) => ({ default: mod.CountryLanding })));
+const CountryAirportLanding = lazy(() => import('./pages/CountryAirportLanding').then((mod) => ({ default: mod.CountryAirportLanding })));
+const CityRouteLanding = lazy(() => import('./pages/CityRouteLanding').then((mod) => ({ default: mod.CityRouteLanding })));
+const TaxiGdanskPage = lazy(() => import('./pages/TaxiGdanskPage').then((mod) => ({ default: mod.TaxiGdanskPage })));
 import {
   trackFormOpen,
   trackPageView,
@@ -169,7 +169,7 @@ function Landing() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-32 sm:pb-0">
-      <Navbar />
+      <LandingNavbar />
       <main>
         <Hero />
         
@@ -293,10 +293,46 @@ const renderLocalizedRoutes = (locale: Locale, t: ReturnType<typeof useI18n>['t'
 export default function App() {
   const { t } = useI18n();
   const location = useLocation();
+  const [trackingReady, setTrackingReady] = useState(false);
 
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    let cancelled = false;
+    let timeoutId: number | null = null;
+    let idleId: number | null = null;
+
+    const enable = () => {
+      if (!cancelled) {
+        setTrackingReady(true);
+      }
+    };
+
+    if ('requestIdleCallback' in window) {
+      idleId = (window as Window & { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number })
+        .requestIdleCallback(enable, { timeout: 1200 });
+    } else {
+      timeoutId = window.setTimeout(enable, 800);
+    }
+
+    return () => {
+      cancelled = true;
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+      }
+      if (idleId !== null && 'cancelIdleCallback' in window) {
+        (window as Window & { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(idleId);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!trackingReady) {
+      return;
+    }
     trackPageView(`${location.pathname}${location.search}`);
-  }, [location.pathname, location.search]);
+  }, [location.pathname, location.search, trackingReady]);
 
   useEffect(() => {
     if (typeof document === 'undefined') {
@@ -323,6 +359,9 @@ export default function App() {
   }, [location.pathname]);
 
   useEffect(() => {
+    if (!trackingReady) {
+      return;
+    }
     if (typeof window === 'undefined') {
       return;
     }
@@ -352,9 +391,12 @@ export default function App() {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
     };
-  }, []);
+  }, [trackingReady]);
 
   useEffect(() => {
+    if (!trackingReady) {
+      return;
+    }
     if (typeof window === 'undefined') {
       return;
     }
@@ -391,9 +433,12 @@ export default function App() {
     return () => {
       document.removeEventListener('click', onClick);
     };
-  }, []);
+  }, [trackingReady]);
 
   useEffect(() => {
+    if (!trackingReady) {
+      return;
+    }
     if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
       return;
     }
@@ -419,7 +464,7 @@ export default function App() {
     );
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
-  }, [location.pathname]);
+  }, [location.pathname, trackingReady]);
 
   return (
     <>

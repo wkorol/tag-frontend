@@ -1,9 +1,9 @@
 import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
 import { useMemo, useEffect, Suspense } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { u as useI18n, a as usePageTitle, d as trackFormOpen, l as localeToPath, c as FloatingActions } from '../entry-server.mjs';
-import { OrderForm } from './OrderForm-Z0yxtQW7.mjs';
-import { Q as QuoteForm } from './QuoteForm-BB9f8ybG.mjs';
+import { u as useI18n, a as usePageTitle, c as trackFormOpen, l as localeToPath, F as FloatingActions } from '../entry-server.mjs';
+import { OrderForm } from './OrderForm-B2tWzKbJ.mjs';
+import { Q as QuoteForm } from './QuoteForm-DWWhKbcm.mjs';
 import 'react-dom/server';
 import 'react-router-dom/server.js';
 import 'lucide-react';

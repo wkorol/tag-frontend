@@ -37,9 +37,9 @@ export function TrustSection() {
             href={reviewsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white px-4 py-4 sm:px-5 sm:py-5 shadow-sm hover:shadow-md transition-shadow text-center"
+            className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white px-5 py-8 sm:px-6 sm:py-10 shadow-sm hover:shadow-md transition-shadow text-center"
           >
-            <div className="flex-1 min-w-0 flex w-full flex-col items-center px-2 sm:px-3">
+            <div className="flex-1 min-w-0 flex w-full flex-col items-center px-2 py-2 sm:px-3">
               <div className="text-gray-900 font-semibold text-lg">
                 {t.trust.googleReviewsTitle}
               </div>

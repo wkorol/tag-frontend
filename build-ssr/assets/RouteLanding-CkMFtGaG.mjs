@@ -1,10 +1,13 @@
 import { jsxs, jsx } from 'react/jsx-runtime';
-import { u as useI18n, a as usePageTitle, l as localeToPath, g as getRouteSlug, N as Navbar, B as Breadcrumbs, t as trackCtaClick, r as requestScrollTo, b as trackNavClick, T as TrustSection, F as Footer, c as FloatingActions } from '../entry-server.mjs';
+import { B as Breadcrumbs } from './Breadcrumbs-BLHIqKga.mjs';
+import { N as Navbar, T as TrustSection, F as Footer } from './TrustSection-vNKajofe.mjs';
+import { u as useI18n, a as usePageTitle, l as localeToPath, g as getRouteSlug, t as trackCtaClick, r as requestScrollTo, b as trackNavClick, F as FloatingActions } from '../entry-server.mjs';
+import 'lucide-react';
 import 'react';
+import 'react-router-dom';
+import './TripadvisorWidget-BVBwrnhD.mjs';
 import 'react-dom/server';
 import 'react-router-dom/server.js';
-import 'react-router-dom';
-import 'lucide-react';
 import 'react-dom';
 
 function RouteLanding({ title, description, route, examples, pricing }) {

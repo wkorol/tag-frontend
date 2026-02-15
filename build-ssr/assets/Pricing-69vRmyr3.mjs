@@ -3,7 +3,7 @@ import { MapPin, Sun, Moon, Calculator, ChevronLeft } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { u as useEurRate, p as preloadEurRate, f as formatEur } from './currency-BfL_L89a.mjs';
 import { F as FIXED_PRICES } from './fixedPricing-BrEVc9Vy.mjs';
-import { u as useI18n, e as trackPricingRouteSelect, f as trackPricingAction, h as TrustBar, i as trackVehicleSelect } from '../entry-server.mjs';
+import { u as useI18n, d as trackPricingRouteSelect, e as trackPricingAction, T as TrustBar, f as trackVehicleSelect } from '../entry-server.mjs';
 import 'react-dom/server';
 import 'react-router-dom/server.js';
 import 'react-router-dom';
