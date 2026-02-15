@@ -28,6 +28,10 @@ export function CityRouteLanding() {
 
   const destination = route.destination;
   const cityTaxi = t.cityTaxi;
+  const cityRouteItemLabel = (cityDestination: string) =>
+    typeof cityTaxi.cityRoutesItem === 'function'
+      ? cityTaxi.cityRoutesItem(cityDestination)
+      : `Lotnisko Gdańsk → ${cityDestination}`;
   usePageTitle(`Cena taxi z lotniska Gdańsk do ${destination}`);
 
   return (
@@ -134,7 +138,7 @@ export function CityRouteLanding() {
                     onClick={() => trackNavClick('city_routes_link')}
                     className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700 transition-colors hover:border-orange-200 hover:bg-orange-50"
                   >
-                    {cityTaxi.cityRoutesItem(entry.destination)}
+                    {cityRouteItemLabel(entry.destination)}
                   </a>
                 ))}
               </div>

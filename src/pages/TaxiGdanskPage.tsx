@@ -15,6 +15,10 @@ export function TaxiGdanskPage() {
   const basePath = localeToPath(locale);
   const content = t.cityTaxi;
   const cityRoutes = getCityRoutes(locale);
+  const cityRouteItemLabel = (destination: string) =>
+    typeof content.cityRoutesItem === 'function'
+      ? content.cityRoutesItem(destination)
+      : `Gdańsk Airport → ${destination}`;
   usePageTitle(content.title);
 
   return (
@@ -107,7 +111,7 @@ export function TaxiGdanskPage() {
                     onClick={() => trackNavClick('city_routes_link')}
                     className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700 transition-colors hover:border-orange-200 hover:bg-orange-50"
                   >
-                    {content.cityRoutesItem(route.destination)}
+                    {cityRouteItemLabel(route.destination)}
                   </a>
                 ))}
               </div>

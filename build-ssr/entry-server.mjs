@@ -2529,6 +2529,7 @@ function CityRouteLanding() {
   }
   const destination = route.destination;
   const cityTaxi = t.cityTaxi;
+  const cityRouteItemLabel = (cityDestination) => typeof cityTaxi.cityRoutesItem === "function" ? cityTaxi.cityRoutesItem(cityDestination) : `Lotnisko Gdańsk → ${cityDestination}`;
   usePageTitle(`Cena taxi z lotniska Gdańsk do ${destination}`);
   return /* @__PURE__ */ jsxs("div", { className: "min-h-screen bg-gray-50", children: [
     /* @__PURE__ */ jsx(Navbar, {}),
@@ -2618,7 +2619,7 @@ function CityRouteLanding() {
             href: `${basePath}/${entry.slug}`,
             onClick: () => trackNavClick("city_routes_link"),
             className: "rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700 transition-colors hover:border-orange-200 hover:bg-orange-50",
-            children: cityTaxi.cityRoutesItem(entry.destination)
+            children: cityRouteItemLabel(entry.destination)
           },
           entry.slug
         )) })
@@ -2635,6 +2636,7 @@ function TaxiGdanskPage() {
   const basePath = localeToPath(locale);
   const content = t.cityTaxi;
   const cityRoutes = getCityRoutes(locale);
+  const cityRouteItemLabel = (destination) => typeof content.cityRoutesItem === "function" ? content.cityRoutesItem(destination) : `Gdańsk Airport → ${destination}`;
   usePageTitle(content.title);
   return /* @__PURE__ */ jsxs("div", { className: "min-h-screen bg-gray-50", children: [
     /* @__PURE__ */ jsx(Navbar, {}),
@@ -2703,7 +2705,7 @@ function TaxiGdanskPage() {
             href: `${basePath}/${route.slug}`,
             onClick: () => trackNavClick("city_routes_link"),
             className: "rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700 transition-colors hover:border-orange-200 hover:bg-orange-50",
-            children: content.cityRoutesItem(route.destination)
+            children: cityRouteItemLabel(route.destination)
           },
           route.slug
         )) })
@@ -2936,6 +2938,28 @@ function App() {
   useEffect(() => {
     trackPageView(`${location.pathname}${location.search}`);
   }, [location.pathname, location.search]);
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return;
+    }
+    const head = document.head;
+    if (!head) {
+      return;
+    }
+    let canonical = head.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.rel = "canonical";
+      head.appendChild(canonical);
+    }
+    try {
+      const nextUrl = new URL(window.location.href);
+      nextUrl.search = "";
+      nextUrl.hash = "";
+      canonical.href = nextUrl.toString();
+    } catch {
+    }
+  }, [location.pathname]);
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
