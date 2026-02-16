@@ -1361,13 +1361,13 @@ const Pricing = lazy(() => import('./assets/Pricing-BDDzADts.mjs').then((mod) =>
 const Footer = lazy(() => import('./assets/Footer-BpSYvjMW.mjs').then((mod) => ({ default: mod.Footer })));
 const CookieBanner = lazy(() => import('./assets/CookieBanner-Dh820bF4.mjs').then((mod) => ({ default: mod.CookieBanner })));
 const FloatingActions = lazy(() => import('./assets/FloatingActions-BmVj2zkN.mjs').then((mod) => ({ default: mod.FloatingActions })));
-const OrderForm = lazy(() => import('./assets/OrderForm-BGjRu8fU.mjs').then((mod) => ({ default: mod.OrderForm })));
-const QuoteForm = lazy(() => import('./assets/QuoteForm-sT0ZyZBb.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
+const OrderForm = lazy(() => import('./assets/OrderForm-CxL8Zgel.mjs').then((mod) => ({ default: mod.OrderForm })));
+const QuoteForm = lazy(() => import('./assets/QuoteForm-fjRx3Z6D.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./assets/ManageOrder-Be9OEJDV.mjs').then((mod) => ({ default: mod.ManageOrder })));
 const RouteLanding = lazy(() => import('./assets/RouteLanding-Czh0qaGC.mjs').then((mod) => ({ default: mod.RouteLanding })));
-const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-CLFEjXLc.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
-const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-CLFEjXLc.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./assets/PricingPage-DjtlIMlh.mjs').then((mod) => ({ default: mod.PricingPage })));
+const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-Db5p8dTC.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
+const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-Db5p8dTC.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
+const PricingPage = lazy(() => import('./assets/PricingPage-hNPG0tsP.mjs').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-CaDjKx27.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-C-tkmzwq.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
 const CookiesPage = lazy(() => import('./assets/CookiesPage-CgvWUwtA.mjs').then((mod) => ({ default: mod.CookiesPage })));

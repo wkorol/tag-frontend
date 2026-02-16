@@ -236,6 +236,10 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
   const signFee = formData.pickupType === 'airport' && formData.signService === 'sign' ? 20 : 0;
   const totalPrice = currentPrice + signFee;
   const eurText = formatEur(totalPrice, eurRate);
+  const confirmOrderLabel =
+    typeof t.orderForm.confirmOrder === 'function'
+      ? t.orderForm.confirmOrder(totalPrice)
+      : `${t.orderForm.confirmOrder ?? 'Confirm order'} (${totalPrice} PLN)`;
   const routeStartsAtAirport = defaultPickupType ? defaultPickupType === 'airport' : route.from === t.pricing.routes.airport;
   const shouldSwapRoute =
     formData.pickupType === 'airport'
@@ -1412,7 +1416,7 @@ export function OrderForm({ route, onClose }: OrderFormProps) {
 	                    t.orderForm.submitting
 	                  ) : (
 	                    <span className="flex flex-col items-center gap-1">
-	                      <span>{t.orderForm.confirmOrder(totalPrice)}</span>
+	                      <span>{confirmOrderLabel}</span>
 	                      {eurText && (
 	                        <span className="order-actions-eur text-[11px] text-blue-100">{eurText}</span>
 	                      )}

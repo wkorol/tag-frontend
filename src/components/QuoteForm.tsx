@@ -258,6 +258,30 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
     savingsPercent: number;
   } | null>(null);
   const [fixedRouteChecking, setFixedRouteChecking] = useState(false);
+  const formatFixedRouteDistance = (distance: number | string) =>
+    typeof t.quoteForm.fixedRouteDistance === 'function'
+      ? t.quoteForm.fixedRouteDistance(distance)
+      : `Distance: ${distance} km`;
+  const formatFixedRouteComputed = (price: number) =>
+    typeof t.quoteForm.fixedRouteComputed === 'function'
+      ? t.quoteForm.fixedRouteComputed(price)
+      : `${price} PLN`;
+  const formatLongRouteDistance = (distance: number) =>
+    typeof t.quoteForm.longRouteDistance === 'function'
+      ? t.quoteForm.longRouteDistance(distance)
+      : `Distance: ${distance} km`;
+  const formatLongRouteTaximeter = (price: number, rate: number) =>
+    typeof t.quoteForm.longRouteTaximeter === 'function'
+      ? t.quoteForm.longRouteTaximeter(price, rate)
+      : `Taximeter: ${price} PLN (${rate} PLN/km)`;
+  const formatLongRouteProposed = (price: number) =>
+    typeof t.quoteForm.longRouteProposed === 'function'
+      ? t.quoteForm.longRouteProposed(price)
+      : `Proposed price: ${price} PLN`;
+  const formatLongRouteSavings = (percent: number) =>
+    typeof t.quoteForm.longRouteSavings === 'function'
+      ? t.quoteForm.longRouteSavings(percent)
+      : `Savings: ${percent}%`;
   const [holidayKeys, setHolidayKeys] = useState<Set<string> | null>(null);
   const [holidayYear, setHolidayYear] = useState<number | null>(null);
   const formStartedRef = useRef(false);
@@ -309,6 +333,10 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
   const eurText = fixedTotalPrice ? formatEur(fixedTotalPrice, eurRate) : null;
   const proposedPriceNumber = showPriceInput ? Number(formData.proposedPrice) : NaN;
   const proposedPriceEur = Number.isFinite(proposedPriceNumber) ? formatEur(proposedPriceNumber, eurRate) : null;
+  const formatConfirmOrderLabel = (price: number) =>
+    typeof t.orderForm.confirmOrder === 'function'
+      ? t.orderForm.confirmOrder(price)
+      : `${t.orderForm.confirmOrder ?? 'Confirm order'} (${price} PLN)`;
   const fieldClass = (base: string, invalid: boolean) =>
     `${base}${invalid ? ' border-red-400 bg-red-50 focus:ring-red-200 focus:border-red-500' : ''}`;
 
@@ -899,7 +927,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
         }
 
         if (isAirportRoute && otherPoint && isBaninoPoint(otherPoint)) {
-          const routeLabel = t.quoteForm.fixedRouteDistance(formatDistance(distance));
+          const routeLabel = formatFixedRouteDistance(formatDistance(distance));
           setFixedRoute({
             vehicleType,
             price: Math.round(120 * busMultiplier),
@@ -915,7 +943,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
         }
 
         if (isAirportRoute && otherPoint && isZukowoPoint(otherPoint)) {
-          const routeLabel = t.quoteForm.fixedRouteDistance(formatDistance(distance));
+          const routeLabel = formatFixedRouteDistance(formatDistance(distance));
           setFixedRoute({
             vehicleType,
             price: Math.round(150 * busMultiplier),
@@ -933,7 +961,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
         if (isAirportRoute && otherPoint && isPointInsideGeoJson(otherPoint, cityPolygons.gdansk) && getCenterKey(otherPoint) !== 'gdansk') {
           const gdanskAirportPrice = getGdanskCityPrice(distance);
           if (gdanskAirportPrice) {
-            const routeLabel = t.quoteForm.fixedRouteDistance(formatDistance(distance));
+            const routeLabel = formatFixedRouteDistance(formatDistance(distance));
             setFixedRoute({
               vehicleType,
               price: Math.round(gdanskAirportPrice * busMultiplier),
@@ -957,7 +985,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
             : null;
 
         if (gdanskFixedPrice) {
-          const routeLabel = t.quoteForm.fixedRouteDistance(formatDistance(distance));
+          const routeLabel = formatFixedRouteDistance(formatDistance(distance));
           setFixedRoute({
             vehicleType,
             price: Math.round(gdanskFixedPrice * busMultiplier),
@@ -1552,7 +1580,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
                   <div className="mt-2 text-sm text-gray-700">{fixedRoute.routeLabel}</div>
                   <div className="mt-2 flex flex-col items-start gap-1">
                     <span className="text-base font-semibold text-amber-900">
-                      {t.quoteForm.fixedRouteComputed(fixedTotalPrice ?? fixedRoute.price)}
+                      {formatFixedRouteComputed(fixedTotalPrice ?? fixedRoute.price)}
                     </span>
                     {eurText && (
                       <span className="text-[11px] text-amber-700">{eurText}</span>
@@ -1573,16 +1601,16 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
                     {t.quoteForm.longRouteTitle}
                   </div>
                   <div className="text-sm text-slate-700">
-                    {t.quoteForm.longRouteDistance(longRouteInfo.distanceKm)}
+                    {formatLongRouteDistance(longRouteInfo.distanceKm)}
                   </div>
                   <div className="mt-3 space-y-1 text-sm text-slate-700">
                     {longRouteInfo.proposedPrice <= longRouteInfo.taximeterPrice && (
                       <div>
-                        {t.quoteForm.longRouteTaximeter(longRouteInfo.taximeterPrice + signFee, longRouteInfo.taximeterRate)}
+                        {formatLongRouteTaximeter(longRouteInfo.taximeterPrice + signFee, longRouteInfo.taximeterRate)}
                       </div>
                     )}
                     <div>
-                      {t.quoteForm.longRouteProposed(
+                      {formatLongRouteProposed(
                         Number.isFinite(proposedPriceNumber)
                           ? proposedPriceNumber
                           : longRouteInfo.proposedPrice + signFee,
@@ -1590,7 +1618,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
                     </div>
                     {longRouteInfo.savingsPercent > 0 && (
                       <div>
-                        {t.quoteForm.longRouteSavings(longRouteInfo.savingsPercent)}
+                        {formatLongRouteSavings(longRouteInfo.savingsPercent)}
                       </div>
                     )}
                   </div>
@@ -1988,7 +2016,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
                   t.quoteForm.submitting
                 ) : fixedRoute && fixedTotalPrice ? (
                   <span className="flex flex-col items-center gap-1">
-                    <span>{t.orderForm.confirmOrder(fixedTotalPrice)}</span>
+                    <span>{formatConfirmOrderLabel(fixedTotalPrice)}</span>
                     {eurText && (
                       <span className="text-[11px] text-blue-100">{eurText}</span>
                     )}
@@ -1996,7 +2024,7 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
                 ) : longRouteInfo ? (
                   <span className="flex flex-col items-center gap-1">
                     <span>
-                      {t.orderForm.confirmOrder(
+                      {formatConfirmOrderLabel(
                         Number.isFinite(proposedPriceNumber)
                           ? proposedPriceNumber
                           : longRouteInfo.proposedPrice + signFee,
