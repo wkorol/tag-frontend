@@ -1377,6 +1377,8 @@ const CountryLanding = lazy(() => import('./assets/CountryLanding-CJHLyIbE.mjs')
 const CountryAirportLanding = lazy(() => import('./assets/CountryAirportLanding-D6D3Y0sp.mjs').then((mod) => ({ default: mod.CountryAirportLanding })));
 const CityRouteLanding = lazy(() => import('./assets/CityRouteLanding-Dr-QrnT3.mjs').then((mod) => ({ default: mod.CityRouteLanding })));
 const TaxiGdanskPage = lazy(() => import('./assets/TaxiGdanskPage-CB1kM5xz.mjs').then((mod) => ({ default: mod.TaxiGdanskPage })));
+const localeRootPathSet = new Set(SUPPORTED_LOCALES.map((locale) => `/${locale}`));
+const normalizeCanonicalPathname = (pathname) => localeRootPathSet.has(pathname) ? `${pathname}/` : pathname;
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
 const renderCityRouteRoutes = (locale) => getCityRoutes(locale).map((route) => /* @__PURE__ */ jsx(Route, { path: route.slug, element: /* @__PURE__ */ jsx(CityRouteLanding, {}) }, route.slug));
 function Landing() {
@@ -1688,6 +1690,7 @@ function App() {
     }
     try {
       const nextUrl = new URL(window.location.href);
+      nextUrl.pathname = normalizeCanonicalPathname(nextUrl.pathname);
       nextUrl.search = "";
       nextUrl.hash = "";
       canonical.href = nextUrl.toString();

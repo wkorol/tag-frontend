@@ -42,6 +42,7 @@ const contentTypes = {
   '.css': 'text/css',
   '.html': 'text/html',
   '.json': 'application/json',
+  '.xml': 'application/xml',
   '.webmanifest': 'application/manifest+json',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
@@ -276,6 +277,12 @@ const server = createServer(async (req, res) => {
       ? 'public, max-age=31536000, immutable'
       : 'public, max-age=3600';
     await serveFile(res, filePath, cacheControl);
+    return;
+  }
+
+  if (localeRoots.has(urlPath)) {
+    res.writeHead(301, { Location: `${urlPath}/${requestUrl.search}` });
+    res.end();
     return;
   }
 

@@ -1224,7 +1224,10 @@ export const buildSeoTags = (urlPath) => {
                 })
                 .join('');
 
-    const xDefault = `<link rel="alternate" hreflang="x-default" href="${site.url}/${defaultLocale}/">`;
+    const xDefaultHref = cityRoute || countryAirport
+        ? canonical
+        : buildLocalizedUrl(defaultLocale, routeKey);
+    const xDefault = `<link rel="alternate" hreflang="x-default" href="${xDefaultHref}">`;
     const robots = isIndexablePath(urlPath) ? 'index,follow' : 'noindex,nofollow';
 
   const ogLocale = (localeHreflangMap[locale] ?? [locale])[0] ?? locale;

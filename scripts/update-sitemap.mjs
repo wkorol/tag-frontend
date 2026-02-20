@@ -103,15 +103,20 @@ const buildLocalizedUrl = (locale, routeKey) => {
   return `${SITE_URL}/${locale}/${routeSlugs[locale][routeKey]}`;
 };
 
-const addXDefault = (alternates) => [
-  ...alternates,
-  { hreflang: 'x-default', href: `${SITE_URL}/${DEFAULT_LOCALE}/` },
-];
+const DEFAULT_LOCALE_PREFIX = `${SITE_URL}/${DEFAULT_LOCALE}/`;
+
+const resolveXDefaultHref = (entry) =>
+  entry.alternates.find(
+    (alt) => alt.href === DEFAULT_LOCALE_PREFIX || alt.href.startsWith(DEFAULT_LOCALE_PREFIX)
+  )?.href ?? entry.loc;
 
 const addEntry = (entries, entry) => {
   entries.push({
     ...entry,
-    alternates: addXDefault(entry.alternates),
+    alternates: [
+      ...entry.alternates,
+      { hreflang: 'x-default', href: resolveXDefaultHref(entry) },
+    ],
   });
 };
 

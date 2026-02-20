@@ -42,6 +42,11 @@ import { getCountryAirports } from './lib/countryAirports';
 import { getCityRoutes } from './lib/cityRoutes';
 import { usePageTitle } from './lib/usePageTitle';
 
+const localeRootPathSet = new Set(SUPPORTED_LOCALES.map((locale) => `/${locale}`));
+
+const normalizeCanonicalPathname = (pathname: string) =>
+  localeRootPathSet.has(pathname) ? `${pathname}/` : pathname;
+
 const renderCountryAirportRoutes = (locale: Locale) =>
   getCountryAirports(locale).map((airport) => (
     <Route key={airport.slug} path={airport.slug} element={<CountryAirportLanding />} />
@@ -429,6 +434,7 @@ export default function App() {
     }
     try {
       const nextUrl = new URL(window.location.href);
+      nextUrl.pathname = normalizeCanonicalPathname(nextUrl.pathname);
       nextUrl.search = '';
       nextUrl.hash = '';
       canonical.href = nextUrl.toString();
