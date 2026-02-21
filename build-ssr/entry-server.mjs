@@ -376,7 +376,8 @@ const trackContactClick = (type) => {
       event_category: "contact",
       event_label: type
     });
-    if (type === "whatsapp" && hasMarketingConsent()) {
+    const shouldTrackContactConversion = hasMarketingConsent() && (type === "whatsapp" || type === "call" || type === "imessage");
+    if (shouldTrackContactConversion) {
       gtag("event", "conversion", {
         send_to: "AW-17948664296/MOjJCMyiwvcbEOjDy-5C"
       });
@@ -770,6 +771,8 @@ function Hero() {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
   const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
+  const callLink = "tel:+48694347548";
+  const iMessageLink = "sms:+48537523437";
   const heroBgUrl = "/background-640.webp";
   const quickLinks = [
     { href: `${basePath}/${getRouteSlug(locale, "pricing")}`, label: t.navbar.prices },
@@ -835,7 +838,7 @@ function Hero() {
             }
           )
         ] }) }),
-        /* @__PURE__ */ jsxs("div", { className: "hero-cta flex flex-col sm:flex-row gap-4 justify-center items-center", children: [
+        /* @__PURE__ */ jsxs("div", { className: "hero-cta flex flex-col sm:flex-row sm:flex-wrap gap-4 justify-center items-center", children: [
           /* @__PURE__ */ jsx(
             "a",
             {
@@ -871,12 +874,31 @@ function Hero() {
           /* @__PURE__ */ jsxs(
             "a",
             {
-              href: "mailto:booking@taxiairportgdansk.com",
-              onClick: () => trackContactClick("email"),
-              className: "inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-6 py-3 rounded-lg hover:bg-white/20 transition-colors",
+              href: callLink,
+              onClick: () => trackContactClick("call"),
+              className: "inline-flex items-center gap-2 px-6 py-3 rounded-lg text-gray-900 font-semibold text-base shadow-sm transition-colors",
+              style: { backgroundColor: "#fbbf24" },
+              "aria-label": "Call +48 694 347 548",
               children: [
-                /* @__PURE__ */ jsx("span", { "aria-hidden": "true", children: "✉️" }),
-                t.hero.orderViaEmail
+                /* @__PURE__ */ jsx("span", { "aria-hidden": "true", children: "📞" }),
+                /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5 leading-none", children: [
+                  /* @__PURE__ */ jsx("span", { children: t.common.callNow }),
+                  /* @__PURE__ */ jsx("span", { className: "call-lang-badge", children: "EN/PL" })
+                ] })
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsxs(
+            "a",
+            {
+              href: iMessageLink,
+              onClick: () => trackContactClick("imessage"),
+              className: "inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-semibold text-base shadow-sm transition-colors",
+              style: { backgroundColor: "#2563eb" },
+              "aria-label": "iMessage +48 537 523 437",
+              children: [
+                /* @__PURE__ */ jsx("svg", { viewBox: "0 0 384 512", "aria-hidden": "true", className: "h-6 w-6", style: { fill: "#ffffff" }, children: /* @__PURE__ */ jsx("path", { d: "M318.7 268.7c-.2-36.7 30-54.3 31.3-55.1-17.1-25-43.7-28.4-53.1-28.8-22.6-2.3-44.1 13.3-55.6 13.3-11.5 0-29.3-13-48.2-12.7-24.8.4-47.6 14.4-60.4 36.7-25.8 44.7-6.6 110.8 18.5 147 12.3 17.6 26.9 37.4 46.1 36.7 18.5-.7 25.5-12 47.8-12 22.3 0 28.6 12 47.9 11.6 19.8-.4 32.3-17.9 44.5-35.6 14.1-20.6 19.9-40.5 20.1-41.5-.4-.2-38.5-14.8-38.7-58.6zm-37.7-108.4c10.2-12.4 17.1-29.7 15.2-46.9-14.7.6-32.5 9.8-43 22.2-9.5 11-17.8 28.6-15.6 45.4 16.4 1.3 33.2-8.3 43.4-20.7z" }) }),
+                "iMessage"
               ]
             }
           )
@@ -1360,23 +1382,23 @@ function usePageTitle(title) {
 const Pricing = lazy(() => import('./assets/Pricing-BDDzADts.mjs').then((mod) => ({ default: mod.Pricing })));
 const Footer = lazy(() => import('./assets/Footer-BpSYvjMW.mjs').then((mod) => ({ default: mod.Footer })));
 const CookieBanner = lazy(() => import('./assets/CookieBanner-Dh820bF4.mjs').then((mod) => ({ default: mod.CookieBanner })));
-const FloatingActions = lazy(() => import('./assets/FloatingActions-BmVj2zkN.mjs').then((mod) => ({ default: mod.FloatingActions })));
+const FloatingActions = lazy(() => import('./assets/FloatingActions-DsaRu_s6.mjs').then((mod) => ({ default: mod.FloatingActions })));
 const OrderForm = lazy(() => import('./assets/OrderForm-CxL8Zgel.mjs').then((mod) => ({ default: mod.OrderForm })));
 const QuoteForm = lazy(() => import('./assets/QuoteForm-fjRx3Z6D.mjs').then(n => n.b).then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./assets/ManageOrder-Be9OEJDV.mjs').then((mod) => ({ default: mod.ManageOrder })));
-const RouteLanding = lazy(() => import('./assets/RouteLanding-Czh0qaGC.mjs').then((mod) => ({ default: mod.RouteLanding })));
-const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-Db5p8dTC.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
-const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-Db5p8dTC.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./assets/PricingPage-hNPG0tsP.mjs').then((mod) => ({ default: mod.PricingPage })));
+const RouteLanding = lazy(() => import('./assets/RouteLanding-C5geeLlm.mjs').then((mod) => ({ default: mod.RouteLanding })));
+const OrderRoutePage = lazy(() => import('./assets/OrderRoutePage-BUyDT5LM.mjs').then((mod) => ({ default: mod.OrderRoutePage })));
+const CustomOrderPage = lazy(() => import('./assets/OrderRoutePage-BUyDT5LM.mjs').then((mod) => ({ default: mod.CustomOrderPage })));
+const PricingPage = lazy(() => import('./assets/PricingPage-CdKw1EOR.mjs').then((mod) => ({ default: mod.PricingPage })));
 const AdminOrdersPage = lazy(() => import('./assets/AdminOrdersPage-CaDjKx27.mjs').then((mod) => ({ default: mod.AdminOrdersPage })));
 const AdminOrderPage = lazy(() => import('./assets/AdminOrderPage-C-tkmzwq.mjs').then((mod) => ({ default: mod.AdminOrderPage })));
-const CookiesPage = lazy(() => import('./assets/CookiesPage-CgvWUwtA.mjs').then((mod) => ({ default: mod.CookiesPage })));
-const PrivacyPage = lazy(() => import('./assets/PrivacyPage-BLxV3hWM.mjs').then((mod) => ({ default: mod.PrivacyPage })));
+const CookiesPage = lazy(() => import('./assets/CookiesPage-Dn8QurXI.mjs').then((mod) => ({ default: mod.CookiesPage })));
+const PrivacyPage = lazy(() => import('./assets/PrivacyPage-B7KSaXNu.mjs').then((mod) => ({ default: mod.PrivacyPage })));
 const NotFoundPage = lazy(() => import('./assets/NotFoundPage-DVDLBjqQ.mjs').then((mod) => ({ default: mod.NotFoundPage })));
-const CountryLanding = lazy(() => import('./assets/CountryLanding-CJHLyIbE.mjs').then((mod) => ({ default: mod.CountryLanding })));
-const CountryAirportLanding = lazy(() => import('./assets/CountryAirportLanding-D6D3Y0sp.mjs').then((mod) => ({ default: mod.CountryAirportLanding })));
-const CityRouteLanding = lazy(() => import('./assets/CityRouteLanding-Dr-QrnT3.mjs').then((mod) => ({ default: mod.CityRouteLanding })));
-const TaxiGdanskPage = lazy(() => import('./assets/TaxiGdanskPage-CB1kM5xz.mjs').then((mod) => ({ default: mod.TaxiGdanskPage })));
+const CountryLanding = lazy(() => import('./assets/CountryLanding-vHlwKJ2L.mjs').then((mod) => ({ default: mod.CountryLanding })));
+const CountryAirportLanding = lazy(() => import('./assets/CountryAirportLanding-BOpFq6OI.mjs').then((mod) => ({ default: mod.CountryAirportLanding })));
+const CityRouteLanding = lazy(() => import('./assets/CityRouteLanding-DaugSAIp.mjs').then((mod) => ({ default: mod.CityRouteLanding })));
+const TaxiGdanskPage = lazy(() => import('./assets/TaxiGdanskPage-UdMZw_aX.mjs').then((mod) => ({ default: mod.TaxiGdanskPage })));
 const localeRootPathSet = new Set(SUPPORTED_LOCALES.map((locale) => `/${locale}`));
 const normalizeCanonicalPathname = (pathname) => localeRootPathSet.has(pathname) ? `${pathname}/` : pathname;
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
@@ -1956,6 +1978,7 @@ const en = {
     "stepCounter": (current, total) => `Step ${current}/${total}`,
     "remainingFields": (count) => `Remaining fields: ${count}`,
     "orderOnlineNow": "Book online",
+    "callNow": "Call now",
     "orderNow": "Book Now",
     "continue": "Continue",
     "back": "Back",
@@ -2836,6 +2859,7 @@ const pl = {
       return `Pozostało jeszcze ${count} ${isFew ? "pola" : "pól"} do wypełnienia`;
     },
     "orderOnlineNow": "Złóż zamówienie online",
+    "callNow": "Zadzwoń",
     "orderNow": "Rezerwuj",
     "continue": "Dalej",
     "back": "Wstecz",
@@ -3710,6 +3734,7 @@ const de = {
     "stepCounter": (current, total) => `Schritt ${current}/${total}`,
     "remainingFields": (count) => `Noch ${count} Felder auszufüllen`,
     "orderOnlineNow": "Taxi online buchen",
+    "callNow": "Jetzt anrufen",
     "orderNow": "Jetzt reservieren",
     "continue": "Weiter",
     "back": "Zurück",
@@ -4582,6 +4607,7 @@ const fi = {
     "stepCounter": (current, total) => `Vaihe ${current}/${total}`,
     "remainingFields": (count) => `Jäljellä ${count} kenttää`,
     "orderOnlineNow": "Varaa taksi verkossa",
+    "callNow": "Soita nyt",
     "orderNow": "Varaa nyt",
     "continue": "Jatka",
     "back": "Takaisin",
@@ -5452,6 +5478,7 @@ const no = {
     "stepCounter": (current, total) => `Steg ${current}/${total}`,
     "remainingFields": (count) => `${count} felt gjenstår`,
     "orderOnlineNow": "Bestill taxi på nett",
+    "callNow": "Ring nå",
     "orderNow": "Reserver nå",
     "continue": "Fortsett",
     "back": "Tilbake",
@@ -6324,6 +6351,7 @@ const sv = {
     "stepCounter": (current, total) => `Steg ${current}/${total}`,
     "remainingFields": (count) => `${count} fält kvar`,
     "orderOnlineNow": "Boka taxi online",
+    "callNow": "Ring nu",
     "orderNow": "Boka nu",
     "continue": "Fortsätt",
     "back": "Tillbaka",
@@ -7196,6 +7224,7 @@ const da = {
     "stepCounter": (current, total) => `Trin ${current}/${total}`,
     "remainingFields": (count) => `${count} felter tilbage`,
     "orderOnlineNow": "Book taxi online",
+    "callNow": "Ring nu",
     "orderNow": "Book nu",
     "continue": "Fortsæt",
     "back": "Tilbage",

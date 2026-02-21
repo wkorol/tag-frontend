@@ -13,6 +13,8 @@ export function Hero() {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
   const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
+  const callLink = 'tel:+48694347548';
+  const iMessageLink = 'sms:+48537523437';
 
   const heroBgUrl = '/background-640.webp';
   const quickLinks = [
@@ -75,7 +77,7 @@ export function Hero() {
               </picture>
             </div>
 
-          <div className="hero-cta flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="hero-cta flex flex-col sm:flex-row sm:flex-wrap gap-4 justify-center items-center">
             <a
                 href={`${basePath}/`}
                 onClick={(event) => {
@@ -103,12 +105,31 @@ export function Hero() {
               {t.common.whatsapp}
             </a>
             <a
-                href="mailto:booking@taxiairportgdansk.com"
-                onClick={() => trackContactClick('email')}
-                className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-6 py-3 rounded-lg hover:bg-white/20 transition-colors"
+                href={callLink}
+                onClick={() => trackContactClick('call')}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-gray-900 font-semibold text-base shadow-sm transition-colors"
+                style={{ backgroundColor: '#fbbf24' }}
+                aria-label="Call +48 694 347 548"
             >
-              <span aria-hidden="true">✉️</span>
-              {t.hero.orderViaEmail}
+              <span aria-hidden="true">📞</span>
+              <span className="inline-flex items-center gap-1.5 leading-none">
+                <span>{t.common.callNow}</span>
+                <span className="call-lang-badge">
+                  EN/PL
+                </span>
+              </span>
+            </a>
+            <a
+                href={iMessageLink}
+                onClick={() => trackContactClick('imessage')}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-semibold text-base shadow-sm transition-colors"
+                style={{ backgroundColor: '#2563eb' }}
+                aria-label="iMessage +48 537 523 437"
+            >
+              <svg viewBox="0 0 384 512" aria-hidden="true" className="h-6 w-6" style={{ fill: '#ffffff' }}>
+                <path d="M318.7 268.7c-.2-36.7 30-54.3 31.3-55.1-17.1-25-43.7-28.4-53.1-28.8-22.6-2.3-44.1 13.3-55.6 13.3-11.5 0-29.3-13-48.2-12.7-24.8.4-47.6 14.4-60.4 36.7-25.8 44.7-6.6 110.8 18.5 147 12.3 17.6 26.9 37.4 46.1 36.7 18.5-.7 25.5-12 47.8-12 22.3 0 28.6 12 47.9 11.6 19.8-.4 32.3-17.9 44.5-35.6 14.1-20.6 19.9-40.5 20.1-41.5-.4-.2-38.5-14.8-38.7-58.6zm-37.7-108.4c10.2-12.4 17.1-29.7 15.2-46.9-14.7.6-32.5 9.8-43 22.2-9.5 11-17.8 28.6-15.6 45.4 16.4 1.3 33.2-8.3 43.4-20.7z" />
+              </svg>
+              iMessage
             </a>
           </div>
           <div className="mt-2 flex justify-center">

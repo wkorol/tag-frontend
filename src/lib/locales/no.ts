@@ -6,6 +6,7 @@ const no = {
     "stepCounter": (current: number, total: number) => `Steg ${current}/${total}`,
     "remainingFields": (count: number) => `${count} felt gjenstår`,
     "orderOnlineNow": "Bestill taxi på nett",
+    "callNow": "Ring nå",
     "orderNow": "Reserver nå",
     "continue": "Fortsett",
     "back": "Tilbake",

@@ -6,6 +6,7 @@ const sv = {
     "stepCounter": (current: number, total: number) => `Steg ${current}/${total}`,
     "remainingFields": (count: number) => `${count} fält kvar`,
     "orderOnlineNow": "Boka taxi online",
+    "callNow": "Ring nu",
     "orderNow": "Boka nu",
     "continue": "Fortsätt",
     "back": "Tillbaka",

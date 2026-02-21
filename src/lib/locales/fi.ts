@@ -6,6 +6,7 @@ const fi = {
     "stepCounter": (current: number, total: number) => `Vaihe ${current}/${total}`,
     "remainingFields": (count: number) => `Jäljellä ${count} kenttää`,
     "orderOnlineNow": "Varaa taksi verkossa",
+    "callNow": "Soita nyt",
     "orderNow": "Varaa nyt",
     "continue": "Jatka",
     "back": "Takaisin",

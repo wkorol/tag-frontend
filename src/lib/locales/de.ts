@@ -6,6 +6,7 @@ const de = {
     "stepCounter": (current: number, total: number) => `Schritt ${current}/${total}`,
     "remainingFields": (count: number) => `Noch ${count} Felder auszufüllen`,
     "orderOnlineNow": "Taxi online buchen",
+    "callNow": "Jetzt anrufen",
     "orderNow": "Jetzt reservieren",
     "continue": "Weiter",
     "back": "Zurück",

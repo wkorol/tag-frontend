@@ -6,6 +6,7 @@ const en = {
     "stepCounter": (current: number, total: number) => `Step ${current}/${total}`,
     "remainingFields": (count: number) => `Remaining fields: ${count}`,
     "orderOnlineNow": "Book online",
+    "callNow": "Call now",
     "orderNow": "Book Now",
     "continue": "Continue",
     "back": "Back",

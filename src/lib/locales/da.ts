@@ -6,6 +6,7 @@ const da = {
     "stepCounter": (current: number, total: number) => `Trin ${current}/${total}`,
     "remainingFields": (count: number) => `${count} felter tilbage`,
     "orderOnlineNow": "Book taxi online",
+    "callNow": "Ring nu",
     "orderNow": "Book nu",
     "continue": "Fortsæt",
     "back": "Tilbage",

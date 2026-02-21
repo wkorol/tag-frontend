@@ -12,6 +12,7 @@ const pl = {
       return `Pozostało jeszcze ${count} ${isFew ? "pola" : "pól"} do wypełnienia`;
     },
     "orderOnlineNow": "Złóż zamówienie online",
+    "callNow": "Zadzwoń",
     "orderNow": "Rezerwuj",
     "continue": "Dalej",
     "back": "Wstecz",

@@ -1,7 +1,7 @@
 import { isAnalyticsEnabled } from './analytics';
 import { hasMarketingConsent } from './consent';
 
-export const trackContactClick = (type: 'whatsapp' | 'call' | 'email') => {
+export const trackContactClick = (type: 'whatsapp' | 'call' | 'email' | 'imessage') => {
   if (typeof window === 'undefined' || !isAnalyticsEnabled()) {
     return;
   }
@@ -12,7 +12,12 @@ export const trackContactClick = (type: 'whatsapp' | 'call' | 'email') => {
       event_category: 'contact',
       event_label: type,
     });
-    if (type === 'whatsapp' && hasMarketingConsent()) {
+
+    const shouldTrackContactConversion =
+      hasMarketingConsent() &&
+      (type === 'whatsapp' || type === 'call' || type === 'imessage');
+
+    if (shouldTrackContactConversion) {
       gtag('event', 'conversion', {
         send_to: 'AW-17948664296/MOjJCMyiwvcbEOjDy-5C',
       });
