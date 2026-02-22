@@ -5,10 +5,10 @@ import { Hero } from './components/Hero';
 import { VehicleTypeSelector } from './components/VehicleTypeSelector';
 import { LazyMount } from './components/LazyMount';
 import { LandingTrustSection } from './components/LandingTrustSection';
+import { FloatingActions } from './components/FloatingActions';
 const Pricing = lazy(() => import('./components/Pricing').then((mod) => ({ default: mod.Pricing })));
 const Footer = lazy(() => import('./components/Footer').then((mod) => ({ default: mod.Footer })));
 const CookieBanner = lazy(() => import('./components/CookieBanner').then((mod) => ({ default: mod.CookieBanner })));
-const FloatingActions = lazy(() => import('./components/FloatingActions').then((mod) => ({ default: mod.FloatingActions })));
 const OrderForm = lazy(() => import('./components/OrderForm').then((mod) => ({ default: mod.OrderForm })));
 const QuoteForm = lazy(() => import('./components/QuoteForm').then((mod) => ({ default: mod.QuoteForm })));
 const ManageOrder = lazy(() => import('./components/ManageOrder').then((mod) => ({ default: mod.ManageOrder })));
@@ -72,7 +72,6 @@ function Landing() {
   } | null>(null);
   const [showQuoteForm, setShowQuoteForm] = useState(false);
   const [pricingTracked, setPricingTracked] = useState(false);
-  const [floatingActionsReady, setFloatingActionsReady] = useState(false);
   
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get('orderId');
@@ -176,48 +175,6 @@ function Landing() {
     tryScroll();
   }, [step]);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    let timeoutId: number | null = null;
-    let idleId: number | null = null;
-
-    const enable = () => setFloatingActionsReady(true);
-    const onFirstInteraction = () => {
-      enable();
-      cleanupListeners();
-    };
-    const cleanupListeners = () => {
-      window.removeEventListener('scroll', onFirstInteraction);
-      window.removeEventListener('pointerdown', onFirstInteraction);
-      window.removeEventListener('touchstart', onFirstInteraction);
-      window.removeEventListener('keydown', onFirstInteraction);
-    };
-
-    timeoutId = window.setTimeout(enable, 2500);
-    if ('requestIdleCallback' in window) {
-      idleId = (window as Window & { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number })
-        .requestIdleCallback(enable, { timeout: 2200 });
-    }
-
-    window.addEventListener('scroll', onFirstInteraction, { passive: true });
-    window.addEventListener('pointerdown', onFirstInteraction, { passive: true });
-    window.addEventListener('touchstart', onFirstInteraction, { passive: true });
-    window.addEventListener('keydown', onFirstInteraction);
-
-    return () => {
-      if (timeoutId !== null) {
-        window.clearTimeout(timeoutId);
-      }
-      if (idleId !== null && 'cancelIdleCallback' in window) {
-        (window as Window & { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(idleId);
-      }
-      cleanupListeners();
-    };
-  }, []);
-
   return (
     <div className="min-h-screen bg-gray-50 pb-32 sm:pb-0">
       <LandingNavbar />
@@ -269,11 +226,7 @@ function Landing() {
           />
         </Suspense>
       )}
-      {floatingActionsReady ? (
-        <Suspense fallback={null}>
-          <FloatingActions hide={Boolean(selectedRoute || showQuoteForm)} />
-        </Suspense>
-      ) : null}
+      <FloatingActions hide={Boolean(selectedRoute || showQuoteForm)} />
     </div>
   );
 }
