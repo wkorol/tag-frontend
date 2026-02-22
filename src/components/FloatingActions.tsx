@@ -15,9 +15,7 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
   const callLink = 'tel:+48694347548';
   const iMessageLink = 'sms:+48537523437';
   const [cookieBannerOffset, setCookieBannerOffset] = useState(0);
-  const [isCookieBannerVisible, setIsCookieBannerVisible] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isTargetVisible, setIsTargetVisible] = useState(false);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
   const [isOrderMenuOpen, setIsOrderMenuOpen] = useState(false);
   const desktopMenuRef = useRef<HTMLDivElement | null>(null);
   const mobileMenuRef = useRef<HTMLDivElement | null>(null);
@@ -33,7 +31,6 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
       const banner = document.querySelector('[data-cookie-banner]') as HTMLElement | null;
       if (!banner) {
         setCookieBannerOffset(0);
-        setIsCookieBannerVisible(false);
         if (resizeObserver) {
           resizeObserver.disconnect();
           resizeObserver = null;
@@ -41,7 +38,6 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
         return;
       }
 
-      setIsCookieBannerVisible(true);
       const height = banner.getBoundingClientRect().height;
       setCookieBannerOffset(Math.ceil(height) + 12);
 
@@ -105,38 +101,30 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
     if (!('IntersectionObserver' in window)) {
       return;
     }
+
     let observer: IntersectionObserver | null = null;
-    const observed = new Set<Element>();
 
     const connect = () => {
-      const targets = [
-        document.getElementById(orderTargetId),
-        document.getElementById('pricing-booking'),
-      ].filter(Boolean) as Element[];
-
-      if (targets.length === 0) {
-        setIsTargetVisible(false);
+      const footer = document.querySelector('footer');
+      if (!footer) {
+        setIsFooterVisible(false);
         return;
       }
 
-      if (!observer) {
-        observer = new IntersectionObserver(
-          (entries) => {
-            setIsTargetVisible(entries.some((entry) => entry.isIntersecting));
-          },
-          {
-            root: null,
-            threshold: 0.2,
-          }
-        );
+      if (observer) {
+        observer.disconnect();
       }
 
-      targets.forEach((target) => {
-        if (!observed.has(target)) {
-          observer!.observe(target);
-          observed.add(target);
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          setIsFooterVisible(Boolean(entry?.isIntersecting));
+        },
+        {
+          root: null,
+          threshold: 0.02,
         }
-      });
+      );
+      observer.observe(footer);
     };
 
     connect();
@@ -149,52 +137,9 @@ export function FloatingActions({ orderTargetId = 'vehicle-selection', hide = fa
         observer.disconnect();
       }
     };
-  }, [orderTargetId]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    const doc = document.documentElement;
-    let pageHeight = Math.max(doc.scrollHeight, document.body.scrollHeight);
-    let rafId: number | null = null;
-
-    const updateVisibility = () => {
-      const topVisible = window.scrollY <= 120;
-      const bottomVisible = window.innerHeight + window.scrollY >= pageHeight - 120;
-      setIsVisible(!topVisible && !bottomVisible);
-      rafId = null;
-    };
-
-    const requestUpdate = () => {
-      if (rafId !== null) {
-        return;
-      }
-      rafId = window.requestAnimationFrame(updateVisibility);
-    };
-
-    const refreshPageHeight = () => {
-      pageHeight = Math.max(doc.scrollHeight, document.body.scrollHeight);
-      requestUpdate();
-    };
-
-    const mutationObserver = new MutationObserver(refreshPageHeight);
-    mutationObserver.observe(document.body, { childList: true, subtree: true });
-
-    updateVisibility();
-    window.addEventListener('scroll', requestUpdate, { passive: true });
-    window.addEventListener('resize', refreshPageHeight);
-    return () => {
-      mutationObserver.disconnect();
-      if (rafId !== null) {
-        window.cancelAnimationFrame(rafId);
-      }
-      window.removeEventListener('scroll', requestUpdate);
-      window.removeEventListener('resize', refreshPageHeight);
-    };
   }, []);
 
-  const shouldHideActions = hide || !isVisible || isCookieBannerVisible || isTargetVisible;
+  const shouldHideActions = hide || isFooterVisible;
 
   useEffect(() => {
     if (shouldHideActions && isOrderMenuOpen) {

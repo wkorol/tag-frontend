@@ -4,17 +4,12 @@ import logoAvif640 from '../assets/logo-640.avif';
 import logoWebp384 from '../assets/logo-384.webp';
 import logoWebp512 from '../assets/logo-512.webp';
 import logoWebp640 from '../assets/logo-640.webp';
-import { trackContactClick, trackCtaClick } from '../lib/tracking';
 import { useI18n, localeToPath } from '../lib/i18n';
-import { requestScrollTo } from '../lib/scroll';
 import { getRouteSlug } from '../lib/routes';
 
 export function Hero() {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
-  const whatsappLink = `https://wa.me/48694347548?text=${encodeURIComponent(t.common.whatsappMessage)}`;
-  const callLink = 'tel:+48694347548';
-  const iMessageLink = 'sms:+48537523437';
 
   const heroBgUrl = '/background-640.webp';
   const quickLinks = [
@@ -42,7 +37,7 @@ export function Hero() {
       
       <div className="hero-content relative max-w-6xl mx-auto px-4 py-12 sm:py-24">
           <div className="text-center">
-          <div className="mb-4 flex justify-center">
+            <div className="mb-4 flex justify-center">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-4 py-2 text-xs sm:text-sm text-white shadow-sm backdrop-blur-sm">
                 <span className="font-semibold">{t.hero.promo.dayPrice}</span>
                 <span>{t.hero.promo.dayLabel}</span>
@@ -66,7 +61,7 @@ export function Hero() {
                 <img
                   src={logoWebp384}
                   alt={t.hero.logoAlt}
-                  className="h-auto"
+                  className="hero-logo-image h-auto animate-hero-logo-pulse"
                   style={{ width: 'min(16rem, 62vw)' }}
                   width={384}
                   height={384}
@@ -76,62 +71,6 @@ export function Hero() {
                 />
               </picture>
             </div>
-
-          <div className="hero-cta flex flex-col sm:flex-row sm:flex-wrap gap-4 justify-center items-center">
-            <a
-                href={`${basePath}/`}
-                onClick={(event) => {
-                  event.preventDefault();
-                  trackCtaClick('hero_order_online');
-                  const scrolled = requestScrollTo('vehicle-selection');
-                  if (!scrolled) {
-                    window.location.href = `${basePath}/#vehicle-selection`;
-                  }
-                }}
-                className="inline-flex items-center gap-2 bg-orange-800 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-700 transition-colors animate-pulse-glow"
-            >
-              {t.common.orderOnlineNow}
-            </a>
-            <a
-                href={whatsappLink}
-                onClick={() => trackContactClick('whatsapp')}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-gray-900 font-semibold text-base shadow-sm transition-colors"
-                style={{ backgroundColor: '#25D366' }}
-            >
-              <svg viewBox="0 0 32 32" aria-hidden="true" className="h-5 w-5 fill-current">
-                <path d="M19.11 17.72c-.26-.13-1.52-.75-1.75-.84-.24-.09-.41-.13-.58.13-.17.26-.67.84-.82 1.02-.15.17-.3.2-.56.07-.26-.13-1.1-.4-2.09-1.28-.77-.69-1.29-1.54-1.44-1.8-.15-.26-.02-.4.11-.53.12-.12.26-.3.39-.45.13-.15.17-.26.26-.43.09-.17.04-.32-.02-.45-.06-.13-.58-1.4-.79-1.92-.21-.5-.43-.43-.58-.44-.15-.01-.32-.01-.49-.01-.17 0-.45.06-.68.32-.24.26-.9.88-.9 2.15s.92 2.49 1.05 2.66c.13.17 1.81 2.76 4.4 3.87.62.27 1.1.43 1.48.55.62.2 1.18.17 1.63.1.5-.07 1.52-.62 1.74-1.22.21-.6.21-1.12.15-1.22-.06-.1-.24-.17-.5-.3z" />
-                <path d="M26.67 5.33A14.9 14.9 0 0016.03 1.5C8.12 1.5 1.5 8.13 1.5 16.03c0 2.4.63 4.76 1.83 6.85L1.5 30.5l7.81-1.79a14.93 14.93 0 006.72 1.61h.01c7.9 0 14.53-6.63 14.53-14.53 0-3.88-1.52-7.53-4.4-10.46zm-10.64 22.3h-.01a12.4 12.4 0 01-6.32-1.73l-.45-.27-4.64 1.06 1.24-4.52-.3-.46a12.45 12.45 0 01-2-6.68c0-6.86 5.58-12.44 12.45-12.44 3.32 0 6.43 1.3 8.77 3.65a12.33 12.33 0 013.64 8.79c0 6.86-5.59 12.44-12.38 12.44z" />
-              </svg>
-              {t.common.whatsapp}
-            </a>
-            <a
-                href={callLink}
-                onClick={() => trackContactClick('call')}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-gray-900 font-semibold text-base shadow-sm transition-colors"
-                style={{ backgroundColor: '#fbbf24' }}
-                aria-label="Call +48 694 347 548"
-            >
-              <span aria-hidden="true">📞</span>
-              <span className="inline-flex items-center gap-1.5 leading-none">
-                <span>{t.common.callNow}</span>
-                <span className="call-lang-badge">
-                  EN/PL
-                </span>
-              </span>
-            </a>
-            <a
-                href={iMessageLink}
-                onClick={() => trackContactClick('imessage')}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-semibold text-base shadow-sm transition-colors"
-                style={{ backgroundColor: '#2563eb' }}
-                aria-label="iMessage +48 537 523 437"
-            >
-              <svg viewBox="0 0 384 512" aria-hidden="true" className="h-6 w-6" style={{ fill: '#ffffff' }}>
-                <path d="M318.7 268.7c-.2-36.7 30-54.3 31.3-55.1-17.1-25-43.7-28.4-53.1-28.8-22.6-2.3-44.1 13.3-55.6 13.3-11.5 0-29.3-13-48.2-12.7-24.8.4-47.6 14.4-60.4 36.7-25.8 44.7-6.6 110.8 18.5 147 12.3 17.6 26.9 37.4 46.1 36.7 18.5-.7 25.5-12 47.8-12 22.3 0 28.6 12 47.9 11.6 19.8-.4 32.3-17.9 44.5-35.6 14.1-20.6 19.9-40.5 20.1-41.5-.4-.2-38.5-14.8-38.7-58.6zm-37.7-108.4c10.2-12.4 17.1-29.7 15.2-46.9-14.7.6-32.5 9.8-43 22.2-9.5 11-17.8 28.6-15.6 45.4 16.4 1.3 33.2-8.3 43.4-20.7z" />
-              </svg>
-              iMessage
-            </a>
-          </div>
           <div className="mt-2 flex justify-center">
             <span className="inline-flex items-center rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-semibold text-white">
               {t.common.noPrepayment}

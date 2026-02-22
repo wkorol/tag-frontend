@@ -1745,6 +1745,28 @@ html {
   animation: 2s ease-in-out infinite pulseGlow;
 }
 
+@keyframes heroLogoPulse {
+  0%, 70%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 6px 16px rgba(15, 23, 42, 0.35)) brightness(1);
+  }
+  82% {
+    transform: scale(1.06);
+    filter: drop-shadow(0 10px 22px rgba(96, 165, 250, 0.45)) brightness(1.08);
+  }
+}
+
+.hero-logo-image {
+  opacity: 1;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.animate-hero-logo-pulse {
+  animation: 6s ease-in-out infinite heroLogoPulse;
+  transform-origin: center;
+}
+
 @keyframes orderNowPulse {
   0%, 100% {
     transform: scale(1);
@@ -1761,6 +1783,10 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .animate-hero-logo-pulse {
+    animation: none;
+  }
+
   .animate-order-now-pulse {
     animation: none;
   }
