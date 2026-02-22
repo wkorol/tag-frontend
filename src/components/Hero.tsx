@@ -7,6 +7,118 @@ import logoWebp640 from '../assets/logo-640.webp';
 import { useI18n, localeToPath } from '../lib/i18n';
 import { getRouteSlug } from '../lib/routes';
 
+function HeroBenefitsContent({ t }: { t: ReturnType<typeof useI18n>['t'] }) {
+  return (
+    <>
+      {/* Additional Services - SEO optimized */}
+      <div className="mt-12 mb-10 max-w-4xl mx-auto">
+        <div className="rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm px-6 py-6 shadow-xl">
+          <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
+            <h2 className="text-blue-100 text-lg sm:text-xl">{t.hero.whyChoose}</h2>
+            <span className="text-xs uppercase tracking-[0.2em] text-blue-200/80">{t.hero.benefits}</span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div
+                className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
+              <span aria-hidden="true" className="text-2xl mb-2">✈️</span>
+              <h3 className="text-white mb-1">{t.hero.benefitsList.flightTrackingTitle}</h3>
+              <p className="text-blue-200 text-sm">
+                {t.hero.benefitsList.flightTrackingBody}
+              </p>
+            </div>
+            <div
+                className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
+              <span aria-hidden="true" className="text-2xl mb-2">✅</span>
+              <h3 className="text-white mb-1">{t.hero.benefitsList.meetGreetTitle}</h3>
+              <p className="text-blue-200 text-sm">
+                {t.hero.benefitsList.meetGreetBody}
+              </p>
+            </div>
+            <div
+                className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
+              <span aria-hidden="true" className="text-2xl mb-2">⏱️</span>
+              <h3 className="text-white mb-1">{t.hero.benefitsList.fastConfirmationTitle}</h3>
+              <p className="text-blue-200 text-sm">
+                {t.hero.benefitsList.fastConfirmationBody}
+              </p>
+            </div>
+            <div
+                className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
+              <span className="text-2xl block text-center mb-2">💳</span>
+              <h3 className="text-white mb-1">{t.hero.benefitsList.flexiblePaymentsTitle}</h3>
+              <p className="text-blue-200 text-sm">
+                {t.hero.benefitsList.flexiblePaymentsBody}
+              </p>
+            </div>
+            <div
+                className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
+              <span aria-hidden="true" className="text-2xl mb-2">📅</span>
+              <h3 className="text-white mb-1">{t.hero.benefitsList.freePrebookingTitle}</h3>
+              <p className="text-blue-200 text-sm">
+                {t.hero.benefitsList.freePrebookingBody}
+              </p>
+            </div>
+            <div
+                className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
+              <span aria-hidden="true" className="text-2xl mb-2">💵</span>
+              <h3 className="text-white mb-1">{t.hero.benefitsList.fixedPriceTitle}</h3>
+              <p className="text-blue-200 text-sm">
+                {t.hero.benefitsList.fixedPriceBody}
+              </p>
+            </div>
+            <div
+                className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
+              <span aria-hidden="true" className="text-2xl mb-2">📍</span>
+              <h3 className="text-white mb-1">{t.hero.benefitsList.localExpertiseTitle}</h3>
+              <p className="text-blue-200 text-sm">
+                {t.hero.benefitsList.localExpertiseBody}
+              </p>
+            </div>
+            <div
+                className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
+              <span aria-hidden="true" className="text-2xl mb-2">🎧</span>
+              <h3 className="text-white mb-1">{t.hero.benefitsList.assistanceTitle}</h3>
+              <p className="text-blue-200 text-sm">
+                {t.hero.benefitsList.assistanceBody}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Fleet Section */}
+      <div id="fleet" className="mt-12">
+        <div className="max-w-4xl mx-auto rounded-3xl border border-white/10 bg-gradient-to-br from-blue-800/40 to-blue-700/20 backdrop-blur-sm px-6 py-8 shadow-xl">
+          <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
+            <h3 className="text-blue-100 text-lg sm:text-xl">{t.hero.fleetTitle}</h3>
+            <span className="text-xs uppercase tracking-[0.2em] text-blue-200/80">{t.hero.fleetLabel}</span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          {/* Standard Cars Card */}
+          <div
+              className="bg-gradient-to-br from-gray-100/20 to-gray-200/20 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-white/30 hover:border-white/50 transition-all flex flex-col items-center justify-center p-8">
+            <span aria-hidden="true" className="text-5xl mb-3">🚕</span>
+            <p className="text-white text-center mb-2">{t.hero.standardCarsTitle}</p>
+            <p className="text-blue-200 text-sm text-center">
+              {t.hero.standardCarsBody}
+            </p>
+          </div>
+
+          {/* Buses Card */}
+          <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/20 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-blue-300/30 hover:border-blue-300/50 transition-all flex flex-col items-center justify-center p-8">
+            <span aria-hidden="true" className="text-5xl mb-3">🚌</span>
+            <p className="text-white text-center mb-2">{t.hero.busTitle}</p>
+            <p className="text-blue-200 text-sm text-center">
+              {t.hero.busBody}
+            </p>
+          </div>
+        </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 export function Hero() {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
@@ -35,7 +147,7 @@ export function Hero() {
         height={900}
       />
       
-      <div className="hero-content relative max-w-6xl mx-auto px-4 py-12 sm:py-24">
+      <div className="hero-content relative max-w-6xl mx-auto px-4 py-10 sm:py-16">
           <div className="text-center">
             <div className="mb-4 flex justify-center">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-4 py-2 text-xs sm:text-sm text-white shadow-sm backdrop-blur-sm">
@@ -99,114 +211,20 @@ export function Hero() {
               {t.hero.subheadline}
             </p>
           </div>
-
-          {/* Additional Services - SEO optimized */}
-          <div className="mt-12 mb-10 max-w-4xl mx-auto">
-            <div className="rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm px-6 py-6 shadow-xl">
-              <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
-                <h2 className="text-blue-100 text-lg sm:text-xl">{t.hero.whyChoose}</h2>
-                <span className="text-xs uppercase tracking-[0.2em] text-blue-200/80">{t.hero.benefits}</span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div
-                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
-                  <span aria-hidden="true" className="text-2xl mb-2">✈️</span>
-                  <h3 className="text-white mb-1">{t.hero.benefitsList.flightTrackingTitle}</h3>
-                  <p className="text-blue-200 text-sm">
-                    {t.hero.benefitsList.flightTrackingBody}
-                  </p>
-                </div>
-                <div
-                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
-                  <span aria-hidden="true" className="text-2xl mb-2">✅</span>
-                  <h3 className="text-white mb-1">{t.hero.benefitsList.meetGreetTitle}</h3>
-                  <p className="text-blue-200 text-sm">
-                    {t.hero.benefitsList.meetGreetBody}
-                  </p>
-                </div>
-                <div
-                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
-                  <span aria-hidden="true" className="text-2xl mb-2">⏱️</span>
-                  <h3 className="text-white mb-1">{t.hero.benefitsList.fastConfirmationTitle}</h3>
-                  <p className="text-blue-200 text-sm">
-                    {t.hero.benefitsList.fastConfirmationBody}
-                  </p>
-                </div>
-                <div
-                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
-                  <span className="text-2xl block text-center mb-2">💳</span>
-                  <h3 className="text-white mb-1">{t.hero.benefitsList.flexiblePaymentsTitle}</h3>
-                  <p className="text-blue-200 text-sm">
-                    {t.hero.benefitsList.flexiblePaymentsBody}
-                  </p>
-                </div>
-                <div
-                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
-                  <span aria-hidden="true" className="text-2xl mb-2">📅</span>
-                  <h3 className="text-white mb-1">{t.hero.benefitsList.freePrebookingTitle}</h3>
-                  <p className="text-blue-200 text-sm">
-                    {t.hero.benefitsList.freePrebookingBody}
-                  </p>
-                </div>
-                <div
-                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
-                  <span aria-hidden="true" className="text-2xl mb-2">💵</span>
-                  <h3 className="text-white mb-1">{t.hero.benefitsList.fixedPriceTitle}</h3>
-                  <p className="text-blue-200 text-sm">
-                    {t.hero.benefitsList.fixedPriceBody}
-                  </p>
-                </div>
-                <div
-                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
-                  <span aria-hidden="true" className="text-2xl mb-2">📍</span>
-                  <h3 className="text-white mb-1">{t.hero.benefitsList.localExpertiseTitle}</h3>
-                  <p className="text-blue-200 text-sm">
-                    {t.hero.benefitsList.localExpertiseBody}
-                  </p>
-                </div>
-                <div
-                    className="bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center">
-                  <span aria-hidden="true" className="text-2xl mb-2">🎧</span>
-                  <h3 className="text-white mb-1">{t.hero.benefitsList.assistanceTitle}</h3>
-                  <p className="text-blue-200 text-sm">
-                    {t.hero.benefitsList.assistanceBody}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Fleet Section */}
-        <div id="fleet" className="mt-12">
-          <div className="max-w-4xl mx-auto rounded-3xl border border-white/10 bg-gradient-to-br from-blue-800/40 to-blue-700/20 backdrop-blur-sm px-6 py-8 shadow-xl">
-            <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
-              <h3 className="text-blue-100 text-lg sm:text-xl">{t.hero.fleetTitle}</h3>
-              <span className="text-xs uppercase tracking-[0.2em] text-blue-200/80">{t.hero.fleetLabel}</span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            {/* Standard Cars Card */}
-            <div
-                className="bg-gradient-to-br from-gray-100/20 to-gray-200/20 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-white/30 hover:border-white/50 transition-all flex flex-col items-center justify-center p-8">
-              <span aria-hidden="true" className="text-5xl mb-3">🚕</span>
-              <p className="text-white text-center mb-2">{t.hero.standardCarsTitle}</p>
-              <p className="text-blue-200 text-sm text-center">
-                {t.hero.standardCarsBody}
-              </p>
-            </div>
-
-            {/* Buses Card */}
-            <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/20 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-blue-300/30 hover:border-blue-300/50 transition-all flex flex-col items-center justify-center p-8">
-              <span aria-hidden="true" className="text-5xl mb-3">🚌</span>
-              <p className="text-white text-center mb-2">{t.hero.busTitle}</p>
-              <p className="text-blue-200 text-sm text-center">
-                {t.hero.busBody}
-              </p>
-            </div>
-          </div>
-          </div>
         </div>
       </div>
     </div>
+  );
+}
+
+export function HeroBenefits() {
+  const { t } = useI18n();
+
+  return (
+    <section className="relative overflow-hidden bg-gradient-to-br from-blue-900 to-blue-700 text-white">
+      <div className="max-w-6xl mx-auto px-4 py-12 sm:py-16">
+        <HeroBenefitsContent t={t} />
+      </div>
+    </section>
   );
 }

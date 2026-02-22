@@ -41,17 +41,6 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
           <p className="text-gray-600 max-w-2xl mx-auto">
             {t.vehicle.subtitle}
           </p>
-          {/* Use custom CSS for spacing (Tailwind output is constrained in this repo). */}
-          <TrustBar className="vehicle-trustbar" />
-          <div className="mt-6 flex justify-center">
-            <a
-              href={pricingPath}
-              className="gemini-cta inline-flex w-full items-center justify-center gap-3 rounded-full px-12 py-4 text-base font-semibold text-blue-800 shadow-sm transition-colors hover:bg-blue-50 sm:w-auto"
-            >
-              <Calculator className="h-4 w-4" />
-              {t.pricingCalculator.title}
-            </a>
-          </div>
         </div>
 
 	        <div className="vehicle-grid-mobile grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
@@ -137,6 +126,20 @@ export function VehicleTypeSelector({ onSelectType }: VehicleTypeSelectorProps) 
 		            </div>
 	          </button>
 	        </div>
+
+        {/* Keep trust badges and calculator directly under vehicle choice cards. */}
+        <div className="mt-8">
+          <TrustBar className="vehicle-trustbar" />
+          <div className="mt-6 flex justify-center">
+            <a
+              href={pricingPath}
+              className="gemini-cta inline-flex w-full items-center justify-center gap-3 rounded-full px-12 py-4 text-base font-semibold text-blue-800 shadow-sm transition-colors hover:bg-blue-50 sm:w-auto"
+            >
+              <Calculator className="h-4 w-4" />
+              {t.pricingCalculator.title}
+            </a>
+          </div>
+        </div>
 	      </div>
 	    </section>
   );

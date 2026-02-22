@@ -1,7 +1,7 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { Navigate, Outlet, Route, Routes, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { LandingNavbar } from './components/LandingNavbar';
-import { Hero } from './components/Hero';
+import { Hero, HeroBenefits } from './components/Hero';
 import { VehicleTypeSelector } from './components/VehicleTypeSelector';
 import { LazyMount } from './components/LazyMount';
 import { LandingTrustSection } from './components/LandingTrustSection';
@@ -180,7 +180,7 @@ function Landing() {
       <LandingNavbar />
       <main>
         <Hero />
-        
+
         <div>
           {step === 'vehicle' ? (
             <VehicleTypeSelector onSelectType={handleVehicleSelect} />
@@ -195,6 +195,8 @@ function Landing() {
             </Suspense>
           )}
         </div>
+
+        <HeroBenefits />
 
         <LazyMount className="defer-render defer-render-md" rootMargin="300px 0px" minHeight={760}>
           <LandingTrustSection />

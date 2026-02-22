@@ -3,7 +3,7 @@ import { createContext, useContext, useState, useEffect, useMemo, useRef, lazy, 
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server.js';
 import { useLocation, Routes, Route, Navigate, useParams, useSearchParams, Outlet } from 'react-router-dom';
-import { CheckCircle2, Calculator, Car, Users, Info } from 'lucide-react';
+import { CheckCircle2, Car, Users, Info, Calculator } from 'lucide-react';
 
 const STORAGE_KEY$1 = "tag_locale";
 const DEFAULT_LOCALE = "en";
@@ -767,6 +767,130 @@ const logoWebp512 = "/assets/logo-512-D88bkmvd.webp";
 
 const logoWebp640 = "/assets/logo-640-BCN0b29s.webp";
 
+function HeroBenefitsContent({ t }) {
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx("div", { className: "mt-12 mb-10 max-w-4xl mx-auto", children: /* @__PURE__ */ jsxs("div", { className: "rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm px-6 py-6 shadow-xl", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between flex-wrap gap-4 mb-6", children: [
+        /* @__PURE__ */ jsx("h2", { className: "text-blue-100 text-lg sm:text-xl", children: t.hero.whyChoose }),
+        /* @__PURE__ */ jsx("span", { className: "text-xs uppercase tracking-[0.2em] text-blue-200/80", children: t.hero.benefits })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4", children: [
+        /* @__PURE__ */ jsxs(
+          "div",
+          {
+            className: "bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center",
+            children: [
+              /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-2xl mb-2", children: "✈️" }),
+              /* @__PURE__ */ jsx("h3", { className: "text-white mb-1", children: t.hero.benefitsList.flightTrackingTitle }),
+              /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm", children: t.hero.benefitsList.flightTrackingBody })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxs(
+          "div",
+          {
+            className: "bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center",
+            children: [
+              /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-2xl mb-2", children: "✅" }),
+              /* @__PURE__ */ jsx("h3", { className: "text-white mb-1", children: t.hero.benefitsList.meetGreetTitle }),
+              /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm", children: t.hero.benefitsList.meetGreetBody })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxs(
+          "div",
+          {
+            className: "bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center",
+            children: [
+              /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-2xl mb-2", children: "⏱️" }),
+              /* @__PURE__ */ jsx("h3", { className: "text-white mb-1", children: t.hero.benefitsList.fastConfirmationTitle }),
+              /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm", children: t.hero.benefitsList.fastConfirmationBody })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxs(
+          "div",
+          {
+            className: "bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center",
+            children: [
+              /* @__PURE__ */ jsx("span", { className: "text-2xl block text-center mb-2", children: "💳" }),
+              /* @__PURE__ */ jsx("h3", { className: "text-white mb-1", children: t.hero.benefitsList.flexiblePaymentsTitle }),
+              /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm", children: t.hero.benefitsList.flexiblePaymentsBody })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxs(
+          "div",
+          {
+            className: "bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center",
+            children: [
+              /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-2xl mb-2", children: "📅" }),
+              /* @__PURE__ */ jsx("h3", { className: "text-white mb-1", children: t.hero.benefitsList.freePrebookingTitle }),
+              /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm", children: t.hero.benefitsList.freePrebookingBody })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxs(
+          "div",
+          {
+            className: "bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center",
+            children: [
+              /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-2xl mb-2", children: "💵" }),
+              /* @__PURE__ */ jsx("h3", { className: "text-white mb-1", children: t.hero.benefitsList.fixedPriceTitle }),
+              /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm", children: t.hero.benefitsList.fixedPriceBody })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxs(
+          "div",
+          {
+            className: "bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center",
+            children: [
+              /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-2xl mb-2", children: "📍" }),
+              /* @__PURE__ */ jsx("h3", { className: "text-white mb-1", children: t.hero.benefitsList.localExpertiseTitle }),
+              /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm", children: t.hero.benefitsList.localExpertiseBody })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxs(
+          "div",
+          {
+            className: "bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center",
+            children: [
+              /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-2xl mb-2", children: "🎧" }),
+              /* @__PURE__ */ jsx("h3", { className: "text-white mb-1", children: t.hero.benefitsList.assistanceTitle }),
+              /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm", children: t.hero.benefitsList.assistanceBody })
+            ]
+          }
+        )
+      ] })
+    ] }) }),
+    /* @__PURE__ */ jsx("div", { id: "fleet", className: "mt-12", children: /* @__PURE__ */ jsxs("div", { className: "max-w-4xl mx-auto rounded-3xl border border-white/10 bg-gradient-to-br from-blue-800/40 to-blue-700/20 backdrop-blur-sm px-6 py-8 shadow-xl", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between flex-wrap gap-4 mb-6", children: [
+        /* @__PURE__ */ jsx("h3", { className: "text-blue-100 text-lg sm:text-xl", children: t.hero.fleetTitle }),
+        /* @__PURE__ */ jsx("span", { className: "text-xs uppercase tracking-[0.2em] text-blue-200/80", children: t.hero.fleetLabel })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto", children: [
+        /* @__PURE__ */ jsxs(
+          "div",
+          {
+            className: "bg-gradient-to-br from-gray-100/20 to-gray-200/20 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-white/30 hover:border-white/50 transition-all flex flex-col items-center justify-center p-8",
+            children: [
+              /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-5xl mb-3", children: "🚕" }),
+              /* @__PURE__ */ jsx("p", { className: "text-white text-center mb-2", children: t.hero.standardCarsTitle }),
+              /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm text-center", children: t.hero.standardCarsBody })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxs("div", { className: "bg-gradient-to-br from-blue-500/20 to-blue-600/20 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-blue-300/30 hover:border-blue-300/50 transition-all flex flex-col items-center justify-center p-8", children: [
+          /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-5xl mb-3", children: "🚌" }),
+          /* @__PURE__ */ jsx("p", { className: "text-white text-center mb-2", children: t.hero.busTitle }),
+          /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm text-center", children: t.hero.busBody })
+        ] })
+      ] })
+    ] }) })
+  ] });
+}
 function Hero() {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
@@ -794,186 +918,68 @@ function Hero() {
         height: 900
       }
     ),
-    /* @__PURE__ */ jsxs("div", { className: "hero-content relative max-w-6xl mx-auto px-4 py-12 sm:py-24", children: [
-      /* @__PURE__ */ jsxs("div", { className: "text-center", children: [
-        /* @__PURE__ */ jsx("div", { className: "mb-4 flex justify-center", children: /* @__PURE__ */ jsxs("div", { className: "inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-4 py-2 text-xs sm:text-sm text-white shadow-sm backdrop-blur-sm", children: [
-          /* @__PURE__ */ jsx("span", { className: "font-semibold", children: t.hero.promo.dayPrice }),
-          /* @__PURE__ */ jsx("span", { children: t.hero.promo.dayLabel }),
-          /* @__PURE__ */ jsx("span", { className: "text-white/70", children: "•" }),
-          /* @__PURE__ */ jsx("span", { className: "font-semibold", children: t.hero.promo.nightPrice }),
-          /* @__PURE__ */ jsx("span", { children: t.hero.promo.nightLabel })
-        ] }) }),
-        /* @__PURE__ */ jsx("div", { className: "hero-logo flex justify-center mb-2", children: /* @__PURE__ */ jsxs("picture", { children: [
-          /* @__PURE__ */ jsx(
-            "source",
-            {
-              srcSet: `${logoAvif384} 384w, ${logoAvif512} 512w, ${logoAvif640} 640w`,
-              type: "image/avif",
-              sizes: "(max-width: 640px) 62vw, 16rem"
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            "source",
-            {
-              srcSet: `${logoWebp384} 384w, ${logoWebp512} 512w, ${logoWebp640} 640w`,
-              type: "image/webp",
-              sizes: "(max-width: 640px) 62vw, 16rem"
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            "img",
-            {
-              src: logoWebp384,
-              alt: t.hero.logoAlt,
-              className: "hero-logo-image h-auto animate-hero-logo-pulse",
-              style: { width: "min(16rem, 62vw)" },
-              width: 384,
-              height: 384,
-              decoding: "async",
-              loading: "eager",
-              sizes: "(max-width: 640px) 62vw, 16rem"
-            }
-          )
-        ] }) }),
-        /* @__PURE__ */ jsx("div", { className: "mt-2 flex justify-center", children: /* @__PURE__ */ jsx("span", { className: "inline-flex items-center rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-semibold text-white", children: t.common.noPrepayment }) }),
-        /* @__PURE__ */ jsxs("div", { className: "mt-4 flex flex-col items-center px-2 text-xs text-white/80", children: [
-          /* @__PURE__ */ jsx("span", { className: "mb-2 text-center text-[10px] uppercase tracking-[0.2em] text-white/60", children: t.routeLanding.quickLinks }),
-          /* @__PURE__ */ jsx("div", { className: "quick-links", children: quickLinks.map((link) => /* @__PURE__ */ jsx(
-            "a",
-            {
-              href: link.href,
-              children: link.label
-            },
-            link.href
-          )) })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "mt-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-6 py-5 max-w-2xl mx-auto", children: [
-          /* @__PURE__ */ jsx("h1", { className: "text-xl sm:text-2xl text-blue-100 mb-3", children: t.hero.headline }),
-          /* @__PURE__ */ jsx("p", { className: "text-blue-200", children: t.hero.subheadline })
-        ] }),
-        /* @__PURE__ */ jsx("div", { className: "mt-12 mb-10 max-w-4xl mx-auto", children: /* @__PURE__ */ jsxs("div", { className: "rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm px-6 py-6 shadow-xl", children: [
-          /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between flex-wrap gap-4 mb-6", children: [
-            /* @__PURE__ */ jsx("h2", { className: "text-blue-100 text-lg sm:text-xl", children: t.hero.whyChoose }),
-            /* @__PURE__ */ jsx("span", { className: "text-xs uppercase tracking-[0.2em] text-blue-200/80", children: t.hero.benefits })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4", children: [
-            /* @__PURE__ */ jsxs(
-              "div",
-              {
-                className: "bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center",
-                children: [
-                  /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-2xl mb-2", children: "✈️" }),
-                  /* @__PURE__ */ jsx("h3", { className: "text-white mb-1", children: t.hero.benefitsList.flightTrackingTitle }),
-                  /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm", children: t.hero.benefitsList.flightTrackingBody })
-                ]
-              }
-            ),
-            /* @__PURE__ */ jsxs(
-              "div",
-              {
-                className: "bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center",
-                children: [
-                  /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-2xl mb-2", children: "✅" }),
-                  /* @__PURE__ */ jsx("h3", { className: "text-white mb-1", children: t.hero.benefitsList.meetGreetTitle }),
-                  /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm", children: t.hero.benefitsList.meetGreetBody })
-                ]
-              }
-            ),
-            /* @__PURE__ */ jsxs(
-              "div",
-              {
-                className: "bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center",
-                children: [
-                  /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-2xl mb-2", children: "⏱️" }),
-                  /* @__PURE__ */ jsx("h3", { className: "text-white mb-1", children: t.hero.benefitsList.fastConfirmationTitle }),
-                  /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm", children: t.hero.benefitsList.fastConfirmationBody })
-                ]
-              }
-            ),
-            /* @__PURE__ */ jsxs(
-              "div",
-              {
-                className: "bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center",
-                children: [
-                  /* @__PURE__ */ jsx("span", { className: "text-2xl block text-center mb-2", children: "💳" }),
-                  /* @__PURE__ */ jsx("h3", { className: "text-white mb-1", children: t.hero.benefitsList.flexiblePaymentsTitle }),
-                  /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm", children: t.hero.benefitsList.flexiblePaymentsBody })
-                ]
-              }
-            ),
-            /* @__PURE__ */ jsxs(
-              "div",
-              {
-                className: "bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center",
-                children: [
-                  /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-2xl mb-2", children: "📅" }),
-                  /* @__PURE__ */ jsx("h3", { className: "text-white mb-1", children: t.hero.benefitsList.freePrebookingTitle }),
-                  /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm", children: t.hero.benefitsList.freePrebookingBody })
-                ]
-              }
-            ),
-            /* @__PURE__ */ jsxs(
-              "div",
-              {
-                className: "bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center",
-                children: [
-                  /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-2xl mb-2", children: "💵" }),
-                  /* @__PURE__ */ jsx("h3", { className: "text-white mb-1", children: t.hero.benefitsList.fixedPriceTitle }),
-                  /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm", children: t.hero.benefitsList.fixedPriceBody })
-                ]
-              }
-            ),
-            /* @__PURE__ */ jsxs(
-              "div",
-              {
-                className: "bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center",
-                children: [
-                  /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-2xl mb-2", children: "📍" }),
-                  /* @__PURE__ */ jsx("h3", { className: "text-white mb-1", children: t.hero.benefitsList.localExpertiseTitle }),
-                  /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm", children: t.hero.benefitsList.localExpertiseBody })
-                ]
-              }
-            ),
-            /* @__PURE__ */ jsxs(
-              "div",
-              {
-                className: "bg-white/10 rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all aspect-square flex flex-col items-center justify-center text-center",
-                children: [
-                  /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-2xl mb-2", children: "🎧" }),
-                  /* @__PURE__ */ jsx("h3", { className: "text-white mb-1", children: t.hero.benefitsList.assistanceTitle }),
-                  /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm", children: t.hero.benefitsList.assistanceBody })
-                ]
-              }
-            )
-          ] })
-        ] }) })
+    /* @__PURE__ */ jsx("div", { className: "hero-content relative max-w-6xl mx-auto px-4 py-10 sm:py-16", children: /* @__PURE__ */ jsxs("div", { className: "text-center", children: [
+      /* @__PURE__ */ jsx("div", { className: "mb-4 flex justify-center", children: /* @__PURE__ */ jsxs("div", { className: "inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-4 py-2 text-xs sm:text-sm text-white shadow-sm backdrop-blur-sm", children: [
+        /* @__PURE__ */ jsx("span", { className: "font-semibold", children: t.hero.promo.dayPrice }),
+        /* @__PURE__ */ jsx("span", { children: t.hero.promo.dayLabel }),
+        /* @__PURE__ */ jsx("span", { className: "text-white/70", children: "•" }),
+        /* @__PURE__ */ jsx("span", { className: "font-semibold", children: t.hero.promo.nightPrice }),
+        /* @__PURE__ */ jsx("span", { children: t.hero.promo.nightLabel })
+      ] }) }),
+      /* @__PURE__ */ jsx("div", { className: "hero-logo flex justify-center mb-2", children: /* @__PURE__ */ jsxs("picture", { children: [
+        /* @__PURE__ */ jsx(
+          "source",
+          {
+            srcSet: `${logoAvif384} 384w, ${logoAvif512} 512w, ${logoAvif640} 640w`,
+            type: "image/avif",
+            sizes: "(max-width: 640px) 62vw, 16rem"
+          }
+        ),
+        /* @__PURE__ */ jsx(
+          "source",
+          {
+            srcSet: `${logoWebp384} 384w, ${logoWebp512} 512w, ${logoWebp640} 640w`,
+            type: "image/webp",
+            sizes: "(max-width: 640px) 62vw, 16rem"
+          }
+        ),
+        /* @__PURE__ */ jsx(
+          "img",
+          {
+            src: logoWebp384,
+            alt: t.hero.logoAlt,
+            className: "hero-logo-image h-auto animate-hero-logo-pulse",
+            style: { width: "min(16rem, 62vw)" },
+            width: 384,
+            height: 384,
+            decoding: "async",
+            loading: "eager",
+            sizes: "(max-width: 640px) 62vw, 16rem"
+          }
+        )
+      ] }) }),
+      /* @__PURE__ */ jsx("div", { className: "mt-2 flex justify-center", children: /* @__PURE__ */ jsx("span", { className: "inline-flex items-center rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-semibold text-white", children: t.common.noPrepayment }) }),
+      /* @__PURE__ */ jsxs("div", { className: "mt-4 flex flex-col items-center px-2 text-xs text-white/80", children: [
+        /* @__PURE__ */ jsx("span", { className: "mb-2 text-center text-[10px] uppercase tracking-[0.2em] text-white/60", children: t.routeLanding.quickLinks }),
+        /* @__PURE__ */ jsx("div", { className: "quick-links", children: quickLinks.map((link) => /* @__PURE__ */ jsx(
+          "a",
+          {
+            href: link.href,
+            children: link.label
+          },
+          link.href
+        )) })
       ] }),
-      /* @__PURE__ */ jsx("div", { id: "fleet", className: "mt-12", children: /* @__PURE__ */ jsxs("div", { className: "max-w-4xl mx-auto rounded-3xl border border-white/10 bg-gradient-to-br from-blue-800/40 to-blue-700/20 backdrop-blur-sm px-6 py-8 shadow-xl", children: [
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between flex-wrap gap-4 mb-6", children: [
-          /* @__PURE__ */ jsx("h3", { className: "text-blue-100 text-lg sm:text-xl", children: t.hero.fleetTitle }),
-          /* @__PURE__ */ jsx("span", { className: "text-xs uppercase tracking-[0.2em] text-blue-200/80", children: t.hero.fleetLabel })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto", children: [
-          /* @__PURE__ */ jsxs(
-            "div",
-            {
-              className: "bg-gradient-to-br from-gray-100/20 to-gray-200/20 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-white/30 hover:border-white/50 transition-all flex flex-col items-center justify-center p-8",
-              children: [
-                /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-5xl mb-3", children: "🚕" }),
-                /* @__PURE__ */ jsx("p", { className: "text-white text-center mb-2", children: t.hero.standardCarsTitle }),
-                /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm text-center", children: t.hero.standardCarsBody })
-              ]
-            }
-          ),
-          /* @__PURE__ */ jsxs("div", { className: "bg-gradient-to-br from-blue-500/20 to-blue-600/20 backdrop-blur-sm rounded-lg overflow-hidden border-2 border-blue-300/30 hover:border-blue-300/50 transition-all flex flex-col items-center justify-center p-8", children: [
-            /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "text-5xl mb-3", children: "🚌" }),
-            /* @__PURE__ */ jsx("p", { className: "text-white text-center mb-2", children: t.hero.busTitle }),
-            /* @__PURE__ */ jsx("p", { className: "text-blue-200 text-sm text-center", children: t.hero.busBody })
-          ] })
-        ] })
-      ] }) })
-    ] })
+      /* @__PURE__ */ jsxs("div", { className: "mt-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-6 py-5 max-w-2xl mx-auto", children: [
+        /* @__PURE__ */ jsx("h1", { className: "text-xl sm:text-2xl text-blue-100 mb-3", children: t.hero.headline }),
+        /* @__PURE__ */ jsx("p", { className: "text-blue-200", children: t.hero.subheadline })
+      ] })
+    ] }) })
   ] });
+}
+function HeroBenefits() {
+  const { t } = useI18n();
+  return /* @__PURE__ */ jsx("section", { className: "relative overflow-hidden bg-gradient-to-br from-blue-900 to-blue-700 text-white", children: /* @__PURE__ */ jsx("div", { className: "max-w-6xl mx-auto px-4 py-12 sm:py-16", children: /* @__PURE__ */ jsx(HeroBenefitsContent, { t }) }) });
 }
 
 function TrustBar({ className }) {
@@ -1017,19 +1023,7 @@ function VehicleTypeSelector({ onSelectType }) {
   return /* @__PURE__ */ jsx("section", { id: "vehicle-selection", ref: sectionRef, className: "py-16 bg-white", children: /* @__PURE__ */ jsxs("div", { className: "max-w-4xl mx-auto px-4", children: [
     /* @__PURE__ */ jsxs("div", { className: "text-center mb-12", children: [
       /* @__PURE__ */ jsx("h2", { className: "text-gray-900 mb-4", children: t.vehicle.title }),
-      /* @__PURE__ */ jsx("p", { className: "text-gray-600 max-w-2xl mx-auto", children: t.vehicle.subtitle }),
-      /* @__PURE__ */ jsx(TrustBar, { className: "vehicle-trustbar" }),
-      /* @__PURE__ */ jsx("div", { className: "mt-6 flex justify-center", children: /* @__PURE__ */ jsxs(
-        "a",
-        {
-          href: pricingPath,
-          className: "gemini-cta inline-flex w-full items-center justify-center gap-3 rounded-full px-12 py-4 text-base font-semibold text-blue-800 shadow-sm transition-colors hover:bg-blue-50 sm:w-auto",
-          children: [
-            /* @__PURE__ */ jsx(Calculator, { className: "h-4 w-4" }),
-            t.pricingCalculator.title
-          ]
-        }
-      ) })
+      /* @__PURE__ */ jsx("p", { className: "text-gray-600 max-w-2xl mx-auto", children: t.vehicle.subtitle })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "vehicle-grid-mobile grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch", children: [
       /* @__PURE__ */ jsxs(
@@ -1096,6 +1090,20 @@ function VehicleTypeSelector({ onSelectType }) {
           ]
         }
       )
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "mt-8", children: [
+      /* @__PURE__ */ jsx(TrustBar, { className: "vehicle-trustbar" }),
+      /* @__PURE__ */ jsx("div", { className: "mt-6 flex justify-center", children: /* @__PURE__ */ jsxs(
+        "a",
+        {
+          href: pricingPath,
+          className: "gemini-cta inline-flex w-full items-center justify-center gap-3 rounded-full px-12 py-4 text-base font-semibold text-blue-800 shadow-sm transition-colors hover:bg-blue-50 sm:w-auto",
+          children: [
+            /* @__PURE__ */ jsx(Calculator, { className: "h-4 w-4" }),
+            t.pricingCalculator.title
+          ]
+        }
+      ) })
     ] })
   ] }) });
 }
@@ -1778,6 +1786,7 @@ function Landing() {
           onBack: handleBackToVehicleSelection
         }
       ) }) }),
+      /* @__PURE__ */ jsx(HeroBenefits, {}),
       /* @__PURE__ */ jsx(LazyMount, { className: "defer-render defer-render-md", rootMargin: "300px 0px", minHeight: 760, children: /* @__PURE__ */ jsx(LandingTrustSection, {}) })
     ] }),
     /* @__PURE__ */ jsx(LazyMount, { className: "defer-render defer-render-sm", rootMargin: "240px 0px", minHeight: 420, children: /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(Footer, {}) }) }),

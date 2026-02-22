@@ -1878,6 +1878,10 @@ html {
   outline-offset: 2px;
 }
 
+.hero-content {
+  min-height: 74vh;
+}
+
 .trust-bar {
   display: flex;
   flex-wrap: wrap;
@@ -2310,9 +2314,9 @@ html {
   }
 
   .hero-content {
-    min-height: 100vh;
-    padding-top: 1.5rem;
-    padding-bottom: 2.5rem;
+    min-height: 74vh;
+    padding-top: 1.25rem;
+    padding-bottom: 1.75rem;
   }
 
   .hero-cta {
