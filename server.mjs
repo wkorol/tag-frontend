@@ -92,6 +92,7 @@ const escapeInlineJson = (value) =>
 
 const localeRoots = new Set(locales.map((locale) => `/${locale}`));
 const localeRootsWithSlash = new Set(locales.map((locale) => `/${locale}/`));
+const defaultLocaleRoot = '/en/';
 const localizedRouteSet = new Set(
   locales.flatMap((locale) => {
     const baseSlugs = Object.values(routeSlugs[locale]).map((slug) => `/${locale}/${slug}`);
@@ -123,45 +124,6 @@ const legacyRedirects = new Map([
 ]);
 
 const isAdminPath = (urlPath) => /^\/(?:[a-z]{2}\/)?admin(?:\/orders\/[^/]+)?$/.test(urlPath);
-
-const detectPreferredLocale = (acceptLanguage) => {
-  if (!acceptLanguage) {
-    return 'pl';
-  }
-
-  const localeAliases = {
-    nb: 'no',
-    nn: 'no',
-  };
-
-  const choices = acceptLanguage
-    .split(',')
-    .map((part) => part.trim().split(';')[0]?.toLowerCase())
-    .filter(Boolean);
-
-  for (const choice of choices) {
-    if (locales.includes(choice)) {
-      return choice;
-    }
-
-    const alias = localeAliases[choice];
-    if (alias && locales.includes(alias)) {
-      return alias;
-    }
-
-    const base = choice.split('-')[0];
-    const baseAlias = base ? localeAliases[base] : null;
-    if (baseAlias && locales.includes(baseAlias)) {
-      return baseAlias;
-    }
-
-    if (base && locales.includes(base)) {
-      return base;
-    }
-  }
-
-  return 'pl';
-};
 
 const isKnownPath = (urlPath) =>
   urlPath === '/' ||
@@ -256,13 +218,9 @@ const server = createServer(async (req, res) => {
     return;
   }
 
-  // Root is a legacy entry-point; redirect to the best locale so we don't index duplicate content.
+  // Keep root deterministic for crawlers to avoid locale-variant canonical conflicts.
   if (urlPath === '/') {
-    const preferred = detectPreferredLocale(req.headers['accept-language']);
-    res.writeHead(302, {
-      Location: `/${preferred}/${requestUrl.search}`,
-      Vary: 'Accept-Language',
-    });
+    res.writeHead(301, { Location: `${defaultLocaleRoot}${requestUrl.search}` });
     res.end();
     return;
   }
