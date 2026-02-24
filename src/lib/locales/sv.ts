@@ -311,6 +311,7 @@ const sv = {
       "Professionella, engelsktalande förare."
     ],
     "destinationsTitle": "Populära destinationer",
+    "relatedRoutesTitle": "Relaterade rutter",
     "faqTitle": "FAQ",
     "faq": [
       {
@@ -437,6 +438,13 @@ const sv = {
       "Gdańsk flygplats → Gdynia",
       "Gamla stan → Gdańsk flygplats"
     ],
+    "priceTitle": (destination: string) => `Taxi Gdańsk flygplats till ${destination} – Pris`,
+    "priceDescription": (destination: string) => `Kolla aktuellt taxipris från Gdańsk flygplats till ${destination}. Kalkylatorn visar dagens pris på sekunder.`,
+    "priceSubtitle": (destination: string) => `Taxi från Gdańsk flygplats till ${destination} – fasta priser, 24/7, snabb bekräftelse.`,
+    "whyTitle": "Varför boka hos oss",
+    "routesSectionTitle": "Tillgängliga rutter",
+    "checkPriceCta": "Kolla pris i kalkylatorn",
+    "bookRideCta": "Boka resa",
     "cityRoutesTitle": "Taxipriser från Gdańsk flygplats",
     "cityRoutesDescription": "Se aktuellt pris från Gdańsk flygplats till dessa orter.",
     "cityRoutesItem": (destination: string) => `Gdańsk flygplats → ${destination}`,

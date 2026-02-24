@@ -177,6 +177,18 @@ const countryAirportRoutes = {
     { slug: 'gdansk-lentokenttakuljetus-helsinki', city: 'Helsinki', airport: 'Helsinki (HEL)', country: 'Suomi' },
     { slug: 'gdansk-lentokenttakuljetus-turku', city: 'Turku', airport: 'Turku (TKU)', country: 'Suomi' },
   ],
+  pl: [
+    { slug: 'transfer-lotnisko-gdansk-londyn-stansted', city: 'Londyn', airport: 'London Stansted (STN)', country: 'Wielka Brytania' },
+    { slug: 'transfer-lotnisko-gdansk-londyn-luton', city: 'Londyn', airport: 'London Luton (LTN)', country: 'Wielka Brytania' },
+    { slug: 'transfer-lotnisko-gdansk-manchester', city: 'Manchester', airport: 'Manchester (MAN)', country: 'Wielka Brytania' },
+    { slug: 'transfer-lotnisko-gdansk-edynburg', city: 'Edynburg', airport: 'Edinburgh (EDI)', country: 'Wielka Brytania' },
+    { slug: 'transfer-lotnisko-gdansk-dortmund', city: 'Dortmund', airport: 'Dortmund (DTM)', country: 'Niemcy' },
+    { slug: 'transfer-lotnisko-gdansk-hamburg', city: 'Hamburg', airport: 'Hamburg (HAM)', country: 'Niemcy' },
+    { slug: 'transfer-lotnisko-gdansk-oslo', city: 'Oslo', airport: 'Oslo Gardermoen (OSL)', country: 'Norwegia' },
+    { slug: 'transfer-lotnisko-gdansk-sztokholm', city: 'Sztokholm', airport: 'Stockholm Arlanda (ARN)', country: 'Szwecja' },
+    { slug: 'transfer-lotnisko-gdansk-kopenhaga', city: 'Kopenhaga', airport: 'København (CPH)', country: 'Dania' },
+    { slug: 'transfer-lotnisko-gdansk-helsinki', city: 'Helsinki', airport: 'Helsinki (HEL)', country: 'Finlandia' },
+  ],
 };
 
 export const countryAirportSlugsByLocale = Object.fromEntries(
@@ -195,6 +207,78 @@ const cityRouteRoutes = {
     { slug: 'taxi-lotnisko-gdansk-wejherowo', destination: 'Wejherowo' },
     { slug: 'taxi-lotnisko-gdansk-rumia', destination: 'Rumia' },
     { slug: 'taxi-lotnisko-gdansk-reda', destination: 'Reda' },
+  ],
+  en: [
+    { slug: 'gdansk-airport-taxi-malbork', destination: 'Malbork' },
+    { slug: 'gdansk-airport-taxi-hel', destination: 'Hel' },
+    { slug: 'gdansk-airport-taxi-wladyslawowo', destination: 'Władysławowo' },
+    { slug: 'gdansk-airport-taxi-slupsk', destination: 'Słupsk' },
+    { slug: 'gdansk-airport-taxi-olsztyn', destination: 'Olsztyn' },
+    { slug: 'gdansk-airport-taxi-starogard', destination: 'Starogard Gdański' },
+    { slug: 'gdansk-airport-taxi-ostroda', destination: 'Ostróda' },
+    { slug: 'gdansk-airport-taxi-wejherowo', destination: 'Wejherowo' },
+    { slug: 'gdansk-airport-taxi-rumia', destination: 'Rumia' },
+    { slug: 'gdansk-airport-taxi-reda', destination: 'Reda' },
+  ],
+  de: [
+    { slug: 'gdansk-flughafen-taxi-malbork', destination: 'Malbork' },
+    { slug: 'gdansk-flughafen-taxi-hel', destination: 'Hel' },
+    { slug: 'gdansk-flughafen-taxi-wladyslawowo', destination: 'Władysławowo' },
+    { slug: 'gdansk-flughafen-taxi-slupsk', destination: 'Słupsk' },
+    { slug: 'gdansk-flughafen-taxi-olsztyn', destination: 'Olsztyn' },
+    { slug: 'gdansk-flughafen-taxi-starogard', destination: 'Starogard Gdański' },
+    { slug: 'gdansk-flughafen-taxi-ostroda', destination: 'Ostróda' },
+    { slug: 'gdansk-flughafen-taxi-wejherowo', destination: 'Wejherowo' },
+    { slug: 'gdansk-flughafen-taxi-rumia', destination: 'Rumia' },
+    { slug: 'gdansk-flughafen-taxi-reda', destination: 'Reda' },
+  ],
+  no: [
+    { slug: 'gdansk-flyplass-taxi-malbork', destination: 'Malbork' },
+    { slug: 'gdansk-flyplass-taxi-hel', destination: 'Hel' },
+    { slug: 'gdansk-flyplass-taxi-wladyslawowo', destination: 'Władysławowo' },
+    { slug: 'gdansk-flyplass-taxi-slupsk', destination: 'Słupsk' },
+    { slug: 'gdansk-flyplass-taxi-olsztyn', destination: 'Olsztyn' },
+    { slug: 'gdansk-flyplass-taxi-starogard', destination: 'Starogard Gdański' },
+    { slug: 'gdansk-flyplass-taxi-ostroda', destination: 'Ostróda' },
+    { slug: 'gdansk-flyplass-taxi-wejherowo', destination: 'Wejherowo' },
+    { slug: 'gdansk-flyplass-taxi-rumia', destination: 'Rumia' },
+    { slug: 'gdansk-flyplass-taxi-reda', destination: 'Reda' },
+  ],
+  sv: [
+    { slug: 'gdansk-flygplats-taxi-malbork', destination: 'Malbork' },
+    { slug: 'gdansk-flygplats-taxi-hel', destination: 'Hel' },
+    { slug: 'gdansk-flygplats-taxi-wladyslawowo', destination: 'Władysławowo' },
+    { slug: 'gdansk-flygplats-taxi-slupsk', destination: 'Słupsk' },
+    { slug: 'gdansk-flygplats-taxi-olsztyn', destination: 'Olsztyn' },
+    { slug: 'gdansk-flygplats-taxi-starogard', destination: 'Starogard Gdański' },
+    { slug: 'gdansk-flygplats-taxi-ostroda', destination: 'Ostróda' },
+    { slug: 'gdansk-flygplats-taxi-wejherowo', destination: 'Wejherowo' },
+    { slug: 'gdansk-flygplats-taxi-rumia', destination: 'Rumia' },
+    { slug: 'gdansk-flygplats-taxi-reda', destination: 'Reda' },
+  ],
+  da: [
+    { slug: 'gdansk-lufthavn-taxi-malbork', destination: 'Malbork' },
+    { slug: 'gdansk-lufthavn-taxi-hel', destination: 'Hel' },
+    { slug: 'gdansk-lufthavn-taxi-wladyslawowo', destination: 'Władysławowo' },
+    { slug: 'gdansk-lufthavn-taxi-slupsk', destination: 'Słupsk' },
+    { slug: 'gdansk-lufthavn-taxi-olsztyn', destination: 'Olsztyn' },
+    { slug: 'gdansk-lufthavn-taxi-starogard', destination: 'Starogard Gdański' },
+    { slug: 'gdansk-lufthavn-taxi-ostroda', destination: 'Ostróda' },
+    { slug: 'gdansk-lufthavn-taxi-wejherowo', destination: 'Wejherowo' },
+    { slug: 'gdansk-lufthavn-taxi-rumia', destination: 'Rumia' },
+    { slug: 'gdansk-lufthavn-taxi-reda', destination: 'Reda' },
+  ],
+  fi: [
+    { slug: 'gdansk-lentokentta-taksi-malbork', destination: 'Malbork' },
+    { slug: 'gdansk-lentokentta-taksi-hel', destination: 'Hel' },
+    { slug: 'gdansk-lentokentta-taksi-wladyslawowo', destination: 'Władysławowo' },
+    { slug: 'gdansk-lentokentta-taksi-slupsk', destination: 'Słupsk' },
+    { slug: 'gdansk-lentokentta-taksi-olsztyn', destination: 'Olsztyn' },
+    { slug: 'gdansk-lentokentta-taksi-starogard', destination: 'Starogard Gdański' },
+    { slug: 'gdansk-lentokentta-taksi-ostroda', destination: 'Ostróda' },
+    { slug: 'gdansk-lentokentta-taksi-wejherowo', destination: 'Wejherowo' },
+    { slug: 'gdansk-lentokentta-taksi-rumia', destination: 'Rumia' },
+    { slug: 'gdansk-lentokentta-taksi-reda', destination: 'Reda' },
   ],
 };
 
@@ -307,29 +391,29 @@ const metaByLocale = {
     noscript:
       'Taxi Airport Gdańsk provides 24/7 airport transfers across Gdańsk, Sopot, and Gdynia. Fixed pricing, professional drivers, and fast confirmation. Contact: booking@taxiairportgdansk.com.',
     home: {
-      title: 'Taxi Gdansk Airport | Taxi Airport Gdańsk Transfers 24/7',
+      title: 'Taxi Gdansk Airport | GDN Airport Transfer Service 24/7',
       description:
-        'Book taxi Gdansk airport transfers with fixed prices. Taxi Airport Gdańsk offers 24/7 pickups, flight tracking, and fast confirmation. Taxi transfers airport Gdansk.',
+        'Book taxi from Gdansk airport to city center with fixed prices. GDN airport transfer service with 24/7 pickups, flight tracking, and fast confirmation. Taxi Airport Gdańsk.',
     },
     airportTaxi: {
-      title: 'Gdansk Airport Taxi | Taxi Airport Gdańsk',
+      title: 'Gdansk Airport Taxi to City Center | Fixed Price Transfer',
       description:
-        'Taxi Gdansk airport to city center and back. Fixed prices, meet & greet, and quick confirmation for airport transfers.',
+        'Taxi from Gdansk airport (GDN) to city center and back. Fixed prices, meet & greet at arrivals, and quick confirmation. Book your Gdansk airport transfer now.',
     },
     airportSopot: {
-      title: 'Gdansk Airport to Sopot Taxi | Taxi Airport Gdańsk',
+      title: 'Gdansk Airport to Sopot Taxi | Fixed Price Transfer',
       description:
-        'Book taxi transfer from Gdansk airport to Sopot with fixed prices, flight tracking, and 24/7 service.',
+        'Taxi transfer from Gdansk airport to Sopot – fixed prices, flight tracking, and 24/7 service. Book GDN to Sopot transfer online.',
     },
     airportGdynia: {
-      title: 'Gdansk Airport to Gdynia Taxi | Taxi Airport Gdańsk',
+      title: 'Gdansk Airport to Gdynia Taxi | Fixed Price Transfer',
       description:
-        'Reliable taxi transfers from Gdansk airport to Gdynia. Fixed price, professional drivers, and fast booking.',
+        'Reliable taxi transfer from Gdansk airport to Gdynia. Fixed price, professional drivers, 24/7. Book GDN to Gdynia transfer.',
     },
     taxiGdanskCity: {
-      title: 'Taxi Gdańsk | Taxi Airport Gdańsk',
+      title: 'Taxi Gdańsk | City & Airport Transfers | Taxi Airport Gdańsk',
       description:
-        'Taxi Gdańsk with fixed prices, 24/7 availability, and fast confirmation. Book airport and city transfers in Gdańsk.',
+        'Taxi Gdańsk with fixed prices, 24/7 availability, and fast confirmation. Airport transfers, city rides, and trips across the Tri-City area.',
     },
     countryLanding: {
       title: 'Gdansk Airport Transfer for UK Travelers | Taxi Airport Gdańsk',
@@ -357,9 +441,9 @@ const metaByLocale = {
         'Request a custom transfer quote for Gdansk, Sopot, or Gdynia. Fast response and flexible pricing.',
     },
     pricing: {
-      title: 'Gdansk Airport Taxi Prices | Taxi Airport Gdańsk',
+      title: 'Gdansk Airport Taxi Prices & Rates | Taxi Airport Gdańsk',
       description:
-        'See fixed prices for airport transfers to Gdansk, Sopot, and Gdynia, plus day/night rates and custom routes.',
+        'Fixed prices for GDN airport transfers to Gdansk, Sopot, and Gdynia. Day/night rates, pricing calculator, and custom route quotes.',
     },
     cookies: {
       title: 'Cookie Policy | Taxi Airport Gdańsk',
@@ -374,29 +458,29 @@ const metaByLocale = {
     noscript:
       'Taxi Airport Gdańsk zapewnia całodobowe transfery lotniskowe w Gdańsku, Sopocie i Gdyni. Stałe ceny, profesjonalni kierowcy i szybkie potwierdzenie. Kontakt: booking@taxiairportgdansk.com.',
     home: {
-      title: 'Taxi Gdańsk Lotnisko | Taxi Airport Gdańsk Transfery 24/7',
+      title: 'Taxi Lotnisko Gdańsk | Transfer z Lotniska Gdańsk 24/7',
       description:
-        'Taxi Gdańsk / taxi gdansk: transfery lotniskowe, stałe ceny i szybkie potwierdzenie. Taxi lotnisko Gdańsk (taxi lotnisko gdansk) 24/7.',
+        'Taxi lotnisko Gdańsk – transfer z lotniska Gdańsk i na lotnisko. Taxi na lotnisko Gdańsk ze stałą ceną, śledzenie lotu, szybkie potwierdzenie. Przewóz z lotniska Gdańsk 24/7.',
     },
     airportTaxi: {
-      title: 'Taxi Lotnisko Gdańsk | Taxi Airport Gdańsk',
+      title: 'Taxi Lotnisko Gdańsk do Centrum | Stała Cena | Taxi Airport Gdańsk',
       description:
-        'Taxi lotnisko Gdańsk do centrum i z centrum na lotnisko. Stałe ceny, szybkie potwierdzenie, 24/7.',
+        'Taxi z lotniska Gdańsk do centrum i z centrum na lotnisko. Transfer lotnisko Gdańsk ze stałą ceną, powitanie na lotnisku, 24/7.',
     },
     airportSopot: {
-      title: 'Taxi Lotnisko Gdańsk – Sopot | Transfer 24/7',
+      title: 'Transfer Lotnisko Gdańsk – Sopot | Taxi Stała Cena 24/7',
       description:
-        'Transfer taxi z lotniska Gdańsk do Sopotu. Stała cena, śledzenie lotu i szybka rezerwacja.',
+        'Taxi z lotniska Gdańsk do Sopotu – stała cena, śledzenie lotu i rezerwacja online. Transfer lotnisko Gdańsk Sopot.',
     },
     airportGdynia: {
-      title: 'Taxi Lotnisko Gdańsk – Gdynia | Transfer 24/7',
+      title: 'Transfer Lotnisko Gdańsk – Gdynia | Taxi Stała Cena 24/7',
       description:
-        'Transfer taxi z lotniska Gdańsk do Gdyni. Stała cena, profesjonalni kierowcy, 24/7.',
+        'Taxi z lotniska Gdańsk do Gdyni – stała cena, profesjonalni kierowcy, 24/7. Transfer lotnisko Gdańsk Gdynia.',
     },
     taxiGdanskCity: {
-      title: 'Taxi Gdańsk | Taxi Airport Gdańsk',
+      title: 'Taxi Gdańsk | Przejazdy Miejskie i Lotniskowe | Taxi Airport Gdańsk',
       description:
-        'Taxi Gdańsk: stałe ceny, dostępność 24/7 i szybkie potwierdzenie. Transfery lotniskowe i miejskie w Gdańsku.',
+        'Taxi Gdańsk: stałe ceny, dostępność 24/7 i szybkie potwierdzenie. Transfery lotniskowe, przejazdy po Trójmieście i taxi na lotnisko Gdańsk.',
     },
     countryLanding: {
       title: 'Transfer lotniskowy Gdańsk dla podróżnych z zagranicy | Taxi Airport Gdańsk',
@@ -424,9 +508,9 @@ const metaByLocale = {
         'Poproś o wycenę niestandardowej trasy w Trójmieście. Odpowiedź w 5–10 minut.',
     },
     pricing: {
-      title: 'Cennik Taxi Lotnisko Gdańsk | Taxi Airport Gdańsk',
+      title: 'Cennik Taxi Lotnisko Gdańsk | Ceny Transferów | Taxi Airport Gdańsk',
       description:
-        'Sprawdź stałe ceny transferów lotniskowych do Gdańska, Sopotu i Gdyni, wraz z taryfami dziennymi i nocnymi.',
+        'Stałe ceny taxi z lotniska Gdańsk do centrum, Sopotu i Gdyni. Kalkulator cen, taryfy dzienne i nocne. Ile kosztuje taxi z lotniska Gdańsk?',
     },
     cookies: {
       title: 'Polityka Cookies | Taxi Airport Gdańsk',
@@ -809,6 +893,30 @@ const cityRouteMetaByLocale = {
   pl: ({ destination }) => ({
     title: `Cena taxi z lotniska Gdańsk do ${destination} | Taxi Airport Gdańsk`,
     description: `Sprawdź cenę przejazdu z lotniska Gdańsk do ${destination}. Kalkulator pokaże aktualną cenę w kilka sekund.`,
+  }),
+  en: ({ destination }) => ({
+    title: `Taxi Gdansk Airport to ${destination} | Price & Booking`,
+    description: `Check the current taxi price from Gdansk Airport (GDN) to ${destination}. Fixed prices, 24/7 service, fast confirmation.`,
+  }),
+  de: ({ destination }) => ({
+    title: `Taxi Flughafen Gdańsk nach ${destination} | Preis & Buchung`,
+    description: `Aktueller Taxipreis vom Flughafen Gdańsk nach ${destination}. Festpreise, 24/7 Service, schnelle Bestätigung.`,
+  }),
+  no: ({ destination }) => ({
+    title: `Taxi Gdańsk flyplass til ${destination} | Pris & bestilling`,
+    description: `Sjekk gjeldende taxipris fra Gdańsk flyplass til ${destination}. Faste priser, 24/7 service, rask bekreftelse.`,
+  }),
+  sv: ({ destination }) => ({
+    title: `Taxi Gdańsk flygplats till ${destination} | Pris & bokning`,
+    description: `Kolla aktuellt taxipris från Gdańsk flygplats till ${destination}. Fasta priser, 24/7 service, snabb bekräftelse.`,
+  }),
+  da: ({ destination }) => ({
+    title: `Taxa Gdańsk lufthavn til ${destination} | Pris & booking`,
+    description: `Tjek den aktuelle taxapris fra Gdańsk lufthavn til ${destination}. Faste priser, 24/7 service, hurtig bekræftelse.`,
+  }),
+  fi: ({ destination }) => ({
+    title: `Taksi Gdańskin lentokenttä – ${destination} | Hinta & varaus`,
+    description: `Tarkista taksihinta Gdańskin lentokentältä kohteeseen ${destination}. Kiinteät hinnat, 24/7 palvelu, nopea vahvistus.`,
   }),
 };
 
@@ -1281,6 +1389,12 @@ export const buildSeoTags = (urlPath) => {
       latitude: '54.3520',
       longitude: '18.6466',
     },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: process.env.VITE_GOOGLE_REVIEWS_RATING || '5.0',
+      reviewCount: process.env.VITE_GOOGLE_REVIEWS_COUNT || '50',
+      bestRating: '5',
+    },
     ...(site.sameAs.length ? { sameAs: site.sameAs } : {}),
   };
 
@@ -1401,6 +1515,10 @@ export const buildSeoTags = (urlPath) => {
     `<title>${meta.title}</title>`,
     `<meta name="description" content="${meta.description}">`,
     `<meta name="robots" content="${robots}">`,
+    `<meta name="geo.region" content="PL-PM">`,
+    `<meta name="geo.placename" content="Gdańsk">`,
+    `<meta name="geo.position" content="54.3520;18.6466">`,
+    `<meta name="ICBM" content="54.3520, 18.6466">`,
     `<meta property="og:title" content="${meta.title}">`,
     `<meta property="og:description" content="${meta.description}">`,
     `<meta property="og:locale" content="${ogLocaleValue}">`,

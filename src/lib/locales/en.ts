@@ -311,6 +311,7 @@ const en = {
       "Professional, English-speaking drivers."
     ],
     "destinationsTitle": "Popular destinations",
+    "relatedRoutesTitle": "Related routes",
     "faqTitle": "FAQ",
     "faq": [
       {
@@ -439,6 +440,13 @@ const en = {
       "Gdańsk Airport → Gdynia",
       "Old Town → Gdańsk Airport"
     ],
+    "priceTitle": (destination: string) => `Taxi Gdańsk Airport to ${destination} – Price`,
+    "priceDescription": (destination: string) => `Check the current taxi price from Gdańsk Airport to ${destination}. The calculator shows today's price in seconds.`,
+    "priceSubtitle": (destination: string) => `Taxi from Gdańsk Airport to ${destination} – fixed prices, 24/7 service, fast confirmation.`,
+    "whyTitle": "Why book with us",
+    "routesSectionTitle": "Available routes",
+    "checkPriceCta": "Check price in calculator",
+    "bookRideCta": "Book a ride",
     "cityRoutesTitle": "Gdańsk Airport taxi price by city",
     "cityRoutesDescription": "Check the current taxi price from Gdańsk Airport to these destinations.",
     "cityRoutesItem": (destination: string) => `Gdańsk Airport → ${destination}`,

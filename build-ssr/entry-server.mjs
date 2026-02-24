@@ -1611,6 +1611,21 @@ const countryAirportsByLocale = {
       { slug: "gdansk-lentokenttakuljetus-helsinki", city: "Helsinki", airport: "Helsinki (HEL)" },
       { slug: "gdansk-lentokenttakuljetus-turku", city: "Turku", airport: "Turku (TKU)" }
     ]
+  },
+  pl: {
+    country: "Europa",
+    airports: [
+      { slug: "transfer-lotnisko-gdansk-londyn-stansted", city: "Londyn", airport: "London Stansted (STN)" },
+      { slug: "transfer-lotnisko-gdansk-londyn-luton", city: "Londyn", airport: "London Luton (LTN)" },
+      { slug: "transfer-lotnisko-gdansk-manchester", city: "Manchester", airport: "Manchester (MAN)" },
+      { slug: "transfer-lotnisko-gdansk-edynburg", city: "Edynburg", airport: "Edinburgh (EDI)" },
+      { slug: "transfer-lotnisko-gdansk-dortmund", city: "Dortmund", airport: "Dortmund (DTM)" },
+      { slug: "transfer-lotnisko-gdansk-hamburg", city: "Hamburg", airport: "Hamburg (HAM)" },
+      { slug: "transfer-lotnisko-gdansk-oslo", city: "Oslo", airport: "Oslo Gardermoen (OSL)" },
+      { slug: "transfer-lotnisko-gdansk-sztokholm", city: "Sztokholm", airport: "Stockholm Arlanda (ARN)" },
+      { slug: "transfer-lotnisko-gdansk-kopenhaga", city: "Kopenhaga", airport: "København (CPH)" },
+      { slug: "transfer-lotnisko-gdansk-helsinki", city: "Helsinki", airport: "Helsinki (HEL)" }
+    ]
   }
 };
 const getCountryAirports = (locale) => {
@@ -1637,6 +1652,78 @@ const cityRoutesByLocale = {
     { slug: "taxi-lotnisko-gdansk-wejherowo", destination: "Wejherowo" },
     { slug: "taxi-lotnisko-gdansk-rumia", destination: "Rumia" },
     { slug: "taxi-lotnisko-gdansk-reda", destination: "Reda" }
+  ],
+  en: [
+    { slug: "gdansk-airport-taxi-malbork", destination: "Malbork" },
+    { slug: "gdansk-airport-taxi-hel", destination: "Hel" },
+    { slug: "gdansk-airport-taxi-wladyslawowo", destination: "Władysławowo" },
+    { slug: "gdansk-airport-taxi-slupsk", destination: "Słupsk" },
+    { slug: "gdansk-airport-taxi-olsztyn", destination: "Olsztyn" },
+    { slug: "gdansk-airport-taxi-starogard", destination: "Starogard Gdański" },
+    { slug: "gdansk-airport-taxi-ostroda", destination: "Ostróda" },
+    { slug: "gdansk-airport-taxi-wejherowo", destination: "Wejherowo" },
+    { slug: "gdansk-airport-taxi-rumia", destination: "Rumia" },
+    { slug: "gdansk-airport-taxi-reda", destination: "Reda" }
+  ],
+  de: [
+    { slug: "gdansk-flughafen-taxi-malbork", destination: "Malbork" },
+    { slug: "gdansk-flughafen-taxi-hel", destination: "Hel" },
+    { slug: "gdansk-flughafen-taxi-wladyslawowo", destination: "Władysławowo" },
+    { slug: "gdansk-flughafen-taxi-slupsk", destination: "Słupsk" },
+    { slug: "gdansk-flughafen-taxi-olsztyn", destination: "Olsztyn" },
+    { slug: "gdansk-flughafen-taxi-starogard", destination: "Starogard Gdański" },
+    { slug: "gdansk-flughafen-taxi-ostroda", destination: "Ostróda" },
+    { slug: "gdansk-flughafen-taxi-wejherowo", destination: "Wejherowo" },
+    { slug: "gdansk-flughafen-taxi-rumia", destination: "Rumia" },
+    { slug: "gdansk-flughafen-taxi-reda", destination: "Reda" }
+  ],
+  no: [
+    { slug: "gdansk-flyplass-taxi-malbork", destination: "Malbork" },
+    { slug: "gdansk-flyplass-taxi-hel", destination: "Hel" },
+    { slug: "gdansk-flyplass-taxi-wladyslawowo", destination: "Władysławowo" },
+    { slug: "gdansk-flyplass-taxi-slupsk", destination: "Słupsk" },
+    { slug: "gdansk-flyplass-taxi-olsztyn", destination: "Olsztyn" },
+    { slug: "gdansk-flyplass-taxi-starogard", destination: "Starogard Gdański" },
+    { slug: "gdansk-flyplass-taxi-ostroda", destination: "Ostróda" },
+    { slug: "gdansk-flyplass-taxi-wejherowo", destination: "Wejherowo" },
+    { slug: "gdansk-flyplass-taxi-rumia", destination: "Rumia" },
+    { slug: "gdansk-flyplass-taxi-reda", destination: "Reda" }
+  ],
+  sv: [
+    { slug: "gdansk-flygplats-taxi-malbork", destination: "Malbork" },
+    { slug: "gdansk-flygplats-taxi-hel", destination: "Hel" },
+    { slug: "gdansk-flygplats-taxi-wladyslawowo", destination: "Władysławowo" },
+    { slug: "gdansk-flygplats-taxi-slupsk", destination: "Słupsk" },
+    { slug: "gdansk-flygplats-taxi-olsztyn", destination: "Olsztyn" },
+    { slug: "gdansk-flygplats-taxi-starogard", destination: "Starogard Gdański" },
+    { slug: "gdansk-flygplats-taxi-ostroda", destination: "Ostróda" },
+    { slug: "gdansk-flygplats-taxi-wejherowo", destination: "Wejherowo" },
+    { slug: "gdansk-flygplats-taxi-rumia", destination: "Rumia" },
+    { slug: "gdansk-flygplats-taxi-reda", destination: "Reda" }
+  ],
+  da: [
+    { slug: "gdansk-lufthavn-taxi-malbork", destination: "Malbork" },
+    { slug: "gdansk-lufthavn-taxi-hel", destination: "Hel" },
+    { slug: "gdansk-lufthavn-taxi-wladyslawowo", destination: "Władysławowo" },
+    { slug: "gdansk-lufthavn-taxi-slupsk", destination: "Słupsk" },
+    { slug: "gdansk-lufthavn-taxi-olsztyn", destination: "Olsztyn" },
+    { slug: "gdansk-lufthavn-taxi-starogard", destination: "Starogard Gdański" },
+    { slug: "gdansk-lufthavn-taxi-ostroda", destination: "Ostróda" },
+    { slug: "gdansk-lufthavn-taxi-wejherowo", destination: "Wejherowo" },
+    { slug: "gdansk-lufthavn-taxi-rumia", destination: "Rumia" },
+    { slug: "gdansk-lufthavn-taxi-reda", destination: "Reda" }
+  ],
+  fi: [
+    { slug: "gdansk-lentokentta-taksi-malbork", destination: "Malbork" },
+    { slug: "gdansk-lentokentta-taksi-hel", destination: "Hel" },
+    { slug: "gdansk-lentokentta-taksi-wladyslawowo", destination: "Władysławowo" },
+    { slug: "gdansk-lentokentta-taksi-slupsk", destination: "Słupsk" },
+    { slug: "gdansk-lentokentta-taksi-olsztyn", destination: "Olsztyn" },
+    { slug: "gdansk-lentokentta-taksi-starogard", destination: "Starogard Gdański" },
+    { slug: "gdansk-lentokentta-taksi-ostroda", destination: "Ostróda" },
+    { slug: "gdansk-lentokentta-taksi-wejherowo", destination: "Wejherowo" },
+    { slug: "gdansk-lentokentta-taksi-rumia", destination: "Rumia" },
+    { slug: "gdansk-lentokentta-taksi-reda", destination: "Reda" }
   ]
 };
 const getCityRoutes = (locale) => {
@@ -1718,24 +1805,24 @@ class AppErrorBoundary extends Component {
   }
 }
 const Pricing = lazy(withChunkRetry(() => import("./assets/Pricing-PAxzYuf5.mjs").then((mod) => ({ default: mod.Pricing })), "pricing"));
-const Footer = lazy(withChunkRetry(() => import("./assets/Footer-nUGSAGu3.mjs").then((mod) => ({ default: mod.Footer })), "footer"));
+const Footer = lazy(withChunkRetry(() => import("./assets/Footer-S_X6anZC.mjs").then((mod) => ({ default: mod.Footer })), "footer"));
 const CookieBanner = lazy(withChunkRetry(() => import("./assets/CookieBanner-BaoCJwfa.mjs").then((mod) => ({ default: mod.CookieBanner })), "cookie-banner"));
 const OrderForm = lazy(withChunkRetry(() => import("./assets/OrderForm-CImSvIOX.mjs").then((mod) => ({ default: mod.OrderForm })), "order-form"));
 const QuoteForm = lazy(withChunkRetry(() => import("./assets/QuoteForm-Bp_asRBf.mjs").then((n) => n.b).then((mod) => ({ default: mod.QuoteForm })), "quote-form"));
 const ManageOrder = lazy(withChunkRetry(() => import("./assets/ManageOrder-x57vjpE2.mjs").then((mod) => ({ default: mod.ManageOrder })), "manage-order"));
-const RouteLanding = lazy(withChunkRetry(() => import("./assets/RouteLanding-DbcJrNrA.mjs").then((mod) => ({ default: mod.RouteLanding })), "route-landing"));
+const RouteLanding = lazy(withChunkRetry(() => import("./assets/RouteLanding-CYoSjc17.mjs").then((mod) => ({ default: mod.RouteLanding })), "route-landing"));
 const OrderRoutePage = lazy(withChunkRetry(() => import("./assets/OrderRoutePage-BNqXcB6R.mjs").then((mod) => ({ default: mod.OrderRoutePage })), "order-route-page"));
 const CustomOrderPage = lazy(withChunkRetry(() => import("./assets/OrderRoutePage-BNqXcB6R.mjs").then((mod) => ({ default: mod.CustomOrderPage })), "custom-order-page"));
-const PricingPage = lazy(withChunkRetry(() => import("./assets/PricingPage-CcrNb_wF.mjs").then((mod) => ({ default: mod.PricingPage })), "pricing-page"));
+const PricingPage = lazy(withChunkRetry(() => import("./assets/PricingPage-BJ6RpHKW.mjs").then((mod) => ({ default: mod.PricingPage })), "pricing-page"));
 const AdminOrdersPage = lazy(withChunkRetry(() => import("./assets/AdminOrdersPage-CUsKktUh.mjs").then((mod) => ({ default: mod.AdminOrdersPage })), "admin-orders-page"));
 const AdminOrderPage = lazy(withChunkRetry(() => import("./assets/AdminOrderPage-BJwNq_qM.mjs").then((mod) => ({ default: mod.AdminOrderPage })), "admin-order-page"));
-const CookiesPage = lazy(withChunkRetry(() => import("./assets/CookiesPage-D1_tACFy.mjs").then((mod) => ({ default: mod.CookiesPage })), "cookies-page"));
-const PrivacyPage = lazy(withChunkRetry(() => import("./assets/PrivacyPage-9Z934pBZ.mjs").then((mod) => ({ default: mod.PrivacyPage })), "privacy-page"));
-const NotFoundPage = lazy(withChunkRetry(() => import("./assets/NotFoundPage-Cp7sBpFY.mjs").then((mod) => ({ default: mod.NotFoundPage })), "not-found-page"));
-const CountryLanding = lazy(withChunkRetry(() => import("./assets/CountryLanding-Dq5OPzZ6.mjs").then((mod) => ({ default: mod.CountryLanding })), "country-landing"));
-const CountryAirportLanding = lazy(withChunkRetry(() => import("./assets/CountryAirportLanding-D0INzDSt.mjs").then((mod) => ({ default: mod.CountryAirportLanding })), "country-airport-landing"));
-const CityRouteLanding = lazy(withChunkRetry(() => import("./assets/CityRouteLanding-BA2j7PBe.mjs").then((mod) => ({ default: mod.CityRouteLanding })), "city-route-landing"));
-const TaxiGdanskPage = lazy(withChunkRetry(() => import("./assets/TaxiGdanskPage-yD2QIsca.mjs").then((mod) => ({ default: mod.TaxiGdanskPage })), "taxi-gdansk-page"));
+const CookiesPage = lazy(withChunkRetry(() => import("./assets/CookiesPage-BzgeuJg3.mjs").then((mod) => ({ default: mod.CookiesPage })), "cookies-page"));
+const PrivacyPage = lazy(withChunkRetry(() => import("./assets/PrivacyPage-D7rv6vUO.mjs").then((mod) => ({ default: mod.PrivacyPage })), "privacy-page"));
+const NotFoundPage = lazy(withChunkRetry(() => import("./assets/NotFoundPage-DyS28W6W.mjs").then((mod) => ({ default: mod.NotFoundPage })), "not-found-page"));
+const CountryLanding = lazy(withChunkRetry(() => import("./assets/CountryLanding-BbSTuJ_k.mjs").then((mod) => ({ default: mod.CountryLanding })), "country-landing"));
+const CountryAirportLanding = lazy(withChunkRetry(() => import("./assets/CountryAirportLanding-CZKuXNDj.mjs").then((mod) => ({ default: mod.CountryAirportLanding })), "country-airport-landing"));
+const CityRouteLanding = lazy(withChunkRetry(() => import("./assets/CityRouteLanding-DKoHYFPQ.mjs").then((mod) => ({ default: mod.CityRouteLanding })), "city-route-landing"));
+const TaxiGdanskPage = lazy(withChunkRetry(() => import("./assets/TaxiGdanskPage-BghaX6QB.mjs").then((mod) => ({ default: mod.TaxiGdanskPage })), "taxi-gdansk-page"));
 const localeRootPathSet = new Set(SUPPORTED_LOCALES.map((locale) => `/${locale}`));
 const normalizeCanonicalPathname = (pathname) => localeRootPathSet.has(pathname) ? `${pathname}/` : pathname;
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
@@ -1882,7 +1969,7 @@ const renderLocalizedRoutes = (locale, t) => {
     /* @__PURE__ */ jsx(Route, { path: getRouteSlug(locale, "countryLanding"), element: /* @__PURE__ */ jsx(CountryLanding, {}) }),
     /* @__PURE__ */ jsx(Route, { path: getRouteSlug(locale, "taxiGdanskCity"), element: /* @__PURE__ */ jsx(TaxiGdanskPage, {}) }),
     renderCountryAirportRoutes(locale),
-    isPolish ? renderCityRouteRoutes(locale) : null,
+    renderCityRouteRoutes(locale),
     /* @__PURE__ */ jsx(
       Route,
       {
@@ -2585,6 +2672,7 @@ const en = {
       "Professional, English-speaking drivers."
     ],
     "destinationsTitle": "Popular destinations",
+    "relatedRoutesTitle": "Related routes",
     "faqTitle": "FAQ",
     "faq": [
       {
@@ -2713,6 +2801,13 @@ const en = {
       "Gdańsk Airport → Gdynia",
       "Old Town → Gdańsk Airport"
     ],
+    "priceTitle": (destination) => `Taxi Gdańsk Airport to ${destination} – Price`,
+    "priceDescription": (destination) => `Check the current taxi price from Gdańsk Airport to ${destination}. The calculator shows today's price in seconds.`,
+    "priceSubtitle": (destination) => `Taxi from Gdańsk Airport to ${destination} – fixed prices, 24/7 service, fast confirmation.`,
+    "whyTitle": "Why book with us",
+    "routesSectionTitle": "Available routes",
+    "checkPriceCta": "Check price in calculator",
+    "bookRideCta": "Book a ride",
     "cityRoutesTitle": "Gdańsk Airport taxi price by city",
     "cityRoutesDescription": "Check the current taxi price from Gdańsk Airport to these destinations.",
     "cityRoutesItem": (destination) => `Gdańsk Airport → ${destination}`,
@@ -3464,6 +3559,7 @@ const pl = {
       "Profesjonalni kierowcy mówiący po angielsku."
     ],
     "destinationsTitle": "Popularne kierunki",
+    "relatedRoutesTitle": "Powiązane trasy",
     "faqTitle": "FAQ",
     "faq": [
       {
@@ -3592,6 +3688,13 @@ const pl = {
       "Lotnisko Gdańsk → Gdynia",
       "Stare Miasto → Lotnisko Gdańsk"
     ],
+    "priceTitle": (destination) => `Cena taxi z lotniska Gdańsk do ${destination}`,
+    "priceDescription": (destination) => `Sprawdź aktualną cenę przejazdu z lotniska Gdańsk do ${destination}. Kalkulator pokaże cenę na dziś w kilka sekund.`,
+    "priceSubtitle": (destination) => `Taxi Gdańsk z lotniska do ${destination} – stałe ceny, 24/7 i szybkie potwierdzenie.`,
+    "whyTitle": "Dlaczego warto",
+    "routesSectionTitle": "Obsługiwane trasy",
+    "checkPriceCta": "Sprawdź cenę w kalkulatorze",
+    "bookRideCta": "Zarezerwuj przejazd",
     "cityRoutesTitle": "Ceny taxi z lotniska Gdańsk",
     "cityRoutesDescription": "Sprawdź cenę przejazdu z lotniska Gdańsk do wybranych miast.",
     "cityRoutesItem": (destination) => `Lotnisko Gdańsk → ${destination}`,
@@ -4337,6 +4440,7 @@ const de = {
       "Professionelle, englischsprachige Fahrer."
     ],
     "destinationsTitle": "Beliebte Ziele",
+    "relatedRoutesTitle": "Verwandte Routen",
     "faqTitle": "FAQ",
     "faq": [
       {
@@ -4463,6 +4567,13 @@ const de = {
       "Flughafen Gdańsk → Gdynia",
       "Altstadt → Flughafen Gdańsk"
     ],
+    "priceTitle": (destination) => `Taxi Flughafen Gdańsk nach ${destination} – Preis`,
+    "priceDescription": (destination) => `Aktueller Taxipreis vom Flughafen Gdańsk nach ${destination}. Der Rechner zeigt den heutigen Preis in Sekunden.`,
+    "priceSubtitle": (destination) => `Taxi vom Flughafen Gdańsk nach ${destination} – Festpreise, 24/7, schnelle Bestätigung.`,
+    "whyTitle": "Warum bei uns buchen",
+    "routesSectionTitle": "Verfügbare Routen",
+    "checkPriceCta": "Preis im Rechner prüfen",
+    "bookRideCta": "Fahrt buchen",
     "cityRoutesTitle": "Taxipreise ab Flughafen Gdańsk",
     "cityRoutesDescription": "Prüfe den aktuellen Preis vom Flughafen Gdańsk zu diesen Orten.",
     "cityRoutesItem": (destination) => `Flughafen Gdańsk → ${destination}`,
@@ -5208,6 +5319,7 @@ const fi = {
       "Ammattikuljettajat, englanninkielinen palvelu."
     ],
     "destinationsTitle": "Suositut kohteet",
+    "relatedRoutesTitle": "Liittyvät reitit",
     "faqTitle": "UKK",
     "faq": [
       {
@@ -5332,6 +5444,13 @@ const fi = {
       "Gdańsk lentokenttä → Gdynia",
       "Vanhakaupunki → Gdańsk lentokenttä"
     ],
+    "priceTitle": (destination) => `Taksi Gdańskin lentokenttä – ${destination} – Hinta`,
+    "priceDescription": (destination) => `Tarkista taksihinta Gdańskin lentokentältä kohteeseen ${destination}. Laskin näyttää tämän päivän hinnan sekunneissa.`,
+    "priceSubtitle": (destination) => `Taksi Gdańskin lentokentältä kohteeseen ${destination} – kiinteät hinnat, 24/7, nopea vahvistus.`,
+    "whyTitle": "Miksi varata meiltä",
+    "routesSectionTitle": "Saatavilla olevat reitit",
+    "checkPriceCta": "Tarkista hinta laskurissa",
+    "bookRideCta": "Varaa kyyti",
     "cityRoutesTitle": "Hinnat: Gdańskin lentoasema taksi",
     "cityRoutesDescription": "Katso ajantasainen hinta Gdańskin lentoasemalta näihin kohteisiin.",
     "cityRoutesItem": (destination) => `Gdańskin lentoasema → ${destination}`,
@@ -6077,6 +6196,7 @@ const no = {
       "Profesjonelle, engelsktalende sjåfører."
     ],
     "destinationsTitle": "Populære destinasjoner",
+    "relatedRoutesTitle": "Relaterte ruter",
     "faqTitle": "FAQ",
     "faq": [
       {
@@ -6204,6 +6324,13 @@ const no = {
       "Gdańsk flyplass → Gdynia",
       "Gamlebyen → Gdańsk flyplass"
     ],
+    "priceTitle": (destination) => `Taxi Gdańsk flyplass til ${destination} – Pris`,
+    "priceDescription": (destination) => `Sjekk gjeldende taxipris fra Gdańsk flyplass til ${destination}. Kalkulatoren viser dagens pris på sekunder.`,
+    "priceSubtitle": (destination) => `Taxi fra Gdańsk flyplass til ${destination} – faste priser, 24/7, rask bekreftelse.`,
+    "whyTitle": "Hvorfor bestille hos oss",
+    "routesSectionTitle": "Tilgjengelige ruter",
+    "checkPriceCta": "Sjekk pris i kalkulatoren",
+    "bookRideCta": "Bestill tur",
     "cityRoutesTitle": "Taxipriser fra Gdańsk lufthavn",
     "cityRoutesDescription": "Sjekk aktuell pris fra Gdańsk lufthavn til disse stedene.",
     "cityRoutesItem": (destination) => `Gdańsk lufthavn → ${destination}`,
@@ -6948,6 +7075,7 @@ const sv = {
       "Professionella, engelsktalande förare."
     ],
     "destinationsTitle": "Populära destinationer",
+    "relatedRoutesTitle": "Relaterade rutter",
     "faqTitle": "FAQ",
     "faq": [
       {
@@ -7074,6 +7202,13 @@ const sv = {
       "Gdańsk flygplats → Gdynia",
       "Gamla stan → Gdańsk flygplats"
     ],
+    "priceTitle": (destination) => `Taxi Gdańsk flygplats till ${destination} – Pris`,
+    "priceDescription": (destination) => `Kolla aktuellt taxipris från Gdańsk flygplats till ${destination}. Kalkylatorn visar dagens pris på sekunder.`,
+    "priceSubtitle": (destination) => `Taxi från Gdańsk flygplats till ${destination} – fasta priser, 24/7, snabb bekräftelse.`,
+    "whyTitle": "Varför boka hos oss",
+    "routesSectionTitle": "Tillgängliga rutter",
+    "checkPriceCta": "Kolla pris i kalkylatorn",
+    "bookRideCta": "Boka resa",
     "cityRoutesTitle": "Taxipriser från Gdańsk flygplats",
     "cityRoutesDescription": "Se aktuellt pris från Gdańsk flygplats till dessa orter.",
     "cityRoutesItem": (destination) => `Gdańsk flygplats → ${destination}`,
@@ -7819,6 +7954,7 @@ const da = {
       "Professionelle, engelsktalende chauffører."
     ],
     "destinationsTitle": "Populære destinationer",
+    "relatedRoutesTitle": "Relaterede ruter",
     "faqTitle": "FAQ",
     "faq": [
       {
@@ -7944,6 +8080,13 @@ const da = {
       "Gdańsk lufthavn → Gdynia",
       "Gamle by → Gdańsk lufthavn"
     ],
+    "priceTitle": (destination) => `Taxa Gdańsk lufthavn til ${destination} – Pris`,
+    "priceDescription": (destination) => `Tjek den aktuelle taxapris fra Gdańsk lufthavn til ${destination}. Beregneren viser dagens pris på sekunder.`,
+    "priceSubtitle": (destination) => `Taxa fra Gdańsk lufthavn til ${destination} – faste priser, 24/7, hurtig bekræftelse.`,
+    "whyTitle": "Hvorfor booke hos os",
+    "routesSectionTitle": "Tilgængelige ruter",
+    "checkPriceCta": "Tjek pris i beregneren",
+    "bookRideCta": "Book en tur",
     "cityRoutesTitle": "Taxipriser fra Gdańsk lufthavn",
     "cityRoutesDescription": "Se den aktuelle pris fra Gdańsk lufthavn til disse destinationer.",
     "cityRoutesItem": (destination) => `Gdańsk lufthavn → ${destination}`,

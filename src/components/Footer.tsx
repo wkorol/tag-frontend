@@ -7,18 +7,8 @@ import { trackContactClick, trackNavClick } from '../lib/tracking';
 export function Footer() {
   const { t, locale } = useI18n();
   const basePath = localeToPath(locale);
-  const popularPlCitySlugs = [
-    'taxi-lotnisko-gdansk-wejherowo',
-    'taxi-lotnisko-gdansk-rumia',
-    'taxi-lotnisko-gdansk-reda',
-    'taxi-lotnisko-gdansk-malbork',
-    'taxi-lotnisko-gdansk-slupsk',
-    'taxi-lotnisko-gdansk-hel',
-  ];
-  const popularPlCityRoutes =
-    locale === 'pl'
-      ? getCityRoutes('pl').filter((route) => popularPlCitySlugs.includes(route.slug))
-      : [];
+  const allCityRoutes = getCityRoutes(locale);
+  const popularCityRoutes = allCityRoutes.slice(0, 6);
 
   return (
     <footer className="bg-gray-900 text-gray-200 py-12">
@@ -137,21 +127,23 @@ export function Footer() {
                 {t.navbar.airportGdynia}
               </a>
 
-              {locale === 'pl' && popularPlCityRoutes.length > 0 ? (
+              {popularCityRoutes.length > 0 ? (
                 <>
                   <div className="h-3" />
                   <div className="text-[10px] uppercase tracking-[0.2em] text-gray-400">
-                    Popularne trasy (PL)
+                    {t.cityTaxi?.cityRoutesTitle ?? 'Popular routes'}
                   </div>
                   <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-2 text-[13px] leading-snug text-gray-200">
-                    {popularPlCityRoutes.map((route) => (
+                    {popularCityRoutes.map((route) => (
                       <a
                         key={route.slug}
                         href={`${basePath}/${route.slug}`}
                         onClick={() => trackNavClick(`footer_city_${route.slug}`)}
                         className="block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors"
                       >
-                        Lotnisko ↔ {route.destination}
+                        {typeof t.cityTaxi?.cityRoutesItem === 'function'
+                          ? t.cityTaxi.cityRoutesItem(route.destination)
+                          : `Airport ↔ ${route.destination}`}
                       </a>
                     ))}
                   </div>

@@ -317,6 +317,7 @@ const pl = {
       "Profesjonalni kierowcy mówiący po angielsku."
     ],
     "destinationsTitle": "Popularne kierunki",
+    "relatedRoutesTitle": "Powiązane trasy",
     "faqTitle": "FAQ",
     "faq": [
       {
@@ -445,6 +446,13 @@ const pl = {
       "Lotnisko Gdańsk → Gdynia",
       "Stare Miasto → Lotnisko Gdańsk"
     ],
+    "priceTitle": (destination: string) => `Cena taxi z lotniska Gdańsk do ${destination}`,
+    "priceDescription": (destination: string) => `Sprawdź aktualną cenę przejazdu z lotniska Gdańsk do ${destination}. Kalkulator pokaże cenę na dziś w kilka sekund.`,
+    "priceSubtitle": (destination: string) => `Taxi Gdańsk z lotniska do ${destination} – stałe ceny, 24/7 i szybkie potwierdzenie.`,
+    "whyTitle": "Dlaczego warto",
+    "routesSectionTitle": "Obsługiwane trasy",
+    "checkPriceCta": "Sprawdź cenę w kalkulatorze",
+    "bookRideCta": "Zarezerwuj przejazd",
     "cityRoutesTitle": "Ceny taxi z lotniska Gdańsk",
     "cityRoutesDescription": "Sprawdź cenę przejazdu z lotniska Gdańsk do wybranych miast.",
     "cityRoutesItem": (destination: string) => `Lotnisko Gdańsk → ${destination}`,

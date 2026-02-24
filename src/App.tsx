@@ -317,7 +317,7 @@ const renderLocalizedRoutes = (locale: Locale, t: ReturnType<typeof useI18n>['t'
       <Route path={getRouteSlug(locale, 'countryLanding')} element={<CountryLanding />} />
       <Route path={getRouteSlug(locale, 'taxiGdanskCity')} element={<TaxiGdanskPage />} />
       {renderCountryAirportRoutes(locale)}
-      {isPolish ? renderCityRouteRoutes(locale) : null}
+      {renderCityRouteRoutes(locale)}
       <Route
         path={getRouteSlug(locale, 'airportTaxi')}
         element={

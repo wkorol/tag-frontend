@@ -4,7 +4,7 @@ import { FloatingActions } from '../components/FloatingActions';
 import { Navbar } from '../components/Navbar';
 import { TrustSection } from '../components/TrustSection';
 import { localeToPath, useI18n } from '../lib/i18n';
-import { getRouteSlug } from '../lib/routes';
+import { getRouteSlug, getRoutePath, type PublicRouteKey } from '../lib/routes';
 import { trackCtaClick, trackNavClick } from '../lib/tracking';
 import { requestScrollTo } from '../lib/scroll';
 import { usePageTitle } from '../lib/usePageTitle';
@@ -189,6 +189,31 @@ export function RouteLanding({ title, description, route, examples, pricing }: R
                   <h3 className="text-gray-900 mb-2">{entry.question}</h3>
                   <p className="text-sm text-gray-600">{entry.answer}</p>
                 </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="py-12 bg-gray-50 border-t border-gray-200">
+          <div className="max-w-5xl mx-auto px-4">
+            <h2 className="text-xl text-gray-900 mb-4">{t.routeLanding.relatedRoutesTitle ?? 'Related routes'}</h2>
+            <div className="grid gap-3 md:grid-cols-3">
+              {([
+                { key: 'airportTaxi' as PublicRouteKey, label: t.navbar.airportTaxi },
+                { key: 'airportSopot' as PublicRouteKey, label: t.navbar.airportSopot },
+                { key: 'airportGdynia' as PublicRouteKey, label: t.navbar.airportGdynia },
+                { key: 'taxiGdanskCity' as PublicRouteKey, label: t.cityTaxi?.title ?? 'Taxi Gdańsk' },
+                { key: 'pricing' as PublicRouteKey, label: t.navbar.prices },
+                { key: 'countryLanding' as PublicRouteKey, label: t.countryLanding?.title ?? t.navbar.airportTaxi },
+              ] as const).map((item) => (
+                <a
+                  key={item.key}
+                  href={getRoutePath(locale, item.key)}
+                  onClick={() => trackNavClick(`route_landing_related_${item.key}`)}
+                  className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 transition-colors hover:border-blue-200 hover:bg-blue-50"
+                >
+                  {item.label}
+                </a>
               ))}
             </div>
           </div>

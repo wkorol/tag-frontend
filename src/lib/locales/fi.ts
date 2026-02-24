@@ -311,6 +311,7 @@ const fi = {
       "Ammattikuljettajat, englanninkielinen palvelu."
     ],
     "destinationsTitle": "Suositut kohteet",
+    "relatedRoutesTitle": "Liittyvät reitit",
     "faqTitle": "UKK",
     "faq": [
       {
@@ -435,6 +436,13 @@ const fi = {
       "Gdańsk lentokenttä → Gdynia",
       "Vanhakaupunki → Gdańsk lentokenttä"
     ],
+    "priceTitle": (destination: string) => `Taksi Gdańskin lentokenttä – ${destination} – Hinta`,
+    "priceDescription": (destination: string) => `Tarkista taksihinta Gdańskin lentokentältä kohteeseen ${destination}. Laskin näyttää tämän päivän hinnan sekunneissa.`,
+    "priceSubtitle": (destination: string) => `Taksi Gdańskin lentokentältä kohteeseen ${destination} – kiinteät hinnat, 24/7, nopea vahvistus.`,
+    "whyTitle": "Miksi varata meiltä",
+    "routesSectionTitle": "Saatavilla olevat reitit",
+    "checkPriceCta": "Tarkista hinta laskurissa",
+    "bookRideCta": "Varaa kyyti",
     "cityRoutesTitle": "Hinnat: Gdańskin lentoasema taksi",
     "cityRoutesDescription": "Katso ajantasainen hinta Gdańskin lentoasemalta näihin kohteisiin.",
     "cityRoutesItem": (destination: string) => `Gdańskin lentoasema → ${destination}`,

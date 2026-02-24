@@ -31,8 +31,19 @@ export function CityRouteLanding() {
   const cityRouteItemLabel = (cityDestination: string) =>
     typeof cityTaxi.cityRoutesItem === 'function'
       ? cityTaxi.cityRoutesItem(cityDestination)
-      : `Lotnisko Gdańsk → ${cityDestination}`;
-  usePageTitle(`Cena taxi z lotniska Gdańsk do ${destination}`);
+      : `Gdańsk Airport → ${cityDestination}`;
+
+  const priceTitle = typeof cityTaxi.priceTitle === 'function'
+    ? cityTaxi.priceTitle(destination)
+    : `Taxi Gdańsk Airport → ${destination}`;
+  const priceDescription = typeof cityTaxi.priceDescription === 'function'
+    ? cityTaxi.priceDescription(destination)
+    : `Check the current taxi price from Gdańsk Airport to ${destination}.`;
+  const priceSubtitle = typeof cityTaxi.priceSubtitle === 'function'
+    ? cityTaxi.priceSubtitle(destination)
+    : `Taxi from Gdańsk Airport to ${destination} – fixed prices, 24/7, fast confirmation.`;
+
+  usePageTitle(priceTitle);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -48,13 +59,13 @@ export function CityRouteLanding() {
                 ]}
               />
               <h1 className="text-3xl text-gray-900 mb-4">
-                Cena taxi z lotniska Gdańsk do {destination}
+                {priceTitle}
               </h1>
               <p className="text-gray-600 mb-4">
-                Sprawdź aktualną cenę przejazdu z lotniska Gdańsk do {destination}. Kalkulator pokaże cenę na dziś w kilka sekund.
+                {priceDescription}
               </p>
               <p className="text-sm text-gray-500 mb-6">
-                Taxi Gdańsk z lotniska do {destination} – stałe ceny, 24/7 i szybkie potwierdzenie.
+                {priceSubtitle}
               </p>
               <div className="flex flex-wrap gap-3">
                 <a
@@ -69,7 +80,7 @@ export function CityRouteLanding() {
                   }}
                   className="inline-flex items-center gap-2 bg-orange-800 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-700 transition-colors animate-pulse-glow"
                 >
-                  Sprawdź cenę w kalkulatorze
+                  {cityTaxi.checkPriceCta ?? 'Check price'}
                 </a>
                 <a
                   href={`${basePath}/`}
@@ -83,7 +94,7 @@ export function CityRouteLanding() {
                   }}
                   className="gemini-cta inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-blue-800 shadow-sm transition-colors hover:bg-blue-50"
                 >
-                  Zarezerwuj przejazd
+                  {cityTaxi.bookRideCta ?? 'Book a ride'}
                 </a>
               </div>
             </div>
@@ -93,7 +104,7 @@ export function CityRouteLanding() {
         <section className="py-12">
           <div className="max-w-5xl mx-auto px-4 grid gap-6 md:grid-cols-2">
             <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h2 className="text-xl text-gray-900 mb-3">Dlaczego warto</h2>
+              <h2 className="text-xl text-gray-900 mb-3">{cityTaxi.whyTitle ?? cityTaxi.highlightsTitle}</h2>
               <ul className="list-disc pl-5 space-y-2 text-gray-600 text-sm">
                 {cityTaxi.highlights.map((item) => (
                   <li key={item}>{item}</li>
@@ -101,7 +112,7 @@ export function CityRouteLanding() {
               </ul>
             </div>
             <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h2 className="text-xl text-gray-900 mb-3">Obsługiwane trasy</h2>
+              <h2 className="text-xl text-gray-900 mb-3">{cityTaxi.routesSectionTitle ?? cityTaxi.routesTitle}</h2>
               <ul className="list-disc pl-5 space-y-2 text-gray-600 text-sm">
                 {cityTaxi.routes.map((item) => (
                   <li key={item}>{item}</li>

@@ -311,6 +311,7 @@ const da = {
       "Professionelle, engelsktalende chauffører."
     ],
     "destinationsTitle": "Populære destinationer",
+    "relatedRoutesTitle": "Relaterede ruter",
     "faqTitle": "FAQ",
     "faq": [
       {
@@ -436,6 +437,13 @@ const da = {
       "Gdańsk lufthavn → Gdynia",
       "Gamle by → Gdańsk lufthavn"
     ],
+    "priceTitle": (destination: string) => `Taxa Gdańsk lufthavn til ${destination} – Pris`,
+    "priceDescription": (destination: string) => `Tjek den aktuelle taxapris fra Gdańsk lufthavn til ${destination}. Beregneren viser dagens pris på sekunder.`,
+    "priceSubtitle": (destination: string) => `Taxa fra Gdańsk lufthavn til ${destination} – faste priser, 24/7, hurtig bekræftelse.`,
+    "whyTitle": "Hvorfor booke hos os",
+    "routesSectionTitle": "Tilgængelige ruter",
+    "checkPriceCta": "Tjek pris i beregneren",
+    "bookRideCta": "Book en tur",
     "cityRoutesTitle": "Taxipriser fra Gdańsk lufthavn",
     "cityRoutesDescription": "Se den aktuelle pris fra Gdańsk lufthavn til disse destinationer.",
     "cityRoutesItem": (destination: string) => `Gdańsk lufthavn → ${destination}`,

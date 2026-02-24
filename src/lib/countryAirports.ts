@@ -71,6 +71,21 @@ const countryAirportsByLocale: Record<string, CountryAirportsConfig> = {
       { slug: 'gdansk-lentokenttakuljetus-turku', city: 'Turku', airport: 'Turku (TKU)' },
     ],
   },
+  pl: {
+    country: 'Europa',
+    airports: [
+      { slug: 'transfer-lotnisko-gdansk-londyn-stansted', city: 'Londyn', airport: 'London Stansted (STN)' },
+      { slug: 'transfer-lotnisko-gdansk-londyn-luton', city: 'Londyn', airport: 'London Luton (LTN)' },
+      { slug: 'transfer-lotnisko-gdansk-manchester', city: 'Manchester', airport: 'Manchester (MAN)' },
+      { slug: 'transfer-lotnisko-gdansk-edynburg', city: 'Edynburg', airport: 'Edinburgh (EDI)' },
+      { slug: 'transfer-lotnisko-gdansk-dortmund', city: 'Dortmund', airport: 'Dortmund (DTM)' },
+      { slug: 'transfer-lotnisko-gdansk-hamburg', city: 'Hamburg', airport: 'Hamburg (HAM)' },
+      { slug: 'transfer-lotnisko-gdansk-oslo', city: 'Oslo', airport: 'Oslo Gardermoen (OSL)' },
+      { slug: 'transfer-lotnisko-gdansk-sztokholm', city: 'Sztokholm', airport: 'Stockholm Arlanda (ARN)' },
+      { slug: 'transfer-lotnisko-gdansk-kopenhaga', city: 'Kopenhaga', airport: 'København (CPH)' },
+      { slug: 'transfer-lotnisko-gdansk-helsinki', city: 'Helsinki', airport: 'Helsinki (HEL)' },
+    ],
+  },
 };
 
 export const getCountryAirports = (locale: string) => countryAirportsByLocale[locale]?.airports ?? [];
