@@ -14,6 +14,17 @@ declare global {
 
 const rootElement = document.getElementById("root")!;
 
+const renderStartupError = () => {
+  rootElement.innerHTML = `
+    <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#0f172a;background:#f8fafc;">
+      <div style="max-width:540px;">
+        <p style="margin:0 0 12px;font-size:18px;font-weight:600;">Page could not be loaded.</p>
+        <p style="margin:0;font-size:14px;line-height:1.5;">Please refresh the page. If the issue continues, clear Safari website data for this domain and try again.</p>
+      </div>
+    </div>
+  `;
+};
+
 const bootstrap = async () => {
   const initialLocale =
     window.__I18N_LOCALE__ ?? getLocaleFromPathname(window.location.pathname) ?? "en";
@@ -38,5 +49,8 @@ const bootstrap = async () => {
   }
 };
 
-void bootstrap();
+void bootstrap().catch((error) => {
+  console.error("Application bootstrap failed:", error);
+  renderStartupError();
+});
   

@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState } from 'react';
+import { Component, Suspense, lazy, useEffect, useState, type ErrorInfo, type ReactNode } from 'react';
 import { Navigate, Outlet, Route, Routes, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { LandingNavbar } from './components/LandingNavbar';
 import { Hero, HeroBenefits } from './components/Hero';
@@ -6,25 +6,91 @@ import { VehicleTypeSelector } from './components/VehicleTypeSelector';
 import { LazyMount } from './components/LazyMount';
 import { LandingTrustSection } from './components/LandingTrustSection';
 import { FloatingActions } from './components/FloatingActions';
-const Pricing = lazy(() => import('./components/Pricing').then((mod) => ({ default: mod.Pricing })));
-const Footer = lazy(() => import('./components/Footer').then((mod) => ({ default: mod.Footer })));
-const CookieBanner = lazy(() => import('./components/CookieBanner').then((mod) => ({ default: mod.CookieBanner })));
-const OrderForm = lazy(() => import('./components/OrderForm').then((mod) => ({ default: mod.OrderForm })));
-const QuoteForm = lazy(() => import('./components/QuoteForm').then((mod) => ({ default: mod.QuoteForm })));
-const ManageOrder = lazy(() => import('./components/ManageOrder').then((mod) => ({ default: mod.ManageOrder })));
-const RouteLanding = lazy(() => import('./pages/RouteLanding').then((mod) => ({ default: mod.RouteLanding })));
-const OrderRoutePage = lazy(() => import('./pages/OrderRoutePage').then((mod) => ({ default: mod.OrderRoutePage })));
-const CustomOrderPage = lazy(() => import('./pages/OrderRoutePage').then((mod) => ({ default: mod.CustomOrderPage })));
-const PricingPage = lazy(() => import('./pages/PricingPage').then((mod) => ({ default: mod.PricingPage })));
-const AdminOrdersPage = lazy(() => import('./pages/AdminOrdersPage').then((mod) => ({ default: mod.AdminOrdersPage })));
-const AdminOrderPage = lazy(() => import('./pages/AdminOrderPage').then((mod) => ({ default: mod.AdminOrderPage })));
-const CookiesPage = lazy(() => import('./pages/CookiesPage').then((mod) => ({ default: mod.CookiesPage })));
-const PrivacyPage = lazy(() => import('./pages/PrivacyPage').then((mod) => ({ default: mod.PrivacyPage })));
-const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then((mod) => ({ default: mod.NotFoundPage })));
-const CountryLanding = lazy(() => import('./pages/CountryLanding').then((mod) => ({ default: mod.CountryLanding })));
-const CountryAirportLanding = lazy(() => import('./pages/CountryAirportLanding').then((mod) => ({ default: mod.CountryAirportLanding })));
-const CityRouteLanding = lazy(() => import('./pages/CityRouteLanding').then((mod) => ({ default: mod.CityRouteLanding })));
-const TaxiGdanskPage = lazy(() => import('./pages/TaxiGdanskPage').then((mod) => ({ default: mod.TaxiGdanskPage })));
+const CHUNK_ERROR_MESSAGE =
+  /Failed to fetch dynamically imported module|Importing a module script failed|Loading chunk [\d]+ failed|dynamically imported module/i;
+
+const withChunkRetry = <T,>(loader: () => Promise<T>, chunkKey: string) => async () => {
+  try {
+    const module = await loader();
+    if (typeof window !== 'undefined') {
+      window.sessionStorage.removeItem(`chunk-retry:${chunkKey}`);
+    }
+    return module;
+  } catch (error) {
+    if (typeof window !== 'undefined') {
+      const message = error instanceof Error ? error.message : String(error);
+      const retryKey = `chunk-retry:${chunkKey}`;
+      const hasRetried = window.sessionStorage.getItem(retryKey) === '1';
+      if (CHUNK_ERROR_MESSAGE.test(message) && !hasRetried) {
+        window.sessionStorage.setItem(retryKey, '1');
+        window.location.reload();
+        return new Promise<T>(() => {});
+      }
+    }
+    throw error;
+  }
+};
+
+function SuspenseFallback() {
+  return (
+    <div className="flex min-h-[120px] items-center justify-center text-sm text-slate-500">
+      Loading...
+    </div>
+  );
+}
+
+class AppErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('Application render error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4 px-6 text-center text-slate-700">
+          <p className="max-w-md text-sm sm:text-base">
+            We could not load this page on your device. Please refresh and try again.
+          </p>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+          >
+            Reload page
+          </button>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+const Pricing = lazy(withChunkRetry(() => import('./components/Pricing').then((mod) => ({ default: mod.Pricing })), 'pricing'));
+const Footer = lazy(withChunkRetry(() => import('./components/Footer').then((mod) => ({ default: mod.Footer })), 'footer'));
+const CookieBanner = lazy(withChunkRetry(() => import('./components/CookieBanner').then((mod) => ({ default: mod.CookieBanner })), 'cookie-banner'));
+const OrderForm = lazy(withChunkRetry(() => import('./components/OrderForm').then((mod) => ({ default: mod.OrderForm })), 'order-form'));
+const QuoteForm = lazy(withChunkRetry(() => import('./components/QuoteForm').then((mod) => ({ default: mod.QuoteForm })), 'quote-form'));
+const ManageOrder = lazy(withChunkRetry(() => import('./components/ManageOrder').then((mod) => ({ default: mod.ManageOrder })), 'manage-order'));
+const RouteLanding = lazy(withChunkRetry(() => import('./pages/RouteLanding').then((mod) => ({ default: mod.RouteLanding })), 'route-landing'));
+const OrderRoutePage = lazy(withChunkRetry(() => import('./pages/OrderRoutePage').then((mod) => ({ default: mod.OrderRoutePage })), 'order-route-page'));
+const CustomOrderPage = lazy(withChunkRetry(() => import('./pages/OrderRoutePage').then((mod) => ({ default: mod.CustomOrderPage })), 'custom-order-page'));
+const PricingPage = lazy(withChunkRetry(() => import('./pages/PricingPage').then((mod) => ({ default: mod.PricingPage })), 'pricing-page'));
+const AdminOrdersPage = lazy(withChunkRetry(() => import('./pages/AdminOrdersPage').then((mod) => ({ default: mod.AdminOrdersPage })), 'admin-orders-page'));
+const AdminOrderPage = lazy(withChunkRetry(() => import('./pages/AdminOrderPage').then((mod) => ({ default: mod.AdminOrderPage })), 'admin-order-page'));
+const CookiesPage = lazy(withChunkRetry(() => import('./pages/CookiesPage').then((mod) => ({ default: mod.CookiesPage })), 'cookies-page'));
+const PrivacyPage = lazy(withChunkRetry(() => import('./pages/PrivacyPage').then((mod) => ({ default: mod.PrivacyPage })), 'privacy-page'));
+const NotFoundPage = lazy(withChunkRetry(() => import('./pages/NotFoundPage').then((mod) => ({ default: mod.NotFoundPage })), 'not-found-page'));
+const CountryLanding = lazy(withChunkRetry(() => import('./pages/CountryLanding').then((mod) => ({ default: mod.CountryLanding })), 'country-landing'));
+const CountryAirportLanding = lazy(withChunkRetry(() => import('./pages/CountryAirportLanding').then((mod) => ({ default: mod.CountryAirportLanding })), 'country-airport-landing'));
+const CityRouteLanding = lazy(withChunkRetry(() => import('./pages/CityRouteLanding').then((mod) => ({ default: mod.CityRouteLanding })), 'city-route-landing'));
+const TaxiGdanskPage = lazy(withChunkRetry(() => import('./pages/TaxiGdanskPage').then((mod) => ({ default: mod.TaxiGdanskPage })), 'taxi-gdansk-page'));
 import {
   trackFormOpen,
   trackPageView,
@@ -79,7 +145,7 @@ function Landing() {
   // If orderId is present, show manage order page
   if (orderId) {
     return (
-      <Suspense fallback={null}>
+      <Suspense fallback={<SuspenseFallback />}>
         <ManageOrder orderId={orderId} />
       </Suspense>
     );
@@ -185,7 +251,7 @@ function Landing() {
           {step === 'vehicle' ? (
             <VehicleTypeSelector onSelectType={handleVehicleSelect} />
           ) : (
-            <Suspense fallback={null}>
+            <Suspense fallback={<SuspenseFallback />}>
               <Pricing
                 vehicleType={vehicleType}
                 onOrderRoute={handleOrderRoute}
@@ -204,13 +270,13 @@ function Landing() {
       </main>
 
       <LazyMount className="defer-render defer-render-sm" rootMargin="240px 0px" minHeight={420}>
-        <Suspense fallback={null}>
+        <Suspense fallback={<SuspenseFallback />}>
           <Footer />
         </Suspense>
       </LazyMount>
 
       {selectedRoute && (
-        <Suspense fallback={null}>
+        <Suspense fallback={<SuspenseFallback />}>
           <OrderForm 
             route={selectedRoute}
             onClose={() => setSelectedRoute(null)}
@@ -219,7 +285,7 @@ function Landing() {
       )}
 
       {showQuoteForm && (
-        <Suspense fallback={null}>
+        <Suspense fallback={<SuspenseFallback />}>
           <QuoteForm 
             onClose={() => {
               setShowQuoteForm(false);
@@ -507,33 +573,35 @@ export default function App() {
   }, [location.pathname, trackingReady]);
 
   return (
-    <>
-      <Suspense fallback={null}>
-        <Routes>
-          <Route path="/" element={<RootLanding />} />
-          {SUPPORTED_LOCALES.map((locale) => renderLocalizedRoutes(locale, t))}
-          <Route path="/cookies" element={<LegacyRedirectToRoute routeKey="cookies" />} />
-          <Route path="/privacy" element={<LegacyRedirectToRoute routeKey="privacy" />} />
-          <Route path="/pricing" element={<LegacyRedirectToRoute routeKey="pricing" />} />
-          <Route path="/admin" element={<LegacyRedirect to="admin" />} />
-          <Route path="/admin/orders/:id" element={<LegacyAdminOrderRedirect />} />
-          <Route path="/gdansk-airport-taxi" element={<LegacyRedirectToRoute routeKey="airportTaxi" />} />
-          <Route path="/gdansk-airport-to-sopot" element={<LegacyRedirectToRoute routeKey="airportSopot" />} />
-          <Route path="/gdansk-airport-to-gdynia" element={<LegacyRedirectToRoute routeKey="airportGdynia" />} />
-          <Route path="/taxi-lotnisko-gdansk" element={<LegacyRedirectToRoute routeKey="airportTaxi" />} />
-          <Route path="/lotnisko-gdansk-sopot" element={<LegacyRedirectToRoute routeKey="airportSopot" />} />
-          <Route path="/lotnisko-gdansk-gdynia" element={<LegacyRedirectToRoute routeKey="airportGdynia" />} />
-          <Route path="/polityka-cookies" element={<LegacyRedirectToRoute routeKey="cookies" />} />
-          <Route path="/polityka-prywatnosci" element={<LegacyRedirectToRoute routeKey="privacy" />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Suspense>
-      {cookieBannerReady ? (
-        <Suspense fallback={null}>
-          <CookieBanner />
+    <AppErrorBoundary>
+      <>
+        <Suspense fallback={<SuspenseFallback />}>
+          <Routes>
+            <Route path="/" element={<RootLanding />} />
+            {SUPPORTED_LOCALES.map((locale) => renderLocalizedRoutes(locale, t))}
+            <Route path="/cookies" element={<LegacyRedirectToRoute routeKey="cookies" />} />
+            <Route path="/privacy" element={<LegacyRedirectToRoute routeKey="privacy" />} />
+            <Route path="/pricing" element={<LegacyRedirectToRoute routeKey="pricing" />} />
+            <Route path="/admin" element={<LegacyRedirect to="admin" />} />
+            <Route path="/admin/orders/:id" element={<LegacyAdminOrderRedirect />} />
+            <Route path="/gdansk-airport-taxi" element={<LegacyRedirectToRoute routeKey="airportTaxi" />} />
+            <Route path="/gdansk-airport-to-sopot" element={<LegacyRedirectToRoute routeKey="airportSopot" />} />
+            <Route path="/gdansk-airport-to-gdynia" element={<LegacyRedirectToRoute routeKey="airportGdynia" />} />
+            <Route path="/taxi-lotnisko-gdansk" element={<LegacyRedirectToRoute routeKey="airportTaxi" />} />
+            <Route path="/lotnisko-gdansk-sopot" element={<LegacyRedirectToRoute routeKey="airportSopot" />} />
+            <Route path="/lotnisko-gdansk-gdynia" element={<LegacyRedirectToRoute routeKey="airportGdynia" />} />
+            <Route path="/polityka-cookies" element={<LegacyRedirectToRoute routeKey="cookies" />} />
+            <Route path="/polityka-prywatnosci" element={<LegacyRedirectToRoute routeKey="privacy" />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
         </Suspense>
-      ) : null}
-    </>
+        {cookieBannerReady ? (
+          <Suspense fallback={<SuspenseFallback />}>
+            <CookieBanner />
+          </Suspense>
+        ) : null}
+      </>
+    </AppErrorBoundary>
   );
 }
 
