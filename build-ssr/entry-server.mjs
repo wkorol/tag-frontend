@@ -1,9 +1,9 @@
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-var _a;
+var _a, _b;
 import { jsx, jsxs, Fragment } from "react/jsx-runtime";
-import { createContext, useContext, useState, useEffect, useMemo, useRef, lazy, Suspense, Component, StrictMode } from "react";
+import { createContext, useContext, useState, useEffect, useMemo, useRef, lazy, Suspense, Component, createElement, StrictMode } from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server.js";
 import { useLocation, Routes, Route, Navigate, useParams, useSearchParams, Outlet } from "react-router-dom";
@@ -165,7 +165,8 @@ const routeSlugs = {
     orderCustom: "book-custom-transfer",
     pricing: "pricing",
     cookies: "cookies",
-    privacy: "privacy"
+    privacy: "privacy",
+    blog: "blog"
   },
   pl: {
     airportTaxi: "taxi-lotnisko-gdansk",
@@ -179,7 +180,8 @@ const routeSlugs = {
     orderCustom: "rezerwacja-niestandardowa",
     pricing: "cennik",
     cookies: "polityka-cookies",
-    privacy: "polityka-prywatnosci"
+    privacy: "polityka-prywatnosci",
+    blog: "blog"
   },
   de: {
     airportTaxi: "gdansk-flughafen-taxi",
@@ -193,7 +195,8 @@ const routeSlugs = {
     orderCustom: "buchung-individuell",
     pricing: "preise",
     cookies: "cookie-richtlinie",
-    privacy: "datenschutz"
+    privacy: "datenschutz",
+    blog: "blog"
   },
   fi: {
     airportTaxi: "gdansk-lentokentta-taksi",
@@ -207,7 +210,8 @@ const routeSlugs = {
     orderCustom: "varaus-mukautettu",
     pricing: "hinnasto",
     cookies: "evasteet",
-    privacy: "tietosuoja"
+    privacy: "tietosuoja",
+    blog: "blog"
   },
   no: {
     airportTaxi: "gdansk-flyplass-taxi",
@@ -221,7 +225,8 @@ const routeSlugs = {
     orderCustom: "bestilling-tilpasset",
     pricing: "priser",
     cookies: "informasjonskapsler",
-    privacy: "personvern"
+    privacy: "personvern",
+    blog: "blog"
   },
   sv: {
     airportTaxi: "gdansk-flygplats-taxi",
@@ -235,7 +240,8 @@ const routeSlugs = {
     orderCustom: "bokning-anpassad",
     pricing: "priser",
     cookies: "kakor",
-    privacy: "integritetspolicy"
+    privacy: "integritetspolicy",
+    blog: "blog"
   },
   da: {
     airportTaxi: "gdansk-lufthavn-taxa",
@@ -249,7 +255,8 @@ const routeSlugs = {
     orderCustom: "booking-tilpasset",
     pricing: "priser",
     cookies: "cookiepolitik",
-    privacy: "privatlivspolitik"
+    privacy: "privatlivspolitik",
+    blog: "blog"
   }
 };
 const getRouteSlug = (locale, key) => routeSlugs[locale][key];
@@ -539,6 +546,7 @@ const trackButtonClick = (label) => {
 };
 const favicon = "/favicon.svg";
 function LandingNavbar() {
+  var _a2, _b2;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { locale, setLocale, t } = useI18n();
   const basePath = localeToPath(locale);
@@ -626,6 +634,15 @@ function LandingNavbar() {
             onClick: () => trackNavClick("landing_pricing"),
             className: "text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap",
             children: t.navbar.prices
+          }
+        ),
+        /* @__PURE__ */ jsx(
+          "a",
+          {
+            href: `${basePath}/blog`,
+            onClick: () => trackNavClick("landing_blog"),
+            className: "text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap",
+            children: (_a2 = t.navbar.blog) != null ? _a2 : "Blog"
           }
         ),
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-sm text-gray-600", children: [
@@ -719,6 +736,15 @@ function LandingNavbar() {
           onClick: () => trackNavClick("landing_mobile_pricing"),
           className: "block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors",
           children: t.navbar.prices
+        }
+      ),
+      /* @__PURE__ */ jsx(
+        "a",
+        {
+          href: `${basePath}/blog`,
+          onClick: () => trackNavClick("landing_mobile_blog"),
+          className: "block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors",
+          children: (_b2 = t.navbar.blog) != null ? _b2 : "Blog"
         }
       ),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 py-2 text-gray-700", children: [
@@ -1259,12 +1285,12 @@ function FloatingActions({ orderTargetId = "vehicle-selection", hide = false }) 
       return;
     }
     const closeOnOutsideClick = (event) => {
-      var _a2, _b, _c, _d;
+      var _a2, _b2, _c, _d;
       const target = event.target;
       if (!target) {
         return;
       }
-      const clickedInsideDesktop = (_b = (_a2 = desktopMenuRef.current) == null ? void 0 : _a2.contains(target)) != null ? _b : false;
+      const clickedInsideDesktop = (_b2 = (_a2 = desktopMenuRef.current) == null ? void 0 : _a2.contains(target)) != null ? _b2 : false;
       const clickedInsideMobile = (_d = (_c = mobileMenuRef.current) == null ? void 0 : _c.contains(target)) != null ? _d : false;
       if (!clickedInsideDesktop && !clickedInsideMobile) {
         setIsOrderMenuOpen(false);
@@ -1629,16 +1655,16 @@ const countryAirportsByLocale = {
   }
 };
 const getCountryAirports = (locale) => {
-  var _a2, _b;
-  return (_b = (_a2 = countryAirportsByLocale[locale]) == null ? void 0 : _a2.airports) != null ? _b : [];
+  var _a2, _b2;
+  return (_b2 = (_a2 = countryAirportsByLocale[locale]) == null ? void 0 : _a2.airports) != null ? _b2 : [];
 };
 const getCountryAirportBySlug = (locale, slug) => {
   var _a2;
   return (_a2 = getCountryAirports(locale).find((airport) => airport.slug === slug)) != null ? _a2 : null;
 };
 const getCountryAirportCountry = (locale) => {
-  var _a2, _b;
-  return (_b = (_a2 = countryAirportsByLocale[locale]) == null ? void 0 : _a2.country) != null ? _b : "";
+  var _a2, _b2;
+  return (_b2 = (_a2 = countryAirportsByLocale[locale]) == null ? void 0 : _a2.country) != null ? _b2 : "";
 };
 const cityRoutesByLocale = {
   pl: [
@@ -1804,25 +1830,28 @@ class AppErrorBoundary extends Component {
     return this.props.children;
   }
 }
-const Pricing = lazy(withChunkRetry(() => import("./assets/Pricing-PAxzYuf5.mjs").then((mod) => ({ default: mod.Pricing })), "pricing"));
-const Footer = lazy(withChunkRetry(() => import("./assets/Footer-S_X6anZC.mjs").then((mod) => ({ default: mod.Footer })), "footer"));
+const Pricing = lazy(withChunkRetry(() => import("./assets/Pricing-DwIJSNH5.mjs").then((mod) => ({ default: mod.Pricing })), "pricing"));
+const Footer = lazy(withChunkRetry(() => import("./assets/Footer-BLuaI9VM.mjs").then((mod) => ({ default: mod.Footer })), "footer"));
 const CookieBanner = lazy(withChunkRetry(() => import("./assets/CookieBanner-BaoCJwfa.mjs").then((mod) => ({ default: mod.CookieBanner })), "cookie-banner"));
-const OrderForm = lazy(withChunkRetry(() => import("./assets/OrderForm-CImSvIOX.mjs").then((mod) => ({ default: mod.OrderForm })), "order-form"));
-const QuoteForm = lazy(withChunkRetry(() => import("./assets/QuoteForm-Bp_asRBf.mjs").then((n) => n.b).then((mod) => ({ default: mod.QuoteForm })), "quote-form"));
-const ManageOrder = lazy(withChunkRetry(() => import("./assets/ManageOrder-x57vjpE2.mjs").then((mod) => ({ default: mod.ManageOrder })), "manage-order"));
-const RouteLanding = lazy(withChunkRetry(() => import("./assets/RouteLanding-CYoSjc17.mjs").then((mod) => ({ default: mod.RouteLanding })), "route-landing"));
-const OrderRoutePage = lazy(withChunkRetry(() => import("./assets/OrderRoutePage-BNqXcB6R.mjs").then((mod) => ({ default: mod.OrderRoutePage })), "order-route-page"));
-const CustomOrderPage = lazy(withChunkRetry(() => import("./assets/OrderRoutePage-BNqXcB6R.mjs").then((mod) => ({ default: mod.CustomOrderPage })), "custom-order-page"));
-const PricingPage = lazy(withChunkRetry(() => import("./assets/PricingPage-BJ6RpHKW.mjs").then((mod) => ({ default: mod.PricingPage })), "pricing-page"));
-const AdminOrdersPage = lazy(withChunkRetry(() => import("./assets/AdminOrdersPage-CUsKktUh.mjs").then((mod) => ({ default: mod.AdminOrdersPage })), "admin-orders-page"));
-const AdminOrderPage = lazy(withChunkRetry(() => import("./assets/AdminOrderPage-BJwNq_qM.mjs").then((mod) => ({ default: mod.AdminOrderPage })), "admin-order-page"));
-const CookiesPage = lazy(withChunkRetry(() => import("./assets/CookiesPage-BzgeuJg3.mjs").then((mod) => ({ default: mod.CookiesPage })), "cookies-page"));
-const PrivacyPage = lazy(withChunkRetry(() => import("./assets/PrivacyPage-D7rv6vUO.mjs").then((mod) => ({ default: mod.PrivacyPage })), "privacy-page"));
-const NotFoundPage = lazy(withChunkRetry(() => import("./assets/NotFoundPage-DyS28W6W.mjs").then((mod) => ({ default: mod.NotFoundPage })), "not-found-page"));
-const CountryLanding = lazy(withChunkRetry(() => import("./assets/CountryLanding-BbSTuJ_k.mjs").then((mod) => ({ default: mod.CountryLanding })), "country-landing"));
-const CountryAirportLanding = lazy(withChunkRetry(() => import("./assets/CountryAirportLanding-CZKuXNDj.mjs").then((mod) => ({ default: mod.CountryAirportLanding })), "country-airport-landing"));
-const CityRouteLanding = lazy(withChunkRetry(() => import("./assets/CityRouteLanding-DKoHYFPQ.mjs").then((mod) => ({ default: mod.CityRouteLanding })), "city-route-landing"));
-const TaxiGdanskPage = lazy(withChunkRetry(() => import("./assets/TaxiGdanskPage-BghaX6QB.mjs").then((mod) => ({ default: mod.TaxiGdanskPage })), "taxi-gdansk-page"));
+const OrderForm = lazy(withChunkRetry(() => import("./assets/OrderForm-gPj-Q5mt.mjs").then((mod) => ({ default: mod.OrderForm })), "order-form"));
+const QuoteForm = lazy(withChunkRetry(() => import("./assets/QuoteForm-CG-Hm2ys.mjs").then((n) => n.b).then((mod) => ({ default: mod.QuoteForm })), "quote-form"));
+const ManageOrder = lazy(withChunkRetry(() => import("./assets/ManageOrder-BJfUnlyN.mjs").then((mod) => ({ default: mod.ManageOrder })), "manage-order"));
+const RouteLanding = lazy(withChunkRetry(() => import("./assets/RouteLanding-CETGU--I.mjs").then((mod) => ({ default: mod.RouteLanding })), "route-landing"));
+const OrderRoutePage = lazy(withChunkRetry(() => import("./assets/OrderRoutePage-D6pON2xO.mjs").then((mod) => ({ default: mod.OrderRoutePage })), "order-route-page"));
+const CustomOrderPage = lazy(withChunkRetry(() => import("./assets/OrderRoutePage-D6pON2xO.mjs").then((mod) => ({ default: mod.CustomOrderPage })), "custom-order-page"));
+const PricingPage = lazy(withChunkRetry(() => import("./assets/PricingPage-BYxL1udj.mjs").then((mod) => ({ default: mod.PricingPage })), "pricing-page"));
+const AdminOrdersPage = lazy(withChunkRetry(() => import("./assets/AdminOrdersPage-DBQAnaw0.mjs").then((mod) => ({ default: mod.AdminOrdersPage })), "admin-orders-page"));
+const AdminOrderPage = lazy(withChunkRetry(() => import("./assets/AdminOrderPage-CZF5lKuF.mjs").then((mod) => ({ default: mod.AdminOrderPage })), "admin-order-page"));
+const CookiesPage = lazy(withChunkRetry(() => import("./assets/CookiesPage-xbZRCa3G.mjs").then((mod) => ({ default: mod.CookiesPage })), "cookies-page"));
+const PrivacyPage = lazy(withChunkRetry(() => import("./assets/PrivacyPage-sju_lowR.mjs").then((mod) => ({ default: mod.PrivacyPage })), "privacy-page"));
+const NotFoundPage = lazy(withChunkRetry(() => import("./assets/NotFoundPage-yk3sSRsm.mjs").then((mod) => ({ default: mod.NotFoundPage })), "not-found-page"));
+const CountryLanding = lazy(withChunkRetry(() => import("./assets/CountryLanding-BV6-MpJ0.mjs").then((mod) => ({ default: mod.CountryLanding })), "country-landing"));
+const CountryAirportLanding = lazy(withChunkRetry(() => import("./assets/CountryAirportLanding-CMLky9Pc.mjs").then((mod) => ({ default: mod.CountryAirportLanding })), "country-airport-landing"));
+const CityRouteLanding = lazy(withChunkRetry(() => import("./assets/CityRouteLanding-DJJUS99v.mjs").then((mod) => ({ default: mod.CityRouteLanding })), "city-route-landing"));
+const TaxiGdanskPage = lazy(withChunkRetry(() => import("./assets/TaxiGdanskPage-CJZXepYe.mjs").then((mod) => ({ default: mod.TaxiGdanskPage })), "taxi-gdansk-page"));
+const BlogListPage = lazy(withChunkRetry(() => import("./assets/BlogListPage-HzFsw6un.mjs").then((mod) => ({ default: mod.BlogListPage })), "blog-list-page"));
+const BlogArticlePage = lazy(withChunkRetry(() => import("./assets/BlogArticlePage-DiYg5Ufi.mjs").then((mod) => ({ default: mod.BlogArticlePage })), "blog-article-page"));
+const AdminBlogPage = lazy(withChunkRetry(() => import("./assets/AdminBlogPage-DGyzsXBI.mjs").then((mod) => ({ default: mod.AdminBlogPage })), "admin-blog-page"));
 const localeRootPathSet = new Set(SUPPORTED_LOCALES.map((locale) => `/${locale}`));
 const normalizeCanonicalPathname = (pathname) => localeRootPathSet.has(pathname) ? `${pathname}/` : pathname;
 const renderCountryAirportRoutes = (locale) => getCountryAirports(locale).map((airport) => /* @__PURE__ */ jsx(Route, { path: airport.slug, element: /* @__PURE__ */ jsx(CountryAirportLanding, {}) }, airport.slug));
@@ -1964,6 +1993,11 @@ const renderLocalizedRoutes = (locale, t) => {
     /* @__PURE__ */ jsx(Route, { path: getRouteSlug(locale, "pricing"), element: /* @__PURE__ */ jsx(PricingPage, {}) }),
     /* @__PURE__ */ jsx(Route, { path: "admin", element: /* @__PURE__ */ jsx(AdminOrdersPage, {}) }),
     /* @__PURE__ */ jsx(Route, { path: "admin/orders/:id", element: /* @__PURE__ */ jsx(AdminOrderPage, {}) }),
+    /* @__PURE__ */ jsx(Route, { path: "admin/blog", element: /* @__PURE__ */ jsx(AdminBlogPage, {}) }),
+    /* @__PURE__ */ jsxs(Route, { path: "blog", children: [
+      /* @__PURE__ */ jsx(Route, { index: true, element: /* @__PURE__ */ jsx(BlogListPage, {}) }),
+      /* @__PURE__ */ jsx(Route, { path: ":slug", element: /* @__PURE__ */ jsx(BlogArticlePage, {}) })
+    ] }),
     /* @__PURE__ */ jsx(Route, { path: getRouteSlug(locale, "cookies"), element: /* @__PURE__ */ jsx(CookiesPage, {}) }),
     /* @__PURE__ */ jsx(Route, { path: getRouteSlug(locale, "privacy"), element: /* @__PURE__ */ jsx(PrivacyPage, {}) }),
     /* @__PURE__ */ jsx(Route, { path: getRouteSlug(locale, "countryLanding"), element: /* @__PURE__ */ jsx(CountryLanding, {}) }),
@@ -2359,6 +2393,17 @@ function LocalePrompt() {
     }
   ) });
 }
+const GLOBAL_SSR_DATA_CONTEXT_KEY = "__tag_ssr_data_context__";
+const SSRDataContext = (_b = globalThis[GLOBAL_SSR_DATA_CONTEXT_KEY]) != null ? _b : createContext(null);
+if (!globalThis[GLOBAL_SSR_DATA_CONTEXT_KEY]) {
+  globalThis[GLOBAL_SSR_DATA_CONTEXT_KEY] = SSRDataContext;
+}
+function SSRDataProvider({ data, children }) {
+  return createElement(SSRDataContext.Provider, { value: data }, children);
+}
+function useSSRData() {
+  return useContext(SSRDataContext);
+}
 const en = {
   "common": {
     "whatsapp": "WhatsApp",
@@ -2395,7 +2440,8 @@ const en = {
     "airportGdynia": "Airport ↔ Gdynia",
     "prices": "Prices",
     "orderNow": "BOOK NOW",
-    "language": "Language"
+    "language": "Language",
+    "blog": "Blog"
   },
   "hero": {
     "promo": {
@@ -3234,6 +3280,17 @@ const en = {
       "priceDay": 150,
       "priceNight": 200
     }
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Travel tips and airport guides for Gdansk",
+    "readMore": "Read more",
+    "publishedOn": "Published on",
+    "backToList": "Back to blog",
+    "noArticles": "No articles published yet.",
+    "ctaTitle": "Need a transfer from Gdansk Airport?",
+    "ctaBody": "Book online with fixed prices and 24/7 service.",
+    "ctaButton": "Book a TAXI"
   }
 };
 const en$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -3282,7 +3339,8 @@ const pl = {
     "airportGdynia": "Lotnisko ↔ Gdynia",
     "prices": "Cennik",
     "orderNow": "REZERWUJ",
-    "language": "Język"
+    "language": "Język",
+    "blog": "Blog"
   },
   "hero": {
     "promo": {
@@ -4121,6 +4179,17 @@ const pl = {
       "priceDay": 150,
       "priceNight": 200
     }
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Porady podróżne i przewodniki lotniskowe",
+    "readMore": "Czytaj więcej",
+    "publishedOn": "Opublikowano",
+    "backToList": "Powrót do bloga",
+    "noArticles": "Brak opublikowanych artykułów.",
+    "ctaTitle": "Potrzebujesz transferu z lotniska Gdańsk?",
+    "ctaBody": "Zarezerwuj online ze stałą ceną i serwisem 24/7.",
+    "ctaButton": "Rezerwuj TAXI"
   }
 };
 const pl$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -4163,7 +4232,8 @@ const de = {
     "airportGdynia": "Flughafen ↔ Gdynia",
     "prices": "Preise",
     "orderNow": "JETZT RESERVIEREN",
-    "language": "Sprache"
+    "language": "Sprache",
+    "blog": "Blog"
   },
   "hero": {
     "promo": {
@@ -5000,6 +5070,17 @@ const de = {
       "priceDay": 150,
       "priceNight": 200
     }
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Reisetipps und Flughafenführer für Gdańsk",
+    "readMore": "Weiterlesen",
+    "publishedOn": "Veröffentlicht am",
+    "backToList": "Zurück zum Blog",
+    "noArticles": "Noch keine Artikel veröffentlicht.",
+    "ctaTitle": "Transfer vom Flughafen Gdańsk benötigt?",
+    "ctaBody": "Online buchen mit Festpreisen und 24/7 Service.",
+    "ctaButton": "TAXI buchen"
   }
 };
 const de$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -5042,7 +5123,8 @@ const fi = {
     "airportGdynia": "Lentokenttä ↔ Gdynia",
     "prices": "Hinnat",
     "orderNow": "VARAA NYT",
-    "language": "Kieli"
+    "language": "Kieli",
+    "blog": "Blogi"
   },
   "hero": {
     "promo": {
@@ -5877,6 +5959,17 @@ const fi = {
       "priceDay": 150,
       "priceNight": 200
     }
+  },
+  "blog": {
+    "title": "Blogi",
+    "subtitle": "Matkavinkkejä ja lentokenttäoppaita Gdańskiin",
+    "readMore": "Lue lisää",
+    "publishedOn": "Julkaistu",
+    "backToList": "Takaisin blogiin",
+    "noArticles": "Ei vielä julkaistuja artikkeleita.",
+    "ctaTitle": "Tarvitsetko kuljetuksen Gdańskin lentokentältä?",
+    "ctaBody": "Varaa verkossa kiinteällä hinnalla ja 24/7 palvelulla.",
+    "ctaButton": "Varaa TAXI"
   }
 };
 const fi$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -5919,7 +6012,8 @@ const no = {
     "airportGdynia": "Flyplass ↔ Gdynia",
     "prices": "Priser",
     "orderNow": "RESERVER NÅ",
-    "language": "Språk"
+    "language": "Språk",
+    "blog": "Blogg"
   },
   "hero": {
     "promo": {
@@ -6756,6 +6850,17 @@ const no = {
       "priceDay": 150,
       "priceNight": 200
     }
+  },
+  "blog": {
+    "title": "Blogg",
+    "subtitle": "Reisetips og flyplassguider for Gdańsk",
+    "readMore": "Les mer",
+    "publishedOn": "Publisert",
+    "backToList": "Tilbake til bloggen",
+    "noArticles": "Ingen publiserte artikler ennå.",
+    "ctaTitle": "Trenger du transport fra Gdańsk flyplass?",
+    "ctaBody": "Bestill online med faste priser og 24/7 service.",
+    "ctaButton": "Bestill TAXI"
   }
 };
 const no$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -6798,7 +6903,8 @@ const sv = {
     "airportGdynia": "Flygplats ↔ Gdynia",
     "prices": "Priser",
     "orderNow": "BOKA NU",
-    "language": "Språk"
+    "language": "Språk",
+    "blog": "Blogg"
   },
   "hero": {
     "promo": {
@@ -7635,6 +7741,17 @@ const sv = {
       "priceDay": 150,
       "priceNight": 200
     }
+  },
+  "blog": {
+    "title": "Blogg",
+    "subtitle": "Resetips och flygplatsguider för Gdańsk",
+    "readMore": "Läs mer",
+    "publishedOn": "Publicerad",
+    "backToList": "Tillbaka till bloggen",
+    "noArticles": "Inga publicerade artiklar ännu.",
+    "ctaTitle": "Behöver du transfer från Gdańsk flygplats?",
+    "ctaBody": "Boka online med fasta priser och 24/7 service.",
+    "ctaButton": "Boka TAXI"
   }
 };
 const sv$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -7677,7 +7794,8 @@ const da = {
     "airportGdynia": "Lufthavn ↔ Gdynia",
     "prices": "Priser",
     "orderNow": "BOOK NU",
-    "language": "Sprog"
+    "language": "Sprog",
+    "blog": "Blog"
   },
   "hero": {
     "promo": {
@@ -8513,6 +8631,17 @@ const da = {
       "priceDay": 150,
       "priceNight": 200
     }
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Rejsetips og lufthavnsguider for Gdańsk",
+    "readMore": "Læs mere",
+    "publishedOn": "Udgivet",
+    "backToList": "Tilbage til bloggen",
+    "noArticles": "Ingen publicerede artikler endnu.",
+    "ctaTitle": "Har du brug for transfer fra Gdańsk lufthavn?",
+    "ctaBody": "Book online med faste priser og 24/7 service.",
+    "ctaButton": "Book TAXI"
   }
 };
 const da$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -8528,12 +8657,12 @@ const serverTranslations = {
   sv,
   da
 };
-function render(url) {
+function render(url, ssrData) {
   var _a2;
   const initialLocale = (_a2 = getLocaleFromPathname(url)) != null ? _a2 : DEFAULT_LOCALE;
   const initialTranslations = serverTranslations[initialLocale];
   const appHtml = renderToString(
-    /* @__PURE__ */ jsx(StrictMode, { children: /* @__PURE__ */ jsx(StaticRouter, { location: url, future: { v7_startTransition: true, v7_relativeSplatPath: true }, children: /* @__PURE__ */ jsx(I18nProvider, { initialLocale, initialTranslations, children: /* @__PURE__ */ jsx(App, {}) }) }) })
+    /* @__PURE__ */ jsx(StrictMode, { children: /* @__PURE__ */ jsx(StaticRouter, { location: url, future: { v7_startTransition: true, v7_relativeSplatPath: true }, children: /* @__PURE__ */ jsx(I18nProvider, { initialLocale, initialTranslations, children: /* @__PURE__ */ jsx(SSRDataProvider, { data: ssrData != null ? ssrData : null, children: /* @__PURE__ */ jsx(App, {}) }) }) }) })
   );
   return {
     appHtml,
@@ -8545,10 +8674,11 @@ export {
   getCityRouteBySlug as A,
   getCityRoutes as B,
   localeToRootPath as C,
-  getRouteKeyFromSlug as D,
-  favicon as E,
+  useSSRData as D,
+  getRouteKeyFromSlug as E,
   FloatingActions as F,
-  trackLocaleChange as G,
+  favicon as G,
+  trackLocaleChange as H,
   TrustBar as T,
   updateGtagConsent as a,
   getRoutePath as b,

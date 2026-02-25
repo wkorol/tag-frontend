@@ -34,7 +34,8 @@ const de = {
     "airportGdynia": "Flughafen ↔ Gdynia",
     "prices": "Preise",
     "orderNow": "JETZT RESERVIEREN",
-    "language": "Sprache"
+    "language": "Sprache",
+    "blog": "Blog"
   },
   "hero": {
     "promo": {
@@ -871,6 +872,17 @@ const de = {
       "priceDay": 150,
       "priceNight": 200
     }
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Reisetipps und Flughafenführer für Gdańsk",
+    "readMore": "Weiterlesen",
+    "publishedOn": "Veröffentlicht am",
+    "backToList": "Zurück zum Blog",
+    "noArticles": "Noch keine Artikel veröffentlicht.",
+    "ctaTitle": "Transfer vom Flughafen Gdańsk benötigt?",
+    "ctaBody": "Online buchen mit Festpreisen und 24/7 Service.",
+    "ctaButton": "TAXI buchen"
   }
 } as const;
 

@@ -34,7 +34,8 @@ const no = {
     "airportGdynia": "Flyplass ↔ Gdynia",
     "prices": "Priser",
     "orderNow": "RESERVER NÅ",
-    "language": "Språk"
+    "language": "Språk",
+    "blog": "Blogg"
   },
   "hero": {
     "promo": {
@@ -871,6 +872,17 @@ const no = {
       "priceDay": 150,
       "priceNight": 200
     }
+  },
+  "blog": {
+    "title": "Blogg",
+    "subtitle": "Reisetips og flyplassguider for Gdańsk",
+    "readMore": "Les mer",
+    "publishedOn": "Publisert",
+    "backToList": "Tilbake til bloggen",
+    "noArticles": "Ingen publiserte artikler ennå.",
+    "ctaTitle": "Trenger du transport fra Gdańsk flyplass?",
+    "ctaBody": "Bestill online med faste priser og 24/7 service.",
+    "ctaButton": "Bestill TAXI"
   }
 } as const;
 

@@ -72,6 +72,7 @@ const routeLastmodHints = {
   pricing: ['seo-data.mjs', 'src/pages/PricingPage.tsx', 'src/components/Pricing.tsx'],
   cookies: ['seo-data.mjs', 'src/pages/CookiesPage.tsx'],
   privacy: ['seo-data.mjs', 'src/pages/PrivacyPage.tsx'],
+  blog: ['seo-data.mjs', 'src/pages/BlogListPage.tsx'],
 };
 
 const routeMeta = {
@@ -88,6 +89,7 @@ const routeMeta = {
   pricing: { changefreq: 'weekly', priority: '0.6' },
   cookies: { changefreq: 'monthly', priority: '0.3' },
   privacy: { changefreq: 'monthly', priority: '0.3' },
+  blog: { changefreq: 'weekly', priority: '0.5' },
 };
 
 const getRouteLastmod = async (routeKey) => {
@@ -197,6 +199,30 @@ for (const locale of locales) {
       priority: '0.5',
       alternates: buildAlternateSetForLocaleOnly(locale, loc),
     });
+  }
+}
+
+const BACKEND_API_URL = process.env.BACKEND_API_URL || '';
+if (BACKEND_API_URL) {
+  try {
+    const sitemapRes = await fetch(`${BACKEND_API_URL}/api/blog/sitemap`);
+    if (sitemapRes.ok) {
+      const { articles } = await sitemapRes.json();
+      for (const article of articles ?? []) {
+        const blogSlug = routeSlugs[article.locale]?.blog ?? 'blog';
+        const loc = `${SITE_URL}/${article.locale}/${blogSlug}/${article.slug}`;
+        const lastmod = article.updatedAt ? article.updatedAt.slice(0, 10) : formatDate(new Date());
+        addEntry(entries, {
+          loc,
+          lastmod,
+          changefreq: 'monthly',
+          priority: '0.4',
+          alternates: buildAlternateSetForLocaleOnly(article.locale, loc),
+        });
+      }
+    }
+  } catch {
+    // Backend unavailable at build time — skip blog articles in sitemap
   }
 }
 

@@ -34,7 +34,8 @@ const fi = {
     "airportGdynia": "Lentokenttä ↔ Gdynia",
     "prices": "Hinnat",
     "orderNow": "VARAA NYT",
-    "language": "Kieli"
+    "language": "Kieli",
+    "blog": "Blogi"
   },
   "hero": {
     "promo": {
@@ -869,6 +870,17 @@ const fi = {
       "priceDay": 150,
       "priceNight": 200
     }
+  },
+  "blog": {
+    "title": "Blogi",
+    "subtitle": "Matkavinkkejä ja lentokenttäoppaita Gdańskiin",
+    "readMore": "Lue lisää",
+    "publishedOn": "Julkaistu",
+    "backToList": "Takaisin blogiin",
+    "noArticles": "Ei vielä julkaistuja artikkeleita.",
+    "ctaTitle": "Tarvitsetko kuljetuksen Gdańskin lentokentältä?",
+    "ctaBody": "Varaa verkossa kiinteällä hinnalla ja 24/7 palvelulla.",
+    "ctaButton": "Varaa TAXI"
   }
 } as const;
 

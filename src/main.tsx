@@ -4,11 +4,13 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 import { I18nProvider, getLocaleFromPathname, getTranslations, type Locale, type Translation } from "./lib/i18n";
+import { SSRDataProvider, type SSRData } from "./lib/ssrData";
 
 declare global {
   interface Window {
     __I18N_LOCALE__?: Locale;
     __I18N_TRANSLATIONS__?: Translation | null;
+    __SSR_DATA__?: SSRData | null;
   }
 }
 
@@ -31,13 +33,17 @@ const bootstrap = async () => {
   const initialTranslations: Translation =
     (window.__I18N_TRANSLATIONS__ as Translation | null | undefined) ??
     (await getTranslations(initialLocale));
+  const ssrData: SSRData | null = window.__SSR_DATA__ ?? null;
   // Reduce memory footprint after hydration.
   window.__I18N_TRANSLATIONS__ = null;
+  window.__SSR_DATA__ = null;
 
   const app = (
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <I18nProvider initialLocale={initialLocale} initialTranslations={initialTranslations}>
-        <App />
+        <SSRDataProvider data={ssrData}>
+          <App />
+        </SSRDataProvider>
       </I18nProvider>
     </BrowserRouter>
   );

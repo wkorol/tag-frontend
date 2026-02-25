@@ -12,7 +12,8 @@ export type PublicRouteKey =
   | 'orderCustom'
   | 'pricing'
   | 'cookies'
-  | 'privacy';
+  | 'privacy'
+  | 'blog';
 
 const routeSlugs: Record<Locale, Record<PublicRouteKey, string>> = {
   en: {
@@ -28,6 +29,7 @@ const routeSlugs: Record<Locale, Record<PublicRouteKey, string>> = {
     pricing: 'pricing',
     cookies: 'cookies',
     privacy: 'privacy',
+    blog: 'blog',
   },
   pl: {
     airportTaxi: 'taxi-lotnisko-gdansk',
@@ -42,6 +44,7 @@ const routeSlugs: Record<Locale, Record<PublicRouteKey, string>> = {
     pricing: 'cennik',
     cookies: 'polityka-cookies',
     privacy: 'polityka-prywatnosci',
+    blog: 'blog',
   },
   de: {
     airportTaxi: 'gdansk-flughafen-taxi',
@@ -56,6 +59,7 @@ const routeSlugs: Record<Locale, Record<PublicRouteKey, string>> = {
     pricing: 'preise',
     cookies: 'cookie-richtlinie',
     privacy: 'datenschutz',
+    blog: 'blog',
   },
   fi: {
     airportTaxi: 'gdansk-lentokentta-taksi',
@@ -70,6 +74,7 @@ const routeSlugs: Record<Locale, Record<PublicRouteKey, string>> = {
     pricing: 'hinnasto',
     cookies: 'evasteet',
     privacy: 'tietosuoja',
+    blog: 'blog',
   },
   no: {
     airportTaxi: 'gdansk-flyplass-taxi',
@@ -84,6 +89,7 @@ const routeSlugs: Record<Locale, Record<PublicRouteKey, string>> = {
     pricing: 'priser',
     cookies: 'informasjonskapsler',
     privacy: 'personvern',
+    blog: 'blog',
   },
   sv: {
     airportTaxi: 'gdansk-flygplats-taxi',
@@ -98,6 +104,7 @@ const routeSlugs: Record<Locale, Record<PublicRouteKey, string>> = {
     pricing: 'priser',
     cookies: 'kakor',
     privacy: 'integritetspolicy',
+    blog: 'blog',
   },
   da: {
     airportTaxi: 'gdansk-lufthavn-taxa',
@@ -112,6 +119,7 @@ const routeSlugs: Record<Locale, Record<PublicRouteKey, string>> = {
     pricing: 'priser',
     cookies: 'cookiepolitik',
     privacy: 'privatlivspolitik',
+    blog: 'blog',
   },
 };
 

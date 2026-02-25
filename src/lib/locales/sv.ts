@@ -34,7 +34,8 @@ const sv = {
     "airportGdynia": "Flygplats ↔ Gdynia",
     "prices": "Priser",
     "orderNow": "BOKA NU",
-    "language": "Språk"
+    "language": "Språk",
+    "blog": "Blogg"
   },
   "hero": {
     "promo": {
@@ -871,6 +872,17 @@ const sv = {
       "priceDay": 150,
       "priceNight": 200
     }
+  },
+  "blog": {
+    "title": "Blogg",
+    "subtitle": "Resetips och flygplatsguider för Gdańsk",
+    "readMore": "Läs mer",
+    "publishedOn": "Publicerad",
+    "backToList": "Tillbaka till bloggen",
+    "noArticles": "Inga publicerade artiklar ännu.",
+    "ctaTitle": "Behöver du transfer från Gdańsk flygplats?",
+    "ctaBody": "Boka online med fasta priser och 24/7 service.",
+    "ctaButton": "Boka TAXI"
   }
 } as const;
 

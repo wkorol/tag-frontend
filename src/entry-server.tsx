@@ -3,6 +3,7 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import App from './App';
 import { DEFAULT_LOCALE, I18nProvider, getLocaleFromPathname, type Locale, type Translation } from './lib/i18n';
+import { SSRDataProvider, type SSRData } from './lib/ssrData';
 import en from './lib/locales/en';
 import pl from './lib/locales/pl';
 import de from './lib/locales/de';
@@ -21,14 +22,16 @@ const serverTranslations: Record<Locale, Translation> = {
   da,
 };
 
-export function render(url: string) {
+export function render(url: string, ssrData?: SSRData | null) {
   const initialLocale = getLocaleFromPathname(url) ?? DEFAULT_LOCALE;
   const initialTranslations = serverTranslations[initialLocale];
   const appHtml = renderToString(
     <StrictMode>
       <StaticRouter location={url} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <I18nProvider initialLocale={initialLocale} initialTranslations={initialTranslations}>
-          <App />
+          <SSRDataProvider data={ssrData ?? null}>
+            <App />
+          </SSRDataProvider>
         </I18nProvider>
       </StaticRouter>
     </StrictMode>

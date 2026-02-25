@@ -46,6 +46,7 @@ export const routeSlugs = {
     pricing: 'pricing',
     cookies: 'cookies',
     privacy: 'privacy',
+    blog: 'blog',
   },
   pl: {
     airportTaxi: 'taxi-lotnisko-gdansk',
@@ -60,6 +61,7 @@ export const routeSlugs = {
     pricing: 'cennik',
     cookies: 'polityka-cookies',
     privacy: 'polityka-prywatnosci',
+    blog: 'blog',
   },
   de: {
     airportTaxi: 'gdansk-flughafen-taxi',
@@ -74,6 +76,7 @@ export const routeSlugs = {
     pricing: 'preise',
     cookies: 'cookie-richtlinie',
     privacy: 'datenschutz',
+    blog: 'blog',
   },
   fi: {
     airportTaxi: 'gdansk-lentokentta-taksi',
@@ -88,6 +91,7 @@ export const routeSlugs = {
     pricing: 'hinnasto',
     cookies: 'evasteet',
     privacy: 'tietosuoja',
+    blog: 'blog',
   },
   no: {
     airportTaxi: 'gdansk-flyplass-taxi',
@@ -102,6 +106,7 @@ export const routeSlugs = {
     pricing: 'priser',
     cookies: 'informasjonskapsler',
     privacy: 'personvern',
+    blog: 'blog',
   },
   sv: {
     airportTaxi: 'gdansk-flygplats-taxi',
@@ -116,6 +121,7 @@ export const routeSlugs = {
     pricing: 'priser',
     cookies: 'kakor',
     privacy: 'integritetspolicy',
+    blog: 'blog',
   },
   da: {
     airportTaxi: 'gdansk-lufthavn-taxa',
@@ -130,6 +136,7 @@ export const routeSlugs = {
     pricing: 'priser',
     cookies: 'cookiepolitik',
     privacy: 'privatlivspolitik',
+    blog: 'blog',
   },
 };
 
@@ -305,6 +312,7 @@ const navLabels = {
     orderAirportSopot: 'Book Airport to Sopot',
     orderAirportGdynia: 'Book Airport to Gdynia',
     orderCustom: 'Book Custom Transfer',
+    blog: 'Blog',
   },
   pl: {
     home: 'Strona główna',
@@ -318,6 +326,7 @@ const navLabels = {
     orderAirportSopot: 'Rezerwacja lotnisko Gdańsk – Sopot',
     orderAirportGdynia: 'Rezerwacja lotnisko Gdańsk – Gdynia',
     orderCustom: 'Rezerwacja trasy niestandardowej',
+    blog: 'Blog',
   },
   de: {
     home: 'Startseite',
@@ -331,6 +340,7 @@ const navLabels = {
     orderAirportSopot: 'Buchung Flughafen – Sopot',
     orderAirportGdynia: 'Buchung Flughafen – Gdynia',
     orderCustom: 'Buchung individuelle Route',
+    blog: 'Blog',
   },
   fi: {
     home: 'Etusivu',
@@ -344,6 +354,7 @@ const navLabels = {
     orderAirportSopot: 'Varaus lentokenttä – Sopot',
     orderAirportGdynia: 'Varaus lentokenttä – Gdynia',
     orderCustom: 'Varaus mukautettu reitti',
+    blog: 'Blogi',
   },
   no: {
     home: 'Hjem',
@@ -357,6 +368,7 @@ const navLabels = {
     orderAirportSopot: 'Bestilling flyplass – Sopot',
     orderAirportGdynia: 'Bestilling flyplass – Gdynia',
     orderCustom: 'Bestilling tilpasset rute',
+    blog: 'Blogg',
   },
   sv: {
     home: 'Hem',
@@ -370,6 +382,7 @@ const navLabels = {
     orderAirportSopot: 'Bokning flygplats – Sopot',
     orderAirportGdynia: 'Bokning flygplats – Gdynia',
     orderCustom: 'Bokning anpassad rutt',
+    blog: 'Blogg',
   },
   da: {
     home: 'Hjem',
@@ -383,6 +396,7 @@ const navLabels = {
     orderAirportSopot: 'Booking lufthavn – Sopot',
     orderAirportGdynia: 'Booking lufthavn – Gdynia',
     orderCustom: 'Booking tilpasset rute',
+    blog: 'Blog',
   },
 };
 
@@ -453,6 +467,10 @@ const metaByLocale = {
       title: 'Privacy Policy | Taxi Airport Gdańsk',
       description: 'Learn how Taxi Airport Gdańsk processes and protects your personal data.',
     },
+    blog: {
+      title: 'Blog | Taxi Airport Gdańsk',
+      description: 'Tips, guides, and practical advice for traveling from Gdansk Airport. How to get to the city center, Sopot, Gdynia and more.',
+    },
   },
   pl: {
     noscript:
@@ -519,6 +537,10 @@ const metaByLocale = {
     privacy: {
       title: 'Polityka Prywatności | Taxi Airport Gdańsk',
       description: 'Sprawdź, jak Taxi Airport Gdańsk przetwarza i chroni dane osobowe.',
+    },
+    blog: {
+      title: 'Blog | Taxi Airport Gdańsk',
+      description: 'Porady, przewodniki i praktyczne informacje o podróżowaniu z lotniska Gdańsk. Jak dojechać do centrum, Sopotu, Gdyni i więcej.',
     },
   },
   de: {
@@ -587,6 +609,10 @@ const metaByLocale = {
       title: 'Datenschutz | Taxi Airport Gdańsk',
       description: 'Details zum Datenschutz bei Taxi Airport Gdańsk.',
     },
+    blog: {
+      title: 'Blog | Taxi Airport Gdańsk',
+      description: 'Tipps, Reiseführer und praktische Ratschläge für die Reise vom Flughafen Gdańsk. Wie Sie ins Zentrum, nach Sopot, Gdynia und mehr gelangen.',
+    },
   },
   fi: {
     noscript:
@@ -653,6 +679,10 @@ const metaByLocale = {
     privacy: {
       title: 'Tietosuoja | Taxi Airport Gdańsk',
       description: 'Tietosuojatiedot Taxi Airport Gdańsk -palvelusta.',
+    },
+    blog: {
+      title: 'Blogi | Taxi Airport Gdańsk',
+      description: 'Vinkkejä, oppaita ja käytännön neuvoja matkustamiseen Gdańskin lentokentältä. Kuinka päästä keskustaan, Sopotiin, Gdyniaan ja muualle.',
     },
   },
   no: {
@@ -721,6 +751,10 @@ const metaByLocale = {
       title: 'Personvern | Taxi Airport Gdańsk',
       description: 'Personverninformasjon for Taxi Airport Gdańsk.',
     },
+    blog: {
+      title: 'Blogg | Taxi Airport Gdańsk',
+      description: 'Tips, guider og praktiske råd for reise fra Gdańsk flyplass. Hvordan komme til sentrum, Sopot, Gdynia og mer.',
+    },
   },
   sv: {
     noscript:
@@ -788,6 +822,10 @@ const metaByLocale = {
       title: 'Integritetspolicy | Taxi Airport Gdańsk',
       description: 'Integritetsinformation för Taxi Airport Gdańsk.',
     },
+    blog: {
+      title: 'Blogg | Taxi Airport Gdańsk',
+      description: 'Tips, guider och praktiska råd för resor från Gdańsk flygplats. Hur du tar dig till centrum, Sopot, Gdynia och mer.',
+    },
   },
   da: {
     noscript:
@@ -854,6 +892,10 @@ const metaByLocale = {
     privacy: {
       title: 'Privatlivspolitik | Taxi Airport Gdańsk',
       description: 'Privatlivsoplysninger for Taxi Airport Gdańsk.',
+    },
+    blog: {
+      title: 'Blog | Taxi Airport Gdańsk',
+      description: 'Tips, guider og praktiske råd til rejser fra Gdańsk lufthavn. Sådan kommer du til centrum, Sopot, Gdynia og mere.',
     },
   },
 };
@@ -1278,6 +1320,7 @@ const isIndexablePath = (urlPath) => {
   if (routeKey && nonIndexableRouteKeys.has(routeKey)) return false;
   if (getCountryAirportRoute(locale, slug)) return true;
   if (getCityRoute(locale, slug)) return true;
+  if (routeKey === 'blog' && pathParts.length >= 3) return true;
   return Boolean(routeKey);
 };
 

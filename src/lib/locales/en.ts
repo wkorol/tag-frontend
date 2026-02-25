@@ -34,7 +34,8 @@ const en = {
     "airportGdynia": "Airport ↔ Gdynia",
     "prices": "Prices",
     "orderNow": "BOOK NOW",
-    "language": "Language"
+    "language": "Language",
+    "blog": "Blog"
   },
   "hero": {
     "promo": {
@@ -873,6 +874,17 @@ const en = {
       "priceDay": 150,
       "priceNight": 200
     }
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Travel tips and airport guides for Gdansk",
+    "readMore": "Read more",
+    "publishedOn": "Published on",
+    "backToList": "Back to blog",
+    "noArticles": "No articles published yet.",
+    "ctaTitle": "Need a transfer from Gdansk Airport?",
+    "ctaBody": "Book online with fixed prices and 24/7 service.",
+    "ctaButton": "Book a TAXI"
   }
 } as const;
 

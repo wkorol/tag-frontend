@@ -84,6 +84,13 @@ export function LandingNavbar() {
             >
               {t.navbar.prices}
             </a>
+            <a
+              href={`${basePath}/blog`}
+              onClick={() => trackNavClick('landing_blog')}
+              className="text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
+            >
+              {t.navbar.blog ?? 'Blog'}
+            </a>
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <span aria-hidden="true" className="text-sm">🌐</span>
               <label className="sr-only" htmlFor="landing-language-select">
@@ -167,6 +174,13 @@ export function LandingNavbar() {
               className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
             >
               {t.navbar.prices}
+            </a>
+            <a
+              href={`${basePath}/blog`}
+              onClick={() => trackNavClick('landing_mobile_blog')}
+              className="block w-full text-left py-2 text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              {t.navbar.blog ?? 'Blog'}
             </a>
             <div className="flex items-center gap-2 py-2 text-gray-700">
               <span aria-hidden="true" className="text-sm">🌐</span>

@@ -3,7 +3,7 @@ import { request as httpsRequest } from 'node:https';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { buildNoscript, buildSeoTags, getHtmlLang, locales, routeSlugs, countryAirportSlugsByLocale, cityRouteSlugsByLocale } from './seo-data.mjs';
+import { buildNoscript, buildSeoTags, getHtmlLang, locales, routeSlugs, countryAirportSlugsByLocale, cityRouteSlugsByLocale, site, getLocaleFromPath } from './seo-data.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,6 +15,7 @@ const ssrEntryCandidates = [
 ];
 
 const port = Number(process.env.PORT || 3000);
+const BACKEND_API_URL = (process.env.BACKEND_API_URL || '').replace(/\/$/, '');
 
 // CSP note:
 // This app loads 3rd party scripts (Google Ads/Analytics, Google Maps, TripAdvisor).
@@ -75,8 +76,10 @@ const isFileRequest = (urlPath) => urlPath.includes('.') || urlPath.startsWith('
 
 const SEO_BLOCK = /<!-- SEO:BEGIN -->[\s\S]*?<!-- SEO:END -->/;
 
-const applySeo = (html, urlPath) =>
-  html.replace(SEO_BLOCK, `<!-- SEO:BEGIN -->${buildSeoTags(urlPath)}<!-- SEO:END -->`);
+const applySeo = (html, urlPath, seoOverride) => {
+  const seoTags = seoOverride ?? buildSeoTags(urlPath);
+  return html.replace(SEO_BLOCK, `<!-- SEO:BEGIN -->${seoTags}<!-- SEO:END -->`);
+};
 
 const applyNoscript = (html, urlPath) =>
   html.replace(
@@ -125,12 +128,191 @@ const legacyRedirects = new Map([
 
 const isAdminPath = (urlPath) => /^\/(?:[a-z]{2}\/)?admin(?:\/orders\/[^/]+)?$/.test(urlPath);
 
+const blogPathRegex = /^\/([a-z]{2})\/blog(?:\/([^/]+))?$/;
+
+const isBlogPath = (urlPath) => blogPathRegex.test(urlPath);
+
+const parseBlogPath = (urlPath) => {
+  const match = urlPath.match(blogPathRegex);
+  if (!match) return null;
+  return { locale: match[1], slug: match[2] || null };
+};
+
 const isKnownPath = (urlPath) =>
   urlPath === '/' ||
   localeRoots.has(urlPath) ||
   localeRootsWithSlash.has(urlPath) ||
   localizedRouteSet.has(urlPath) ||
-  isAdminPath(urlPath);
+  isAdminPath(urlPath) ||
+  isBlogPath(urlPath);
+
+const fetchJson = (url) =>
+  new Promise((resolve, reject) => {
+    const parsedUrl = new URL(url);
+    const client = parsedUrl.protocol === 'https:' ? httpsRequest : httpRequest;
+    const req = client(parsedUrl, { method: 'GET', headers: { Accept: 'application/json' } }, (res) => {
+      let body = '';
+      res.on('data', (chunk) => { body += chunk; });
+      res.on('end', () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          try { resolve(JSON.parse(body)); } catch { resolve(null); }
+        } else {
+          resolve(null);
+        }
+      });
+    });
+    req.on('error', () => resolve(null));
+    req.setTimeout(5000, () => { req.destroy(); resolve(null); });
+    req.end();
+  });
+
+const fetchBlogData = async (blogInfo) => {
+  if (!BACKEND_API_URL) return null;
+  const { locale, slug } = blogInfo;
+  if (slug) {
+    const data = await fetchJson(`${BACKEND_API_URL}/api/blog/articles/${encodeURIComponent(slug)}?locale=${encodeURIComponent(locale)}`);
+    return data ? { blogArticle: data.article } : null;
+  }
+  const data = await fetchJson(`${BACKEND_API_URL}/api/blog/articles?locale=${encodeURIComponent(locale)}`);
+  return data ? { blogArticles: data.articles } : null;
+};
+
+const localeHreflangMap = {
+  en: ['en', 'en-GB'],
+  pl: ['pl', 'pl-PL'],
+  de: ['de', 'de-DE'],
+  fi: ['fi', 'fi-FI'],
+  no: ['no', 'nb-NO'],
+  sv: ['sv', 'sv-SE'],
+  da: ['da', 'da-DK'],
+};
+
+const blogListMetaByLocale = {
+  en: {
+    title: 'Blog | Taxi Airport Gdańsk',
+    description: 'Travel tips, airport guides, and transport advice for Gdańsk, Sopot, and Gdynia. Read our latest articles about getting around the Tri-City area.',
+  },
+  pl: {
+    title: 'Blog | Taxi Airport Gdańsk',
+    description: 'Porady podróżne, przewodniki lotniskowe i informacje o transporcie w Gdańsku, Sopocie i Gdyni. Przeczytaj nasze najnowsze artykuły.',
+  },
+  de: {
+    title: 'Blog | Taxi Airport Gdańsk',
+    description: 'Reisetipps, Flughafenführer und Transporthinweise für Gdańsk, Sopot und Gdynia.',
+  },
+  fi: {
+    title: 'Blogi | Taxi Airport Gdańsk',
+    description: 'Matkavinkkejä, lentokenttäoppaita ja kuljetusneuvoja Gdańskiin, Sopotiin ja Gdyniaan.',
+  },
+  no: {
+    title: 'Blogg | Taxi Airport Gdańsk',
+    description: 'Reisetips, flyplassguider og transportråd for Gdańsk, Sopot og Gdynia.',
+  },
+  sv: {
+    title: 'Blogg | Taxi Airport Gdańsk',
+    description: 'Resetips, flygplatsguider och transportråd för Gdańsk, Sopot och Gdynia.',
+  },
+  da: {
+    title: 'Blog | Taxi Airport Gdańsk',
+    description: 'Rejsetips, lufthavnsguider og transportråd for Gdańsk, Sopot og Gdynia.',
+  },
+};
+
+const escapeHtmlAttr = (str) => str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+const buildBlogSeoTags = (locale, article) => {
+  const canonical = `${site.url}/${locale}/blog/${article.slug}`;
+  const ogLocale = (localeHreflangMap[locale] ?? [locale])[0].replace('-', '_');
+  const publishedIso = article.publishedAt ?? new Date().toISOString();
+  const ogImage = article.ogImageUrl || site.ogImage;
+
+  const blogPostingSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: article.title,
+    description: article.metaDescription,
+    url: canonical,
+    datePublished: publishedIso,
+    image: ogImage,
+    author: {
+      '@type': 'Organization',
+      name: site.name,
+      url: site.url,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: site.name,
+      logo: { '@type': 'ImageObject', url: site.logo },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    inLanguage: locale,
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${site.url}/${locale}/` },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${site.url}/${locale}/blog` },
+      { '@type': 'ListItem', position: 3, name: article.title, item: canonical },
+    ],
+  };
+
+  return [
+    `<title>${escapeHtmlAttr(article.title)} | ${site.name}</title>`,
+    `<meta name="description" content="${escapeHtmlAttr(article.metaDescription)}">`,
+    `<meta name="robots" content="index,follow">`,
+    `<meta property="og:title" content="${escapeHtmlAttr(article.title)}">`,
+    `<meta property="og:description" content="${escapeHtmlAttr(article.metaDescription)}">`,
+    `<meta property="og:type" content="article">`,
+    `<meta property="og:locale" content="${ogLocale}">`,
+    `<meta property="og:image" content="${ogImage}">`,
+    `<meta property="og:url" content="${canonical}">`,
+    `<meta property="og:site_name" content="${site.name}">`,
+    `<meta property="article:published_time" content="${publishedIso}">`,
+    `<meta name="twitter:card" content="summary_large_image">`,
+    `<meta name="twitter:title" content="${escapeHtmlAttr(article.title)}">`,
+    `<meta name="twitter:description" content="${escapeHtmlAttr(article.metaDescription)}">`,
+    `<meta name="twitter:image" content="${ogImage}">`,
+    `<link rel="canonical" href="${canonical}">`,
+    `<script type="application/ld+json">${JSON.stringify(blogPostingSchema)}</script>`,
+    `<script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`,
+  ].join('');
+};
+
+const buildBlogListSeoTags = (locale) => {
+  const meta = blogListMetaByLocale[locale] ?? blogListMetaByLocale.en;
+  const canonical = `${site.url}/${locale}/blog`;
+  const ogLocale = (localeHreflangMap[locale] ?? [locale])[0].replace('-', '_');
+
+  const alternates = locales
+    .flatMap((lang) =>
+      (localeHreflangMap[lang] ?? [lang]).map(
+        (hreflang) => `<link rel="alternate" hreflang="${hreflang}" href="${site.url}/${lang}/blog">`
+      )
+    )
+    .join('');
+  const xDefault = `<link rel="alternate" hreflang="x-default" href="${site.url}/en/blog">`;
+
+  return [
+    `<title>${escapeHtmlAttr(meta.title)}</title>`,
+    `<meta name="description" content="${escapeHtmlAttr(meta.description)}">`,
+    `<meta name="robots" content="index,follow">`,
+    `<meta property="og:title" content="${escapeHtmlAttr(meta.title)}">`,
+    `<meta property="og:description" content="${escapeHtmlAttr(meta.description)}">`,
+    `<meta property="og:type" content="website">`,
+    `<meta property="og:locale" content="${ogLocale}">`,
+    `<meta property="og:image" content="${site.ogImage}">`,
+    `<meta property="og:url" content="${canonical}">`,
+    `<meta property="og:site_name" content="${site.name}">`,
+    `<meta name="twitter:card" content="summary_large_image">`,
+    `<meta name="twitter:title" content="${escapeHtmlAttr(meta.title)}">`,
+    `<meta name="twitter:description" content="${escapeHtmlAttr(meta.description)}">`,
+    `<link rel="canonical" href="${canonical}">`,
+    alternates,
+    xDefault,
+  ].join('');
+};
 
 const serveFile = async (res, filePath, cacheControl) => {
   try {
@@ -260,16 +442,30 @@ const server = createServer(async (req, res) => {
   const isNotFound = !isKnownPath(urlPath);
 
   try {
-    const rendered = render(urlPath);
+    // Fetch blog data for blog routes
+    let ssrData = null;
+    let seoOverride = null;
+    const blogInfo = parseBlogPath(urlPath);
+    if (blogInfo) {
+      ssrData = await fetchBlogData(blogInfo);
+      if (blogInfo.slug && ssrData?.blogArticle) {
+        seoOverride = buildBlogSeoTags(blogInfo.locale, ssrData.blogArticle);
+      } else if (!blogInfo.slug) {
+        seoOverride = buildBlogListSeoTags(blogInfo.locale);
+      }
+    }
+
+    const rendered = render(urlPath, ssrData);
     const appHtml = typeof rendered === 'string' ? rendered : rendered.appHtml;
     const locale = typeof rendered === 'string' ? 'en' : rendered.initialLocale;
     const translations = typeof rendered === 'string' ? null : rendered.initialTranslations ?? null;
-    const hydrationScript = `<script>window.__I18N_LOCALE__=${escapeInlineJson(locale)};window.__I18N_TRANSLATIONS__=${escapeInlineJson(translations)};</script>`;
+    const ssrDataScript = ssrData ? `window.__SSR_DATA__=${escapeInlineJson(ssrData)};` : '';
+    const hydrationScript = `<script>window.__I18N_LOCALE__=${escapeInlineJson(locale)};window.__I18N_TRANSLATIONS__=${escapeInlineJson(translations)};${ssrDataScript}</script>`;
     const html = template.replace(
       '<div id="root"></div>',
       `${hydrationScript}<div id="root">${appHtml}</div>`
     );
-    const finalHtml = applyHtmlLang(applyNoscript(applySeo(html, urlPath), urlPath), urlPath);
+    const finalHtml = applyHtmlLang(applyNoscript(applySeo(html, urlPath, seoOverride), urlPath), urlPath);
     res.writeHead(isNotFound ? 404 : 200, { 'Content-Type': 'text/html' });
     res.end(finalHtml);
   } catch {

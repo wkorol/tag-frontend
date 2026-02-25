@@ -21,6 +21,7 @@ export function Navbar() {
   const isAirportTaxi = currentRouteKey === 'airportTaxi';
   const isAirportSopot = currentRouteKey === 'airportSopot';
   const isAirportGdynia = currentRouteKey === 'airportGdynia';
+  const isBlog = firstSegment === 'blog';
 
   const handleLocaleChange = (nextLocale: Locale) => {
     trackLocaleChange(locale, nextLocale);
@@ -138,6 +139,15 @@ export function Navbar() {
             >
               {t.navbar.prices}
             </a>
+            <a
+              href={`${basePath}/blog`}
+              onClick={() => trackNavClick('blog')}
+              className={`transition-colors whitespace-nowrap ${
+                isBlog ? 'text-blue-700 font-semibold' : 'text-gray-700 hover:text-blue-600'
+              }`}
+            >
+              {t.navbar.blog ?? 'Blog'}
+            </a>
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <span aria-hidden="true" className="text-sm">🌐</span>
               <label className="sr-only" htmlFor="language-select">
@@ -240,6 +250,15 @@ export function Navbar() {
               }`}
             >
               {t.navbar.prices}
+            </a>
+            <a
+              href={`${basePath}/blog`}
+              onClick={() => trackNavClick('mobile_blog')}
+              className={`block w-full text-left py-2 transition-colors ${
+                isBlog ? 'text-blue-700 font-semibold' : 'text-gray-700 hover:text-blue-600'
+              }`}
+            >
+              {t.navbar.blog ?? 'Blog'}
             </a>
             <div className="flex items-center gap-2 py-2 text-gray-700">
               <span aria-hidden="true" className="text-sm">🌐</span>

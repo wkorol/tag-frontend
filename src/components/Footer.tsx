@@ -106,6 +106,13 @@ export function Footer() {
                 {t.cityTaxi?.title ?? 'Taxi Gdańsk'}
               </a>
               <a
+                href={`${basePath}/blog`}
+                onClick={() => trackNavClick('footer_blog')}
+                className="block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors"
+              >
+                {t.navbar.blog ?? 'Blog'}
+              </a>
+              <a
                 href={getRoutePath(locale, 'airportTaxi')}
                 onClick={() => trackNavClick('footer_airport_taxi')}
                 className="block min-h-11 py-1 text-white visited:text-white hover:text-gray-200 transition-colors"

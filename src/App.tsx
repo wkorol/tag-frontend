@@ -91,6 +91,9 @@ const CountryLanding = lazy(withChunkRetry(() => import('./pages/CountryLanding'
 const CountryAirportLanding = lazy(withChunkRetry(() => import('./pages/CountryAirportLanding').then((mod) => ({ default: mod.CountryAirportLanding })), 'country-airport-landing'));
 const CityRouteLanding = lazy(withChunkRetry(() => import('./pages/CityRouteLanding').then((mod) => ({ default: mod.CityRouteLanding })), 'city-route-landing'));
 const TaxiGdanskPage = lazy(withChunkRetry(() => import('./pages/TaxiGdanskPage').then((mod) => ({ default: mod.TaxiGdanskPage })), 'taxi-gdansk-page'));
+const BlogListPage = lazy(withChunkRetry(() => import('./pages/BlogListPage').then((mod) => ({ default: mod.BlogListPage })), 'blog-list-page'));
+const BlogArticlePage = lazy(withChunkRetry(() => import('./pages/BlogArticlePage').then((mod) => ({ default: mod.BlogArticlePage })), 'blog-article-page'));
+const AdminBlogPage = lazy(withChunkRetry(() => import('./pages/AdminBlogPage').then((mod) => ({ default: mod.AdminBlogPage })), 'admin-blog-page'));
 import {
   trackFormOpen,
   trackPageView,
@@ -312,6 +315,11 @@ const renderLocalizedRoutes = (locale: Locale, t: ReturnType<typeof useI18n>['t'
       <Route path={getRouteSlug(locale, 'pricing')} element={<PricingPage />} />
       <Route path="admin" element={<AdminOrdersPage />} />
       <Route path="admin/orders/:id" element={<AdminOrderPage />} />
+      <Route path="admin/blog" element={<AdminBlogPage />} />
+      <Route path="blog">
+        <Route index element={<BlogListPage />} />
+        <Route path=":slug" element={<BlogArticlePage />} />
+      </Route>
       <Route path={getRouteSlug(locale, 'cookies')} element={<CookiesPage />} />
       <Route path={getRouteSlug(locale, 'privacy')} element={<PrivacyPage />} />
       <Route path={getRouteSlug(locale, 'countryLanding')} element={<CountryLanding />} />

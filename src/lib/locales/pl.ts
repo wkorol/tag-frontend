@@ -40,7 +40,8 @@ const pl = {
     "airportGdynia": "Lotnisko ↔ Gdynia",
     "prices": "Cennik",
     "orderNow": "REZERWUJ",
-    "language": "Język"
+    "language": "Język",
+    "blog": "Blog"
   },
   "hero": {
     "promo": {
@@ -879,6 +880,17 @@ const pl = {
       "priceDay": 150,
       "priceNight": 200
     }
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Porady podróżne i przewodniki lotniskowe",
+    "readMore": "Czytaj więcej",
+    "publishedOn": "Opublikowano",
+    "backToList": "Powrót do bloga",
+    "noArticles": "Brak opublikowanych artykułów.",
+    "ctaTitle": "Potrzebujesz transferu z lotniska Gdańsk?",
+    "ctaBody": "Zarezerwuj online ze stałą ceną i serwisem 24/7.",
+    "ctaButton": "Rezerwuj TAXI"
   }
 } as const;
 
