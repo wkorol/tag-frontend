@@ -1,4 +1,4 @@
-import { Component, Suspense, lazy, useEffect, useState, type ErrorInfo, type ReactNode } from 'react';
+import { Component, Suspense, lazy, startTransition, useEffect, useState, type ErrorInfo, type ReactNode } from 'react';
 import { Navigate, Outlet, Route, Routes, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { LandingNavbar } from './components/LandingNavbar';
 import { Hero, HeroBenefits } from './components/Hero';
@@ -392,7 +392,7 @@ export default function App() {
 
     const enable = () => {
       if (!cancelled) {
-        setTrackingReady(true);
+        startTransition(() => setTrackingReady(true));
       }
     };
 
@@ -422,7 +422,7 @@ export default function App() {
     let timeoutId: number | null = null;
     let idleId: number | null = null;
 
-    const enable = () => setCookieBannerReady(true);
+    const enable = () => startTransition(() => setCookieBannerReady(true));
 
     timeoutId = window.setTimeout(enable, 1800);
     if ('requestIdleCallback' in window) {

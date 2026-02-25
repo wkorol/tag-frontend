@@ -1,4 +1,3 @@
-import { StrictMode } from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import App from './App';
@@ -26,15 +25,13 @@ export function render(url: string, ssrData?: SSRData | null) {
   const initialLocale = getLocaleFromPathname(url) ?? DEFAULT_LOCALE;
   const initialTranslations = serverTranslations[initialLocale];
   const appHtml = renderToString(
-    <StrictMode>
-      <StaticRouter location={url} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <I18nProvider initialLocale={initialLocale} initialTranslations={initialTranslations}>
-          <SSRDataProvider data={ssrData ?? null}>
-            <App />
-          </SSRDataProvider>
-        </I18nProvider>
-      </StaticRouter>
-    </StrictMode>
+    <StaticRouter location={url} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <I18nProvider initialLocale={initialLocale} initialTranslations={initialTranslations}>
+        <SSRDataProvider data={ssrData ?? null}>
+          <App />
+        </SSRDataProvider>
+      </I18nProvider>
+    </StaticRouter>
   );
 
   return {

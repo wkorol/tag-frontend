@@ -3,9 +3,9 @@ var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { en
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var _a, _b;
 import { jsx, jsxs, Fragment } from "react/jsx-runtime";
-import { createContext, useContext, useState, useEffect, useMemo, useRef, lazy, Suspense, Component, createElement, StrictMode } from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server.js";
+import { createContext, useContext, useState, useEffect, useMemo, useRef, lazy, Suspense, startTransition, Component, createElement } from "react";
 import { useLocation, Routes, Route, Navigate, useParams, useSearchParams, Outlet } from "react-router-dom";
 import { CheckCircle2, Car, Users, Info, Calculator } from "lucide-react";
 const STORAGE_KEY$1 = "tag_locale";
@@ -1831,24 +1831,24 @@ class AppErrorBoundary extends Component {
   }
 }
 const Pricing = lazy(withChunkRetry(() => import("./assets/Pricing-DwIJSNH5.mjs").then((mod) => ({ default: mod.Pricing })), "pricing"));
-const Footer = lazy(withChunkRetry(() => import("./assets/Footer-BLuaI9VM.mjs").then((mod) => ({ default: mod.Footer })), "footer"));
+const Footer = lazy(withChunkRetry(() => import("./assets/Footer-DdKAp0re.mjs").then((mod) => ({ default: mod.Footer })), "footer"));
 const CookieBanner = lazy(withChunkRetry(() => import("./assets/CookieBanner-BaoCJwfa.mjs").then((mod) => ({ default: mod.CookieBanner })), "cookie-banner"));
 const OrderForm = lazy(withChunkRetry(() => import("./assets/OrderForm-gPj-Q5mt.mjs").then((mod) => ({ default: mod.OrderForm })), "order-form"));
-const QuoteForm = lazy(withChunkRetry(() => import("./assets/QuoteForm-CG-Hm2ys.mjs").then((n) => n.b).then((mod) => ({ default: mod.QuoteForm })), "quote-form"));
+const QuoteForm = lazy(withChunkRetry(() => import("./assets/QuoteForm-D7OJlkYc.mjs").then((n) => n.b).then((mod) => ({ default: mod.QuoteForm })), "quote-form"));
 const ManageOrder = lazy(withChunkRetry(() => import("./assets/ManageOrder-BJfUnlyN.mjs").then((mod) => ({ default: mod.ManageOrder })), "manage-order"));
-const RouteLanding = lazy(withChunkRetry(() => import("./assets/RouteLanding-CETGU--I.mjs").then((mod) => ({ default: mod.RouteLanding })), "route-landing"));
-const OrderRoutePage = lazy(withChunkRetry(() => import("./assets/OrderRoutePage-D6pON2xO.mjs").then((mod) => ({ default: mod.OrderRoutePage })), "order-route-page"));
-const CustomOrderPage = lazy(withChunkRetry(() => import("./assets/OrderRoutePage-D6pON2xO.mjs").then((mod) => ({ default: mod.CustomOrderPage })), "custom-order-page"));
-const PricingPage = lazy(withChunkRetry(() => import("./assets/PricingPage-BYxL1udj.mjs").then((mod) => ({ default: mod.PricingPage })), "pricing-page"));
+const RouteLanding = lazy(withChunkRetry(() => import("./assets/RouteLanding-CNGhZ4jd.mjs").then((mod) => ({ default: mod.RouteLanding })), "route-landing"));
+const OrderRoutePage = lazy(withChunkRetry(() => import("./assets/OrderRoutePage-CAMP9ugg.mjs").then((mod) => ({ default: mod.OrderRoutePage })), "order-route-page"));
+const CustomOrderPage = lazy(withChunkRetry(() => import("./assets/OrderRoutePage-CAMP9ugg.mjs").then((mod) => ({ default: mod.CustomOrderPage })), "custom-order-page"));
+const PricingPage = lazy(withChunkRetry(() => import("./assets/PricingPage-BeTLtc3j.mjs").then((mod) => ({ default: mod.PricingPage })), "pricing-page"));
 const AdminOrdersPage = lazy(withChunkRetry(() => import("./assets/AdminOrdersPage-DBQAnaw0.mjs").then((mod) => ({ default: mod.AdminOrdersPage })), "admin-orders-page"));
 const AdminOrderPage = lazy(withChunkRetry(() => import("./assets/AdminOrderPage-CZF5lKuF.mjs").then((mod) => ({ default: mod.AdminOrderPage })), "admin-order-page"));
-const CookiesPage = lazy(withChunkRetry(() => import("./assets/CookiesPage-xbZRCa3G.mjs").then((mod) => ({ default: mod.CookiesPage })), "cookies-page"));
-const PrivacyPage = lazy(withChunkRetry(() => import("./assets/PrivacyPage-sju_lowR.mjs").then((mod) => ({ default: mod.PrivacyPage })), "privacy-page"));
-const NotFoundPage = lazy(withChunkRetry(() => import("./assets/NotFoundPage-yk3sSRsm.mjs").then((mod) => ({ default: mod.NotFoundPage })), "not-found-page"));
-const CountryLanding = lazy(withChunkRetry(() => import("./assets/CountryLanding-BV6-MpJ0.mjs").then((mod) => ({ default: mod.CountryLanding })), "country-landing"));
-const CountryAirportLanding = lazy(withChunkRetry(() => import("./assets/CountryAirportLanding-CMLky9Pc.mjs").then((mod) => ({ default: mod.CountryAirportLanding })), "country-airport-landing"));
-const CityRouteLanding = lazy(withChunkRetry(() => import("./assets/CityRouteLanding-DJJUS99v.mjs").then((mod) => ({ default: mod.CityRouteLanding })), "city-route-landing"));
-const TaxiGdanskPage = lazy(withChunkRetry(() => import("./assets/TaxiGdanskPage-CJZXepYe.mjs").then((mod) => ({ default: mod.TaxiGdanskPage })), "taxi-gdansk-page"));
+const CookiesPage = lazy(withChunkRetry(() => import("./assets/CookiesPage-BJDDAMJL.mjs").then((mod) => ({ default: mod.CookiesPage })), "cookies-page"));
+const PrivacyPage = lazy(withChunkRetry(() => import("./assets/PrivacyPage-nHyT8-lI.mjs").then((mod) => ({ default: mod.PrivacyPage })), "privacy-page"));
+const NotFoundPage = lazy(withChunkRetry(() => import("./assets/NotFoundPage-ldslrggF.mjs").then((mod) => ({ default: mod.NotFoundPage })), "not-found-page"));
+const CountryLanding = lazy(withChunkRetry(() => import("./assets/CountryLanding-BOCDxygm.mjs").then((mod) => ({ default: mod.CountryLanding })), "country-landing"));
+const CountryAirportLanding = lazy(withChunkRetry(() => import("./assets/CountryAirportLanding-DrW6DNJU.mjs").then((mod) => ({ default: mod.CountryAirportLanding })), "country-airport-landing"));
+const CityRouteLanding = lazy(withChunkRetry(() => import("./assets/CityRouteLanding-Bw1GlehP.mjs").then((mod) => ({ default: mod.CityRouteLanding })), "city-route-landing"));
+const TaxiGdanskPage = lazy(withChunkRetry(() => import("./assets/TaxiGdanskPage-CpJUUgQo.mjs").then((mod) => ({ default: mod.TaxiGdanskPage })), "taxi-gdansk-page"));
 const BlogListPage = lazy(withChunkRetry(() => import("./assets/BlogListPage-HzFsw6un.mjs").then((mod) => ({ default: mod.BlogListPage })), "blog-list-page"));
 const BlogArticlePage = lazy(withChunkRetry(() => import("./assets/BlogArticlePage-JvSNOh2I.mjs").then((mod) => ({ default: mod.BlogArticlePage })), "blog-article-page"));
 const AdminBlogPage = lazy(withChunkRetry(() => import("./assets/AdminBlogPage-DGyzsXBI.mjs").then((mod) => ({ default: mod.AdminBlogPage })), "admin-blog-page"));
@@ -2076,7 +2076,7 @@ function App() {
     let idleId = null;
     const enable = () => {
       if (!cancelled) {
-        setTrackingReady(true);
+        startTransition(() => setTrackingReady(true));
       }
     };
     if ("requestIdleCallback" in window) {
@@ -2100,7 +2100,7 @@ function App() {
     }
     let timeoutId = null;
     let idleId = null;
-    const enable = () => setCookieBannerReady(true);
+    const enable = () => startTransition(() => setCookieBannerReady(true));
     timeoutId = window.setTimeout(enable, 1800);
     if ("requestIdleCallback" in window) {
       idleId = window.requestIdleCallback(enable, { timeout: 2e3 });
@@ -8662,7 +8662,7 @@ function render(url, ssrData) {
   const initialLocale = (_a2 = getLocaleFromPathname(url)) != null ? _a2 : DEFAULT_LOCALE;
   const initialTranslations = serverTranslations[initialLocale];
   const appHtml = renderToString(
-    /* @__PURE__ */ jsx(StrictMode, { children: /* @__PURE__ */ jsx(StaticRouter, { location: url, future: { v7_startTransition: true, v7_relativeSplatPath: true }, children: /* @__PURE__ */ jsx(I18nProvider, { initialLocale, initialTranslations, children: /* @__PURE__ */ jsx(SSRDataProvider, { data: ssrData != null ? ssrData : null, children: /* @__PURE__ */ jsx(App, {}) }) }) }) })
+    /* @__PURE__ */ jsx(StaticRouter, { location: url, future: { v7_startTransition: true, v7_relativeSplatPath: true }, children: /* @__PURE__ */ jsx(I18nProvider, { initialLocale, initialTranslations, children: /* @__PURE__ */ jsx(SSRDataProvider, { data: ssrData != null ? ssrData : null, children: /* @__PURE__ */ jsx(App, {}) }) }) })
   );
   return {
     appHtml,
