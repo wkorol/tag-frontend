@@ -4,6 +4,7 @@ import { Navbar } from '../components/Navbar';
 import { FloatingActions } from '../components/FloatingActions';
 import { getApiBaseUrl } from '../lib/api';
 import { localeToPath, useI18n } from '../lib/i18n';
+import { getRoutePath } from '../lib/routes';
 import { useSSRData, type BlogArticleFull } from '../lib/ssrData';
 import { usePageTitle } from '../lib/usePageTitle';
 
@@ -121,7 +122,7 @@ export function BlogArticlePage() {
                 </p>
                 <div className="pt-6">
                   <Link
-                    to={`${basePath}/`}
+                    to={getRoutePath(locale, 'orderAirportGdansk')}
                     className="inline-block rounded-lg bg-blue-600 px-6 py-3 text-base font-semibold text-white hover:bg-blue-700 transition-colors"
                   >
                     {t.blog?.ctaButton ?? 'Book a TAXI'}
