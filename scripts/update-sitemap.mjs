@@ -1,7 +1,7 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { locales, routeSlugs, countryAirportSlugsByLocale, cityRouteSlugsByLocale } from '../seo-data.mjs';
+import { locales, routeSlugs, countryAirportSlugsByLocale, cityRouteSlugsByLocale, countryAirportCrossLocale, cityRouteCrossLocale } from '../seo-data.mjs';
 
 const SITE_URL = 'https://taxiairportgdansk.com';
 const DEFAULT_LOCALE = 'en';
@@ -176,28 +176,38 @@ for (const routeKey of routeKeys) {
 const seoDataLastmod = await getFileDate('seo-data.mjs');
 const dynamicLastmod = seoDataLastmod ?? formatDate(new Date());
 
-for (const locale of locales) {
-  for (const slug of countryAirportSlugsByLocale[locale] ?? []) {
-    const loc = `${SITE_URL}/${locale}/${slug}`;
+for (const [, crossEntries] of countryAirportCrossLocale) {
+  const alternates = crossEntries.flatMap(({ locale, slug }) =>
+    (LOCALE_HREFLANG_MAP[locale] ?? [locale]).map((hreflang) => ({
+      hreflang,
+      href: `${SITE_URL}/${locale}/${slug}`,
+    }))
+  );
+  for (const { locale, slug } of crossEntries) {
     addEntry(entries, {
-      loc,
+      loc: `${SITE_URL}/${locale}/${slug}`,
       lastmod: dynamicLastmod,
       changefreq: 'weekly',
       priority: '0.5',
-      alternates: buildAlternateSetForLocaleOnly(locale, loc),
+      alternates,
     });
   }
 }
 
-for (const locale of locales) {
-  for (const slug of cityRouteSlugsByLocale[locale] ?? []) {
-    const loc = `${SITE_URL}/${locale}/${slug}`;
+for (const [, crossEntries] of cityRouteCrossLocale) {
+  const alternates = crossEntries.flatMap(({ locale, slug }) =>
+    (LOCALE_HREFLANG_MAP[locale] ?? [locale]).map((hreflang) => ({
+      hreflang,
+      href: `${SITE_URL}/${locale}/${slug}`,
+    }))
+  );
+  for (const { locale, slug } of crossEntries) {
     addEntry(entries, {
-      loc,
+      loc: `${SITE_URL}/${locale}/${slug}`,
       lastmod: dynamicLastmod,
       changefreq: 'weekly',
       priority: '0.5',
-      alternates: buildAlternateSetForLocaleOnly(locale, loc),
+      alternates,
     });
   }
 }

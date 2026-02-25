@@ -71,8 +71,6 @@ const estimateInsideRatio = (
 };
 
 const getGdanskCityPrice = (distance: number) => {
-  if (distance <= 5) return 50;
-  if (distance <= 10) return 80;
   if (distance <= 15) return 100;
   if (distance <= 20) return 120;
   if (distance <= 25) return 150;
@@ -428,10 +426,27 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
     sessionTokenRef.current = null;
   };
 
+  const geocodeByPlaceId = async (placeId: string): Promise<{ lat: number; lon: number } | null> => {
+    const google = (window as any).google;
+    if (!google?.maps?.Geocoder) return null;
+    return new Promise((resolve) => {
+      new google.maps.Geocoder().geocode({ placeId }, (results: any, status: any) => {
+        if (status !== 'OK' || !results?.[0]?.geometry?.location) {
+          resolve(null);
+          return;
+        }
+        const loc = results[0].geometry.location;
+        const lat = typeof loc.lat === 'function' ? loc.lat() : Number(loc.lat);
+        const lon = typeof loc.lng === 'function' ? loc.lng() : Number(loc.lng);
+        resolve(Number.isFinite(lat) && Number.isFinite(lon) ? { lat, lon } : null);
+      });
+    });
+  };
+
   const retrievePlacePoint = async (placeId: string) => {
     const lib = await ensurePlacesLibrary();
     if (!lib) {
-      return null;
+      return geocodeByPlaceId(placeId);
     }
     try {
       const place = new lib.Place({ id: placeId });
@@ -440,12 +455,12 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
       const lat = typeof location?.lat === 'function' ? location.lat() : Number(location?.lat);
       const lon = typeof location?.lng === 'function' ? location.lng() : Number(location?.lng);
       if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
-        return null;
+        return geocodeByPlaceId(placeId);
       }
       resetSessionToken();
       return { lat, lon };
     } catch {
-      return null;
+      return geocodeByPlaceId(placeId);
     }
   };
 

@@ -222,7 +222,7 @@ const escapeHtmlAttr = (str) => str.replace(/&/g, '&amp;').replace(/"/g, '&quot;
 
 const buildBlogSeoTags = (locale, article) => {
   const canonical = `${site.url}/${locale}/blog/${article.slug}`;
-  const ogLocale = (localeHreflangMap[locale] ?? [locale])[0].replace('-', '_');
+  const ogLocale = (localeHreflangMap[locale] ?? [locale]).at(-1).replace('-', '_');
   const publishedIso = article.publishedAt ?? new Date().toISOString();
   const ogImage = article.ogImageUrl || site.ogImage;
 
@@ -270,11 +270,18 @@ const buildBlogSeoTags = (locale, article) => {
     `<meta property="og:url" content="${canonical}">`,
     `<meta property="og:site_name" content="${site.name}">`,
     `<meta property="article:published_time" content="${publishedIso}">`,
+    `<meta property="article:modified_time" content="${article.updatedAt ?? publishedIso}">`,
     `<meta name="twitter:card" content="summary_large_image">`,
     `<meta name="twitter:title" content="${escapeHtmlAttr(article.title)}">`,
     `<meta name="twitter:description" content="${escapeHtmlAttr(article.metaDescription)}">`,
     `<meta name="twitter:image" content="${ogImage}">`,
+    `<meta property="og:image:width" content="1200">`,
+    `<meta property="og:image:height" content="630">`,
     `<link rel="canonical" href="${canonical}">`,
+    ...(localeHreflangMap[locale] ?? [locale]).map(
+      (hreflang) => `<link rel="alternate" hreflang="${hreflang}" href="${canonical}">`
+    ),
+    `<link rel="alternate" hreflang="x-default" href="${canonical}">`,
     `<script type="application/ld+json">${JSON.stringify(blogPostingSchema)}</script>`,
     `<script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`,
   ].join('');
@@ -283,7 +290,7 @@ const buildBlogSeoTags = (locale, article) => {
 const buildBlogListSeoTags = (locale) => {
   const meta = blogListMetaByLocale[locale] ?? blogListMetaByLocale.en;
   const canonical = `${site.url}/${locale}/blog`;
-  const ogLocale = (localeHreflangMap[locale] ?? [locale])[0].replace('-', '_');
+  const ogLocale = (localeHreflangMap[locale] ?? [locale]).at(-1).replace('-', '_');
 
   const alternates = locales
     .flatMap((lang) =>
@@ -308,6 +315,9 @@ const buildBlogListSeoTags = (locale) => {
     `<meta name="twitter:card" content="summary_large_image">`,
     `<meta name="twitter:title" content="${escapeHtmlAttr(meta.title)}">`,
     `<meta name="twitter:description" content="${escapeHtmlAttr(meta.description)}">`,
+    `<meta name="twitter:image" content="${site.ogImage}">`,
+    `<meta property="og:image:width" content="1200">`,
+    `<meta property="og:image:height" content="630">`,
     `<link rel="canonical" href="${canonical}">`,
     alternates,
     xDefault,

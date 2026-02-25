@@ -293,11 +293,38 @@ export const cityRouteSlugsByLocale = Object.fromEntries(
   Object.entries(cityRouteRoutes).map(([locale, entries]) => [locale, entries.map((entry) => entry.slug)])
 );
 
-const getCountryAirportRoute = (locale, slug) =>
+export const getCountryAirportRoute = (locale, slug) =>
   (countryAirportRoutes[locale] ?? []).find((entry) => entry.slug === slug) ?? null;
 
-const getCityRoute = (locale, slug) =>
+export const getCityRoute = (locale, slug) =>
   (cityRouteRoutes[locale] ?? []).find((entry) => entry.slug === slug) ?? null;
+
+const extractAirportCode = (airport) => {
+  const match = airport.match(/\(([A-Z]{3})\)/);
+  return match ? match[1] : null;
+};
+
+export const cityRouteCrossLocale = new Map();
+for (const [locale, routes] of Object.entries(cityRouteRoutes)) {
+  for (const route of routes) {
+    if (!cityRouteCrossLocale.has(route.destination)) {
+      cityRouteCrossLocale.set(route.destination, []);
+    }
+    cityRouteCrossLocale.get(route.destination).push({ locale, slug: route.slug });
+  }
+}
+
+export const countryAirportCrossLocale = new Map();
+for (const [locale, routes] of Object.entries(countryAirportRoutes)) {
+  for (const route of routes) {
+    const code = extractAirportCode(route.airport);
+    if (!code) continue;
+    if (!countryAirportCrossLocale.has(code)) {
+      countryAirportCrossLocale.set(code, []);
+    }
+    countryAirportCrossLocale.get(code).push({ locale, slug: route.slug });
+  }
+}
 
 const navLabels = {
   en: {
@@ -481,7 +508,7 @@ const metaByLocale = {
         'Taxi lotnisko Gdańsk – transfer z lotniska Gdańsk i na lotnisko. Taxi na lotnisko Gdańsk ze stałą ceną, śledzenie lotu, szybkie potwierdzenie. Przewóz z lotniska Gdańsk 24/7.',
     },
     airportTaxi: {
-      title: 'Taxi Lotnisko Gdańsk do Centrum | Stała Cena | Taxi Airport Gdańsk',
+      title: 'Taxi z Lotniska Gdańsk do Centrum | Taxi Airport Gdańsk',
       description:
         'Taxi z lotniska Gdańsk do centrum i z centrum na lotnisko. Transfer lotnisko Gdańsk ze stałą ceną, powitanie na lotnisku, 24/7.',
     },
@@ -496,12 +523,12 @@ const metaByLocale = {
         'Taxi z lotniska Gdańsk do Gdyni – stała cena, profesjonalni kierowcy, 24/7. Transfer lotnisko Gdańsk Gdynia.',
     },
     taxiGdanskCity: {
-      title: 'Taxi Gdańsk | Przejazdy Miejskie i Lotniskowe | Taxi Airport Gdańsk',
+      title: 'Taxi Gdańsk | Przejazdy i Transfery | Taxi Airport Gdańsk',
       description:
         'Taxi Gdańsk: stałe ceny, dostępność 24/7 i szybkie potwierdzenie. Transfery lotniskowe, przejazdy po Trójmieście i taxi na lotnisko Gdańsk.',
     },
     countryLanding: {
-      title: 'Transfer lotniskowy Gdańsk dla podróżnych z zagranicy | Taxi Airport Gdańsk',
+      title: 'Transfer Lotniskowy Gdańsk | Taxi Airport Gdańsk',
       description:
         'Transfer z lotniska Gdańsk dla podróżnych z zagranicy. Stałe ceny, odbiór 24/7 i szybkie potwierdzenie.',
     },
@@ -526,7 +553,7 @@ const metaByLocale = {
         'Poproś o wycenę niestandardowej trasy w Trójmieście. Odpowiedź w 5–10 minut.',
     },
     pricing: {
-      title: 'Cennik Taxi Lotnisko Gdańsk | Ceny Transferów | Taxi Airport Gdańsk',
+      title: 'Cennik Taxi Lotnisko Gdańsk | Taxi Airport Gdańsk',
       description:
         'Stałe ceny taxi z lotniska Gdańsk do centrum, Sopotu i Gdyni. Kalkulator cen, taryfy dzienne i nocne. Ile kosztuje taxi z lotniska Gdańsk?',
     },
@@ -902,31 +929,31 @@ const metaByLocale = {
 
 const airportMetaByLocale = {
   en: ({ city, airport }) => ({
-    title: `${city} → Gdansk Airport Transfer (${airport}) | Taxi Airport Gdańsk`,
+    title: `${city} – Gdansk Airport Transfer | Taxi Airport Gdańsk`,
     description: `Private transfer from ${airport} to Gdańsk, Sopot, and Gdynia. Fixed prices, 24/7 pickup, fast confirmation.`,
   }),
   de: ({ city, airport }) => ({
-    title: `${city} → Gdańsk Flughafentransfer (${airport}) | Taxi Airport Gdańsk`,
+    title: `${city} – Gdańsk Flughafentransfer | Taxi Airport Gdańsk`,
     description: `Privater Transfer von ${airport} nach Gdańsk, Sopot und Gdynia. Festpreise, 24/7 Abholung, schnelle Bestätigung.`,
   }),
   fi: ({ city, airport }) => ({
-    title: `${city} → Gdańskin lentokenttäkuljetus (${airport}) | Taxi Airport Gdańsk`,
+    title: `${city} – Gdańsk lentokenttäkuljetus | Taxi Airport Gdańsk`,
     description: `Yksityinen kuljetus ${airport}-lentoasemalta Gdańskiin, Sopotiin ja Gdyniaan. Kiinteät hinnat, 24/7 nouto, nopea vahvistus.`,
   }),
   no: ({ city, airport }) => ({
-    title: `${city} → Flyplasstransport Gdańsk (${airport}) | Taxi Airport Gdańsk`,
+    title: `${city} – Flyplasstransport Gdańsk | Taxi Airport Gdańsk`,
     description: `Privat transport fra ${airport} til Gdańsk, Sopot og Gdynia. Faste priser, døgnåpen henting, rask bekreftelse.`,
   }),
   sv: ({ city, airport }) => ({
-    title: `${city} → Flygplatstransfer Gdańsk (${airport}) | Taxi Airport Gdańsk`,
+    title: `${city} – Flygplatstransfer Gdańsk | Taxi Airport Gdańsk`,
     description: `Privat transfer från ${airport} till Gdańsk, Sopot och Gdynia. Fasta priser, 24/7 upphämtning, snabb bekräftelse.`,
   }),
   da: ({ city, airport }) => ({
-    title: `${city} → Lufthavnstransfer Gdańsk (${airport}) | Taxi Airport Gdańsk`,
+    title: `${city} – Lufthavnstransfer Gdańsk | Taxi Airport Gdańsk`,
     description: `Privat transfer fra ${airport} til Gdańsk, Sopot og Gdynia. Faste priser, afhentning 24/7, hurtig bekræftelse.`,
   }),
   pl: ({ city, airport }) => ({
-    title: `${city} → Transfer lotniskowy Gdańsk (${airport}) | Taxi Airport Gdańsk`,
+    title: `${city} – Transfer lotniskowy Gdańsk | Taxi Airport Gdańsk`,
     description: `Prywatny transfer z ${airport} do Gdańska, Sopotu i Gdyni. Stałe ceny, odbiór 24/7, szybkie potwierdzenie.`,
   }),
 };
@@ -1357,31 +1384,53 @@ export const buildSeoTags = (urlPath) => {
                 ? `${site.url}/${locale}/${countryAirport.slug}`
                 : buildLocalizedUrl(locale, routeKey);
 
-    const alternates = cityRoute
-        ? (localeHreflangMap[locale] ?? [locale])
-            .map((hreflang) => `<link rel="alternate" hreflang="${hreflang}" href="${canonical}">`)
-            .join('')
-        : countryAirport
-            ? (localeHreflangMap[locale] ?? [locale])
-                .map((hreflang) => `<link rel="alternate" hreflang="${hreflang}" href="${canonical}">`)
-                .join('')
-            : locales
-                .flatMap((lang) => {
-                    const href = buildLocalizedUrl(lang, routeKey);
-                    const hreflangs = localeHreflangMap[lang] ?? [lang];
-                    return hreflangs.map(
-                        (hreflang) => `<link rel="alternate" hreflang="${hreflang}" href="${href}">`
-                    );
-                })
-                .join('');
+    let alternates;
+    let xDefaultHref;
 
-    const xDefaultHref = cityRoute || countryAirport
-        ? canonical
-        : buildLocalizedUrl(defaultLocale, routeKey);
+    if (cityRoute) {
+      const crossEntries = cityRouteCrossLocale.get(cityRoute.destination) ?? [{ locale, slug: cityRoute.slug }];
+      alternates = crossEntries
+        .flatMap(({ locale: altLocale, slug: altSlug }) => {
+          const href = `${site.url}/${altLocale}/${altSlug}`;
+          return (localeHreflangMap[altLocale] ?? [altLocale]).map(
+            (hreflang) => `<link rel="alternate" hreflang="${hreflang}" href="${href}">`
+          );
+        })
+        .join('');
+      const enEntry = crossEntries.find((e) => e.locale === defaultLocale);
+      xDefaultHref = enEntry ? `${site.url}/${enEntry.locale}/${enEntry.slug}` : canonical;
+    } else if (countryAirport) {
+      const code = extractAirportCode(countryAirport.airport);
+      const crossEntries = code
+        ? (countryAirportCrossLocale.get(code) ?? [{ locale, slug: countryAirport.slug }])
+        : [{ locale, slug: countryAirport.slug }];
+      alternates = crossEntries
+        .flatMap(({ locale: altLocale, slug: altSlug }) => {
+          const href = `${site.url}/${altLocale}/${altSlug}`;
+          return (localeHreflangMap[altLocale] ?? [altLocale]).map(
+            (hreflang) => `<link rel="alternate" hreflang="${hreflang}" href="${href}">`
+          );
+        })
+        .join('');
+      const enEntry = crossEntries.find((e) => e.locale === defaultLocale);
+      xDefaultHref = enEntry ? `${site.url}/${enEntry.locale}/${enEntry.slug}` : canonical;
+    } else {
+      alternates = locales
+        .flatMap((lang) => {
+          const href = buildLocalizedUrl(lang, routeKey);
+          const hreflangs = localeHreflangMap[lang] ?? [lang];
+          return hreflangs.map(
+            (hreflang) => `<link rel="alternate" hreflang="${hreflang}" href="${href}">`
+          );
+        })
+        .join('');
+      xDefaultHref = buildLocalizedUrl(defaultLocale, routeKey);
+    }
+
     const xDefault = `<link rel="alternate" hreflang="x-default" href="${xDefaultHref}">`;
     const robots = isIndexablePath(urlPath) ? 'index,follow' : 'noindex,nofollow';
 
-  const ogLocale = (localeHreflangMap[locale] ?? [locale])[0] ?? locale;
+  const ogLocale = (localeHreflangMap[locale] ?? [locale]).at(-1) ?? locale;
   const ogLocaleValue = ogLocale.replace('-', '_');
   const ogAlternateValues = Array.from(
     new Set(
@@ -1576,6 +1625,8 @@ export const buildSeoTags = (urlPath) => {
     `<meta name="twitter:title" content="${meta.title}">`,
     `<meta name="twitter:description" content="${meta.description}">`,
     `<meta name="twitter:image" content="${site.ogImage}">`,
+    `<meta property="og:image:width" content="1200">`,
+    `<meta property="og:image:height" content="630">`,
     `<link rel="canonical" href="${canonical}">`,
     alternates,
     xDefault,

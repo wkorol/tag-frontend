@@ -1850,7 +1850,7 @@ const CountryAirportLanding = lazy(withChunkRetry(() => import("./assets/Country
 const CityRouteLanding = lazy(withChunkRetry(() => import("./assets/CityRouteLanding-DJJUS99v.mjs").then((mod) => ({ default: mod.CityRouteLanding })), "city-route-landing"));
 const TaxiGdanskPage = lazy(withChunkRetry(() => import("./assets/TaxiGdanskPage-CJZXepYe.mjs").then((mod) => ({ default: mod.TaxiGdanskPage })), "taxi-gdansk-page"));
 const BlogListPage = lazy(withChunkRetry(() => import("./assets/BlogListPage-HzFsw6un.mjs").then((mod) => ({ default: mod.BlogListPage })), "blog-list-page"));
-const BlogArticlePage = lazy(withChunkRetry(() => import("./assets/BlogArticlePage-DiYg5Ufi.mjs").then((mod) => ({ default: mod.BlogArticlePage })), "blog-article-page"));
+const BlogArticlePage = lazy(withChunkRetry(() => import("./assets/BlogArticlePage-JvSNOh2I.mjs").then((mod) => ({ default: mod.BlogArticlePage })), "blog-article-page"));
 const AdminBlogPage = lazy(withChunkRetry(() => import("./assets/AdminBlogPage-DGyzsXBI.mjs").then((mod) => ({ default: mod.AdminBlogPage })), "admin-blog-page"));
 const localeRootPathSet = new Set(SUPPORTED_LOCALES.map((locale) => `/${locale}`));
 const normalizeCanonicalPathname = (pathname) => localeRootPathSet.has(pathname) ? `${pathname}/` : pathname;
