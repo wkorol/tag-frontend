@@ -1834,12 +1834,12 @@ const Pricing = lazy(withChunkRetry(() => import("./assets/Pricing-DwIJSNH5.mjs"
 const Footer = lazy(withChunkRetry(() => import("./assets/Footer-DdKAp0re.mjs").then((mod) => ({ default: mod.Footer })), "footer"));
 const CookieBanner = lazy(withChunkRetry(() => import("./assets/CookieBanner-BaoCJwfa.mjs").then((mod) => ({ default: mod.CookieBanner })), "cookie-banner"));
 const OrderForm = lazy(withChunkRetry(() => import("./assets/OrderForm-gPj-Q5mt.mjs").then((mod) => ({ default: mod.OrderForm })), "order-form"));
-const QuoteForm = lazy(withChunkRetry(() => import("./assets/QuoteForm-D7OJlkYc.mjs").then((n) => n.b).then((mod) => ({ default: mod.QuoteForm })), "quote-form"));
+const QuoteForm = lazy(withChunkRetry(() => import("./assets/QuoteForm-BC7azLOT.mjs").then((n) => n.b).then((mod) => ({ default: mod.QuoteForm })), "quote-form"));
 const ManageOrder = lazy(withChunkRetry(() => import("./assets/ManageOrder-BJfUnlyN.mjs").then((mod) => ({ default: mod.ManageOrder })), "manage-order"));
 const RouteLanding = lazy(withChunkRetry(() => import("./assets/RouteLanding-CNGhZ4jd.mjs").then((mod) => ({ default: mod.RouteLanding })), "route-landing"));
-const OrderRoutePage = lazy(withChunkRetry(() => import("./assets/OrderRoutePage-CAMP9ugg.mjs").then((mod) => ({ default: mod.OrderRoutePage })), "order-route-page"));
-const CustomOrderPage = lazy(withChunkRetry(() => import("./assets/OrderRoutePage-CAMP9ugg.mjs").then((mod) => ({ default: mod.CustomOrderPage })), "custom-order-page"));
-const PricingPage = lazy(withChunkRetry(() => import("./assets/PricingPage-BeTLtc3j.mjs").then((mod) => ({ default: mod.PricingPage })), "pricing-page"));
+const OrderRoutePage = lazy(withChunkRetry(() => import("./assets/OrderRoutePage-BKC6ZgBf.mjs").then((mod) => ({ default: mod.OrderRoutePage })), "order-route-page"));
+const CustomOrderPage = lazy(withChunkRetry(() => import("./assets/OrderRoutePage-BKC6ZgBf.mjs").then((mod) => ({ default: mod.CustomOrderPage })), "custom-order-page"));
+const PricingPage = lazy(withChunkRetry(() => import("./assets/PricingPage-CAtU9X7o.mjs").then((mod) => ({ default: mod.PricingPage })), "pricing-page"));
 const AdminOrdersPage = lazy(withChunkRetry(() => import("./assets/AdminOrdersPage-DBQAnaw0.mjs").then((mod) => ({ default: mod.AdminOrdersPage })), "admin-orders-page"));
 const AdminOrderPage = lazy(withChunkRetry(() => import("./assets/AdminOrderPage-CZF5lKuF.mjs").then((mod) => ({ default: mod.AdminOrderPage })), "admin-order-page"));
 const CookiesPage = lazy(withChunkRetry(() => import("./assets/CookiesPage-BJDDAMJL.mjs").then((mod) => ({ default: mod.CookiesPage })), "cookies-page"));

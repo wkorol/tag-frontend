@@ -428,7 +428,11 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
 
   const geocodeByPlaceId = async (placeId: string): Promise<{ lat: number; lon: number } | null> => {
     const google = (window as any).google;
-    if (!google?.maps?.Geocoder) return null;
+    if (!google?.maps) return null;
+    if (!google.maps.Geocoder && google.maps.importLibrary) {
+      await google.maps.importLibrary('geocoding');
+    }
+    if (!google.maps.Geocoder) return null;
     return new Promise((resolve) => {
       new google.maps.Geocoder().geocode({ placeId }, (results: any, status: any) => {
         if (status !== 'OK' || !results?.[0]?.geometry?.location) {
@@ -775,11 +779,19 @@ export function QuoteForm({ onClose, initialVehicleType = 'standard' }: QuoteFor
           return null;
         }
         const place = prediction.toPlace ? prediction.toPlace() : new lib.Place({ id: prediction.placeId });
-        await place.fetchFields({ fields: ['location'] });
-        const location = place.location;
-        const lat = typeof location?.lat === 'function' ? location.lat() : Number(location?.lat);
-        const lon = typeof location?.lng === 'function' ? location.lng() : Number(location?.lng);
-        const point = Number.isFinite(lat) && Number.isFinite(lon) ? { lat, lon } : null;
+        let point: { lat: number; lon: number } | null = null;
+        try {
+          await place.fetchFields({ fields: ['location'] });
+          const location = place.location;
+          const lat = typeof location?.lat === 'function' ? location.lat() : Number(location?.lat);
+          const lon = typeof location?.lng === 'function' ? location.lng() : Number(location?.lng);
+          point = Number.isFinite(lat) && Number.isFinite(lon) ? { lat, lon } : null;
+        } catch {
+          point = null;
+        }
+        if (!point) {
+          point = await geocodeByPlaceId(prediction.placeId);
+        }
         if (!point) {
           geocodeCache.current.set(key, null);
           return null;
