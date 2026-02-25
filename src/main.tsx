@@ -49,7 +49,12 @@ const bootstrap = async () => {
   );
 
   if (rootElement.hasChildNodes()) {
-    hydrateRoot(rootElement, app);
+    hydrateRoot(rootElement, app, {
+      onRecoverableError: () => {
+        // Lazy-loaded route chunks may not be ready during hydration;
+        // React recovers by client-rendering the affected subtree.
+      },
+    });
   } else {
     createRoot(rootElement).render(app);
   }
