@@ -16,7 +16,9 @@ export const site = {
       ? sameAsFromEnv
       : [
           'https://wa.me/48694347548',
-          'https://www.google.com/maps/search/?api=1&query=Taxi+Airport+Gda%C5%84sk',
+          'https://maps.app.goo.gl/aW5PSs2tR3gjKRBMA',
+          'https://www.instagram.com/taxiairportgdansk',
+          'https://www.facebook.com/profile.php?id=61587339213541',
         ],
 };
 
