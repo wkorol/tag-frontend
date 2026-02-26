@@ -476,7 +476,10 @@ const server = createServer(async (req, res) => {
       `${hydrationScript}<div id="root">${appHtml}</div>`
     );
     const finalHtml = applyHtmlLang(applyNoscript(applySeo(html, urlPath, seoOverride), urlPath), urlPath);
-    res.writeHead(isNotFound ? 404 : 200, { 'Content-Type': 'text/html' });
+    res.writeHead(isNotFound ? 404 : 200, {
+      'Content-Type': 'text/html',
+      'Content-Language': locale,
+    });
     res.end(finalHtml);
   } catch {
     res.writeHead(500);
