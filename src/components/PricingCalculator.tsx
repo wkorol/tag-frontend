@@ -310,24 +310,30 @@ export function PricingCalculator() {
   };
 
   const geocodeByPlaceId = async (placeId: string): Promise<{ lat: number; lon: number } | null> => {
-    const google = (window as any).google;
-    if (!google?.maps) return null;
-    if (!google.maps.Geocoder && google.maps.importLibrary) {
-      await google.maps.importLibrary('geocoding');
-    }
-    if (!google.maps.Geocoder) return null;
-    return new Promise((resolve) => {
-      new google.maps.Geocoder().geocode({ placeId }, (results: any, status: any) => {
-        if (status !== 'OK' || !results?.[0]?.geometry?.location) {
-          resolve(null);
-          return;
-        }
-        const loc = results[0].geometry.location;
-        const lat = typeof loc.lat === 'function' ? loc.lat() : Number(loc.lat);
-        const lon = typeof loc.lng === 'function' ? loc.lng() : Number(loc.lng);
-        resolve(Number.isFinite(lat) && Number.isFinite(lon) ? { lat, lon } : null);
+    try {
+      const google = (window as any).google;
+      if (!google?.maps) { console.warn('[geo] no google.maps'); return null; }
+      if (!google.maps.Geocoder && google.maps.importLibrary) {
+        await google.maps.importLibrary('geocoding');
+      }
+      if (!google.maps.Geocoder) { console.warn('[geo] Geocoder unavailable after importLibrary'); return null; }
+      return new Promise((resolve) => {
+        new google.maps.Geocoder().geocode({ placeId }, (results: any, status: any) => {
+          if (status !== 'OK' || !results?.[0]?.geometry?.location) {
+            console.warn('[geo] geocode status:', status, 'placeId:', placeId);
+            resolve(null);
+            return;
+          }
+          const loc = results[0].geometry.location;
+          const lat = typeof loc.lat === 'function' ? loc.lat() : Number(loc.lat);
+          const lon = typeof loc.lng === 'function' ? loc.lng() : Number(loc.lng);
+          resolve(Number.isFinite(lat) && Number.isFinite(lon) ? { lat, lon } : null);
+        });
       });
-    });
+    } catch (err) {
+      console.warn('[geo] geocodeByPlaceId error:', err);
+      return null;
+    }
   };
 
   const retrieveSuggestionPoint = async (placeId: string) => {
@@ -558,11 +564,15 @@ export function PricingCalculator() {
           const lat = typeof location?.lat === 'function' ? location.lat() : Number(location?.lat);
           const lon = typeof location?.lng === 'function' ? location.lng() : Number(location?.lng);
           point = Number.isFinite(lat) && Number.isFinite(lon) ? { lat, lon } : null;
-        } catch {
+          console.warn('[geocodeAddr] fetchFields result:', point, 'placeId:', prediction.placeId);
+        } catch (err) {
+          console.warn('[geocodeAddr] fetchFields failed:', err, 'placeId:', prediction.placeId);
           point = null;
         }
         if (!point) {
+          console.warn('[geocodeAddr] trying geocodeByPlaceId fallback');
           point = await geocodeByPlaceId(prediction.placeId);
+          console.warn('[geocodeAddr] fallback result:', point);
         }
         if (!point) {
           geocodeCache.current.set(key, null);
@@ -743,15 +753,18 @@ export function PricingCalculator() {
       };
 
       try {
+        console.warn('[calc] pickupMode:', pickupMode, 'destMode:', destinationMode, 'pickupPoint:', pickupPoint, 'destPoint:', destinationPoint);
         const pickup = pickupMode === 'airport'
           ? (await geocodeAddress(AIRPORT_GEOCODE_QUERY) ?? AIRPORT_COORD)
           : (pickupPoint ?? await geocodeAddress(pickupAddress));
         const destination = destinationMode === 'airport'
           ? (await geocodeAddress(AIRPORT_GEOCODE_QUERY) ?? AIRPORT_COORD)
           : (destinationPoint ?? await geocodeAddress(destinationAddress));
+        console.warn('[calc] pickup:', pickup, 'destination:', destination);
 
         if (!pickup || !destination) {
           if (!active) return;
+          console.warn('[calc] FAILED — pickup or destination is null');
           setResult(null);
           setError(t.pricingCalculator.noResult);
           setIsChecking(false);
@@ -872,9 +885,7 @@ export function PricingCalculator() {
       } catch (err) {
         if (!active) return;
         if (controller.signal.aborted) return;
-        if (import.meta.env.DEV) {
-          console.error('PricingCalculator: calculation failed', err);
-        }
+        console.warn('[calc] outer catch:', err);
         setResult(null);
         setError(t.pricingCalculator.noResult);
         setIsChecking(false);

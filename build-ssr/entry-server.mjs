@@ -1839,7 +1839,7 @@ const ManageOrder = lazy(withChunkRetry(() => import("./assets/ManageOrder-BJfUn
 const RouteLanding = lazy(withChunkRetry(() => import("./assets/RouteLanding-CNGhZ4jd.mjs").then((mod) => ({ default: mod.RouteLanding })), "route-landing"));
 const OrderRoutePage = lazy(withChunkRetry(() => import("./assets/OrderRoutePage-BKC6ZgBf.mjs").then((mod) => ({ default: mod.OrderRoutePage })), "order-route-page"));
 const CustomOrderPage = lazy(withChunkRetry(() => import("./assets/OrderRoutePage-BKC6ZgBf.mjs").then((mod) => ({ default: mod.CustomOrderPage })), "custom-order-page"));
-const PricingPage = lazy(withChunkRetry(() => import("./assets/PricingPage-CAtU9X7o.mjs").then((mod) => ({ default: mod.PricingPage })), "pricing-page"));
+const PricingPage = lazy(withChunkRetry(() => import("./assets/PricingPage-Cgv_cMYQ.mjs").then((mod) => ({ default: mod.PricingPage })), "pricing-page"));
 const AdminOrdersPage = lazy(withChunkRetry(() => import("./assets/AdminOrdersPage-DBQAnaw0.mjs").then((mod) => ({ default: mod.AdminOrdersPage })), "admin-orders-page"));
 const AdminOrderPage = lazy(withChunkRetry(() => import("./assets/AdminOrderPage-CZF5lKuF.mjs").then((mod) => ({ default: mod.AdminOrderPage })), "admin-order-page"));
 const CookiesPage = lazy(withChunkRetry(() => import("./assets/CookiesPage-BJDDAMJL.mjs").then((mod) => ({ default: mod.CookiesPage })), "cookies-page"));
