@@ -198,6 +198,10 @@ export function PricingCalculator() {
   const [destinationSuggestionStatus, setDestinationSuggestionStatus] = useState<string | null>(null);
   const [pickupPoint, setPickupPoint] = useState<{ lat: number; lon: number } | null>(null);
   const [destinationPoint, setDestinationPoint] = useState<{ lat: number; lon: number } | null>(null);
+  const formatFixedRouteDistance = (distance: number | string) =>
+    typeof t.quoteForm.fixedRouteDistance === 'function'
+      ? t.quoteForm.fixedRouteDistance(distance)
+      : `Distance: ${distance} km`;
   const showDebug = typeof window !== 'undefined'
     && new URLSearchParams(window.location.search).get('debug') === '1';
   const [googleReady, setGoogleReady] = useState(false);
@@ -312,15 +316,14 @@ export function PricingCalculator() {
   const geocodeByPlaceId = async (placeId: string): Promise<{ lat: number; lon: number } | null> => {
     try {
       const google = (window as any).google;
-      if (!google?.maps) { console.warn('[geo] no google.maps'); return null; }
+      if (!google?.maps) return null;
       if (!google.maps.Geocoder && google.maps.importLibrary) {
         await google.maps.importLibrary('geocoding');
       }
-      if (!google.maps.Geocoder) { console.warn('[geo] Geocoder unavailable after importLibrary'); return null; }
+      if (!google.maps.Geocoder) return null;
       return new Promise((resolve) => {
         new google.maps.Geocoder().geocode({ placeId }, (results: any, status: any) => {
           if (status !== 'OK' || !results?.[0]?.geometry?.location) {
-            console.warn('[geo] geocode status:', status, 'placeId:', placeId);
             resolve(null);
             return;
           }
@@ -564,15 +567,11 @@ export function PricingCalculator() {
           const lat = typeof location?.lat === 'function' ? location.lat() : Number(location?.lat);
           const lon = typeof location?.lng === 'function' ? location.lng() : Number(location?.lng);
           point = Number.isFinite(lat) && Number.isFinite(lon) ? { lat, lon } : null;
-          console.warn('[geocodeAddr] fetchFields result:', point, 'placeId:', prediction.placeId);
-        } catch (err) {
-          console.warn('[geocodeAddr] fetchFields failed:', err, 'placeId:', prediction.placeId);
+        } catch {
           point = null;
         }
         if (!point) {
-          console.warn('[geocodeAddr] trying geocodeByPlaceId fallback');
           point = await geocodeByPlaceId(prediction.placeId);
-          console.warn('[geocodeAddr] fallback result:', point);
         }
         if (!point) {
           geocodeCache.current.set(key, null);
@@ -711,7 +710,7 @@ export function PricingCalculator() {
           return {
             price: Math.round(120 * busMultiplier),
             allDay: true,
-            routeLabel: t.quoteForm.fixedRouteDistance(formatDistance(distance)),
+            routeLabel: formatFixedRouteDistance(formatDistance(distance)),
           };
         }
 
@@ -719,7 +718,7 @@ export function PricingCalculator() {
           return {
             price: Math.round(150 * busMultiplier),
             allDay: true,
-            routeLabel: t.quoteForm.fixedRouteDistance(formatDistance(distance)),
+            routeLabel: formatFixedRouteDistance(formatDistance(distance)),
           };
         }
 
@@ -729,7 +728,7 @@ export function PricingCalculator() {
             return {
               price: Math.round(gdanskAirportPrice * busMultiplier),
               allDay: true,
-              routeLabel: t.quoteForm.fixedRouteDistance(formatDistance(distance)),
+              routeLabel: formatFixedRouteDistance(formatDistance(distance)),
             };
           }
         }
@@ -745,7 +744,7 @@ export function PricingCalculator() {
           return {
             price: Math.round(gdanskFixedPrice * busMultiplier),
             allDay: true,
-            routeLabel: t.quoteForm.fixedRouteDistance(formatDistance(distance)),
+            routeLabel: formatFixedRouteDistance(formatDistance(distance)),
           };
         }
 
@@ -753,18 +752,15 @@ export function PricingCalculator() {
       };
 
       try {
-        console.warn('[calc] pickupMode:', pickupMode, 'destMode:', destinationMode, 'pickupPoint:', pickupPoint, 'destPoint:', destinationPoint);
         const pickup = pickupMode === 'airport'
           ? (await geocodeAddress(AIRPORT_GEOCODE_QUERY) ?? AIRPORT_COORD)
           : (pickupPoint ?? await geocodeAddress(pickupAddress));
         const destination = destinationMode === 'airport'
           ? (await geocodeAddress(AIRPORT_GEOCODE_QUERY) ?? AIRPORT_COORD)
           : (destinationPoint ?? await geocodeAddress(destinationAddress));
-        console.warn('[calc] pickup:', pickup, 'destination:', destination);
 
         if (!pickup || !destination) {
           if (!active) return;
-          console.warn('[calc] FAILED — pickup or destination is null');
           setResult(null);
           setError(t.pricingCalculator.noResult);
           setIsChecking(false);
@@ -885,7 +881,7 @@ export function PricingCalculator() {
       } catch (err) {
         if (!active) return;
         if (controller.signal.aborted) return;
-        console.warn('[calc] outer catch:', err);
+        // calculation failed
         setResult(null);
         setError(t.pricingCalculator.noResult);
         setIsChecking(false);
