@@ -403,18 +403,17 @@ const server = createServer(async (req, res) => {
   }
 
   const requestUrl = new URL(req.url, `http://${req.headers.host}`);
-  const urlPath = requestUrl.pathname;
+  let urlPath = requestUrl.pathname;
 
   if (urlPath === '/gtag/js') {
     await proxyGtagJs(req, res, requestUrl);
     return;
   }
 
-  // Keep root deterministic for crawlers to avoid locale-variant canonical conflicts.
+  // Serve root as the default locale page (no redirect).
+  // Canonical tag in HTML will point to /en/, so Google consolidates correctly.
   if (urlPath === '/') {
-    res.writeHead(301, { Location: `${defaultLocaleRoot}${requestUrl.search}` });
-    res.end();
-    return;
+    urlPath = defaultLocaleRoot;
   }
 
   if (isFileRequest(urlPath)) {
@@ -430,10 +429,10 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  // Serve locale roots (/pl, /de, …) as their trailing-slash equivalent
+  // instead of redirecting, so Google doesn't report "page with redirect".
   if (localeRoots.has(urlPath)) {
-    res.writeHead(301, { Location: `${urlPath}/${requestUrl.search}` });
-    res.end();
-    return;
+    urlPath = `${urlPath}/`;
   }
 
   if (urlPath.length > 1 && urlPath.endsWith('/') && !localeRootsWithSlash.has(urlPath)) {
